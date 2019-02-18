@@ -19,6 +19,10 @@ config/name="Emberhunt"
 run/main_scene="res://scenes/MainMenu.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://scripts/Global.gd"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
