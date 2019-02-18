@@ -1,7 +1,7 @@
 extends Control
 
 func _on_ButtonPlay_pressed():
-	pass # TODO: add char creation / char select
+	get_tree().change_scene("res://scenes/player.tscn")
 
 func _on_ButtonSettings_pressed():
 	get_tree().change_scene("res://scenes/Settings.tscn")

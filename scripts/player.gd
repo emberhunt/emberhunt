@@ -1,5 +1,6 @@
 extends Node2D
 
+
 var playerStats = { #Player Stats dictionary
 	"healthCurrent": 0,
 	"healthMax": 100,
