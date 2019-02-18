@@ -40,3 +40,12 @@ func _ready():
 	else:
 		get_node("VBoxContainer/ButtonSound").set_text("Sound: OFF")
 	get_node("VBoxContainer/ButtonQuality").set_text("Quality: "+Global.quality)
+	get_node("VBoxContainer2/SliderMusic").set_value(Global.Music*100)
+	get_node("VBoxContainer2/SliderSound").set_value(Global.Sound*100)
+
+func _on_SliderMusic_value_changed(value):
+	Global.Music = value/100
+
+
+func _on_SliderSound_value_changed(value):
+	Global.Sound = value/100
