@@ -13,8 +13,8 @@ export(Texture) var background_sprite = null # background texture for the touchp
 export(Texture) var foreground_sprite = null # dragable foreground texture for the touchpad
 export(bool) var always_output_max_drag = false # always output the maximum drag value
 export(int,-1,10000) var MAX_DRAG = -1 # maximum drag radius from touchpad's center in pixels
-export(bool) var is_fixed = false # touchpad will only appear at the screen-local coordinates defined as fixed_position
-export(Vector2) var fixed_position = Vector2(0,0) # if is_fixed is true, only appear if the user clicks inside the maximum_drag radius around fixed_poistion
+export(bool) var is_fixed = true # touchpad will only appear at the screen-local coordinates defined as fixed_position
+export(Vector2) var fixed_position = Vector2(150,450) # if is_fixed is true, only appear if the user clicks inside the maximum_drag radius around fixed_poistion
 
 onready var player_node = get_parent().get_parent() # set to relativ path to the player
 
@@ -60,7 +60,8 @@ func _input(event):
 		# ******************************************************************************************* #
 		# Change the following lines according to the class variables / functions of your player node #
 		# ******************************************************************************************* #
-		player_node.rotation = touchpad_rotation # float - rotation in rad
+		# we dont need rotation do we?
+		#player_node.rotation = touchpad_rotation # float - rotation in rad
 		player_node.direction = touchpad_direction # Vector2() - normalized direction vector
 		player_node.speed = touchpad_power # intensity of the touchpad's drag
 	else:

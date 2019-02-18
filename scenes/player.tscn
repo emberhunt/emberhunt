@@ -19,6 +19,7 @@ shape = SubResource( 1 )
 [node name="UI" type="CanvasLayer" parent="KinematicBody2D"]
 
 [node name="touchpad" parent="KinematicBody2D/UI" instance=ExtResource( 2 )]
+position = Vector2( 120, 500 )
 
 [node name="Sprite" type="Sprite" parent="KinematicBody2D"]
 scale = Vector2( 4, 4 )
