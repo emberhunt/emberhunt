@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/Settings.gd" type="Script" id=2]
+[ext_resource path="res://cave.jpg" type="Texture" id=3]
+
+[node name="Settings" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="TextureRectBackground" type="TextureRect" parent="."]
+self_modulate = Color( 0.286275, 0.286275, 0.286275, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 540.0
+texture = ExtResource( 3 )
+
+[node name="Container" type="Container" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -62.033
+margin_bottom = -327.033
+size_flags_horizontal = 5
+size_flags_vertical = 5
+
+[node name="LabelTitle" type="Label" parent="Container"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -52.0
+margin_top = -15.5
+margin_right = 52.0
+margin_bottom = 15.5
+text = "Settings
+"
+align = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -64.0
+margin_top = -34.0
+margin_right = 64.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 128, 0 )
+custom_constants/separation = 46
+
+[node name="ButtonBack" type="Button" parent="VBoxContainer"]
+margin_right = 128.0
+margin_bottom = 16.0
+text = "Back"
+
+[node name="ButtonMusic" type="Button" parent="VBoxContainer"]
+margin_top = 62.0
+margin_right = 128.0
+margin_bottom = 78.0
+text = "Music: ON"
+
+[node name="ButtonSound" type="Button" parent="VBoxContainer"]
+margin_top = 124.0
+margin_right = 128.0
+margin_bottom = 140.0
+text = "Sound: ON"
+
+[node name="ButtonQuality" type="Button" parent="VBoxContainer"]
+margin_top = 186.0
+margin_right = 128.0
+margin_bottom = 202.0
+text = "Quality: High"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -67.0
+margin_top = -24.0
+
+[node name="LabelVersion" type="Label" parent="MarginContainer"]
+margin_top = 5.0
+margin_right = 67.0
+margin_bottom = 19.0
+grow_horizontal = 0
+text = "v 0_0_0"
+align = 1
+valign = 1
+
+[connection signal="pressed" from="VBoxContainer/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonMusic" to="." method="_on_ButtonMusic_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonSound" to="." method="_on_ButtonSound_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonQuality" to="." method="_on_ButtonQuality_pressed"]
