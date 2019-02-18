@@ -1,12 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://scripts/playerBody.gd" type="Script" id=2]
-[ext_resource path="res://scenes/touchpad.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scripts/attackpad.gd" type="Script" id=4]
-[ext_resource path="res://scripts/weapon.gd" type="Script" id=5]
-[ext_resource path="res://icon.png" type="Texture" id=6]
-[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=7]
+[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=3]
+[ext_resource path="res://scenes/touchpad.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.58973, 5.34315 )
@@ -23,9 +20,9 @@ shape = SubResource( 1 )
 
 [node name="UI" type="CanvasLayer" parent="body"]
 
-[node name="Control" type="Control" parent="body/UI"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="touchpad" parent="UI" instance=ExtResource( 4 )]
+position = Vector2( 185.69, 412.425 )
+fixed_position = Vector2( 0, 0 )
 
 [node name="touchpad" parent="body/UI/Control" instance=ExtResource( 3 )]
 
@@ -49,4 +46,3 @@ z_index = 1
 texture = ExtResource( 7 )
 region_enabled = true
 region_rect = Rect2( 368, 111, 16, 18 )
-
