@@ -1,18 +1,17 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://touchpad.gd" type="Script" id=1]
-[ext_resource path="res://touchpad_bg.png" type="Texture" id=2]
-[ext_resource path="res://touchpad_inner.png" type="Texture" id=3]
+[ext_resource path="res://scripts/touchpad.gd" type="Script" id=1]
+[ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/touchpad_inner.png" type="Texture" id=3]
 
 [node name="touchpad" type="Position2D"]
-editor/display_folded = true
 script = ExtResource( 1 )
-background_sprite = ExtResource( 2 )
-foreground_sprite = ExtResource( 3 )
 
 [node name="background" type="Sprite" parent="."]
 visible = false
+texture = ExtResource( 2 )
 
 [node name="foreground" type="Sprite" parent="background"]
 scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 3 )
 
