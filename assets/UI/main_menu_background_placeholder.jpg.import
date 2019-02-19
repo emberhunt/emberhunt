@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cave.jpg-9c1e2c64801546ddf813ec4ba9947a3b.stex"
+path="res://.import/main_menu_background_placeholder.jpg-affd8bc2061efe893dcb1f7869ee1585.stex"
 
 [deps]
 
-source_file="res://cave.jpg"
-dest_files=[ "res://.import/cave.jpg-9c1e2c64801546ddf813ec4ba9947a3b.stex" ]
+source_file="res://assets/UI/main_menu_background_placeholder.jpg"
+dest_files=[ "res://.import/main_menu_background_placeholder.jpg-affd8bc2061efe893dcb1f7869ee1585.stex" ]
 
 [params]
 

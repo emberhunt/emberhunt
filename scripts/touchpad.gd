@@ -62,7 +62,7 @@ func _input(event):
 		# ******************************************************************************************* #
 		# Change the following lines according to the class variables / functions of your player node #
 		# ******************************************************************************************* #
-		# we dont need rotation do we?
+		# we dont need rotation do we? # onlyJB: we do need snapped rotations, some sort of modulo calculation over the radians should work
 		#player_node.rotation = touchpad_rotation # float - rotation in rad
 		player_node.direction = touchpad_direction # Vector2() - normalized direction vector
 		player_node.speed = touchpad_power # intensity of the touchpad's drag
