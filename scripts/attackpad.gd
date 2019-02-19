@@ -19,6 +19,8 @@ export(Vector2) var fixed_position = Vector2(150,450) # if is_fixed is true, onl
 onready var weapon_node = get_node("/root/player/body/weapon") # set to relativ path to the player
 
 func _ready():
+	fixed_position.y = get_viewport().get_size().y-170
+	fixed_position.x = get_viewport().get_size().x-170
 	if background_sprite != null:
 		$background.texture = background_sprite
 	if foreground_sprite != null:
