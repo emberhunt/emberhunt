@@ -15,6 +15,7 @@ extents = Vector2( 4.58973, 5.34315 )
 script = ExtResource( 1 )
 
 [node name="body" type="KinematicBody2D" parent="."]
+editor/display_folded = true
 script = ExtResource( 2 )
 
 [node name="collision_shape" type="CollisionShape2D" parent="body"]
@@ -22,6 +23,7 @@ position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
 [node name="weapon" type="Node2D" parent="body"]
+editor/display_folded = true
 position = Vector2( 0, 15 )
 script = ExtResource( 3 )
 
@@ -34,8 +36,10 @@ region_rect = Rect2( 17, 40, 17, 43 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="touchpad" parent="UI" instance=ExtResource( 5 )]
+position = Vector2( 20, 20 )
 
 [node name="attackpad" parent="UI" instance=ExtResource( 5 )]
+position = Vector2( 20, 20 )
 script = ExtResource( 6 )
 fixed_position = Vector2( 700, 450 )
 
