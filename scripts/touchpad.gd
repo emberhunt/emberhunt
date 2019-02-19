@@ -16,9 +16,11 @@ export(int,-1,10000) var MAX_DRAG = -1 # maximum drag radius from touchpad's cen
 export(bool) var is_fixed = true # touchpad will only appear at the screen-local coordinates defined as fixed_position
 export(Vector2) var fixed_position = Vector2(150,450) # if is_fixed is true, only appear if the user clicks inside the maximum_drag radius around fixed_poistion
 
-onready var player_node = get_parent().get_parent().get_node("body") # set to relativ path to the player
+onready var player_node = get_node("/root/player/body") # set to relativ path to the player
 
 func _ready():
+	fixed_position.y = get_viewport().get_size().y-170
+	fixed_position.x = 170
 	if background_sprite != null:
 		$background.texture = background_sprite
 	if foreground_sprite != null:
@@ -60,7 +62,7 @@ func _input(event):
 		# ******************************************************************************************* #
 		# Change the following lines according to the class variables / functions of your player node #
 		# ******************************************************************************************* #
-		# we dont need rotation do we?
+		# we dont need rotation do we? # onlyJB: we do need snapped rotations, some sort of modulo calculation over the radians should work
 		#player_node.rotation = touchpad_rotation # float - rotation in rad
 		player_node.direction = touchpad_direction # Vector2() - normalized direction vector
 		player_node.speed = touchpad_power # intensity of the touchpad's drag

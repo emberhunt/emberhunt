@@ -1,14 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://scripts/playerBody.gd" type="Script" id=2]
-[ext_resource path="res://scripts/weapon.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://scenes/weapon.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=4]
 [ext_resource path="res://scenes/touchpad.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scripts/attackpad.gd" type="Script" id=6]
-[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
+
 extents = Vector2( 4.58973, 5.34315 )
 
 [node name="player" type="Node2D"]
@@ -21,28 +21,19 @@ script = ExtResource( 2 )
 position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
-[node name="weapon" type="Node2D" parent="body"]
-position = Vector2( 0, 15 )
-script = ExtResource( 3 )
-
-[node name="weapon_sprite" type="Sprite" parent="body/weapon"]
-z_index = 2
-texture = ExtResource( 4 )
-region_enabled = true
-region_rect = Rect2( 17, 40, 17, 43 )
-
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="touchpad" parent="UI" instance=ExtResource( 5 )]
-
-[node name="attackpad" parent="UI" instance=ExtResource( 5 )]
-script = ExtResource( 6 )
-fixed_position = Vector2( 700, 450 )
+[node name="weapon" parent="body" instance=ExtResource( 3 )]
 
 [node name="player_sprite" type="Sprite" parent="."]
 scale = Vector2( 4, 4 )
 z_index = 1
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 368, 111, 16, 18 )
+
+[node name="touchpad" parent="." instance=ExtResource( 5 )]
+
+[node name="attackpad" parent="." instance=ExtResource( 5 )]
+position = Vector2( 19.8145, -240.293 )
+script = ExtResource( 6 )
+fixed_position = Vector2( 700, 450 )
 

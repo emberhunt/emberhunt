@@ -16,9 +16,11 @@ export(int,-1,10000) var MAX_DRAG = -1 # maximum drag radius from touchpad's cen
 export(bool) var is_fixed = true # touchpad will only appear at the screen-local coordinates defined as fixed_position
 export(Vector2) var fixed_position = Vector2(150,450) # if is_fixed is true, only appear if the user clicks inside the maximum_drag radius around fixed_poistion
 
-onready var weapon_node = get_parent().get_parent().get_node("body/weapon") # set to relativ path to the player
+onready var weapon_node = get_node("/root/player/body/weapon") # set to relativ path to the player
 
 func _ready():
+	fixed_position.y = get_viewport().get_size().y-170
+	fixed_position.x = get_viewport().get_size().x-170
 	if background_sprite != null:
 		$background.texture = background_sprite
 	if foreground_sprite != null:
