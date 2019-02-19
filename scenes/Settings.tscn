@@ -2,7 +2,10 @@
 
 [ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/Settings.gd" type="Script" id=2]
-[ext_resource path="res://cave.jpg" type="Texture" id=3]
+[ext_resource path="res://assets/UI/main_menu_background_placeholder.jpg" type="Texture" id=3]
+
+
+
 
 [node name="Settings" type="Control"]
 anchor_right = 1.0
