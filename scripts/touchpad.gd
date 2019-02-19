@@ -32,27 +32,27 @@ func _ready():
 			hacky_error.EASY_TOUCHPAD_no_max_drag_or_background_texture_defined()
 
 func _input(event):
-	if event is InputEventMouseButton:
+	if event is InputEventScreenTouch:
 		if event.button_index == 1 and event.pressed: # left mouse button
 			if is_fixed: # touchpad got a fix position
-				if (get_global_mouse_position()-fixed_position).length() <= MAX_DRAG:
+				if (event.position-fixed_position).length() <= MAX_DRAG:
 					position = fixed_position
 					$background.show() # show touchpad on click
 			else: # touchpad can be used anywhere on the screen
-				position = get_global_mouse_position()
+				position = event.position
 				$background.show() # show touchpad on click
 		elif event.button_index == 1 and event.pressed == false: # left mouse released
 			$background.hide() # hide touchpad
 	
 	if $background.visible == true: # if touchpad is in use right now
-		if get_local_mouse_position().length() <= MAX_DRAG:
-			$background/foreground.position = get_local_mouse_position() # move touchpad's foreground texture according to the drag
+		if event.position.length() <= MAX_DRAG:
+			$background/foreground.position = event.position # move touchpad's foreground texture according to the drag
 		else:
-			$background/foreground.position = get_local_mouse_position().normalized()*MAX_DRAG # cap touchpad's foreground texture drag radius
+			$background/foreground.position = event.position.normalized()*MAX_DRAG # cap touchpad's foreground texture drag radius
 		
-		var touchpad_rotation = atan2(get_local_mouse_position().x,get_local_mouse_position().y*-1) # depending on your sprites base rotation you may want to invert x or y or both (*-1)
-		var touchpad_direction = get_local_mouse_position().normalized()
-		var touchpad_power = get_local_mouse_position().length()
+		var touchpad_rotation = atan2(event.position.x,event.position.y*-1) # depending on your sprites base rotation you may want to invert x or y or both (*-1)
+		var touchpad_direction = event.position.normalized()
+		var touchpad_power = event.position.length()
 		if touchpad_power > MAX_DRAG or always_output_max_drag: # cap maximum touchpad_power output at maximum drag radius
 			touchpad_power = MAX_DRAG
 
