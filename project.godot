@@ -22,7 +22,6 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://scripts/Global.gd"
-MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
 SoundPlayer="*res://scenes/SoundPlayer.tscn"
 
 [input_devices]
