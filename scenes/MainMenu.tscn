@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://assets/UI/main_menu_background_placeholder.jpg" type="Texture" id=3]
+[ext_resource path="res://assets/title.png" type="Texture" id=4]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -16,10 +17,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -960.0
-margin_top = -540.0
-margin_right = 960.0
-margin_bottom = 540.0
+margin_left = -958.64
+margin_top = -538.64
+margin_right = 961.36
+margin_bottom = 541.36
 texture = ExtResource( 3 )
 
 [node name="Container" type="Container" parent="."]
@@ -30,17 +31,17 @@ margin_bottom = -265.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 
-[node name="LabelTitle" type="Label" parent="Container"]
+[node name="TextureRect" type="TextureRect" parent="Container"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -52.0
-margin_top = -15.5
-margin_right = 52.0
-margin_bottom = 15.5
-text = "Emberhunt"
-align = 1
+margin_left = -300.0
+margin_top = -58.0
+margin_right = 300.0
+margin_bottom = 40.0
+texture = ExtResource( 4 )
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
