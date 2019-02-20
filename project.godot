@@ -25,6 +25,7 @@ config/icon="res://assets/icon.png"
 
 Global="*res://scripts/Global.gd"
 MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
+SoundPlayer="*res://scenes/SoundPlayer.tscn"
 
 [rendering]
 
