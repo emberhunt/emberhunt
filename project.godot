@@ -24,6 +24,7 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Global="*res://scripts/Global.gd"
+MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
 
 [rendering]
 
