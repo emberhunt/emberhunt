@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/roundButton_notPressed.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=4]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=5]
 [ext_resource path="res://scripts/PauseButton.gd" type="Script" id=6]
+[ext_resource path="res://scripts/Label.gd" type="Script" id=7]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 150.0
@@ -66,5 +67,15 @@ texture_disabled = ExtResource( 5 )
 texture_focused = ExtResource( 5 )
 expand = true
 script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+editor/display_folded = true
+margin_right = 96.0
+margin_bottom = 57.0
+script = ExtResource( 7 )
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Label"]
+wait_time = 4096.0
+autostart = true
 
 [connection signal="pressed" from="CanvasLayer/TextureButton" to="CanvasLayer/TextureButton" method="_on_TextureButton_pressed"]
