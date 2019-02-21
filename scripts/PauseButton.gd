@@ -8,3 +8,5 @@ func _on_TextureButton_pressed():
 	var scene_instance = scene.instance()
 	scene_instance.set_name("PauseMenu")
 	get_parent().add_child(scene_instance)
+	get_node("../../moveButton").disabled = true
+	get_node("../../shootButton").disabled = true
