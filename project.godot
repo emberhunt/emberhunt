@@ -17,12 +17,15 @@ _global_script_class_icons={
 
 config/name="Emberhunt"
 run/main_scene="res://scenes/MainMenu.tscn"
-config/icon="res://icon.png"
+boot_splash/image="res://assets/splashScreen.png"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
+config/icon="res://assets/icon.png"
 
 [autoload]
 
 Global="*res://scripts/Global.gd"
 SoundPlayer="*res://scenes/SoundPlayer.tscn"
+MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
 
 [input_devices]
 
