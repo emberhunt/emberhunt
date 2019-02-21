@@ -33,6 +33,7 @@ margin_top = 20.0
 margin_right = 189.0
 margin_bottom = 36.0
 max_value = 9.0
+ticks_on_borders = true
 
 [node name="SliderBonusDamageHigh" type="HSlider" parent="SettingsContainer/InputContainer"]
 margin_top = 40.0
