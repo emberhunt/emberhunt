@@ -1,12 +1,12 @@
 extends Control
 
 func _on_ButtonBack_pressed():
-	SoundPlayer.play(load("res://assets/sounds/click.wav"))
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	get_tree().change_scene("res://scenes/MainMenu.tscn")
 
 
 func _on_ButtonMusic_pressed():
-	SoundPlayer.play(load("res://assets/sounds/click.wav"))
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if Global.boolMusic:
 		get_node("Buttons/ButtonMusic/Label").set_text("Music: OFF")
 	else:
@@ -15,7 +15,7 @@ func _on_ButtonMusic_pressed():
 
 
 func _on_ButtonSound_pressed():
-	SoundPlayer.play(load("res://assets/sounds/click.wav"))
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if Global.boolSound:
 		get_node("Buttons/ButtonSound/Label").set_text("Sound: OFF")
 	else:
@@ -24,7 +24,7 @@ func _on_ButtonSound_pressed():
 
 
 func _on_ButtonQuality_pressed():
-	SoundPlayer.play(load("res://assets/sounds/click.wav"))
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if Global.quality == "High":
 		Global.quality = "Medium"
 	elif Global.quality == "Medium":
