@@ -34,8 +34,8 @@ func _ready():
 			hacky_error.EASY_TOUCHPAD_no_max_drag_or_background_texture_defined()
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == 1 and event.pressed: # left mouse button
+	if event is InputEventScreenTouch:
+		if event.pressed: # left mouse button
 			if is_fixed: # touchpad got a fix position
 				if (get_global_mouse_position()-fixed_position).length() <= MAX_DRAG:
 					position = fixed_position
@@ -43,7 +43,7 @@ func _input(event):
 			else: # touchpad can be used anywhere on the screen
 				position = get_global_mouse_position()
 				$background.show() # show touchpad on click
-		elif event.button_index == 1 and event.pressed == false: # left mouse released
+		elif not event.pressed: # left mouse released
 			$background.hide() # hide touchpad
 	
 	if $background.visible == true: # if touchpad is in use right now
