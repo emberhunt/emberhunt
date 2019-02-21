@@ -43,3 +43,4 @@ texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 368, 111, 16, 18 )
 
+[connection signal="timeout" from="body/weapon/fire_rate" to="body/weapon" method="_on_fire_rate_timeout"]
