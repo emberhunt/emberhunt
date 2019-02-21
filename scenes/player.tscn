@@ -4,8 +4,8 @@
 [ext_resource path="res://scripts/playerBody.gd" type="Script" id=2]
 [ext_resource path="res://scripts/weapon.gd" type="Script" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
-[ext_resource path="res://scenes/GUI.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=6]
+[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=5]
+[ext_resource path="res://scenes/GUI.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.58973, 5.34315 )
@@ -34,13 +34,14 @@ region_rect = Rect2( 17, 40, 17, 43 )
 
 [node name="bullet_container" type="Node" parent="body/weapon"]
 
-[node name="GUI" parent="." instance=ExtResource( 5 )]
-
 [node name="player_sprite" type="Sprite" parent="."]
 scale = Vector2( 4, 4 )
 z_index = 1
-texture = ExtResource( 6 )
+texture = ExtResource( 5 )
 region_enabled = true
 region_rect = Rect2( 368, 111, 16, 18 )
+
+[node name="GUI" parent="." instance=ExtResource( 6 )]
+margin_bottom = -2.27206
 
 [connection signal="timeout" from="body/weapon/fire_rate" to="body/weapon" method="_on_fire_rate_timeout"]

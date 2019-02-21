@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=1]
-[ext_resource path="res://assets/UI/touchpad_inner.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/roundButton_notPressed.png" type="Texture" id=2]
 [ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=3]
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=4]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=5]
+[ext_resource path="res://scripts/PauseButton.gd" type="Script" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 150.0
@@ -25,7 +26,7 @@ script = ExtResource( 1 )
 
 [node name="buttonSprite" type="Sprite" parent="moveButton"]
 visible = false
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( 5, 5 )
 z_index = 1
 texture = ExtResource( 2 )
 
@@ -41,7 +42,7 @@ script = ExtResource( 4 )
 
 [node name="buttonSprite" type="Sprite" parent="shootButton"]
 visible = false
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( 5, 5 )
 z_index = 1
 texture = ExtResource( 2 )
 
@@ -49,15 +50,21 @@ texture = ExtResource( 2 )
 visible = false
 texture = ExtResource( 3 )
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -120.0
-margin_bottom = 120.0
+margin_left = -90.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = 90.0
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 5 )
 texture_hover = ExtResource( 5 )
 texture_disabled = ExtResource( 5 )
 texture_focused = ExtResource( 5 )
 expand = true
+script = ExtResource( 6 )
 
+[connection signal="pressed" from="CanvasLayer/TextureButton" to="CanvasLayer/TextureButton" method="_on_TextureButton_pressed"]
