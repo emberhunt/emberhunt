@@ -11,8 +11,8 @@ var touch_rotation = 0
 
 func _ready():
 	# Adjust position on screen
-	position.x = 150
-	position.y = get_viewport().size.y-150
+	position.x = 200
+	position.y = get_viewport().size.y-200
 	origin = position
 
 func _input(event):
