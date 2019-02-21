@@ -30,7 +30,7 @@ visible = false
 texture = ExtResource( 3 )
 
 [node name="shootButton" type="TouchScreenButton" parent="."]
-position = Vector2( 880, 450 )
+position = Vector2( 874, 450 )
 shape = SubResource( 1 )
 script = ExtResource( 4 )
 

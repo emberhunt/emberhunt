@@ -1,13 +1,19 @@
 extends TouchScreenButton
 
 const radius = 150
-onready var origin = global_position
+var origin
 onready var player_node = get_parent().get_parent().get_node('body')
 onready var other_node = get_parent().get_node("shootButton")
 
 var touch_power = 0
 var touch_direction = 0
 var touch_rotation = 0
+
+func _ready():
+	# Adjust position on screen
+	position.x = 150
+	position.y = get_viewport().size.y-150
+	origin = position
 
 func _input(event):
 	if event is InputEventScreenTouch:
