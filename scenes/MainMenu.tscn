@@ -24,6 +24,7 @@ margin_bottom = 540.0
 texture = ExtResource( 3 )
 
 [node name="Container" type="Container" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 31.0
@@ -44,35 +45,38 @@ texture = ExtResource( 4 )
 stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+editor/display_folded = true
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -64.0
+margin_left = -99.0
 margin_top = -34.0
-margin_right = 64.0
-margin_bottom = 34.0
+margin_right = 122.0
+margin_bottom = 206.0
 rect_min_size = Vector2( 128, 0 )
-custom_constants/separation = 46
+custom_constants/separation = 50
 
 [node name="ButtonPlay" type="Button" parent="VBoxContainer"]
-margin_right = 128.0
+margin_right = 221.0
 margin_bottom = 16.0
 text = "Play"
 
 [node name="ButtonSettings" type="Button" parent="VBoxContainer"]
-margin_top = 62.0
-margin_right = 128.0
-margin_bottom = 78.0
+margin_top = 66.0
+margin_right = 221.0
+margin_bottom = 82.0
 text = "Settings"
 
 [node name="ButtonExit" type="Button" parent="VBoxContainer"]
-margin_top = 124.0
-margin_right = 128.0
-margin_bottom = 140.0
+margin_top = 132.0
+margin_right = 221.0
+margin_bottom = 148.0
 text = "Exit"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
