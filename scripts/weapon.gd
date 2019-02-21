@@ -7,7 +7,7 @@ var can_attack = true
 export var stats = {
 	damage = 1, 							# base damage
 	damage_random = Vector2(0,0), 			# adds x to y damage
-	fire_rate = 1, 							# attacks per second
+	fire_rate = 5.0, 							# attacks per second
 	fire_rate_random = 0, 					# 0-1 to randomly change the firerate by fire_rate_random*100 % in both directions
 	bullet_count = 1, 						# amount of bullets per attack
 	bullet_count_random = Vector2(0,0), 	# adds x to y bullets per attack
@@ -59,7 +59,7 @@ func _attack():
 		$bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
 	
 	can_attack = false # disable attacks until cooldown passed
-	$fire_rate.wait_time = (1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random) # set the fire_rate timer to the according time
+	$fire_rate.set_wait_time((1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random)) # set the fire_rate timer to the according time
 	$fire_rate.start()
 
 func _on_fire_rate_timeout(): # cooldown between 2 attacks passed, next attack ready
