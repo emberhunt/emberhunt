@@ -123,7 +123,8 @@ func _on_BackgroundColor_color_changed(color):
 	VisualServer.set_default_clear_color(color)
 
 func _on_ButtonSaveWeapon_pressed():
-	$VBoxContainer/ButtonSaveWeapon/WeaponName.show()
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
+	$VBoxContainer/ButtonSaveWeapon/WeaponName.visible = not $VBoxContainer/ButtonSaveWeapon/WeaponName.visible
 
 func _on_ButtonConfirmSafe_pressed():
 	if $VBoxContainer/ButtonSaveWeapon/WeaponName.text != "":
@@ -135,6 +136,7 @@ func _on_ButtonConfirmSafe_pressed():
 		$VBoxContainer/ButtonSaveWeapon/WeaponName.hide()
 		$VBoxContainer/ButtonSaveWeapon/WeaponName/ButtonConfirmSafe/NoNameWarning.hide()
 		$VBoxContainer/ButtonSaveWeapon/WeaponName.text = ""
+		$VBoxContainer/ButtonLoadWeapon/OptionButton.text = $VBoxContainer/ButtonSaveWeapon/WeaponName.text
 	else:
 		$VBoxContainer/ButtonSaveWeapon/WeaponName/ButtonConfirmSafe/NoNameWarning.show()
 		
@@ -160,4 +162,44 @@ func _on_ButtonRestoreDefaults_pressed():
 	for color in $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
 		$SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset(color)
 	$SettingsContainer/InputContainer/BulletColor.color = default_values.bullet_color
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.select(0)
 	
+func _on_ButtonLoadWeapon_pressed():
+	var file = ConfigFile.new()
+	file.load(weapon_safe_file)
+	var i = 1
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.clear()
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.add_item("Choose attack",0)
+	for section in file.get_sections():
+		$VBoxContainer/ButtonLoadWeapon/OptionButton.add_item(section,i)
+		i += 1
+	$VBoxContainer/ButtonSaveWeapon/WeaponName.hide()
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.visible = not $VBoxContainer/ButtonLoadWeapon/OptionButton.visible
+
+func _on_OptionButton_item_selected(ID):
+	var file = ConfigFile.new()
+	file.load(weapon_safe_file)
+	var attack_name = file.get_sections()[ID-1]
+	for key in $weapon.stats.keys():
+		if key != "bullet_scene":
+			$weapon.stats[key] = file.get_value(attack_name,key,null)
+	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
+			
+	$SettingsContainer/InputContainer/SliderDamage.value = $weapon.stats.damage
+	$SettingsContainer/InputContainer/SliderBonusDamageLow.value = $weapon.stats.damage_random.x
+	$SettingsContainer/InputContainer/SliderBonusDamageHigh.value = $weapon.stats.damage_random.y
+	$SettingsContainer/InputContainer/SliderFireRate.value = $weapon.stats.fire_rate
+	$SettingsContainer/InputContainer/SliderFireRateRandom.value = $weapon.stats.fire_rate_random
+	$SettingsContainer/InputContainer/SliderBulletCount.value = $weapon.stats.bullet_count
+	$SettingsContainer/InputContainer/SliderBulletRandomLow.value = $weapon.stats.bullet_count_random.x
+	$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = $weapon.stats.bullet_count_random.y
+	$SettingsContainer/InputContainer/SliderBulletSpread.value = rad2deg($weapon.stats.bullet_spread)
+	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = rad2deg($weapon.stats.bullet_spread_random)
+	$SettingsContainer/InputContainer/SliderBulletRange.value = $weapon.stats.bullet_range
+	$SettingsContainer/InputContainer/SliderBulletRangeRandom.value = $weapon.stats.bullet_range_random
+	$SettingsContainer/InputContainer/SliderBulletSpeed.value = $weapon.stats.bullet_speed
+	$SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = $weapon.stats.bullet_speed_random
+	$SettingsContainer/InputContainer/SliderBulletScale.value = $weapon.stats.bullet_scale
+	$SettingsContainer/InputContainer/SliderBulletScaleRandom.value = $weapon.stats.bullet_scale_random
+#	$SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset()
+	$SettingsContainer/InputContainer/BulletColor.color = $weapon.stats.bullet_color

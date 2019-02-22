@@ -7,7 +7,7 @@ var can_attack = true
 export var stats = {
 	damage = 1, 							# base damage
 	damage_random = Vector2(0,0), 			# adds x to y damage
-	fire_rate = 5.0, 						# attacks per second
+	fire_rate = 1.0, 						# attacks per second
 	fire_rate_random = 0, 					# 0-1 to randomly change the firerate by fire_rate_random*100 % in both directions
 	bullet_count = 1, 						# amount of bullets per attack
 	bullet_count_random = Vector2(0,0), 	# adds x to y bullets per attack
@@ -44,14 +44,14 @@ func _attack():
 		extra_bullets = extra_bullet_range[randi()%len(extra_bullet_range)]								# /
 	
 	var rotation_step = -1																				# \
-	if stats.bullet_spread != 0:																		#	calculate spread step based on bullet_count and bullet_spread
-		rotation_step = float(stats.bullet_spread) / float(stats.bullet_count)							# /
+	if stats.bullet_spread != 0 and stats.bullet_count + extra_bullets > 1:								#	calculate spread step based on bullet_count and bullet_spread
+		rotation_step = float(stats.bullet_spread) / float(stats.bullet_count+extra_bullets)			# /
 	
 	for bullet_number in range(stats.bullet_count+extra_bullets): 													# for each bullet do:
 		var new_bullet = stats.bullet_scene.instance() 															# instance new bullet
 		var bullet_rotation = rotation 																					# set base rotation to weapon rotation
 		if rotation_step != -1:																							# if there is a fixed spread step
-			bullet_rotation += stats.bullet_count/2 * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
+			bullet_rotation += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
 		if stats.bullet_spread_random != 0: 																			# if there is a random spread
 			bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
 				

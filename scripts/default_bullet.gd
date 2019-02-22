@@ -21,6 +21,7 @@ func _ini(stats, weapon_origin, weapon_rotation): # is called by weapon.gd befor
 	origin = weapon_origin # safe origin to calculate traveled distance
 	position = origin # set position to weapon origin
 	direction = direction.rotated(weapon_rotation) # rotate the bullet according to the weapon node
+	rotation = weapon_rotation
 	speed = stats.bullet_speed * (rand_range(1-stats.bullet_speed_random,1+stats.bullet_speed_random)) # value to multiply the direction with
 	max_travel_distance = stats.bullet_range * (rand_range(1-stats.bullet_range_random,1+stats.bullet_range_random)) # maximum travel distance in pixel
 	
@@ -40,15 +41,15 @@ func _ini(stats, weapon_origin, weapon_rotation): # is called by weapon.gd befor
 	
 	scale = Vector2(stats.bullet_scale,stats.bullet_scale) * rand_range(1-stats.bullet_scale_random,1+stats.bullet_scale_random) # calculate bullet scale and it's randomness
 	if stats.bullet_gradient is Gradient: 								# if a gradient is defined:
-		$MeshInstance2D.modulate = stats.bullet_gradient.get_color(0) 	# 	modulate to first gradient color
+		$Sprite.modulate = stats.bullet_gradient.get_color(0) 	# 	modulate to first gradient color
 		gradient = stats.bullet_gradient								# 	safe gradient for interpolating colors based on travel distance
 	else:																# if no gradient is defined:
-		$MeshInstance2D.modulate = stats.bullet_color					#	modulate to bullet_color
+		$Sprite.modulate = stats.bullet_color					#	modulate to bullet_color
 	
 func _physics_process(delta):
 	move_and_slide(direction*speed)
 	if gradient != null: # if we use a gradient
-		$MeshInstance2D.modulate = gradient.interpolate(abs((position-origin).length()) / max_travel_distance) # interpolate gradient colors based on travel distance
+		$Sprite.modulate = gradient.interpolate(abs((position-origin).length()) / max_travel_distance) # interpolate gradient colors based on travel distance
 	if abs((position-origin).length()) > max_travel_distance: # max travel distance reached? delete yourself!
 		queue_free()
 		

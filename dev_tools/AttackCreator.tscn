@@ -11,6 +11,7 @@ position = Vector2( 826.354, 441.653 )
 rotation = -0.886892
 
 [node name="SettingsContainer" type="HBoxContainer" parent="."]
+editor/display_folded = true
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 472.0
@@ -490,10 +491,11 @@ margin_bottom = 474.0
 text = "background color."
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 11.0
-margin_top = 523.0
-margin_right = 191.0
-margin_bottom = 596.0
+editor/display_folded = true
+margin_left = 11.2424
+margin_top = 502.258
+margin_right = 191.242
+margin_bottom = 594.258
 
 [node name="ButtonSaveWeapon" type="Button" parent="VBoxContainer"]
 margin_right = 180.0
@@ -525,16 +527,30 @@ margin_bottom = 45.0
 text = "ADD A NAME FIRST!"
 align = 1
 
-[node name="ButtonRestoreDefaults" type="Button" parent="VBoxContainer"]
+[node name="ButtonLoadWeapon" type="Button" parent="VBoxContainer"]
 margin_top = 24.0
 margin_right = 180.0
 margin_bottom = 44.0
-text = "Restore defaults"
+text = "Load attack pattern"
 
-[node name="ButtonDeleteProjectiles" type="Button" parent="VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/ButtonLoadWeapon"]
+visible = false
+margin_left = 184.0
+margin_right = 343.0
+margin_bottom = 20.0
+text = "Default"
+align = 1
+
+[node name="ButtonRestoreDefaults" type="Button" parent="VBoxContainer"]
 margin_top = 48.0
 margin_right = 180.0
 margin_bottom = 68.0
+text = "Restore defaults"
+
+[node name="ButtonDeleteProjectiles" type="Button" parent="VBoxContainer"]
+margin_top = 72.0
+margin_right = 180.0
+margin_bottom = 92.0
 text = "Clear all projectiles"
 
 [connection signal="value_changed" from="SettingsContainer/InputContainer/SliderDamage" to="." method="_on_SliderDamage_value_changed"]
@@ -557,5 +573,7 @@ text = "Clear all projectiles"
 [connection signal="color_changed" from="SettingsContainer/InputContainer/BackgroundColor" to="." method="_on_BackgroundColor_color_changed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSaveWeapon" to="." method="_on_ButtonSaveWeapon_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSaveWeapon/WeaponName/ButtonConfirmSafe" to="." method="_on_ButtonConfirmSafe_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonLoadWeapon" to="." method="_on_ButtonLoadWeapon_pressed"]
+[connection signal="item_selected" from="VBoxContainer/ButtonLoadWeapon/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="pressed" from="VBoxContainer/ButtonRestoreDefaults" to="." method="_on_ButtonRestoreDefaults_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonDeleteProjectiles" to="." method="_on_ButtonDeleteProjectiles_pressed"]
