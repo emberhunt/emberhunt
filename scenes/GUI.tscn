@@ -83,5 +83,4 @@ script = ExtResource( 7 )
 wait_time = 4096.0
 autostart = true
 
-[connection signal="pressed" from="CanvasLayer/PauseButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
