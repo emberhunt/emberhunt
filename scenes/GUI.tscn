@@ -68,6 +68,11 @@ texture_focused = ExtResource( 5 )
 expand = true
 script = ExtResource( 6 )
 
+[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/PauseButton"]
+scale = Vector2( 5, 5 )
+normal = ExtResource( 5 )
+pressed = ExtResource( 5 )
+
 [node name="Label" type="Label" parent="CanvasLayer"]
 editor/display_folded = true
 margin_right = 96.0
@@ -78,4 +83,5 @@ script = ExtResource( 7 )
 wait_time = 4096.0
 autostart = true
 
-[connection signal="pressed" from="CanvasLayer/PauseButton" to="CanvasLayer/PauseButton" method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
