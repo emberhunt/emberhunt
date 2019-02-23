@@ -1,6 +1,6 @@
 extends TouchScreenButton
 
-const radius = 150
+var radius = Global.touchpadRadius
 var origin
 onready var player_node = get_parent().get_parent().get_node('body')
 onready var other_node = get_parent().get_node("shootButton")
@@ -15,8 +15,8 @@ var disabled = false
 
 func _ready():
 	# Adjust position on screen
-	position.x = 200
-	position.y = get_viewport().size.y-200
+	position.x = radius+30
+	position.y = get_viewport().size.y-(radius+30)
 	origin = position
 
 func _input(event):
