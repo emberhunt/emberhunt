@@ -29,7 +29,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Item.gd"
 }, {
-"base": "Node2D",
+"base": "Reference",
 "class": "Player",
 "language": "GDScript",
 "path": "res://scripts/player.gd"

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/GUI.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=2]
+
+[node name="game" type="Node"]
+
+[node name="gui" parent="." instance=ExtResource( 1 )]
+margin_bottom = -2.27203
+playerNode = NodePath("../player")
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+

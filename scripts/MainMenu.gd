@@ -2,7 +2,7 @@ extends Control
 
 func _on_ButtonPlay_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
-	get_tree().change_scene("res://scenes/player.tscn")
+	get_tree().change_scene("res://scenes/Game.tscn")
 
 func _on_ButtonSettings_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))

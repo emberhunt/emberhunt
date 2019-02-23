@@ -2,16 +2,19 @@ extends TouchScreenButton
 
 var radius = 100
 var origin
-onready var player_node = get_parent().get_parent().get_node('body')
-onready var other_node = get_parent().get_node("shootButton")
+var _playerBody : KinematicBody2D = null#get_parent().get_parent().get_node('body')
 
-var touch_power = 0
-var touch_direction = 0
-var touch_rotation = 0
+var touchPower = 0
+var touchDirection = 0
+var touchRotation = 0
 
 var index
 
 var disabled = false
+
+func init(playerBody : KinematicBody2D):
+	_playerBody = playerBody
+
 
 func _ready():
 	# Adjust position on screen
@@ -19,13 +22,17 @@ func _ready():
 	position.y = get_viewport().size.y-(radius+30)
 	origin = position
 
+
 func _input(event):
+	if _playerBody == null:
+		return
+	
 	if event is InputEventScreenTouch:
 		if not event.pressed and is_pressed() and event.index == index:
 			$buttonSprite.global_position = origin
 			$buttonSprite.hide()
 			$background.hide()
-			player_node.speed = 0
+			_playerBody.speed = 0
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
@@ -36,10 +43,10 @@ func _input(event):
 					$buttonSprite.show()
 					$background.show()
 					$buttonSprite.global_position = event.position
-					touch_power = localPos.length()
-					touch_direction = localPos.normalized()
-					if touch_power > radius:
-						touch_power = radius
-						$buttonSprite.global_position = radius*touch_direction + origin
-					player_node.speed = touch_power
-					player_node.direction = touch_direction
+					touchPower = localPos.length()
+					touchDirection = localPos.normalized()
+					if touchPower > radius:
+						touchPower = radius
+						$buttonSprite.global_position = radius*touchDirection + origin
+					_playerBody.speed = touchPower
+					_playerBody.direction = touchDirection

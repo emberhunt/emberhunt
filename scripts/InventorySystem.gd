@@ -32,7 +32,7 @@ func _ready():
 		_inventories[get_child(i).name] = get_child(i)
 		_inventories[get_child(i).name].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
 	
-	var mainInv = $PlayerInventory
+	var mainInv = $playerInventory
 	mainInv.add_item(mainInv.get_item(0))
 	mainInv.add_item(mainInv.get_item(1))
 	mainInv.add_item(mainInv.get_item(2))
@@ -42,7 +42,7 @@ func _ready():
 	mainInv.remove_item(0)
 	
 	
-	var chest = $Chest
+	var chest = $chest
 	chest.add_item(chest.get_item(0))
 	chest.add_item(chest.get_item(1))
 	chest.add_item(chest.get_item(2))
@@ -51,7 +51,7 @@ func _ready():
 	chest.add_item(chest.get_item(3))
 	chest.remove_item(0)
 	
-	var chest2 = $Chest2
+	var chest2 = $chest2
 	chest2.add_item(chest2.get_item(0))
 	chest2.add_item(chest2.get_item(1))
 	chest2.add_item(chest2.get_item(2))
@@ -82,8 +82,8 @@ func _ready():
 		
 	pass
 
-func init(mainInventory : String):
-	_mainInventoryId = mainInventory
+#func _init(mainInventory : String):
+#	_mainInventoryId = mainInventory
 	
 	
 func get_inventory():
