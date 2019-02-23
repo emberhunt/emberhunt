@@ -1,6 +1,6 @@
 extends TouchScreenButton
 
-var radius = Global.touchpadRadius
+var radius = 100
 var origin
 onready var player_node = get_parent().get_parent().get_node('body')
 onready var other_node = get_parent().get_node("shootButton")

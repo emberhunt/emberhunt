@@ -6,4 +6,4 @@ var boolMusic = true
 var Music = 1
 var quality = "High" # High, Medium, Low
 
-var touchpadRadius = 100
+
