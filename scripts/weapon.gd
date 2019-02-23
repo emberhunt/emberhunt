@@ -3,6 +3,8 @@ extends Node2D
 var direction = 0
 var attacking = false
 var can_attack = true
+var attacked_recently = false
+var bullet_scene = preload("res://scenes/default_bullet.tscn")
 
 export var stats = {
 	damage = 1, 							# base damage
@@ -26,15 +28,20 @@ export var stats = {
 	bullet_effects = {}, 					# placeholder for ailments / effects a bullet may have | we have no parser for that yet
 	bullet_color = Color(1,0,0,1), 			# if no gradient is defined, the bullet will be modulated with this value
 	bullet_gradient = Gradient, 			# a color ramp to interpolate bullet colors based on traveled distance
-	bullet_scene = preload("res://scenes/default_bullet.tscn") # pass a scene to add different bullets with custom behaviour
+	heavy_attack = false
 	}
 
 func _process(delta):
 	if attacking: # attack touchpad is in use
 		get_node("weapon_sprite").show()
-		if can_attack: # attack is not on cooldown
+		if can_attack and not stats.heavy_attack: # attack is not on cooldown and not a heavy attack
 			_attack()
+		elif can_attack and stats.heavy_attack:
+			attacked_recently = true
 	else:
+		if stats.heavy_attack and attacked_recently: # pad released and attack is heavy attack
+			_attack()
+		attacked_recently = false
 		get_node("weapon_sprite").hide()
 		
 func _attack():
@@ -48,7 +55,7 @@ func _attack():
 		rotation_step = float(stats.bullet_spread) / float(stats.bullet_count+extra_bullets)			# /
 	
 	for bullet_number in range(stats.bullet_count+extra_bullets): 													# for each bullet do:
-		var new_bullet = stats.bullet_scene.instance() 															# instance new bullet
+		var new_bullet = bullet_scene.instance() 																		# instance new bullet
 		var bullet_rotation = rotation 																					# set base rotation to weapon rotation
 		if rotation_step != -1:																							# if there is a fixed spread step
 			bullet_rotation += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
