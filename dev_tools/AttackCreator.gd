@@ -122,6 +122,9 @@ func _on_ButtonDeleteProjectiles_pressed():
 func _on_BackgroundColor_color_changed(color):
 	VisualServer.set_default_clear_color(color)
 
+func _on_CheckBoxHeavyAttack_toggled(button_pressed):
+	$weapon.stats.heavy_attack = button_pressed
+	
 func _on_ButtonSaveWeapon_pressed():
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
 	$VBoxContainer/ButtonSaveWeapon/WeaponName.visible = not $VBoxContainer/ButtonSaveWeapon/WeaponName.visible
@@ -131,6 +134,7 @@ func _on_ButtonConfirmSafe_pressed():
 		var file = ConfigFile.new()
 		file.load(weapon_safe_file)
 		for key in $weapon.stats.keys():
+			print(key)
 			file.set_value($VBoxContainer/ButtonSaveWeapon/WeaponName.text,key,$weapon.stats[key])
 		file.save(weapon_safe_file)
 		$VBoxContainer/ButtonSaveWeapon/WeaponName.hide()
@@ -162,6 +166,7 @@ func _on_ButtonRestoreDefaults_pressed():
 	for color in $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
 		$SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset(color)
 	$SettingsContainer/InputContainer/BulletColor.color = default_values.bullet_color
+	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = false
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.select(0)
 	
 func _on_ButtonLoadWeapon_pressed():
@@ -181,8 +186,8 @@ func _on_OptionButton_item_selected(ID):
 	file.load(weapon_safe_file)
 	var attack_name = file.get_sections()[ID-1]
 	for key in $weapon.stats.keys():
-		if key != "bullet_scene":
-			$weapon.stats[key] = file.get_value(attack_name,key,null)
+		$weapon.stats[key] = file.get_value(attack_name,key,false)
+		print(key)
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
 			
 	$SettingsContainer/InputContainer/SliderDamage.value = $weapon.stats.damage
@@ -201,5 +206,5 @@ func _on_OptionButton_item_selected(ID):
 	$SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = $weapon.stats.bullet_speed_random
 	$SettingsContainer/InputContainer/SliderBulletScale.value = $weapon.stats.bullet_scale
 	$SettingsContainer/InputContainer/SliderBulletScaleRandom.value = $weapon.stats.bullet_scale_random
-#	$SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset()
 	$SettingsContainer/InputContainer/BulletColor.color = $weapon.stats.bullet_color
+	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = $weapon.stats.heavy_attack
