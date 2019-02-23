@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=1]
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 274, 133, 28, 23 )
+
+[node name="testWorld" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 194.325, 110.73 )
+scale = Vector2( 2, 2 )
+texture = SubResource( 1 )
+region_rect = Rect2( 34, 43, 54, 15 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+

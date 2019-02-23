@@ -2,8 +2,8 @@ extends TouchScreenButton
 
 var radius = 100
 var origin
-onready var player_node = get_parent().get_parent().get_node('body')
-onready var other_node = get_parent().get_node("shootButton")
+onready var player_node = get_node('../../../body')
+onready var other_node = get_node("../shootButton")
 
 var touch_power = 0
 var touch_direction = 0

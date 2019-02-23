@@ -11,5 +11,5 @@ func _on_PauseButton_pressed():
 		scene_instance.set_name("PauseMenu")
 		get_parent().add_child(scene_instance)
 		# Disable touchpads
-		get_node("../../moveButton").disabled = true
-		get_node("../../shootButton").disabled = true
+		get_node("../moveButton").disabled = true
+		get_node("../shootButton").disabled = true

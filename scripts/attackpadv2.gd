@@ -2,7 +2,7 @@ extends TouchScreenButton
 
 var radius = 100
 var origin
-onready var weapon_node = get_parent().get_parent().get_node('body/weapon')
+onready var weapon_node = get_node('../../../body/weapon')
 
 var touch_power = 0
 var touch_direction = 0
