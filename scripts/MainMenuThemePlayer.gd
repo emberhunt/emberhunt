@@ -1,7 +1,7 @@
 extends AudioStreamPlayer
 
 func set_sound_volume(amount): # Convert from percentage to decibels
-	return 8.6858896380650365530225783783321 * log(amount)
+	return 10 * log(amount)
 
 func _process(delta):
 	# Check if the player is in correct scenes for the theme to be played

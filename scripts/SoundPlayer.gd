@@ -2,7 +2,7 @@ extends Node2D
 
 var count = 0
 
-func play(sound):
+func play(sound, volume=0):
 	# Check if Sound is ON
 	if Global.boolSound:
 		# Create an AudioStreamPlayer which will play the sound
@@ -14,7 +14,7 @@ func play(sound):
 		# Specify which sound to play
 		scene_instance.set_stream(sound)
 		# Set volume
-		scene_instance.set_volume_db(8.6858896380650365530225783783321 * log(Global.Sound))
+		scene_instance.set_volume_db((10 * log(Global.Sound))+volume)
 		# Start playing
 		scene_instance._set_playing(true)
 		return "sound"+str(count)

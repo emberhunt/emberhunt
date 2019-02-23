@@ -1,6 +1,6 @@
 extends TouchScreenButton
 
-const radius = 150
+var radius = 100
 var origin
 onready var weapon_node = get_parent().get_parent().get_node('body/weapon')
 
@@ -14,8 +14,8 @@ var disabled = false
 
 func _ready():
 	# Adjust position on screen
-	position.x = get_viewport().size.x-200
-	position.y = get_viewport().size.y-200
+	position.x = get_viewport().size.x-(radius+30)
+	position.y = get_viewport().size.y-(radius+30)
 	origin = position
 
 func _input(event):
