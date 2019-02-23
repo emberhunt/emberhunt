@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "Character",
+"language": "GDScript",
+"path": "res://scripts/character.gd"
+}, {
+"base": "Node2D",
+"class": "Entity",
+"language": "GDScript",
+"path": "res://scripts/Entity.gd"
+}, {
 "base": "Control",
 "class": "InventorySystem",
 "language": "GDScript",
@@ -20,6 +30,8 @@ _global_script_classes=[ {
 "path": "res://scripts/Item.gd"
 } ]
 _global_script_class_icons={
+"Character": "",
+"Entity": "",
 "InventorySystem": "",
 "Item": ""
 }
