@@ -11,6 +11,13 @@ var touchRotation = 0
 var index
 
 var disabled = false
+var isPressed = false
+
+func isInArea(pos):
+	if pos.x<2*radius+50 and pos.y>get_viewport().size.y-(2*radius+50):
+		return true
+	else:
+		return false
 
 func init(playerBody : KinematicBody2D):
 	_playerBody = playerBody
@@ -28,17 +35,32 @@ func _input(event):
 		return
 	
 	if event is InputEventScreenTouch:
-		if not event.pressed and is_pressed() and event.index == index:
+		if not event.pressed and event.index == index:
+			isPressed = false
 			$buttonSprite.global_position = origin
 			$buttonSprite.hide()
 			$background.hide()
 			_playerBody.speed = 0
+		if event.pressed and not isPressed and isInArea(event.position):
+			index = event.index
+			isPressed = true
+			var localPos = event.position - origin
+			$buttonSprite.show()
+			$background.show()
+			$buttonSprite.global_position = event.position
+			touchPower = localPos.length()
+			touchDirection = localPos.normalized()
+			if touchPower > radius:
+				touchPower = radius
+				$buttonSprite.global_position = radius*touchDirection + origin
+			_playerBody.speed = touchPower
+			_playerBody.direction = touchDirection
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
-			if event.position.x < OS.get_screen_size().x/2 - 150:
+			if event.index == index:
 				var localPos = event.position - origin
-				if is_pressed():
+				if isPressed:
 					index = event.index
 					$buttonSprite.show()
 					$background.show()

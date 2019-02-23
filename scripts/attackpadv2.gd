@@ -11,6 +11,13 @@ var touchRotation = 0
 var index
 
 var disabled = false
+var isPressed = false
+
+func isInArea(pos):
+	if pos.x>get_viewport().size.x-(2*radius+50) and pos.y>get_viewport().size.y-(2*radius+50):
+		return true
+	else:
+		return false
 
 func init(weaponNode : Node2D):
 	_weaponNode = weaponNode
@@ -25,17 +32,33 @@ func _ready():
 
 func _input(event):
 	if event is InputEventScreenTouch:
-		if not event.pressed and is_pressed() and index == event.index:
+		if not event.pressed and index == event.index:
+			isPressed = false
 			$buttonSprite.global_position = origin
 			$buttonSprite.hide()
 			$background.hide()
 			_weaponNode.attacking = false
+		if event.pressed and not isPressed and isInArea(event.position):
+			index = event.index
+			isPressed = true
+			var localPos = event.position - origin
+			$buttonSprite.show()
+			$background.show()
+			$buttonSprite.global_position = event.position
+			touchPower = localPos.length()
+			touchDirection = localPos.normalized()
+			touchRotation = atan2(localPos.x, localPos.y*-1)
+			if touchPower > radius:
+				touchPower = radius
+				$buttonSprite.global_position = radius*touchDirection + origin
+			_weaponNode.rotation = touchRotation
+			_weaponNode.attacking = true
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
-			if event.position.x > OS.get_screen_size().x/2 - 200:
+			if event.index == index:
 				var localPos = event.position - origin
-				if is_pressed():
+				if isPressed:
 					index = event.index
 					$buttonSprite.show()
 					$background.show()

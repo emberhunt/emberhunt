@@ -1,5 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
+<<<<<<< HEAD
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=2]
 [ext_resource path="res://assets/UI/roundButton_pressed.png" type="Texture" id=3]
@@ -8,6 +9,15 @@
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=6]
 [ext_resource path="res://scripts/PauseButton.gd" type="Script" id=7]
 [ext_resource path="res://scenes/InventorySystem.tscn" type="PackedScene" id=8]
+=======
+[ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=1]
+[ext_resource path="res://scripts/PauseButton.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Label.gd" type="Script" id=3]
+[ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=4]
+[ext_resource path="res://assets/UI/roundButton_pressed.png" type="Texture" id=5]
+[ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=6]
+[ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=7]
+>>>>>>> 03a90f622142af4fda80582ffb5a837a83af13a7
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 150.0
@@ -21,6 +31,7 @@ margin_right = -0.119568
 margin_bottom = -2.27209
 script = ExtResource( 1 )
 
+<<<<<<< HEAD
 [node name="moveButton" type="TouchScreenButton" parent="."]
 editor/display_folded = true
 position = Vector2( 150, 450 )
@@ -53,15 +64,19 @@ texture = ExtResource( 3 )
 visible = false
 texture = ExtResource( 4 )
 
+=======
+>>>>>>> 03a90f622142af4fda80582ffb5a837a83af13a7
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = 90.0
+<<<<<<< HEAD
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 6 )
 texture_hover = ExtResource( 6 )
@@ -74,18 +89,70 @@ script = ExtResource( 7 )
 scale = Vector2( 5, 5 )
 normal = ExtResource( 6 )
 pressed = ExtResource( 6 )
+=======
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 1 )
+texture_hover = ExtResource( 1 )
+texture_disabled = ExtResource( 1 )
+texture_focused = ExtResource( 1 )
+expand = true
+script = ExtResource( 2 )
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/PauseButton"]
+scale = Vector2( 5, 5 )
+normal = ExtResource( 1 )
+pressed = ExtResource( 1 )
+>>>>>>> 03a90f622142af4fda80582ffb5a837a83af13a7
 
 [node name="debugLabel" type="Label" parent="CanvasLayer"]
 editor/display_folded = true
 margin_right = 96.0
 margin_bottom = 57.0
+<<<<<<< HEAD
 text = "(150, 450)"
+=======
+script = ExtResource( 3 )
+>>>>>>> 03a90f622142af4fda80582ffb5a837a83af13a7
 
 [node name="Timer" type="Timer" parent="CanvasLayer/debugLabel"]
 wait_time = 4096.0
 autostart = true
 
+<<<<<<< HEAD
 [node name="inventorySystem" parent="." instance=ExtResource( 8 )]
 visible = false
+=======
+[node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
+editor/display_folded = true
+position = Vector2( 149.88, 447.728 )
+shape = SubResource( 1 )
+script = ExtResource( 4 )
+
+[node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
+visible = false
+scale = Vector2( 5, 5 )
+z_index = 1
+texture = ExtResource( 5 )
+
+[node name="background" type="Sprite" parent="CanvasLayer/moveButton"]
+visible = false
+texture = ExtResource( 6 )
+
+[node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
+editor/display_folded = true
+position = Vector2( 873.88, 447.728 )
+shape = SubResource( 1 )
+script = ExtResource( 7 )
+
+[node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
+visible = false
+scale = Vector2( 5, 5 )
+z_index = 1
+texture = ExtResource( 5 )
+
+[node name="background" type="Sprite" parent="CanvasLayer/shootButton"]
+visible = false
+texture = ExtResource( 6 )
+>>>>>>> 03a90f622142af4fda80582ffb5a837a83af13a7
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
