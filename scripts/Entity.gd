@@ -22,15 +22,14 @@ enum PropertyType {
 	MAGIC_RESISTANCE,
 	
 	LEVEL,
-	CLASS,
-	SUB_CLASS
+	CLASS
 }
 
 var properties = {}
 
 
 func _ready():
-	# TODO: add autoload script to get ids
+	# TODO: add autoload script to get ids, probably by server
 	var uid = 0 # get_next_id()
 	
 	print("entity[" + str(uid) + "]")
@@ -75,8 +74,6 @@ func get_property_name(propertyType):
 			return "level"
 		PropertyType.CLASS:
 			return "class"
-		PropertyType.SUB_CLASS:
-			return "subclass"
 		_:
 			print("coudln't find propertyType: " + str(propertyType))
 			return ""
