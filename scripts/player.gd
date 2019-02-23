@@ -5,7 +5,6 @@ class_name Player
 
 func _ready():
 	_set_properties()
-	
 	print(get_property(PropertyType.CLASS))
 	
 
@@ -21,6 +20,5 @@ func _set_properties():
 	set_property(PropertyType.PHYSICAL_DEFENSE, 1)
 	set_property(PropertyType.MAGIC_RESISTANCE, 1)
 	
-	set_property(PropertyType.CLASS, "MAGICIAN")
-	set_property(PropertyType.SUB_CLASS, "FIRE MAGICIAN")
+	set_property(PropertyType.CLASS, get_character_type(CharacterType.KNIGHT))
 	set_property(PropertyType.LEVEL, 1)
