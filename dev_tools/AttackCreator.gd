@@ -134,7 +134,6 @@ func _on_ButtonConfirmSafe_pressed():
 		var file = ConfigFile.new()
 		file.load(weapon_safe_file)
 		for key in $weapon.stats.keys():
-			print(key)
 			file.set_value($VBoxContainer/ButtonSaveWeapon/WeaponName.text,key,$weapon.stats[key])
 		file.save(weapon_safe_file)
 		$VBoxContainer/ButtonSaveWeapon/WeaponName.hide()
@@ -187,7 +186,6 @@ func _on_OptionButton_item_selected(ID):
 	var attack_name = file.get_sections()[ID-1]
 	for key in $weapon.stats.keys():
 		$weapon.stats[key] = file.get_value(attack_name,key,false)
-		print(key)
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
 			
 	$SettingsContainer/InputContainer/SliderDamage.value = $weapon.stats.damage
