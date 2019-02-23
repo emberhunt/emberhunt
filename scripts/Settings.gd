@@ -2,6 +2,7 @@ extends Control
 
 func _on_ButtonBack_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
+	Global.saveGame()
 	get_tree().change_scene("res://scenes/MainMenu.tscn")
 
 
