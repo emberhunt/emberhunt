@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Control",
+"class": "InventorySystem",
+"language": "GDScript",
+"path": "res://scripts/InventorySystem.gd"
+}, {
+"base": "Reference",
+"class": "Item",
+"language": "GDScript",
+"path": "res://scripts/Item.gd"
+} ]
 _global_script_class_icons={
-
+"InventorySystem": "",
+"Item": ""
 }
 
 [application]
@@ -18,10 +29,6 @@ _global_script_class_icons={
 config/name="Emberhunt"
 run/main_scene="res://scenes/MainMenu.tscn"
 config/icon="res://icon.png"
-
-[autoload]
-
-Global="*res://scripts/Global.gd"
 
 [rendering]
 

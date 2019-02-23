@@ -1,0 +1,118 @@
+{
+	"0" : {
+		"name" : "The Super Great Dingle Donger 9000",
+		"type" : "WEAPON_MELEE",
+		"value" : 10,
+		"weight" : 1.0,
+		"description" : "This is a test weapon!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"str" : 1
+		},
+		
+		"texture_region" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"stack_size" : 4,
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : false,
+		"discardable" : true
+	},
+	"1" : {
+		"name" : "The Tome Of Darkness",
+		"type" : "TOME",
+		"value" : 1337,
+		"weight" : 2.0,
+		"description" : "This is a TOME!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"str" : 1
+		},
+		
+		"texture_region" : {
+			"x" : 32,
+			"y" : 0,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+
+		"stack_size" : 4,		
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : false,
+		"discardable" : true
+	},
+	"2" : {
+		"name" : "asd",
+		"type" : "TOME",
+		"value" : 1337,
+		"weight" : 3.0,
+		"description" : "This is a TOME!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"str" : 1
+		},
+		
+		"texture_region" : {
+			"x" : 32,
+			"y" : 32,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"stack_size" : 4,
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : false,
+		"discardable" : true
+	},
+	"3" : {
+		"name" : "Potion",
+		"type" : "CONSUMEABLE",
+		"value" : 123,
+		"weight" : 0.13,
+		"description" : "This is the uber Potion!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"str" : 1
+		},
+		
+		"texture_region" : {
+			"x" : 128,
+			"y" : 160,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"stack_size" : 4,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : false,
+		"discardable" : true
+	}
+}

@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
+
+[node name="Inventory" type="Control"]
+margin_left = 194.158
+margin_top = 114.316
+margin_right = 744.158
+margin_bottom = 468.316
+mouse_filter = 1
+script = ExtResource( 1 )
+inventoryName = "playerInv"
+max_inventory_size = 15
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+
+[node name="GridContainer" type="GridContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_constants/vseparation = 40
+custom_constants/hseparation = 40
+columns = 4
+
