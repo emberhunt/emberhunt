@@ -28,12 +28,17 @@ _global_script_classes=[ {
 "class": "Item",
 "language": "GDScript",
 "path": "res://scripts/Item.gd"
+"base": "Node2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://scripts/player.gd"
 } ]
 _global_script_class_icons={
 "Character": "",
 "Entity": "",
 "InventorySystem": "",
 "Item": ""
+"Player": ""
 }
 
 [application]
