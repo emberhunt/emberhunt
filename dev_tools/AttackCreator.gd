@@ -154,8 +154,8 @@ func _on_ButtonRestoreDefaults_pressed():
 	$SettingsContainer/InputContainer/SliderBulletCount.value = default_values.bullet_count
 	$SettingsContainer/InputContainer/SliderBulletRandomLow.value = default_values.bullet_count_random.x
 	$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = default_values.bullet_count_random.y
-	$SettingsContainer/InputContainer/SliderBulletSpread.value = rad2deg(default_values.bullet_spread)
-	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = rad2deg(default_values.bullet_spread_random)
+	$SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad(default_values.bullet_spread)
+	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad(default_values.bullet_spread_random)
 	$SettingsContainer/InputContainer/SliderBulletRange.value = default_values.bullet_range
 	$SettingsContainer/InputContainer/SliderBulletRangeRandom.value = default_values.bullet_range_random
 	$SettingsContainer/InputContainer/SliderBulletSpeed.value = default_values.bullet_speed
@@ -196,8 +196,8 @@ func _on_OptionButton_item_selected(ID):
 	$SettingsContainer/InputContainer/SliderBulletCount.value = $weapon.stats.bullet_count
 	$SettingsContainer/InputContainer/SliderBulletRandomLow.value = $weapon.stats.bullet_count_random.x
 	$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = $weapon.stats.bullet_count_random.y
-	$SettingsContainer/InputContainer/SliderBulletSpread.value = rad2deg($weapon.stats.bullet_spread)
-	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = rad2deg($weapon.stats.bullet_spread_random)
+	$SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad($weapon.stats.bullet_spread)
+	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad($weapon.stats.bullet_spread_random)
 	$SettingsContainer/InputContainer/SliderBulletRange.value = $weapon.stats.bullet_range
 	$SettingsContainer/InputContainer/SliderBulletRangeRandom.value = $weapon.stats.bullet_range_random
 	$SettingsContainer/InputContainer/SliderBulletSpeed.value = $weapon.stats.bullet_speed
