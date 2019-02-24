@@ -37,11 +37,18 @@ margin_bottom = 574.526
 inventoryName = "chest"
 max_inventory_size = 8
 
-[node name="itemSlotDescription" parent="." instance=ExtResource( 3 )]
+[node name="canvasLayer" type="CanvasLayer" parent="."]
+layer = 11
+
+[node name="blocker" type="Control" parent="canvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="itemSlotDescription" parent="canvasLayer" instance=ExtResource( 3 )]
 visible = false
 rect_pivot_offset = Vector2( -24, -24 )
 
-[node name="descriptionField" type="Control" parent="."]
+[node name="descriptionField" type="Control" parent="canvasLayer"]
 visible = false
 margin_left = 1.0
 margin_right = 343.0
@@ -49,4 +56,4 @@ margin_bottom = 233.0
 rect_pivot_offset = Vector2( 16, 16 )
 mouse_filter = 1
 
-[connection signal="mouse_exited" from="descriptionField" to="." method="_on_descriptionField_mouse_exited"]
+[connection signal="mouse_exited" from="canvasLayer/descriptionField" to="." method="_on_descriptionField_mouse_exited"]

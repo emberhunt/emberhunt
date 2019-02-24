@@ -11,8 +11,9 @@ extends Control
 const Inventory = preload("res://scripts/Inventory.gd")
 const SlotRequirement = preload("res://scripts/SlotRequirement.gd")
 
-onready var itemDescription = $itemSlotDescription
-onready var itemDescriptionField = $descriptionField
+onready var itemDescription = $canvasLayer/itemSlotDescription
+onready var itemDescriptionField = $canvasLayer/descriptionField
+onready var blocker = $canvasLayer/blocker
 
 
 class_name InventorySystem
@@ -141,31 +142,50 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 			itemDescriptionField.rect_global_position = pos
 			 
 			itemDescription.set_description(_inventories[inv].get_slots()[pressedId].get_item().get_description())
-			itemDescription.set_visible(true)
+			blocker.set_visible(true)
 			itemDescriptionField.set_visible(true)
+			itemDescription.set_visible(true)
 			
 		if selectedId == lastSelectedId:
 			return
 		
-		var slotRequirements = _inventories[inv].get_slots()[selectedId].get_slot_requirements()
-		var itemRequirements = _inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item().get_requirements()
+		#var slotRequirements = _inventories[inv].get_slots()[selectedId].get_slot_requirements()
+		#var itemRequirements = _inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item().get_requirements()
 		
 		var itemType = _inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item().get_type()
-		var slotTypeRequirement = _inventories[inv].get_slots()[selectedId].get_slot_types()
+		#var slotTypeRequirement = _inventories[inv].get_slots()[selectedId].get_slot_types()
 		
 		#print(slotRequirements)
 		#print(itemRequirements)
 		print(itemType)
-		print(_inventories[inv].get_slots()[selectedId].get_slot_types())
+		#print(_inventories[inv].get_slots()[selectedId].get_slot_types())
 		
 		
-		if _inventories[inv].get_slots()[selectedId].has_slot_type(itemType):#SlotRequirement.meet_requirements(itemRequirements, slotRequirements) and \
-			# get player stats
+		#if _inventories[inv].get_slots()[selectedId].accepts_slot_type(itemType):#SlotRequirement.meet_requirements(itemRequirements, slotRequirements) and \
+		#if _check_requirements_type(_inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item(), _inventories[inv].get_slots()[selectedId]):	# get player stats
+		if _check_requirements_for_slot_swap( \
+				_inventories[lastSelectedInv].get_slots()[lastSelectedId], \
+				_inventories[selectedInv].get_slots()[selectedId]):
 			#if SlotRequirement.character_meets_item_requirements(playerStats, itemRequirements):
 			_inventories[selectedInv].swap_items(selectedId, lastSelectedId) 
 			
+func _check_requirements_for_slot_swap(firstSlot, secondSlot) -> bool:
+	if not _check_requirements_type(secondSlot.get_item(), firstSlot):
+		return false
+	if not _check_requirements_type(firstSlot.get_item(), secondSlot):
+		return false
+	
+	return true
+func _check_requirements_type(item, slot) -> bool:
+	if item == null:
+		return true
+	if slot.accepts_slot_type(item.get_type()):
+		return true
+	return false
+	
 			
 func _on_descriptionField_mouse_exited():
 	if itemDescription.is_visible():
 		itemDescription.set_visible(false)
 		itemDescriptionField.set_visible(false)
+		blocker.set_visible(false)

@@ -47,7 +47,7 @@ class Slot:
 	func set_slot_types(types : Array):
 		_slotTypeRequirements = types
 		
-	func has_slot_type(type) -> bool:
+	func accepts_slot_type(type) -> bool:
 		if _slotTypeRequirements.empty():
 			return true
 		return _slotTypeRequirements.has(type)
