@@ -34,10 +34,6 @@ func _ready():
 
 
 func _input(event):
-	if _playerBody == null:
-		print("no body")
-		return
-	
 	if event is InputEventScreenTouch:
 		if not event.pressed and event.index == index:
 			isPressed = false
@@ -47,6 +43,9 @@ func _input(event):
 			_playerBody.speed = 0
 		if event.pressed and not isPressed and isInArea(event.position):
 			if not disabled:
+				if Global.touchpadPosition == "Flexible":
+					origin = event.position
+					set_position(event.position)
 				index = event.index
 				isPressed = true
 				var localPos = event.position - origin

@@ -58,6 +58,7 @@ func _on_SliderSound_value_changed(value):
 
 
 func _on_ButtonTouchpads_pressed():
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if Global.touchpadPosition == "Fixed":
 		Global.touchpadPosition = "Flexible"
 	else:

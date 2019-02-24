@@ -15,7 +15,7 @@ var playerBody : KinematicBody2D = null
 func _ready():
 	set_process_input(true)
 	inventorySystem.hide()
-	playerBody = get_node(playerNode).get_child(0)
+	playerBody = get_node("../player").get_child(0)
 	
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))

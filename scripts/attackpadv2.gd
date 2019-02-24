@@ -34,10 +34,6 @@ func _ready():
 
 
 func _input(event):
-	if _weaponNode == null:
-		print("no body")
-		return
-	
 	if event is InputEventScreenTouch:
 		if not event.pressed and index == event.index:
 			isPressed = false
@@ -47,6 +43,9 @@ func _input(event):
 			_weaponNode.attacking = false
 		if event.pressed and not isPressed and isInArea(event.position):
 			if not disabled:
+				if Global.touchpadPosition == "Flexible":
+					origin = event.position
+					set_position(event.position)
 				index = event.index
 				isPressed = true
 				var localPos = event.position - origin

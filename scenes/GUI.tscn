@@ -55,7 +55,6 @@ wait_time = 4096.0
 autostart = true
 
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
-editor/display_folded = true
 position = Vector2( 149.88, 447.728 )
 shape = SubResource( 1 )
 script = ExtResource( 3 )
