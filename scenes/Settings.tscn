@@ -80,7 +80,6 @@ text = "Settings
 align = 1
 
 [node name="Buttons" type="Container" parent="."]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -176,7 +175,29 @@ align = 1
 valign = 1
 uppercase = true
 
+[node name="ButtonTouchpads" type="TextureButton" parent="Buttons"]
+editor/display_folded = true
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 220.0
+margin_top = 210.0
+margin_right = 620.0
+margin_bottom = 260.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+expand = true
+
+[node name="Label" type="Label" parent="Buttons/ButtonTouchpads"]
+margin_right = 400.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 6 )
+text = "Touchpads: Fixed"
+align = 1
+valign = 1
+uppercase = true
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
+editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -243,5 +264,6 @@ valign = 1
 [connection signal="pressed" from="Buttons/ButtonMusic" to="." method="_on_ButtonMusic_pressed"]
 [connection signal="pressed" from="Buttons/ButtonSound" to="." method="_on_ButtonSound_pressed"]
 [connection signal="pressed" from="Buttons/ButtonQuality" to="." method="_on_ButtonQuality_pressed"]
+[connection signal="pressed" from="Buttons/ButtonTouchpads" to="." method="_on_ButtonTouchpads_pressed"]
 [connection signal="value_changed" from="VBoxContainer2/SliderMusic" to="." method="_on_SliderMusic_value_changed"]
 [connection signal="value_changed" from="VBoxContainer2/SliderSound" to="." method="_on_SliderSound_value_changed"]
