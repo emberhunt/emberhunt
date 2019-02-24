@@ -21,6 +21,8 @@ enum PropertyType {
 	PHYSICAL_DEFENSE,
 	MAGIC_RESISTANCE,
 	
+	CARRY_WEIGHT,
+	
 	LEVEL,
 	CLASS
 }
@@ -34,6 +36,10 @@ func _ready():
 	
 	print("entity[" + str(uid) + "]")
 	set_property(PropertyType.ID, uid)
+	
+	
+func get_properties() -> Dictionary:
+	return properties
 
 
 func has_property(propertyType) -> bool:

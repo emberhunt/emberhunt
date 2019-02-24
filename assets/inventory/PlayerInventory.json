@@ -4,7 +4,7 @@
 		"type" : "WEAPON_MELEE",
 		"value" : 10,
 		"weight" : 1.0,
-		"description" : "This is a test weapon!",
+		"description" : "fant",
 		
 		"requirements" : {
 			"level" : 10
@@ -33,7 +33,7 @@
 		"type" : "TOME",
 		"value" : 1337,
 		"weight" : 2.0,
-		"description" : "This is a TOME!",
+		"description" : "This is the most op thing you have ever seen",
 		
 		"requirements" : {
 			"level" : 10

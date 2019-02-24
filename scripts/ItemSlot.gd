@@ -13,7 +13,7 @@ onready var _itemTexture = $ItemTexture
 var _texture : Texture = null
 
 var _id : String = ""
-var _typeRequirements = {}
+
 
 #custom init function
 func init(id):
@@ -26,16 +26,26 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if event.position.x > rect_global_position.x and \
-		 event.position.y > rect_global_position.y and \
-		 event.position.x < rect_global_position.x + rect_size.x and \
-		 event.position.y < rect_global_position.y + rect_size.y:
+#		if is_position_in_description_range(event.position):
+#			print("in range")
+		if _is_position_on_slot(event.position):
 			if event.button_index == BUTTON_LEFT:
 				if not event.pressed:
 					emit_signal("on_slot_released", _id)
 				else:
 					emit_signal("on_slot_pressed", _id)
 		
+
+			
+func _is_position_on_slot(position) -> bool: # get_viewport().get_mouse_position()
+	if position.x > rect_global_position.x and \
+		 position.y > rect_global_position.y and \
+		 position.x < rect_global_position.x + rect_size.x and \
+		 position.y < rect_global_position.y + rect_size.y:
+		return true
+	else:
+		return false
+
 
 func get_id() -> String:
 	return _id
@@ -68,4 +78,3 @@ func set_selected():
 
 func set_unselected():
 	texture_normal = _backgroundTexture
-

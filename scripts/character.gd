@@ -23,7 +23,7 @@ func _ready():
 	pass
 
 
-static func get_character_type(characterType) -> String:
+static func get_character_name(characterType) -> String:
 	match (characterType):
 		CharacterType.KNIGHT:
 			return "knight"

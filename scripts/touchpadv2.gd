@@ -20,6 +20,9 @@ func isInArea(pos):
 		return false
 
 func init(playerBody : KinematicBody2D):
+	if playerBody == null:
+		print("no body")
+		return
 	_playerBody = playerBody
 
 
@@ -32,6 +35,7 @@ func _ready():
 
 func _input(event):
 	if _playerBody == null:
+		print("no body")
 		return
 	
 	if event is InputEventScreenTouch:

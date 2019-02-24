@@ -6,7 +6,7 @@ extends Control
 
 onready var debugLabel = $CanvasLayer/debugLabel 
 
-export(NodePath) var playerNode
+export(NodePath) var playerNode = "../player"
 
 onready var inventorySystem = $inventorySystem
 var playerBody : KinematicBody2D = null

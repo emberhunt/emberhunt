@@ -27,3 +27,5 @@ func loadGame():
 	
 func _ready():
 	loadGame()
+	
+	

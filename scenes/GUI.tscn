@@ -20,6 +20,7 @@ margin_top = -2.27206
 margin_right = -0.119568
 margin_bottom = -2.27209
 script = ExtResource( 1 )
+playerNode = NodePath("")
 
 [node name="moveButton" type="TouchScreenButton" parent="."]
 editor/display_folded = true

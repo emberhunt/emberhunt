@@ -7,7 +7,6 @@
 
 [node name="gui" parent="." instance=ExtResource( 1 )]
 margin_bottom = -2.27203
-playerNode = NodePath("../player")
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 
