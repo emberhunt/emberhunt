@@ -33,7 +33,7 @@ region_rect = Rect2( 17, 40, 17, 43 )
 
 [node name="bullet_container" type="Node" parent="body/weapon"]
 
-[node name="player_sprite" type="Sprite" parent="."]
+[node name="player_sprite" type="Sprite" parent="body"]
 scale = Vector2( 4, 4 )
 z_index = 1
 texture = ExtResource( 5 )

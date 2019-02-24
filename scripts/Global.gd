@@ -6,6 +6,9 @@ var boolMusic = true
 var Music = 1
 var quality = "High" # High, Medium, Low
 
+# game paused
+var paused = false
+
 func saveGame():
 	var file = ConfigFile.new()
 	file.load("user://emberhunt.save")

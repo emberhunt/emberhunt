@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=2]
@@ -6,8 +6,7 @@
 [ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=4]
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=5]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=6]
-[ext_resource path="res://scripts/PauseButton.gd" type="Script" id=7]
-[ext_resource path="res://scenes/InventorySystem.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/InventorySystem.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 150.0
@@ -55,8 +54,14 @@ visible = false
 texture = ExtResource( 4 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="PauseButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
@@ -69,7 +74,6 @@ texture_hover = ExtResource( 6 )
 texture_disabled = ExtResource( 6 )
 texture_focused = ExtResource( 6 )
 expand = true
-script = ExtResource( 7 )
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/PauseButton"]
 scale = Vector2( 5, 5 )
@@ -86,7 +90,7 @@ text = "(150, 450)"
 wait_time = 4096.0
 autostart = true
 
-[node name="inventorySystem" parent="." instance=ExtResource( 8 )]
+[node name="inventorySystem" parent="." instance=ExtResource( 7 )]
 visible = false
 
-[connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="CanvasLayer/PauseButton" method="_on_PauseButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]

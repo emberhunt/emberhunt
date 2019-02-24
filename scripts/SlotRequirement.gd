@@ -6,7 +6,6 @@
 const DeepCopy = preload("res://scripts/DeepCopyDict.gd")
 
 enum SlotRequirement {
-	ITEM_TYPE,
 	WEIGHT,
 	
 	MAX_HEALTH,
@@ -25,8 +24,6 @@ enum SlotRequirement {
 
 static func get_requirement_name(requirementType) -> String:
 	match (requirementType):
-		SlotRequirement.ITEM_TYPE:
-			return "item_type"
 		SlotRequirement.WEIGHT:
 			return "weight"
 		
@@ -57,8 +54,6 @@ static func get_requirement_name(requirementType) -> String:
 
 static func get_requirement_type(requirement):
 	match (requirement):
-		"item_type":
-			return SlotRequirement.ITEM_TYPE
 		"weight":
 			return SlotRequirement.WEIGHT
 		
@@ -126,37 +121,24 @@ static func test_requirement(requirements : Dictionary, requirementType : String
 			return false
 		
 
-static func meet_character_and_item_requirements(characterStats : Dictionary, itemStats : Dictionary, slotRequirements : Dictionary) -> bool:
-	if slotRequirements.empty():
+static func character_meets_item_requirements(characterStats : Dictionary, itemStats : Dictionary) -> bool:
+	if itemStats.empty():
 		return true
 	
-	var tempDict = DeepCopy.deep_copy(itemStats)
+	for i in range(itemStats.size()):
+		var itemKey = itemStats.keys()[i]
 		
-	for i in range(characterStats.size()):
-		var charKey = characterStats.keys()[i]
-		var charVal = characterStats[characterStats.keys()[i]]
-		
-		tempDict[charKey] = charVal
-	
-	var neededRequirementsCount = slotRequirements.size()
-	var currentRequirementsCount = 0
-		
-	
-	for i in range(slotRequirements.size()):
-		var slotKey = slotRequirements.keys()[i]
-		var slotVal = slotRequirements[slotKey]
-		
-		if not tempDict.has(slotKey):
+		if not characterStats.has(itemKey):
 			return false
 		
-		for j in range(tempDict.size()):
-			var dKey = tempDict.keys()[j]
-			var dVal = tempDict[dKey]
+		for j in range(characterStats.size()):
+			var dKey = characterStats.keys()[j]
+			var dVal = characterStats[dKey]
 			
 			#check if keys are the same: e.g.: 'class' == 'class'
-			if slotKey == dKey:
+			if itemKey == dKey:
 				# then check if the requirement is met
-				if not test_requirement(slotRequirements, slotKey, dVal): 
+				if not test_requirement(itemStats, itemKey, dVal): 
 					return false
 	
 	return true

@@ -2,7 +2,7 @@ extends TouchScreenButton
 
 var radius = 100
 var origin
-var _playerBody : KinematicBody2D = null#get_parent().get_parent().get_node('body')
+onready var _playerBody : KinematicBody2D = null#get_parent().get_parent().get_node('body')
 
 var touchPower = 0
 var touchDirection = 0

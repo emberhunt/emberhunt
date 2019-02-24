@@ -35,6 +35,7 @@ class Slot:
 	var _slot : TextureButton
 	var _amount = 0
 	var _slotRequirements = {} # level, class, type of item
+	var _slotTypeRequirements : Array # ItemTypes
 
 	func _init(id : String):
 		_slot = itemSlotPrefab.instance()
@@ -42,6 +43,17 @@ class Slot:
 		#_slot.set_amount(0)
 		#_slot = ItemSlotPrefab.instance()
 		pass
+		
+	func set_slot_types(types : Array):
+		_slotTypeRequirements = types
+		
+	func has_slot_type(type) -> bool:
+		if _slotTypeRequirements.empty():
+			return true
+		return _slotTypeRequirements.has(type)
+	
+	func get_slot_types() -> Array:
+		return _slotTypeRequirements
 	
 	func set_amount(amount : int):
 		_amount = amount
@@ -138,6 +150,7 @@ func _ready():
 		if i == 0:
 			emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
 					Character.get_character_name(Character.CharacterType.KNIGHT))
+			emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.WEAPON_MELEE)])
 		add_slot(emptySlot)
 	
 	
@@ -155,7 +168,7 @@ func _get_selected_slot() -> ItemSlot:
 	return _slots[_selected]._item
 	
 func _input(event):
-	if not get_parent().is_visible():
+	if not get_parent().is_visible() or Global.paused:
 		return
 	
 	if event is InputEventMouseButton:
@@ -335,7 +348,7 @@ func swap_items(idx1 : String, idx2 : String):
 
 # when released, swap items
 func _on_slot_released(index):
-	if not get_parent().is_visible():
+	if not get_parent().is_visible() or Global.paused:
 		return
 		
 	_lastSelected = _selected
@@ -355,7 +368,7 @@ func _on_slot_released(index):
 	
 
 func _on_slot_pressed(index : String):
-	if not get_parent().is_visible():
+	if not get_parent().is_visible() or Global.paused:
 		return
 		
 	_lastSelected = _selected

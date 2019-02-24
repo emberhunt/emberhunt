@@ -21,3 +21,10 @@ region_rect = Rect2( 34, 43, 54, 15 )
 [node name="gui" parent="." instance=ExtResource( 3 )]
 playerNode = NodePath("../player")
 
+[node name="debugLabel" parent="gui/CanvasLayer" index="2"]
+text = "(0, 0)"
+
+
+[editable path="player"]
+
+[editable path="gui"]

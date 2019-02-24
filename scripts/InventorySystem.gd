@@ -47,7 +47,7 @@ func _ready():
 	mainInv.add_item(mainInv.get_item(3))
 	mainInv.add_item(mainInv.get_item(3))
 	mainInv.add_item(mainInv.get_item(3))
-	mainInv.remove_item(0)
+	mainInv.remove_item(3)
 	
 	
 	var chest = $Inventories/chest
@@ -88,8 +88,6 @@ func _ready():
 #			_inventories[_mainInventoryId].register_slot(inv.inventoryName + str(s), slot)
 			
 		
-	pass
-	
 #func _input(event):
 #	if not is_visible():
 #		return
@@ -117,11 +115,13 @@ func unregister_inventory(inventoryId : String):
 
 
 func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
+	if Global.paused:
+		return
+		
 	lastSelectedInv = selectedInv
 	selectedInv = inv
 	lastSelectedId = selectedId
 	selectedId = id
-	print(is_pressed)
 	
 	if is_pressed:
 		if _inventories[inv].get_slots()[id]._item != null :
@@ -150,10 +150,18 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 		var slotRequirements = _inventories[inv].get_slots()[selectedId].get_slot_requirements()
 		var itemRequirements = _inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item().get_requirements()
 		
-		print(slotRequirements)
-		print(itemRequirements)
+		var itemType = _inventories[lastSelectedInv].get_slots()[lastSelectedId].get_item().get_type()
+		var slotTypeRequirement = _inventories[inv].get_slots()[selectedId].get_slot_types()
 		
-		if SlotRequirement.meet_requirements(itemRequirements, slotRequirements):
+		#print(slotRequirements)
+		#print(itemRequirements)
+		print(itemType)
+		print(_inventories[inv].get_slots()[selectedId].get_slot_types())
+		
+		
+		if _inventories[inv].get_slots()[selectedId].has_slot_type(itemType):#SlotRequirement.meet_requirements(itemRequirements, slotRequirements) and \
+			# get player stats
+			#if SlotRequirement.character_meets_item_requirements(playerStats, itemRequirements):
 			_inventories[selectedInv].swap_items(selectedId, lastSelectedId) 
 			
 			
