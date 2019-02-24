@@ -16,4 +16,3 @@ func _process(delta):
 	if Input.is_action_pressed("ui_down"):		# |
 		motion += Vector2(0,10000)*delta			#/
 	move_and_slide(motion)# Move according to the motion vector
-	

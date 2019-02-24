@@ -1,7 +1,7 @@
 class_name Item
 
 
-enum ItemTypes {
+enum ItemType {
 	WEAPON_MELEE,
 	WEAPON_RANGED,
 	CONSUMEABLE,
@@ -11,18 +11,31 @@ enum ItemTypes {
 static func get_type_from_name(itemTypeName : String):
 	match (itemTypeName):
 		"WEAPON_MELEE":
-			return ItemTypes.WEAPON_MELEE
+			return ItemType.WEAPON_MELEE
 		"WEAPON_RANGED":
-			return ItemTypes.WEAPON_RANGED
+			return ItemType.WEAPON_RANGED
 		"CONSUMEABLE":
-			return ItemTypes.CONSUMEABLE
+			return ItemType.CONSUMEABLE
 		"TOME":
-			return ItemTypes.TOME
+			return ItemType.TOME
 		_:
 			print("unkown item type!")
 			return "UNKOWN_ITEM_TYPE"
 	
 
+static func get_type_name(itemType) -> String:
+	match (itemType):
+		ItemType.WEAPON_MELEE:
+			return "WEAPON_MELEE"
+		ItemType.WEAPON_RANGED:
+			return "WEAPON_RANGED"
+		ItemType.CONSUMEABLE:
+			return "CONSUMEABLE"
+		ItemType.TOME:
+			return "TOME"
+		_:
+			print("unkown item type!")
+			return "UNKOWN_ITEM_TYPE"
 
 	
 	
@@ -74,8 +87,8 @@ func get_id() -> int:
 func get_name() -> String:
 	return _name
 	
-func get_type() -> int:
-	return _type
+func get_type() -> String:
+	return get_type_name(_type)
 
 func get_weight() -> float:
 	return _weight

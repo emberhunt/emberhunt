@@ -2,8 +2,9 @@ extends "res://scripts/character.gd"
 
 class_name Player
 
+var inventory = preload("res://scripts/Inventory.gd").new()
 
-func _ready():
+func _init():
 	_set_properties()
 	print(get_property(PropertyType.CLASS))
 	
@@ -19,6 +20,8 @@ func _set_properties():
 	set_property(PropertyType.LUCK, 1)
 	set_property(PropertyType.PHYSICAL_DEFENSE, 1)
 	set_property(PropertyType.MAGIC_RESISTANCE, 1)
+	set_property(PropertyType.CARRY_WEIGHT, 100.0)
 	
-	set_property(PropertyType.CLASS, get_character_type(CharacterType.KNIGHT))
+	set_property(PropertyType.CLASS, get_character_name(CharacterType.KNIGHT))
 	set_property(PropertyType.LEVEL, 1)
+

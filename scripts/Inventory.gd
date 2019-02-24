@@ -1,7 +1,7 @@
 """
 
 """
-extends Node
+extends Control
 
 # signaled, when pressed or released
 signal on_slot_toggled(is_pressed, _selected, inventoryName)
@@ -9,6 +9,8 @@ signal on_slot_toggled(is_pressed, _selected, inventoryName)
 
 const Item = preload("res://scripts/Item.gd")
 const ItemSlot = preload("res://scripts/ItemSlot.gd")
+const SlotRequirement = preload("res://scripts/SlotRequirement.gd")
+const Character = preload("res://scripts/character.gd")
 
 
 const itemSlotPrefab = preload("res://scenes/ItemSlot.tscn")
@@ -32,7 +34,8 @@ class Slot:
 	var _item : Item = null
 	var _slot : TextureButton
 	var _amount = 0
-	var _requirements = {}
+	var _slotRequirements = {} # level, class, type of item
+	var _slotTypeRequirements : Array # ItemTypes
 
 	func _init(id : String):
 		_slot = itemSlotPrefab.instance()
@@ -40,6 +43,17 @@ class Slot:
 		#_slot.set_amount(0)
 		#_slot = ItemSlotPrefab.instance()
 		pass
+		
+	func set_slot_types(types : Array):
+		_slotTypeRequirements = types
+		
+	func has_slot_type(type) -> bool:
+		if _slotTypeRequirements.empty():
+			return true
+		return _slotTypeRequirements.has(type)
+	
+	func get_slot_types() -> Array:
+		return _slotTypeRequirements
 	
 	func set_amount(amount : int):
 		_amount = amount
@@ -88,11 +102,14 @@ class Slot:
 	func set_unselected():
 		_slot.set_unselected()
 		
-	func has_requirements() -> bool:
-		return _requirements.size() > 0
+	func add_slot_requirement(requirementType, value):
+		_slotRequirements[SlotRequirement.get_requirement_name(requirementType)] = value
 		
-	func get_requirements() -> Dictionary:
-		return _requirements
+	func has_slot_requirements() -> bool:
+		return _slotRequirements.size() > 0
+		
+	func get_slot_requirements() -> Dictionary:
+		return _slotRequirements
 	
 	
 
@@ -124,25 +141,19 @@ func _ready():
 	_load_all_items()
 	
 	itemSlots.columns = columns
-	#itemList.max_columns = columns
 	
 	
 	for i in range(max_inventory_size):
 		var textureRect = TextureRect.new()
 		textureRect.texture = _slotBackground
-		#itemSlots.add_child(textureRect)
 		var emptySlot = Slot.new(inventoryName + str(i))
-		#emptySlot._slot = itemSlotPrefab
+		if i == 0:
+			emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
+					Character.get_character_name(Character.CharacterType.KNIGHT))
+			emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.WEAPON_MELEE)])
 		add_slot(emptySlot)
-
-		
-		#_itemSlots[str(i)] = null
-		#var emptyItem = _emptySlot
-		#itemList.add_icon_item(emptyItem)		
 	
-
 	
-
 func register_slot(name : String, slot : Slot):
 	_registeredSlotNames.append(name)
 	_slots[name] = slot
@@ -157,6 +168,9 @@ func _get_selected_slot() -> ItemSlot:
 	return _slots[_selected]._item
 	
 func _input(event):
+	if not get_parent().is_visible() or Global.paused:
+		return
+	
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			pass
@@ -318,12 +332,11 @@ func _get_next_free_slot_id() -> String:
 	
 	
 func swap_selected():
-	print(_selected)
-	print(_lastSelected)
-	var tempItem = _slots[_selected].get_item()
-	var amount = _slots[_selected].get_amount()
-	_slots[_selected].set_item(_slots[_lastSelected].get_item(), _slots[_lastSelected].get_amount())
-	_slots[_lastSelected].set_item(tempItem, amount)
+	swap_items(_selected, _lastSelected)
+#	var tempItem = _slots[_selected].get_item()
+#	var amount = _slots[_selected].get_amount()
+#	_slots[_selected].set_item(_slots[_lastSelected].get_item(), _slots[_lastSelected].get_amount())
+#	_slots[_lastSelected].set_item(tempItem, amount)
 	
 	
 func swap_items(idx1 : String, idx2 : String): 
@@ -335,6 +348,8 @@ func swap_items(idx1 : String, idx2 : String):
 
 # when released, swap items
 func _on_slot_released(index):
+	if not get_parent().is_visible() or Global.paused:
+		return
 		
 	_lastSelected = _selected
 	_selected = index
@@ -353,6 +368,9 @@ func _on_slot_released(index):
 	
 
 func _on_slot_pressed(index : String):
+	if not get_parent().is_visible() or Global.paused:
+		return
+		
 	_lastSelected = _selected
 	_selected = index
 	#print("selected: " + str(index))

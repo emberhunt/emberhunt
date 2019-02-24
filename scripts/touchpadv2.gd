@@ -2,12 +2,11 @@ extends TouchScreenButton
 
 var radius = 100
 var origin
-onready var player_node = get_node('../../../body')
-onready var other_node = get_node("../shootButton")
+onready var _playerBody : KinematicBody2D = null#get_parent().get_parent().get_node('body')
 
-var touch_power = 0
-var touch_direction = 0
-var touch_rotation = 0
+var touchPower = 0
+var touchDirection = 0
+var touchRotation = 0
 
 var index
 
@@ -20,20 +19,32 @@ func isInArea(pos):
 	else:
 		return false
 
+func init(playerBody : KinematicBody2D):
+	if playerBody == null:
+		print("no body")
+		return
+	_playerBody = playerBody
+
+
 func _ready():
 	# Adjust position on screen
 	position.x = radius+30
 	position.y = get_viewport().size.y-(radius+30)
 	origin = position
 
+
 func _input(event):
+	if _playerBody == null:
+		print("no body")
+		return
+	
 	if event is InputEventScreenTouch:
 		if not event.pressed and event.index == index:
 			isPressed = false
 			$buttonSprite.global_position = origin
 			$buttonSprite.hide()
 			$background.hide()
-			player_node.speed = 0
+			_playerBody.speed = 0
 		if event.pressed and not isPressed and isInArea(event.position):
 			index = event.index
 			isPressed = true
@@ -41,13 +52,13 @@ func _input(event):
 			$buttonSprite.show()
 			$background.show()
 			$buttonSprite.global_position = event.position
-			touch_power = localPos.length()
-			touch_direction = localPos.normalized()
-			if touch_power > radius:
-				touch_power = radius
-				$buttonSprite.global_position = radius*touch_direction + origin
-			player_node.speed = touch_power
-			player_node.direction = touch_direction
+			touchPower = localPos.length()
+			touchDirection = localPos.normalized()
+			if touchPower > radius:
+				touchPower = radius
+				$buttonSprite.global_position = radius*touchDirection + origin
+			_playerBody.speed = touchPower
+			_playerBody.direction = touchDirection
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
@@ -58,10 +69,10 @@ func _input(event):
 					$buttonSprite.show()
 					$background.show()
 					$buttonSprite.global_position = event.position
-					touch_power = localPos.length()
-					touch_direction = localPos.normalized()
-					if touch_power > radius:
-						touch_power = radius
-						$buttonSprite.global_position = radius*touch_direction + origin
-					player_node.speed = touch_power
-					player_node.direction = touch_direction
+					touchPower = localPos.length()
+					touchDirection = localPos.normalized()
+					if touchPower > radius:
+						touchPower = radius
+						$buttonSprite.global_position = radius*touchDirection + origin
+					_playerBody.speed = touchPower
+					_playerBody.direction = touchDirection
