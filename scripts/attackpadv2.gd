@@ -46,20 +46,21 @@ func _input(event):
 			$background.hide()
 			_weaponNode.attacking = false
 		if event.pressed and not isPressed and isInArea(event.position):
-			index = event.index
-			isPressed = true
-			var localPos = event.position - origin
-			$buttonSprite.show()
-			$background.show()
-			$buttonSprite.global_position = event.position
-			touchPower = localPos.length()
-			touchDirection = localPos.normalized()
-			touchRotation = atan2(localPos.x, localPos.y*-1)
-			if touchPower > radius:
-				touchPower = radius
-				$buttonSprite.global_position = radius*touchDirection + origin
-			_weaponNode.rotation = touchRotation
-			_weaponNode.attacking = true
+			if not disabled:
+				index = event.index
+				isPressed = true
+				var localPos = event.position - origin
+				$buttonSprite.show()
+				$background.show()
+				$buttonSprite.global_position = event.position
+				touchPower = localPos.length()
+				touchDirection = localPos.normalized()
+				touchRotation = atan2(localPos.x, localPos.y*-1)
+				if touchPower > radius:
+					touchPower = radius
+					$buttonSprite.global_position = radius*touchDirection + origin
+				_weaponNode.rotation = touchRotation
+				_weaponNode.attacking = true
 			
 	if event is InputEventScreenDrag:
 		if not disabled:

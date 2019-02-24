@@ -17,8 +17,8 @@ func _ready():
 	inventorySystem.hide()
 	playerBody = get_node(playerNode).get_child(0)
 	
-	$moveButton.init(playerBody)
-	$shootButton.init(playerBody.get_node("weapon"))
+	$CanvasLayer/moveButton.init(playerBody)
+	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))
 
 
 func _input(event):
@@ -40,5 +40,5 @@ func _on_TouchScreenButton_pressed():
 		scene_instance.set_name("PauseMenu")
 		$CanvasLayer.add_child(scene_instance)
 		# Disable touchpads
-		get_node("moveButton").disabled = true
-		get_node("shootButton").disabled = true
+		get_node("CanvasLayer/moveButton").disabled = true
+		get_node("CanvasLayer/shootButton").disabled = true
