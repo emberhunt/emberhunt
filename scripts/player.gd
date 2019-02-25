@@ -7,7 +7,7 @@ const InventorySystem = preload("res://scripts/InventorySystem.gd")
 var inventory : InventorySystem
 
 func _init():
-	inventory = inventorySystem.new()
+	inventory = InventorySystem.new()
 	
 	_set_properties()
 	print(get_property(PropertyType.CLASS))
