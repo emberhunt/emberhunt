@@ -3,28 +3,47 @@
 [ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
 
 [node name="Inventory" type="Control"]
-margin_left = 194.158
-margin_top = 114.316
-margin_right = 744.158
-margin_bottom = 468.316
+margin_right = 489.0
+margin_bottom = 299.0
 mouse_filter = 1
 script = ExtResource( 1 )
 inventoryName = "playerInv"
 max_inventory_size = 15
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
+color = Color( 0.223529, 0.160784, 0.0392157, 1 )
 
 [node name="GridContainer" type="GridContainer" parent="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
-margin_top = 5.0
+margin_top = 30.0
 margin_right = -5.0
 margin_bottom = -5.0
-custom_constants/vseparation = 40
-custom_constants/hseparation = 40
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
 columns = 4
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+anchor_right = 1.0
+margin_bottom = 25.0
+color = Color( 0.533333, 0.392157, 0.0901961, 1 )
+
+[node name="nameBackground" type="ColorRect" parent="Panel"]
+anchor_right = 1.0
+margin_left = 3.0
+margin_top = 3.0
+margin_right = -3.0
+margin_bottom = 22.0
+color = Color( 0.396078, 0.266667, 0.109804, 1 )
+
+[node name="name" type="Label" parent="Panel/nameBackground"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "inventory_name"
+align = 1
+valign = 1
 
