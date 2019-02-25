@@ -28,7 +28,9 @@ export var stats = {
 	bullet_effects = {}, 					# placeholder for ailments / effects a bullet may have | we have no parser for that yet
 	bullet_color = Color(1,0,0,1), 			# if no gradient is defined, the bullet will be modulated with this value
 	bullet_gradient = Gradient, 			# a color ramp to interpolate bullet colors based on traveled distance
-	heavy_attack = false
+	heavy_attack = false,
+	attack_sound = "",
+	impact_sound = ""
 	}
 
 func _process(delta):
@@ -45,6 +47,9 @@ func _process(delta):
 		get_node("weapon_sprite").hide()
 		
 func _attack():
+	if stats.attack_sound != "":
+		SoundPlayer.play(SoundPlayer.loaded_sounds[stats.attack_sound],-10)
+	
 	var extra_bullets = 0																				# 
 	var extra_bullet_range = range(stats.bullet_count_random.x,stats.bullet_count_random.y+1)			# \
 	if len(extra_bullet_range) != 0:																	#	calculate random_bullet_count
