@@ -47,7 +47,7 @@ class Slot:
 	func set_slot_types(types : Array):
 		_slotTypeRequirements = types
 		
-	func has_slot_type(type) -> bool:
+	func accepts_slot_type(type) -> bool:
 		if _slotTypeRequirements.empty():
 			return true
 		return _slotTypeRequirements.has(type)
@@ -136,8 +136,8 @@ func _ready():
 	set_process(false)
 	set_process_input(true)
 	
-	inventoryName = self.name 
-	
+	$Panel/nameBackground/name.set_text(inventoryName)
+	inventoryName = self.name	
 	_load_all_items()
 	
 	itemSlots.columns = columns
@@ -215,7 +215,8 @@ func _load_all_items():
 				itemData["stackable"],
 				itemData["usable"],
 				itemData["discardable"],
-				itemData["sellable"]
+				itemData["sellable"],
+				itemData["consumable"]
 				)
 				
 		_allItems.append(newItem)

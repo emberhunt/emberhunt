@@ -7,7 +7,8 @@
 		"description" : "fant",
 		
 		"requirements" : {
-			"level" : 10
+			"level" : 10,
+			"str" : 20
 		},
 						
 		"effects" : {
@@ -26,21 +27,22 @@
 		"stackable" : false,
 		"sellable" : true,
 		"usable" : false,
+		"consumable" : false,
 		"discardable" : true
 	},
 	"1" : {
 		"name" : "The Tome Of Darkness",
 		"type" : "TOME",
-		"value" : 1337,
+		"value" : 1524,
 		"weight" : 2.0,
-		"description" : "This is the most op thing you have ever seen",
+		"description" : "The darklords secrets!",
 		
 		"requirements" : {
 			"level" : 10
 		},
 						
 		"effects" : {
-			"str" : 1
+			"health" : 1
 		},
 		
 		"texture_region" : {
@@ -55,21 +57,22 @@
 		"stackable" : false,
 		"sellable" : true,
 		"usable" : false,
+		"consumable" : false,
 		"discardable" : true
 	},
 	"2" : {
 		"name" : "asd",
 		"type" : "TOME",
-		"value" : 1337,
+		"value" : 123,
 		"weight" : 3.0,
-		"description" : "This is a TOME!",
+		"description" : "This is a really old tome!",
 		
 		"requirements" : {
-			"level" : 10
+			"level" : 33
 		},
 						
 		"effects" : {
-			"str" : 1
+			"str" : 5
 		},
 		
 		"texture_region" : {
@@ -83,22 +86,23 @@
 		"stack_size" : 4,
 		"stackable" : false,
 		"sellable" : true,
-		"usable" : false,
+		"usable" : true,
+		"consumable" : false,
 		"discardable" : true
 	},
 	"3" : {
-		"name" : "Potion",
-		"type" : "CONSUMEABLE",
+		"name" : "Healing potion",
+		"type" : "POTION",
 		"value" : 123,
 		"weight" : 0.13,
-		"description" : "This is the uber Potion!",
+		"description" : "This will make you feel better!",
 		
 		"requirements" : {
 			"level" : 10
 		},
 						
 		"effects" : {
-			"str" : 1
+			"str" : 200
 		},
 		
 		"texture_region" : {
@@ -112,7 +116,8 @@
 		"stack_size" : 4,
 		"stackable" : true,
 		"sellable" : true,
-		"usable" : false,
+		"usable" : true,
+		"consumable" : true,
 		"discardable" : true
 	}
 }
