@@ -2,9 +2,13 @@ extends "res://scripts/character.gd"
 
 class_name Player
 
-var inventory = preload("res://scripts/Inventory.gd").new()
+const InventorySystem = preload("res://scripts/InventorySystem.gd")
+
+var inventory : InventorySystem
 
 func _init():
+	inventory = InventorySystem.new()
+	
 	_set_properties()
 	print(get_property(PropertyType.CLASS))
 	

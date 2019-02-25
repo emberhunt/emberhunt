@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=2]
-[ext_resource path="res://scenes/MainMenuBackground.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/UI/main_menu_background_placeholder.jpg" type="Texture" id=3]
 [ext_resource path="res://assets/title.png" type="Texture" id=4]
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
@@ -14,7 +14,17 @@ anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
 
-[node name="background" parent="." instance=ExtResource( 3 )]
+[node name="background" type="TextureRect" parent="."]
+self_modulate = Color( 0.286275, 0.286275, 0.286275, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -958.413
+margin_top = -540.0
+margin_right = 961.587
+margin_bottom = 540.0
+texture = ExtResource( 3 )
 
 [node name="container" type="Container" parent="."]
 editor/display_folded = true

@@ -21,7 +21,7 @@ region_rect = Rect2( 34, 43, 54, 15 )
 [node name="gui" parent="." instance=ExtResource( 3 )]
 playerNode = NodePath("../player")
 
-[node name="debugLabel" parent="gui/CanvasLayer" index="2"]
+[node name="debugLabel" parent="gui/CanvasLayer" index="1"]
 text = "(0, 0)"
 
 
