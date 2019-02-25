@@ -215,7 +215,8 @@ func _load_all_items():
 				itemData["stackable"],
 				itemData["usable"],
 				itemData["discardable"],
-				itemData["sellable"]
+				itemData["sellable"],
+				itemData["consumable"]
 				)
 				
 		_allItems.append(newItem)

@@ -38,7 +38,7 @@ inventoryName = "chest"
 max_inventory_size = 8
 
 [node name="canvasLayer" type="CanvasLayer" parent="."]
-layer = 11
+layer = 2
 
 [node name="blocker" type="Control" parent="canvasLayer"]
 anchor_right = 1.0
