@@ -20,6 +20,7 @@ position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
 [node name="weapon" type="Node2D" parent="body"]
+editor/display_folded = true
 position = Vector2( 0, 15 )
 script = ExtResource( 3 )
 
@@ -39,5 +40,13 @@ z_index = 1
 texture = ExtResource( 5 )
 region_enabled = true
 region_rect = Rect2( 368, 111, 16, 18 )
+
+[node name="Camera2D" type="Camera2D" parent="body"]
+current = true
+smoothing_enabled = true
+drag_margin_left = 0.02
+drag_margin_top = 0.02
+drag_margin_right = 0.02
+drag_margin_bottom = 0.02
 
 [connection signal="timeout" from="body/weapon/fire_rate" to="body/weapon" method="_on_fire_rate_timeout"]

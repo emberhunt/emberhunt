@@ -47,6 +47,7 @@ func _ready():
 	get_node("Buttons/ButtonQuality/Label").set_text("Quality: "+Global.quality)
 	get_node("VBoxContainer2/SliderMusic").set_value(Global.Music*100)
 	get_node("VBoxContainer2/SliderSound").set_value(Global.Sound*100)
+	get_node("Buttons/ButtonTouchpads/Label").set_text("Touchpads: "+Global.touchpadPosition)
 
 func _on_SliderMusic_value_changed(value):
 	Global.Music = value/100
@@ -54,3 +55,12 @@ func _on_SliderMusic_value_changed(value):
 
 func _on_SliderSound_value_changed(value):
 	Global.Sound = value/100
+
+
+func _on_ButtonTouchpads_pressed():
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
+	if Global.touchpadPosition == "Fixed":
+		Global.touchpadPosition = "Flexible"
+	else:
+		Global.touchpadPosition = "Fixed"
+	get_node("Buttons/ButtonTouchpads/Label").set_text("Touchpads: "+Global.touchpadPosition)

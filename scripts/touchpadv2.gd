@@ -34,10 +34,6 @@ func _ready():
 
 
 func _input(event):
-	if _playerBody == null:
-		print("no body")
-		return
-	
 	if event is InputEventScreenTouch:
 		if not event.pressed and event.index == index:
 			isPressed = false
@@ -46,19 +42,23 @@ func _input(event):
 			$background.hide()
 			_playerBody.speed = 0
 		if event.pressed and not isPressed and isInArea(event.position):
-			index = event.index
-			isPressed = true
-			var localPos = event.position - origin
-			$buttonSprite.show()
-			$background.show()
-			$buttonSprite.global_position = event.position
-			touchPower = localPos.length()
-			touchDirection = localPos.normalized()
-			if touchPower > radius:
-				touchPower = radius
-				$buttonSprite.global_position = radius*touchDirection + origin
-			_playerBody.speed = touchPower
-			_playerBody.direction = touchDirection
+			if not disabled:
+				if Global.touchpadPosition == "Flexible":
+					origin = event.position
+					set_position(event.position)
+				index = event.index
+				isPressed = true
+				var localPos = event.position - origin
+				$buttonSprite.show()
+				$background.show()
+				$buttonSprite.global_position = event.position
+				touchPower = localPos.length()
+				touchDirection = localPos.normalized()
+				if touchPower > radius:
+					touchPower = radius
+					$buttonSprite.global_position = radius*touchDirection + origin
+				_playerBody.speed = touchPower
+				_playerBody.direction = touchDirection
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
