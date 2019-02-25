@@ -15,32 +15,35 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="playerInventory" parent="Inventories" instance=ExtResource( 2 )]
-margin_left = 43.7963
-margin_top = 39.2659
-margin_right = 385.796
-margin_bottom = 218.266
-max_inventory_size = 8
+margin_left = 43.0
+margin_top = 107.0
+margin_right = 244.0
+margin_bottom = 388.0
+inventoryName = "Player Inventory"
+max_inventory_size = 20
 
 [node name="chest" parent="Inventories" instance=ExtResource( 2 )]
-margin_left = 509.316
-margin_top = 33.0766
-margin_right = 936.316
-margin_bottom = 240.077
-inventoryName = "chest"
-max_inventory_size = 8
+margin_left = 509.0
+margin_top = 33.0
+margin_right = 712.0
+margin_bottom = 218.0
+inventoryName = "Small Chest"
+max_inventory_size = 12
 
 [node name="chest2" parent="Inventories" instance=ExtResource( 2 )]
-margin_left = 276.346
-margin_top = 273.526
-margin_right = 736.346
-margin_bottom = 574.526
-inventoryName = "chest"
-max_inventory_size = 8
+margin_left = 488.0
+margin_top = 266.0
+margin_right = 789.0
+margin_bottom = 455.0
+inventoryName = "Big Chest"
+max_inventory_size = 18
+columns = 6
 
 [node name="canvasLayer" type="CanvasLayer" parent="."]
 layer = 2
 
 [node name="blocker" type="Control" parent="canvasLayer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 

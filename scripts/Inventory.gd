@@ -136,8 +136,8 @@ func _ready():
 	set_process(false)
 	set_process_input(true)
 	
-	inventoryName = self.name 
-	
+	$Panel/nameBackground/name.set_text(inventoryName)
+	inventoryName = self.name	
 	_load_all_items()
 	
 	itemSlots.columns = columns
