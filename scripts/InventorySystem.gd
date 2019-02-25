@@ -11,9 +11,9 @@ extends Control
 const Inventory = preload("res://scripts/Inventory.gd")
 const SlotRequirement = preload("res://scripts/SlotRequirement.gd")
 
-onready var itemDescription = $canvasLayer/itemSlotDescription
-onready var itemDescriptionField = $canvasLayer/descriptionField
-onready var blocker = $canvasLayer/blocker
+onready var itemDescription = $itemSlotDescription
+onready var itemDescriptionField = $descriptionField
+onready var blocker = $blocker
 
 
 class_name InventorySystem

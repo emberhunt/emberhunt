@@ -85,7 +85,10 @@ texture = ExtResource( 4 )
 visible = false
 texture = ExtResource( 5 )
 
-[node name="inventorySystem" parent="." instance=ExtResource( 7 )]
-visible = false
+[node name="inventorySystem" parent="CanvasLayer" instance=ExtResource( 7 )]
+margin_left = -0.119565
+margin_top = -2.27206
+margin_right = -0.119568
+margin_bottom = -2.27203
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]

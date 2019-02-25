@@ -1,14 +1,13 @@
 """
 
 """
-tool
 extends Control
 
 onready var debugLabel = $CanvasLayer/debugLabel 
 
 export(NodePath) var playerNode = "../player"
 
-onready var inventorySystem = $inventorySystem
+onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
 
 
@@ -27,8 +26,7 @@ func _input(event):
 		inventorySystem.visible = ! inventorySystem.visible
 		
 func _process(delta):
-	if playerBody != null:
-		debugLabel.set_text(str(playerBody.get_position()))
+	debugLabel.set_text(str(playerBody.get_position()))
 	
 
 func _on_TouchScreenButton_pressed():
