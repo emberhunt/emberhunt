@@ -21,6 +21,7 @@ func _player_disconnected(id):
 	print(str(id)+" disconnected")
 
 remote func registerNewAccount():
+	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
 	rpc_id(get_tree().get_rpc_sender_id(), "receiveNewUUID", generateRandomUUID())
 	
 func generateRandomUUID():
