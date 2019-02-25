@@ -6,9 +6,19 @@ var weapon_safe_file = "res://dev_tools/weapons.cfg"
 
 func _ready():
 	VisualServer.set_default_clear_color(Color(0,0,0,1))
+	
 	for key in $weapon.stats.keys():
 		default_values[key] = $weapon.stats[key]
+		
 	color_ramp = $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets()
+	
+	$SettingsContainer/InputContainer/SoundImpact.add_item("No impact sound",0)
+	$SettingsContainer/InputContainer/SoundAttack.add_item("No attack sound",0)
+	var counter = 1
+	for key in SoundPlayer.loaded_sounds.keys():
+		$SettingsContainer/InputContainer/SoundImpact.add_item(key,counter)
+		$SettingsContainer/InputContainer/SoundAttack.add_item(key,counter)
+		counter+=1
 
 func _process(delta):
 	if $weapon.can_attack:
@@ -134,7 +144,8 @@ func _on_ButtonConfirmSafe_pressed():
 		var file = ConfigFile.new()
 		file.load(weapon_safe_file)
 		for key in $weapon.stats.keys():
-			file.set_value($VBoxContainer/ButtonSaveWeapon/WeaponName.text,key,$weapon.stats[key])
+			if key != "bullet_gradient":
+				file.set_value($VBoxContainer/ButtonSaveWeapon/WeaponName.text,key,$weapon.stats[key])
 		file.save(weapon_safe_file)
 		$VBoxContainer/ButtonSaveWeapon/WeaponName.hide()
 		$VBoxContainer/ButtonSaveWeapon/WeaponName/ButtonConfirmSafe/NoNameWarning.hide()
@@ -167,6 +178,8 @@ func _on_ButtonRestoreDefaults_pressed():
 	$SettingsContainer/InputContainer/BulletColor.color = default_values.bullet_color
 	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = false
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.select(0)
+	$SettingsContainer/InputContainer/SoundAttack.select(0)
+	$SettingsContainer/InputContainer/SoundImpact.select(0)
 	
 func _on_ButtonLoadWeapon_pressed():
 	var file = ConfigFile.new()
@@ -206,3 +219,27 @@ func _on_OptionButton_item_selected(ID):
 	$SettingsContainer/InputContainer/SliderBulletScaleRandom.value = $weapon.stats.bullet_scale_random
 	$SettingsContainer/InputContainer/BulletColor.color = $weapon.stats.bullet_color
 	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = $weapon.stats.heavy_attack
+	for id in range($SettingsContainer/InputContainer/SoundAttack.get_item_count()):
+		if $SettingsContainer/InputContainer/SoundAttack.get_item_text(id) == $weapon.stats.attack_sound:
+			$SettingsContainer/InputContainer/SoundAttack.select(id)
+	for id in range($SettingsContainer/InputContainer/SoundImpact.get_item_count()):
+		if $SettingsContainer/InputContainer/SoundImpact.get_item_text(id) == $weapon.stats.impact_sound:
+			$SettingsContainer/InputContainer/SoundImpact.select(id)
+	if $weapon.stats.impact_sound == "":
+		$SettingsContainer/InputContainer/SoundImpact.select(0)
+	if $weapon.stats.attack_sound == "":
+		$SettingsContainer/InputContainer/SoundAttack.select(0)
+
+func _on_SoundAttack_item_selected(ID):
+	var sfx = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+	if sfx != "No attack sound":
+		$weapon.stats.attack_sound = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+	else:
+		$weapon.stats.attack_sound = ""
+
+func _on_SoundImpact_item_selected(ID):
+	var sfx = $SettingsContainer/InputContainer/SoundImpact.get_item_text(ID)
+	if sfx != "No impact sound":
+		$weapon.stats.impact_sound = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+	else:
+		$weapon.stats.impact_sound = ""

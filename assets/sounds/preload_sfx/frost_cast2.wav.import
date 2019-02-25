@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/frost_cast2.wav-6a398f17306c8e93135493afa235c909.sample"
+
+[deps]
+
+source_file="res://assets/sounds/preload_sfx/frost_cast2.wav"
+dest_files=[ "res://.import/frost_cast2.wav-6a398f17306c8e93135493afa235c909.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

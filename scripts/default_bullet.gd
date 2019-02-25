@@ -16,6 +16,8 @@ var effects = {}
 
 var gradient = null
 
+var impact_sound = ""
+
 
 func _ini(stats, weapon_origin, weapon_rotation): # is called by weapon.gd before the bullet is added to the scene
 	origin = weapon_origin # safe origin to calculate traveled distance
@@ -45,6 +47,8 @@ func _ini(stats, weapon_origin, weapon_rotation): # is called by weapon.gd befor
 		gradient = stats.bullet_gradient								# 	safe gradient for interpolating colors based on travel distance
 	else:																# if no gradient is defined:
 		$Sprite.modulate = stats.bullet_color					#	modulate to bullet_color
+		
+	impact_sound = stats.impact_sound
 	
 func _physics_process(delta):
 	move_and_slide(direction*speed)
@@ -53,7 +57,9 @@ func _physics_process(delta):
 	if abs((position-origin).length()) > max_travel_distance: # max travel distance reached? delete yourself!
 		queue_free()
 		
-func _reduce_pierce(): # called by enemies colliding with this bullet
+func _hit(): # called by enemies colliding with this bullet
+	if impact_sound != "":
+		SoundPlayer.play(SoundPlayer.loaded_sounds[impact_sound])
 	if pierce_left <= 0:	# delete bullet if there is no remaining pierce
 		queue_free()
 	else:					# reduce remaining pierces by one
