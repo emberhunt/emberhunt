@@ -10,21 +10,21 @@ func _ready():
 	for key in $weapon.stats.keys():
 		default_values[key] = $weapon.stats[key]
 		
-	color_ramp = $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets()
+	color_ramp = $ScrollContainer/SettingsContainer/InputContainer/BulletColor.get_picker().get_presets()
 	
-	$SettingsContainer/InputContainer/SoundImpact.add_item("No impact sound",0)
-	$SettingsContainer/InputContainer/SoundAttack.add_item("No attack sound",0)
+	$ScrollContainer/SettingsContainer/InputContainer/SoundImpact.add_item("No impact sound",0)
+	$ScrollContainer/SettingsContainer/InputContainer/SoundAttack.add_item("No attack sound",0)
 	var counter = 1
 	for key in SoundPlayer.loaded_sounds.keys():
-		$SettingsContainer/InputContainer/SoundImpact.add_item(key,counter)
-		$SettingsContainer/InputContainer/SoundAttack.add_item(key,counter)
+		$ScrollContainer/SettingsContainer/InputContainer/SoundImpact.add_item(key,counter)
+		$ScrollContainer/SettingsContainer/InputContainer/SoundAttack.add_item(key,counter)
 		counter+=1
 
 func _process(delta):
 	if $weapon.can_attack:
 		$weapon._attack()
-	if color_ramp != $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
-		_update_bullet_gradient($SettingsContainer/InputContainer/BulletColor.get_picker().get_presets())
+	if color_ramp != $ScrollContainer/SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
+		_update_bullet_gradient($ScrollContainer/SettingsContainer/InputContainer/BulletColor.get_picker().get_presets())
 
 func _update_bullet_gradient(ColorArray):
 	if len(ColorArray) > 1:
@@ -48,79 +48,79 @@ func _update_bullet_gradient(ColorArray):
 
 func _on_SliderDamage_value_changed(value):
 	$weapon.stats.damage = value
-	$SettingsContainer/ValueContainer/ValueDamage.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueDamage.text = str(value)
 
 func _on_SliderBonusDamageLow_value_changed(value):
 	$weapon.stats.damage_random.x = value
-	if value >= $SettingsContainer/InputContainer/SliderBonusDamageHigh.value:
-		$SettingsContainer/InputContainer/SliderBonusDamageHigh.value = value+1
-	$SettingsContainer/ValueContainer/ValueBonusDamageLow.text = str(value)
+	if value >= $ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageHigh.value:
+		$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageHigh.value = value+1
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBonusDamageLow.text = str(value)
 
 func _on_SliderBonusDamageHigh_value_changed(value):
 	$weapon.stats.damage_random.y = value
-	if value <= $SettingsContainer/InputContainer/SliderBonusDamageLow.value:
+	if value <= $ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageLow.value:
 		if value != 0:
-			$SettingsContainer/InputContainer/SliderBonusDamageLow.value = value - 1
-	$SettingsContainer/ValueContainer/ValueBonusDamageHigh.text = str(value)
+			$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageLow.value = value - 1
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBonusDamageHigh.text = str(value)
 
 func _on_SliderFireRate_value_changed(value):
 	$weapon.stats.fire_rate = value
-	$SettingsContainer/ValueContainer/ValueFireRate.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueFireRate.text = str(value)
 	$weapon.get_node("fire_rate").wait_time = 1/value
 	$weapon.get_node("fire_rate").start()
 
 func _on_SliderFireRateRandom_value_changed(value):
 	$weapon.stats.fire_rate_random = value
-	$SettingsContainer/ValueContainer/ValueFireRateRandom.text = str(value*100)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueFireRateRandom.text = str(value*100)
 
 func _on_SliderBulletCount_value_changed(value):
 	$weapon.stats.bullet_count = value
-	$SettingsContainer/ValueContainer/ValueBulletCount.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletCount.text = str(value)
 
 func _on_SliderBulletRandomLow_value_changed(value):
 	$weapon.stats.bullet_count_random.x = value
-	if value >= $SettingsContainer/InputContainer/SliderBulletRandomHigh.value:
-		$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = value+1
-	$SettingsContainer/ValueContainer/ValueBulletRandomLow.text = str(value)
+	if value >= $ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomHigh.value:
+		$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomHigh.value = value+1
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletRandomLow.text = str(value)
 
 func _on_SliderBulletRandomHigh_value_changed(value):
 	$weapon.stats.bullet_count_random.y = value
-	if value <= $SettingsContainer/InputContainer/SliderBulletRandomLow.value:
+	if value <= $ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomLow.value:
 		if value != 0:
-			$SettingsContainer/InputContainer/SliderBulletRandomLow.value = value-1
-	$SettingsContainer/ValueContainer/ValueBulletRandomHigh.text = str(value)
+			$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomLow.value = value-1
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletRandomHigh.text = str(value)
 
 func _on_SliderBulletSpeed_value_changed(value):
 	$weapon.stats.bullet_speed = value
-	$SettingsContainer/ValueContainer/ValueBulletSpeed.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletSpeed.text = str(value)
 
 func _on_SliderBulletSpeedRandom_value_changed(value):
 	$weapon.stats.bullet_speed_random = value
-	$SettingsContainer/ValueContainer/ValueBulletSpeedRandom.text = str(value*100)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletSpeedRandom.text = str(value*100)
 
 func _on_SliderBulletRange_value_changed(value):
 	$weapon.stats.bullet_range = value
-	$SettingsContainer/ValueContainer/ValueBulletRange.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletRange.text = str(value)
 
 func _on_SliderBulletRangeRandom_value_changed(value):
 	$weapon.stats.bullet_range_random = value
-	$SettingsContainer/ValueContainer/ValueBulletRangeRandom.text = str(value*100)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletRangeRandom.text = str(value*100)
 
 func _on_SliderBulletSpread_value_changed(value):
 	$weapon.stats.bullet_spread = deg2rad(value)
-	$SettingsContainer/ValueContainer/ValueBulletSpread.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletSpread.text = str(value)
 
 func _on_SliderBulletSpreadRandom_value_changed(value):
 	$weapon.stats.bullet_spread_random = deg2rad(value)
-	$SettingsContainer/ValueContainer/ValueBulletSpreadRandom.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletSpreadRandom.text = str(value)
 
 func _on_SliderBulletScale_value_changed(value):
 	$weapon.stats.bullet_scale = value
-	$SettingsContainer/ValueContainer/ValueBulletScale.text = str(value)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletScale.text = str(value)
 
 func _on_SliderBulletScaleRandom_value_changed(value):
 	$weapon.stats.bullet_scale_random = value
-	$SettingsContainer/ValueContainer/ValueBulletScaleRanom.text = str(value*100)
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletScaleRanom.text = str(value*100)
 
 func _on_BulletColor_color_changed(color):
 	$weapon.stats.bullet_color = color
@@ -157,29 +157,34 @@ func _on_ButtonConfirmSafe_pressed():
 func _on_ButtonRestoreDefaults_pressed():
 	for key in default_values.keys():
 		$weapon.stats[key] = default_values[key]
-	$SettingsContainer/InputContainer/SliderDamage.value = default_values.damage
-	$SettingsContainer/InputContainer/SliderBonusDamageLow.value = default_values.damage_random.x
-	$SettingsContainer/InputContainer/SliderBonusDamageHigh.value = default_values.damage_random.y
-	$SettingsContainer/InputContainer/SliderFireRate.value = default_values.fire_rate
-	$SettingsContainer/InputContainer/SliderFireRateRandom.value = default_values.fire_rate_random
-	$SettingsContainer/InputContainer/SliderBulletCount.value = default_values.bullet_count
-	$SettingsContainer/InputContainer/SliderBulletRandomLow.value = default_values.bullet_count_random.x
-	$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = default_values.bullet_count_random.y
-	$SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad(default_values.bullet_spread)
-	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad(default_values.bullet_spread_random)
-	$SettingsContainer/InputContainer/SliderBulletRange.value = default_values.bullet_range
-	$SettingsContainer/InputContainer/SliderBulletRangeRandom.value = default_values.bullet_range_random
-	$SettingsContainer/InputContainer/SliderBulletSpeed.value = default_values.bullet_speed
-	$SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = default_values.bullet_speed_random
-	$SettingsContainer/InputContainer/SliderBulletScale.value = default_values.bullet_scale
-	$SettingsContainer/InputContainer/SliderBulletScaleRandom.value = default_values.bullet_scale_random
-	for color in $SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
-		$SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset(color)
-	$SettingsContainer/InputContainer/BulletColor.color = default_values.bullet_color
-	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = false
+	$ScrollContainer/SettingsContainer/InputContainer/SliderDamage.value = default_values.damage
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageLow.value = default_values.damage_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageHigh.value = default_values.damage_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderFireRate.value = default_values.fire_rate
+	$ScrollContainer/SettingsContainer/InputContainer/SliderFireRateRandom.value = default_values.fire_rate_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletCount.value = default_values.bullet_count
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomLow.value = default_values.bullet_count_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomHigh.value = default_values.bullet_count_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad(default_values.bullet_spread)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad(default_values.bullet_spread_random)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRange.value = default_values.bullet_range
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRangeRandom.value = default_values.bullet_range_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpeed.value = default_values.bullet_speed
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = default_values.bullet_speed_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletScale.value = default_values.bullet_scale
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletScaleRandom.value = default_values.bullet_scale_random
+	for color in $ScrollContainer/SettingsContainer/InputContainer/BulletColor.get_picker().get_presets():
+		$ScrollContainer/SettingsContainer/InputContainer/BulletColor.get_picker().erase_preset(color)
+	$ScrollContainer/SettingsContainer/InputContainer/BulletColor.color = default_values.bullet_color
+	$ScrollContainer/SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = false
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.select(0)
-	$SettingsContainer/InputContainer/SoundAttack.select(0)
-	$SettingsContainer/InputContainer/SoundImpact.select(0)
+	$ScrollContainer/SettingsContainer/InputContainer/SoundAttack.select(0)
+	$ScrollContainer/SettingsContainer/InputContainer/SoundImpact.select(0)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierce.value = default_values.bullet_pierce
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomLow.value = default_values.bullet_pierce_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value = default_values.bullet_pierce_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockback.value = default_values.bullet_knockback
+	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockbackRandom.value = default_values.bullet_knockback_random
 	
 func _on_ButtonLoadWeapon_pressed():
 	var file = ConfigFile.new()
@@ -201,45 +206,77 @@ func _on_OptionButton_item_selected(ID):
 		$weapon.stats[key] = file.get_value(attack_name,key,false)
 	$VBoxContainer/ButtonLoadWeapon/OptionButton.hide()
 			
-	$SettingsContainer/InputContainer/SliderDamage.value = $weapon.stats.damage
-	$SettingsContainer/InputContainer/SliderBonusDamageLow.value = $weapon.stats.damage_random.x
-	$SettingsContainer/InputContainer/SliderBonusDamageHigh.value = $weapon.stats.damage_random.y
-	$SettingsContainer/InputContainer/SliderFireRate.value = $weapon.stats.fire_rate
-	$SettingsContainer/InputContainer/SliderFireRateRandom.value = $weapon.stats.fire_rate_random
-	$SettingsContainer/InputContainer/SliderBulletCount.value = $weapon.stats.bullet_count
-	$SettingsContainer/InputContainer/SliderBulletRandomLow.value = $weapon.stats.bullet_count_random.x
-	$SettingsContainer/InputContainer/SliderBulletRandomHigh.value = $weapon.stats.bullet_count_random.y
-	$SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad($weapon.stats.bullet_spread)
-	$SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad($weapon.stats.bullet_spread_random)
-	$SettingsContainer/InputContainer/SliderBulletRange.value = $weapon.stats.bullet_range
-	$SettingsContainer/InputContainer/SliderBulletRangeRandom.value = $weapon.stats.bullet_range_random
-	$SettingsContainer/InputContainer/SliderBulletSpeed.value = $weapon.stats.bullet_speed
-	$SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = $weapon.stats.bullet_speed_random
-	$SettingsContainer/InputContainer/SliderBulletScale.value = $weapon.stats.bullet_scale
-	$SettingsContainer/InputContainer/SliderBulletScaleRandom.value = $weapon.stats.bullet_scale_random
-	$SettingsContainer/InputContainer/BulletColor.color = $weapon.stats.bullet_color
-	$SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = $weapon.stats.heavy_attack
-	for id in range($SettingsContainer/InputContainer/SoundAttack.get_item_count()):
-		if $SettingsContainer/InputContainer/SoundAttack.get_item_text(id) == $weapon.stats.attack_sound:
-			$SettingsContainer/InputContainer/SoundAttack.select(id)
-	for id in range($SettingsContainer/InputContainer/SoundImpact.get_item_count()):
-		if $SettingsContainer/InputContainer/SoundImpact.get_item_text(id) == $weapon.stats.impact_sound:
-			$SettingsContainer/InputContainer/SoundImpact.select(id)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderDamage.value = $weapon.stats.damage
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageLow.value = $weapon.stats.damage_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBonusDamageHigh.value = $weapon.stats.damage_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderFireRate.value = $weapon.stats.fire_rate
+	$ScrollContainer/SettingsContainer/InputContainer/SliderFireRateRandom.value = $weapon.stats.fire_rate_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletCount.value = $weapon.stats.bullet_count
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomLow.value = $weapon.stats.bullet_count_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRandomHigh.value = $weapon.stats.bullet_count_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpread.value = deg2rad($weapon.stats.bullet_spread)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpreadRandom.value = deg2rad($weapon.stats.bullet_spread_random)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRange.value = $weapon.stats.bullet_range
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRangeRandom.value = $weapon.stats.bullet_range_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpeed.value = $weapon.stats.bullet_speed
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpeedRandom.value = $weapon.stats.bullet_speed_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletScale.value = $weapon.stats.bullet_scale
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletScaleRandom.value = $weapon.stats.bullet_scale_random
+	$ScrollContainer/SettingsContainer/InputContainer/BulletColor.color = $weapon.stats.bullet_color
+	$ScrollContainer/SettingsContainer/InputContainer/CheckBoxHeavyAttack.pressed = $weapon.stats.heavy_attack
+	for id in range($ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_count()):
+		if $ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_text(id) == $weapon.stats.attack_sound:
+			$ScrollContainer/SettingsContainer/InputContainer/SoundAttack.select(id)
+	for id in range($ScrollContainer/SettingsContainer/InputContainer/SoundImpact.get_item_count()):
+		if $ScrollContainer/SettingsContainer/InputContainer/SoundImpact.get_item_text(id) == $weapon.stats.impact_sound:
+			$ScrollContainer/SettingsContainer/InputContainer/SoundImpact.select(id)
 	if $weapon.stats.impact_sound == "":
-		$SettingsContainer/InputContainer/SoundImpact.select(0)
+		$ScrollContainer/SettingsContainer/InputContainer/SoundImpact.select(0)
 	if $weapon.stats.attack_sound == "":
-		$SettingsContainer/InputContainer/SoundAttack.select(0)
+		$ScrollContainer/SettingsContainer/InputContainer/SoundAttack.select(0)
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierce.value = $weapon.stats.bullet_pierce
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomLow.value = $weapon.stats.bullet_pierce_random.x
+	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value = $weapon.stats.bullet_pierce_random.y
+	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockback.value = $weapon.stats.bullet_knockback
+	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockbackRandom.value = $weapon.stats.bullet_knockback_random
 
 func _on_SoundAttack_item_selected(ID):
-	var sfx = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+	var sfx = $ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
 	if sfx != "No attack sound":
-		$weapon.stats.attack_sound = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+		$weapon.stats.attack_sound = $ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
 	else:
 		$weapon.stats.attack_sound = ""
 
 func _on_SoundImpact_item_selected(ID):
-	var sfx = $SettingsContainer/InputContainer/SoundImpact.get_item_text(ID)
+	var sfx = $ScrollContainer/SettingsContainer/InputContainer/SoundImpact.get_item_text(ID)
 	if sfx != "No impact sound":
-		$weapon.stats.impact_sound = $SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
+		$weapon.stats.impact_sound = $ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
 	else:
 		$weapon.stats.impact_sound = ""
+
+func _on_SliderPierce_value_changed(value):
+	$weapon.stats.bullet_pierce = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValuePierce.text = str(value)
+
+func _on_SliderPierceRandomLow_value_changed(value):
+	if value >= $ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value:
+		if value != 0:
+			$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value = value+1
+	$weapon.stats.bullet_pierce_random.x = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValuePierceRandomLow.text = str(value)
+	
+
+func _on_SliderPierceRandomHigh_value_changed(value):
+	if value <= $ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomLow.value:
+		if value != 0:
+			$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomLow.value = value-1
+	$weapon.stats.bullet_pierce_random.y = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValuePierceRandomHigh.text = str(value)
+
+func _on_SliderKnockback_value_changed(value):
+	$weapon.stats.bullet_knockback = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueKnockback.text = str(value)
+
+func _on_SliderKnockbackRandom_value_changed(value):
+	$weapon.stats.bullet_knockback_random = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueKnockbackRandom.text = str(value*100)
