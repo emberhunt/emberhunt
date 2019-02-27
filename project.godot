@@ -55,6 +55,7 @@ config/icon="res://assets/icon_192x192.png"
 Global="*res://scripts/Global.gd"
 SoundPlayer="*res://scenes/SoundPlayer.tscn"
 MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
+Networking="*res://scenes/Networking.tscn"
 
 [debug]
 
