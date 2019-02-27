@@ -66,11 +66,11 @@ const _itemTypes = {
 	ItemType.NATRUE_RELIC : "NATRUE_RELIC",
 	ItemType.DIVINE_RELIC : "DIVINE_RELIC",
 	
-	ItemType.ARROW : "ARMOR_CHEST",
-	ItemType.ARROW : "ARMOR_HELMET",
-	ItemType.ARROW : "ARMOR_LEG",
+	ItemType.ARMOR_CHEST : "ARMOR_CHEST",
+	ItemType.ARMOR_HELMET : "ARMOR_HELMET",
+	ItemType.ARMOR_LEG : "ARMOR_LEG",
 	
-	ItemType.ARROW : "POTION"
+	ItemType.POTION : "POTION"
 }
 
 static func get_type_from_name(itemTypeName : String):
@@ -103,9 +103,10 @@ var _weight : float
 var _textureRegion : Rect2
 var _texturePath : String
 
+var _slotsUse # for 1 or 2 handed weapon
+
 # enums
 var _type
-var _slotsUse # for 1 or 2 handed weapon
 
 # Dicts
 var _effects

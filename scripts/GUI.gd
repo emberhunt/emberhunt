@@ -22,8 +22,10 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
-		#print("visible")
 		inventorySystem.visible = ! inventorySystem.visible
+		get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
+		get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible
+		
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
@@ -43,7 +45,6 @@ func _on_TouchScreenButton_pressed():
 
 
 func _on_toggleInventory_pressed():
-	if inventorySystem.is_visible():
-		inventorySystem.set_visible(false)
-	else:
-		inventorySystem.set_visible(true)
+	inventorySystem.visible = ! inventorySystem.visible
+	get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
+	get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible

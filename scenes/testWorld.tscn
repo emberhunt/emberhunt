@@ -22,9 +22,6 @@ editor/display_folded = true
 [node name="gui" parent="." instance=ExtResource( 3 )]
 playerNode = NodePath("../player")
 
-[node name="PauseButton" parent="gui/CanvasLayer" index="0"]
-editor/display_folded = false
-
 [node name="debugLabel" parent="gui/CanvasLayer" index="2"]
 text = "(0, 0)"
 

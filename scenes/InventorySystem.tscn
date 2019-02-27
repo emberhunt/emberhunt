@@ -18,33 +18,35 @@ margin_bottom = 0.216431
 mouse_filter = 2
 
 [node name="chest" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 506.0
-margin_top = 61.9474
-margin_right = 691.0
-margin_bottom = 199.947
-inventoryName = "Chest"
+margin_left = 578.631
+margin_top = 147.21
+margin_right = 763.631
+margin_bottom = 285.21
+inventoryName = "chest"
 
 [node name="chest2" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 512.0
-margin_top = 207.0
-margin_right = 694.0
-margin_bottom = 345.0
-inventoryName = "Chest"
+margin_left = 580.0
+margin_top = 299.0
+margin_right = 762.0
+margin_bottom = 482.0
+inventoryName = "chest2"
+maxInventorySize = 12
 
 [node name="playerInventory" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 113.0
-margin_top = 259.0
-margin_right = 314.0
-margin_bottom = 484.0
-inventoryName = "Inventory"
+margin_left = 122.0
+margin_top = 289.0
+margin_right = 461.0
+margin_bottom = 514.0
+inventoryName = "playerInventory"
 maxInventorySize = 16
 
 [node name="equipment" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 122.105
-margin_top = 43.371
-margin_right = 338.105
-margin_bottom = 254.371
-inventoryName = "Equipment"
+margin_left = 122.0
+margin_top = 43.0
+margin_right = 461.0
+margin_bottom = 287.0
+inventoryName = "equipment"
+maxInventorySize = 9
 weightEnabled = true
 maxWeight = 60.0
 

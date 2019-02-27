@@ -38,11 +38,22 @@ var holding = false
 func _ready():
 	set_process_input(true)
 	
-	_mainInventoryId = "equipment"
 	
+	_mainInventoryId = "equipment"
 	for i in range(get_child(0).get_child_count()):
 		_inventories[get_child(0).get_child(i).name] = get_child(0).get_child(i)
 		_inventories[get_child(0).get_child(i).name].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
+	
+	
+	# This will be loaded by file later on.
+	# This to test functionality
+	
+	var playerEquipment = $inventories/equipment
+	playerEquipment.add_item(playerEquipment.get_item(0))
+	playerEquipment.add_item(playerEquipment.get_item(0))
+	playerEquipment.add_item(playerEquipment.get_item(1))
+	playerEquipment.add_item(playerEquipment.get_item(2))
+	
 	
 	# test items / later loaded from file
 	var mainInv = $inventories/playerInventory
