@@ -1,0 +1,121 @@
+extends Node2D
+
+const SERVER_PORT = 22122
+const MAX_PLAYERS = 10
+
+
+func _ready():
+	# Initialize server
+	var peer = NetworkedMultiplayerENet.new()
+	peer.create_server(SERVER_PORT, MAX_PLAYERS)
+	get_tree().set_network_peer(peer)
+	get_tree().set_meta("network_peer", peer)
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+
+
+func _player_connected(id):
+	print(str(id)+" connected")
+
+func _player_disconnected(id):
+	print(str(id)+" disconnected")
+
+remote func registerNewAccount():
+	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
+	rpc_id(get_tree().get_rpc_sender_id(), "receiveNewUUID", generateRandomUUID())
+	
+func generateRandomUUID():
+	var intToStr = {0 : 0,
+					1 : 1,
+					2 : 2,
+					3 : 3,
+					4 : 4,
+					5 : 5,
+					6 : 6,
+					7 : 7,
+					8 : 8,
+					9 : 9,
+					10 : "a",
+					11 : "b",
+					12 : "c",
+					13 : "d",
+					14 : "e",
+					15 : "f",
+					16 : "g",
+					17 : "h",
+					18 : "i",
+					19 : "j",
+					20 : "k",
+					21 : "l",
+					22 : "m",
+					23 : "n",
+					24 : "o",
+					25 : "p",
+					26 : "q",
+					27 : "r",
+					28 : "s",
+					29 : "t",
+					30 : "u",
+					31 : "v",
+					32 : "w",
+					33 : "x",
+					34 : "y",
+					35 : "z",
+					36 : "A",
+					37 : "B",
+					38 : "C",
+					39 : "D",
+					40 : "E",
+					41 : "F",
+					42 : "G",
+					43 : "H",
+					44 : "I",
+					45 : "J",
+					46 : "K",
+					47 : "L",
+					48 : "M",
+					49 : "N",
+					50 : "O",
+					51 : "P",
+					52 : "Q",
+					53 : "R",
+					54 : "S",
+					55 : "T",
+					56 : "U",
+					57 : "V",
+					58 : "W",
+					59 : "X",
+					60 : "Y",
+					61 : "Z"}
+	var uuid = ""
+	var path = "user://existingUUIDS"
+	var dirList = []
+	for i in range(23):
+		randomize()
+		var x = intToStr[randi()%62]
+		uuid = uuid+str(x)
+		path = path+"/"+str(x)
+		dirList.append(str(x))
+	# check if the uuid is already taken
+	var dir = Directory.new()
+	if dir.dir_exists(path):
+		return generateRandomUUID()
+	# continue if it's not
+	dir.open("user://existingUUIDS")
+	# Create the directory
+	var tempPath = "user://existingUUIDS/"
+	for i in range(23):
+		dir.make_dir(dirList[i])
+		dir.open(tempPath+dirList[i])
+		tempPath = tempPath+dirList[i]+"/"
+	# Create data.json to store account's data
+	var file = File.new()
+	if file.open(path+"/data.json", File.WRITE) != 0:
+		print("Error creating file "+path+"/data.json")
+		return
+	var data = {
+		"chars" : []
+	}
+	file.store_line(JSON.print(data))
+	file.close()
+	return uuid

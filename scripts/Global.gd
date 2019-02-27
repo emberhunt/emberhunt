@@ -7,6 +7,7 @@ var boolMusic = true
 var Music = 1
 var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
+var UUID = false
 
 # game paused
 var paused = false
@@ -20,6 +21,7 @@ func saveGame():
 	file.set_value("Settings","Music",Music)
 	file.set_value("Settings","quality",quality)
 	file.set_value("Settings","touchpadPosition",touchpadPosition)
+	file.set_value("Networking","uuid",UUID)
 	file.save("user://emberhunt.save")
 
 func loadGame():
@@ -31,6 +33,7 @@ func loadGame():
 	Music = file.get_value("Settings","Music", 1)
 	quality = file.get_value("Settings","quality", "High")
 	touchpadPosition = file.get_value("Settings","touchpadPosition", "Fixed")
+	UUID = file.get_value("Networking","uuid", false)
 	
 func _ready():
 	loadGame()
