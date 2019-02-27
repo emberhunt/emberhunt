@@ -40,3 +40,10 @@ func _on_TouchScreenButton_pressed():
 		# Disable touchpads
 		get_node("CanvasLayer/moveButton").disabled = true
 		get_node("CanvasLayer/shootButton").disabled = true
+
+
+func _on_toggleInventory_pressed():
+	if inventorySystem.is_visible():
+		inventorySystem.set_visible(false)
+	else:
+		inventorySystem.set_visible(true)

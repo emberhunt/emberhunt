@@ -2,45 +2,95 @@ class_name Item
 
 
 enum ItemType {
-	WEAPON_MELEE,
-	WEAPON_RANGED,
-	POTION,
-	ARMOR,
-	TOME
+	# Weapons
+	SPEAR,
+	SWORD,
+	GREAT_SWORD,
+	DAGGER,
+	LANCE,
+	MACE,
+	SHORT_BOW,
+	LONG_BOW,
+	HARP_BOW,
+	SHURIKEN,
+	THROWING_DAGGER,
+	STAVE,
+	TOME,
+	WAND,
+	
+	# Offhand
+	SHIELD,
+	BANNER,
+	TOWER_SHIELD,
+	WITHERED_HEAD,
+	QUIVER,
+	CRYSTAL_SHARD,
+	ORB,
+	TRAP,
+	NATRUE_RELIC,
+	DIVINE_RELIC,
+	ARROW,
+	
+	# Armor
+	ARMOR_CHEST,
+	ARMOR_HELMET,
+	ARMOR_LEG,
+	
+	# Consumable
+	POTION
+}
+
+const _itemTypes = {
+	ItemType.SPEAR : "SPEAR",
+	ItemType.SWORD : "SWORD",
+	ItemType.GREAT_SWORD : "GREAT_SWORD",
+	ItemType.DAGGER : "DAGGER",
+	ItemType.LANCE : "LANCE",
+	ItemType.MACE : "MACE",
+	ItemType.SHORT_BOW : "SHORT_BOW",
+	ItemType.LONG_BOW : "LONG_BOW",
+	ItemType.HARP_BOW : "HARP_BOW",
+	ItemType.SHURIKEN : "SHURIKEN",
+	ItemType.THROWING_DAGGER : "THROWING_DAGGER",
+	ItemType.TOME : "TOME",
+	ItemType.WAND : "WAND",
+	
+	ItemType.SHIELD : "SHIELD",
+	ItemType.BANNER : "BANNER",
+	ItemType.TOWER_SHIELD : "TOWER_SHIELD",
+	ItemType.WITHERED_HEAD : "WITHERED_HEAD",
+	ItemType.QUIVER : "QUIVER",
+	ItemType.CRYSTAL_SHARD : "CRYSTAL_SHARD",
+	ItemType.ORB : "ORB",
+	ItemType.TRAP : "TRAP",
+	ItemType.NATRUE_RELIC : "NATRUE_RELIC",
+	ItemType.DIVINE_RELIC : "DIVINE_RELIC",
+	
+	ItemType.ARROW : "ARMOR_CHEST",
+	ItemType.ARROW : "ARMOR_HELMET",
+	ItemType.ARROW : "ARMOR_LEG",
+	
+	ItemType.ARROW : "POTION"
 }
 
 static func get_type_from_name(itemTypeName : String):
-	match (itemTypeName):
-		"WEAPON_MELEE":
-			return ItemType.WEAPON_MELEE
-		"WEAPON_RANGED":
-			return ItemType.WEAPON_RANGED
-		"POTION":
-			return ItemType.POTION
-		"ARMOR":
-			return ItemType.ARMOR
-		"TOME":
-			return ItemType.TOME
-		_:
-			print("unkown item type!")
-			return "UNKOWN_ITEM_TYPE"
+	for type in _itemTypes.keys():
+		if _itemTypes[type] == itemTypeName:
+			return type
+	
+	printerr("couldn't find item name")
+	assert(true)
+	return null
 	
 
 static func get_type_name(itemType) -> String:
-	match (itemType):
-		ItemType.WEAPON_MELEE:
-			return "WEAPON_MELEE"
-		ItemType.WEAPON_RANGED:
-			return "WEAPON_RANGED"
-		ItemType.POTION:
-			return "POTION"
-		ItemType.ARMOR:
-			return "ARMOR"
-		ItemType.TOME:
-			return "TOME"
-		_:
-			print("unkown item type!")
-			return "UNKOWN_ITEM_TYPE"
+	for name in _itemTypes.values():
+		if name == _itemTypes[itemType]:
+			return name
+	
+	printerr("couldn't find item name")
+	assert(true)
+	return ""
 
 	
 	
@@ -55,6 +105,7 @@ var _texturePath : String
 
 # enums
 var _type
+var _slotsUse # for 1 or 2 handed weapon
 
 # Dicts
 var _effects
@@ -69,7 +120,7 @@ var _consumable : bool
 
 
 func _init(id, name, type, weight, value, effects, requirements, description, texturePath, textureRegion, \
-			stackSize, stackable = false, usable = false, discardable = true, sellable = true, consumable = false):
+			slotsUse, stackSize, stackable = false, usable = false, discardable = true, sellable = true, consumable = false):
 	_id = id
 	_name = name
 	_type = type
@@ -83,6 +134,7 @@ func _init(id, name, type, weight, value, effects, requirements, description, te
 	_discardable = discardable
 	_sellable = sellable
 	_consumable = consumable
+	_slotsUse = slotsUse
 	_stackable = stackable
 	_stackSize = stackSize
 	_textureRegion = Rect2(textureRegion["x"], textureRegion["y"], textureRegion["w"], textureRegion["h"])

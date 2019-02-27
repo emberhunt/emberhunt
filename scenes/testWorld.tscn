@@ -17,12 +17,22 @@ texture = SubResource( 1 )
 region_rect = Rect2( 34, 43, 54, 15 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
 
 [node name="gui" parent="." instance=ExtResource( 3 )]
 playerNode = NodePath("../player")
 
-[node name="debugLabel" parent="gui/CanvasLayer" index="1"]
+[node name="PauseButton" parent="gui/CanvasLayer" index="0"]
+editor/display_folded = false
+
+[node name="debugLabel" parent="gui/CanvasLayer" index="2"]
 text = "(0, 0)"
+
+[node name="moveButton" parent="gui/CanvasLayer" index="3"]
+editor/display_folded = true
+
+[node name="inventorySystem" parent="gui/CanvasLayer" index="5"]
+visible = false
 
 
 [editable path="player"]

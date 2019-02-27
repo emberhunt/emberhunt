@@ -19,32 +19,30 @@ enum CharacterType {
 }
 
 
-func _ready():
-	pass
+const _characterTypes = {
+	CharacterType.KNIGHT : "knight",
+	CharacterType.BERZERKER : "berzerker",
+	CharacterType.ASSASSIN : "assassin",
+	CharacterType.SNIPER : "sniper",
+	CharacterType.HUNTER : "hunter",
+	CharacterType.ARSONIST : "arsonist",
+	CharacterType.BRAND : "brand",
+	CharacterType.HERALD : "herald",
+	CharacterType.REDEEMER : "redeemer",
+	CharacterType.DRUID : "druid"
+	
+}
 
 
-static func get_character_name(characterType) -> String:
-	match (characterType):
-		CharacterType.KNIGHT:
-			return "knight"
-		CharacterType.BERZERKER:
-			return "berzerker"
-		CharacterType.ASSASSIN:
-			return "assassin"
-		CharacterType.SNIPER:
-			return "sniper"
-		CharacterType.HUNTER:
-			return "hunter"
-		CharacterType.ARSONIST:
-			return "arsonist"
-		CharacterType.BRAND:
-			return "brand"
-		CharacterType.HERALD:
-			return "herald"
-		CharacterType.REDEEMER:
-			return "redeemer"
-		CharacterType.DRUID:
-			return "druid"
-		_:
-			print("Couldn't find character type: " + str(characterType))
-			return ""
+static func get_character_type_name(characterType) -> String:
+	if _characterTypes.has(characterType):
+		return _characterTypes[characterType]
+	print("Couldn't find character type: " + str(characterType))
+	return ""
+	
+
+static func get_character_type_by_name(characterName : String):
+	for i in range(_characterTypes.size()):
+		if characterName == _characterTypes[i]:
+			return _characterTypes.keys()[i]
+	

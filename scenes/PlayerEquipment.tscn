@@ -1,15 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ItemSlot.tscn" type="PackedScene" id=2]
 
 [node name="inventory" type="Control"]
-margin_right = 489.0
-margin_bottom = 299.0
-rect_pivot_offset = Vector2( -290, -110 )
+margin_left = 149.0
+margin_top = 60.0
+margin_right = 482.0
+margin_bottom = 338.0
 mouse_filter = 1
 script = ExtResource( 1 )
-weightEnabled = true
-maxWeight = 20.0
+maxInventorySize = 2
 
 [node name="background" type="ColorRect" parent="."]
 anchor_right = 1.0
@@ -17,14 +18,27 @@ anchor_bottom = 1.0
 mouse_filter = 1
 color = Color( 0.223529, 0.160784, 0.0392157, 1 )
 
-[node name="slots" type="GridContainer" parent="background"]
+[node name="slots" type="Control" parent="background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
-margin_top = 32.0
-margin_right = -5.0
-margin_bottom = -5.0
-columns = 4
+margin_left = 3.0
+margin_top = 29.0
+margin_right = -3.0
+margin_bottom = -3.0
+mouse_filter = 1
+
+[node name="itemSlot" parent="background/slots" instance=ExtResource( 2 )]
+margin_left = 136.986
+margin_top = 17.4668
+margin_right = 176.986
+margin_bottom = 57.4668
+expand = true
+
+[node name="itemSlot2" parent="background/slots" instance=ExtResource( 2 )]
+margin_left = 135.964
+margin_top = 64.2096
+margin_right = 175.964
+margin_bottom = 104.21
 
 [node name="colorTitlebar" type="ColorRect" parent="background"]
 anchor_right = 1.0
@@ -47,14 +61,15 @@ align = 1
 valign = 1
 
 [node name="weightLabel" type="Label" parent="background"]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 3.0
 margin_top = -16.0
-margin_right = -2.0
+margin_right = -3.0
 margin_bottom = -2.0
-text = "0 / 20"
+text = "0 / -1"
 align = 2
 valign = 1
 

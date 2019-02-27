@@ -4,9 +4,13 @@
   DON'T have THIS inventory system,
   instead they have an accessable inventory
 - Each InventorySystem has a main inventory, which will get access to other inventories
-- Additional Inventories can be added to the main inventory
+- Additional inventories can be added to the main inventory
 """
 extends Control
+
+class_name InventorySystem
+
+
 
 const Inventory = preload("res://scripts/Inventory.gd")
 const SlotRequirement = preload("res://scripts/SlotRequirement.gd")
@@ -14,9 +18,8 @@ const SlotRequirement = preload("res://scripts/SlotRequirement.gd")
 onready var itemDescription = $itemSlotDescription
 onready var itemDescriptionField = $descriptionField
 onready var blocker = $blocker
+onready var draggenItem = $draggenItem
 
-
-class_name InventorySystem
 
 #key is the player/chest id
 var _inventories = {}
@@ -33,42 +36,28 @@ var pressedId : String
 var holding = false
 
 func _ready():
-	#set_process_input(true)
+	set_process_input(true)
+	
+	_mainInventoryId = "equipment"
 	
 	for i in range(get_child(0).get_child_count()):
-		if i == 0:
-			_mainInventoryId = get_child(i).name
 		_inventories[get_child(0).get_child(i).name] = get_child(0).get_child(i)
 		_inventories[get_child(0).get_child(i).name].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
 	
 	# test items / later loaded from file
-	var mainInv = $Inventories/playerInventory
+	var mainInv = $inventories/playerInventory
 	mainInv.add_item(mainInv.get_item(0))
 	mainInv.add_item(mainInv.get_item(1))
-	mainInv.add_item(mainInv.get_item(2))
-	mainInv.add_item(mainInv.get_item(3))
-	mainInv.add_item(mainInv.get_item(3))
-	mainInv.add_item(mainInv.get_item(3))
-	mainInv.remove_item(3)
+	mainInv.remove_item(0)
 	
 	
-	var chest = $Inventories/chest
+	var chest = $inventories/chest
 	chest.add_item(chest.get_item(0))
-	chest.add_item(chest.get_item(1))
-	chest.add_item(chest.get_item(2))
 	chest.add_item(chest.get_item(3))
-	chest.add_item(chest.get_item(3))
-	chest.add_item(chest.get_item(3))
-	chest.remove_item(0)
 	
-	var chest2 = $Inventories/chest2
+	var chest2 = $inventories/chest2
 	chest2.add_item(chest2.get_item(0))
-	chest2.add_item(chest2.get_item(1))
-	chest2.add_item(chest2.get_item(2))
 	chest2.add_item(chest2.get_item(3))
-	chest2.add_item(chest2.get_item(3))
-	chest2.add_item(chest2.get_item(3))
-	chest2.remove_item(0)
 	
 	# registeres inventories
 	for i in range(get_child(0).get_child_count()):
@@ -81,17 +70,33 @@ func _ready():
 					_inventories[get_child(0).get_child(j).name].register_slot(inv.inventoryName + str(s), slot)
 	
 	
+func _process(delta):
+	if holding:
+		draggenItem.rect_global_position = get_viewport().get_mouse_position()
+
+
 func get_inventory():
 	return _inventories[_mainInventoryId]
 
 # TODO:
 # - "register" items to main inventory
 func register_inventory(inventory : Inventory):
-	inventory
+	for i in range(get_child(0).get_child_count()):
+		var inv = _inventories[get_child(0).get_child(i).name]
+		#inv.used = true
+		for s in range(inv.get_slot_size()):
+			var slot = inv.get_slots()[inv.inventoryName + str(s)]
+			
+			inventory.register_slot(inv.inventoryName + str(s), slot)
+
 	
 	
-func unregister_inventory(inventoryId : String):
-	_inventories.erase(inventoryId)
+func unregister_inventories():
+	# ToDo: add marker if inventory should be unregistred or not
+	# rather than only one main inventory
+	for i in range(_inventories.size()):
+		if _mainInventoryId != _inventories.keys()[i]:
+			_inventories.erase(_inventories.keys()[i])
 
 
 func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
@@ -107,6 +112,8 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 		if _inventories[inv].get_slots()[id]._item != null :
 			holding = true
 			pressedId = id
+			draggenItem.set_visible(true)
+			draggenItem.texture = _inventories[inv].get_slots()[id]._slot.get_child(0).texture
 			
 			
 	elif holding and not is_pressed:
@@ -127,10 +134,36 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 			
 		if selectedId == lastSelectedId:
 			return
+		
+		var lastSelSlot = _inventories[lastSelectedInv].get_slots()[lastSelectedId]
+		var selSlot = _inventories[selectedInv].get_slots()[selectedId]
+		
+		if lastSelSlot.get_item() != null and selSlot.get_item() != null: 
+			# check if the items are the same and are stackable
+			if lastSelSlot.get_item().get_id() == selSlot.get_item().get_id() and \
+					selSlot.get_item().is_stackable() and lastSelSlot.get_item().is_stackable() and \
+					selSlot.get_amount() + lastSelSlot.get_amount() < selSlot.get_item().get_stack_size():
+				_inventories[selectedInv].get_slots()[selectedId].set_amount(selSlot.get_amount() + lastSelSlot.get_amount())
+				_inventories[lastSelectedInv].add_weight(-_inventories[lastSelectedInv].get_slots()[lastSelectedId].get_weight())
+				_inventories[selectedInv].add_weight(_inventories[lastSelectedInv].get_slots()[lastSelectedId].get_weight())
+				_inventories[lastSelectedInv].get_slots()[lastSelectedId].remove_item()
+				return
+		
+		# swap items
 		if _check_requirements_for_slot_swap( \
 				_inventories[lastSelectedInv].get_slots()[lastSelectedId], \
 				_inventories[selectedInv].get_slots()[selectedId]):
-			_inventories[selectedInv].swap_items(selectedId, lastSelectedId) 
+			_inventories[selectedInv].swap_items(selectedId, lastSelectedId)  # swap items
+			var lastItemWeight = \
+					_inventories[lastSelectedInv].get_slots()[lastSelectedId].get_weight()
+			var selItemWeight = \
+					_inventories[selectedInv].get_slots()[selectedId].get_weight()
+					
+			_inventories[selectedInv].add_weight(-lastItemWeight)
+			_inventories[lastSelectedInv].add_weight(-selItemWeight)
+			_inventories[selectedInv].add_weight(selItemWeight)
+			_inventories[lastSelectedInv].add_weight(lastItemWeight)
+			
 			
 			
 func _check_requirements_for_slot_swap(firstSlot, secondSlot) -> bool:
@@ -154,3 +187,11 @@ func _on_descriptionField_mouse_exited():
 		itemDescription.set_visible(false)
 		itemDescriptionField.set_visible(false)
 		blocker.set_visible(false)
+
+
+func _on_inventorySystem_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and not event.is_pressed():
+		holding = false
+		draggenItem.set_visible(false)
+		
+		

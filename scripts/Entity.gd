@@ -76,6 +76,9 @@ func get_property_name(propertyType):
 		PropertyType.MAGIC_RESISTANCE:
 			return "magicResistance" 
 			
+		PropertyType.CARRY_WEIGHT:
+			return "carryWeight"
+			
 		PropertyType.LEVEL:
 			return "level"
 		PropertyType.CLASS:
