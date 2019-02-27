@@ -147,7 +147,7 @@ autostart = true
 
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
 position = Vector2( 149.88, 447.728 )
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 script = ExtResource( 3 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
@@ -163,7 +163,7 @@ texture = ExtResource( 5 )
 [node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
 position = Vector2( 873.88, 447.728 )
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 script = ExtResource( 6 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
