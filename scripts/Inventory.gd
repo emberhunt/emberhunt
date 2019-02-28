@@ -1,6 +1,8 @@
 """
-
+This is a inventory that only can be used
+by including it in an inventory system
 """
+tool
 extends Control
 
 # signaled, when pressed or released
@@ -20,19 +22,13 @@ const _atlasTexture = preload("res://assets/inventory/items.png")
 const _slotBackground = preload("res://assets/inventory/slotBackground.png")
 const _emptySlot = preload("res://assets/inventory/empty_slot.png")
 
-# this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
-# inventoryId should be the unique player id
-var inventoryId : int = -1
-# the name should be something like: "playerinventory", "chest" or "merchant"
-export(String) var inventoryName
-# how much can this inventory carry, negative means, no limit
-var maxWeight = -1.0
-var _currentWeight = 0.0
-
-
+"""
+This class is used as an wrapper for 
+the slot, the item, requirements and the amount of the items
+"""
 class Slot:
 	var _item : Item = null
-	var _slot : TextureButton
+	var _slot #: TextureButton
 	var _amount = 0
 	var _slotRequirements = {} # level, class, type of item
 	var _slotTypeRequirements : Array # ItemTypes
@@ -94,8 +90,11 @@ class Slot:
 		return _amount
 		
 	func get_weight() -> float:
-		return _item.get_weight()
-
+		if _item != null:
+			return _item.get_weight() * get_amount()
+		else:
+			return 0.0
+			
 	func set_selected():
 		_slot.set_selected()
 		
@@ -110,14 +109,51 @@ class Slot:
 		
 	func get_slot_requirements() -> Dictionary:
 		return _slotRequirements
+
+
+onready var itemSlots = $background/slots
+onready var weightLabel = $background/weightLabel
+
+# this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
+# inventoryId should be the unique player id
+var inventoryId : int = -1
+# the name should be something like: "playerinventory", "chest" or "merchant"
+export(String) var inventoryName = "inventory" setget update_inventory_name
+export(int) var maxInventorySize = 8
+export(int) var columns = 4 setget update_inventory_columns
+export(bool) var weightEnabled = false setget update_weight_enabled
+export(float) var maxWeight = -1 setget _update_max_weight
+
+func _update_max_weight(newMax):
+	maxWeight = newMax
+	_update_weight()
+
+func update_weight_enabled(enable : bool):
+	weightEnabled = enable
+	if has_node("background/weightLabel"):
+		if $background/weightLabel != null:
+			$background/weightLabel.set_visible(enable)
 	
+func update_inventory_name(name : String):
+	if not Engine.editor_hint:
+		return
 	
+	if has_node("background/weightLabel"):
+		if $background/weightLabel != null:
+			$background/nameBackground/name.text= name
+			inventoryName = name
+
+func update_inventory_columns(cols : int):
+	# set colums to 0 for custom layout
+	if $background/slots.is_class("GridContainer"):
+		columns = cols
+		$background/slots.columns = columns
 
 
-onready var itemSlots = $Panel/GridContainer
+# how much can this inventory carry, negative means, no limit
 
-export(int) var max_inventory_size = 8
-export(int) var columns = 4
+var _currentWeight = 0.0
+
 
 # class Slot, contains all available slots
 var _slots = {}
@@ -136,23 +172,33 @@ func _ready():
 	set_process(false)
 	set_process_input(true)
 	
-	$Panel/nameBackground/name.set_text(inventoryName)
+	$background/nameBackground/name.set_text(inventoryName)
 	inventoryName = self.name	
+	
 	_load_all_items()
 	
-	itemSlots.columns = columns
-	
-	
-	for i in range(max_inventory_size):
-		var textureRect = TextureRect.new()
-		textureRect.texture = _slotBackground
-		var emptySlot = Slot.new(inventoryName + str(i))
-		if i == 0:
-			emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
-					Character.get_character_name(Character.CharacterType.KNIGHT))
-			emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.WEAPON_MELEE)])
-		add_slot(emptySlot)
-	
+	# set colums to 0 for custom layout
+	if columns > 0 and itemSlots is GridContainer:
+		itemSlots.columns = columns
+
+		for i in range(maxInventorySize):
+			var textureRect = TextureRect.new()
+			textureRect.texture = _slotBackground
+			var emptySlot = Slot.new(inventoryName + str(i))
+			if i == 0:
+				emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
+						Character.get_character_type_name(Character.CharacterType.KNIGHT))
+				emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.GREAT_SWORD)])
+			add_slot(emptySlot)
+
+	else:
+		maxInventorySize = itemSlots.get_child_count()
+
+		for i in range(maxInventorySize):
+			itemSlots.get_child(i).init(inventoryName + str(i))
+
+		register_existing_slots()
+		
 	
 func register_slot(name : String, slot : Slot):
 	_registeredSlotNames.append(name)
@@ -199,7 +245,8 @@ func _load_all_items():
 	
 	for i in range(data.size()):
 		var itemData= data[str(i)]
-		
+		#print(itemData["type"])
+		#print(Item.get_type_from_name(itemData["type"]))
 		var newItem = Item.new(
 				i,
 				itemData["name"], 
@@ -211,6 +258,7 @@ func _load_all_items():
 				itemData["description"],
 				itemData["texture_path"],
 				itemData["texture_region"],
+				itemData["slots_use"],
 				itemData["stack_size"],
 				itemData["stackable"],
 				itemData["usable"],
@@ -223,41 +271,39 @@ func _load_all_items():
 		_allItemNames[newItem.get_name()] = newItem
 
 
-func _get_item_by_id(id : int) -> Item:
-	return _allItems[id]
-
-
-func _get_item_by_name(name : String) -> Item:
-	return _allItemNames[name]
-	
-
-func get_item(id : int) -> Item:
-	# ItemSlot.new(item, amount)
-	#return ItemSlot.new(_get_item_by_id(id), 1)
-	return _get_item_by_id(id)
-
 func can_carry_items(item : Item, amount : int = 1) -> bool:
 	if _currentWeight + (item.get_weight() * float(amount)) > maxWeight:
 		return false
 	return true
 	
 	
+# register slots if you want to add slots that already exist in the editor
+func register_existing_slots():
+	for i in range(maxInventorySize):
+		var newSlotIndex = inventoryName + str(_slots.size())
+		var emptySlot = Slot.new(newSlotIndex)
+		_slots[newSlotIndex] = emptySlot
+		_slots[newSlotIndex]._slot = itemSlots.get_child(i)
+		_slots[newSlotIndex]._slot.connect("on_slot_pressed", self, "_on_slot_pressed") 
+		_slots[newSlotIndex]._slot.connect("on_slot_released", self, "_on_slot_released") 
+
+	
 func add_slot(slot : Slot):
 	#print("adding slot")
 	var newSlotIndex = inventoryName + str(_slots.size())
 	_slots[newSlotIndex] = slot
-	itemSlots.add_child(_slots[newSlotIndex]._slot)
+	$background/slots.add_child(_slots[newSlotIndex]._slot)
 
 	_slots[newSlotIndex]._slot.connect("on_slot_pressed", self, "_on_slot_pressed") 
 	_slots[newSlotIndex]._slot.connect("on_slot_released", self, "_on_slot_released") 
 
-func get_slot_size():
-	return _slots.size() - _registeredSlotNames.size()
 
 func remove_item(slotId : int, amount : int = 0) -> Item:
 	var item = get_slot(slotId)._item
+	add_weight(-item.get_weight())
 	get_slot(slotId).remove_item(amount)
 	return item
+
 
 # add item to inventory
 #return false if couldn't add item to inv
@@ -278,6 +324,7 @@ func add_item(item : Item, amount : int = 1) -> bool:
 					#print("item id of stackable: " + str(currentSlot.get_amount()))
 					currentSlot.set_amount(currentSlot.get_amount() + 1)
 					_currentWeight += item.get_weight()
+					_update_weight()
 					return true
 
 	# if not stackable/not exist/full stack then add to new slot
@@ -296,16 +343,9 @@ func add_item(item : Item, amount : int = 1) -> bool:
 #	itemList.set_item_tooltip_enabled(freePos, true)
 #	itemList.set_item_icon(freePos, atls)
 	_currentWeight += item.get_weight()
+	_update_weight()
 	return true
-	
 
-
-func get_slots() -> Dictionary:
-	return _slots
-	
-func get_item_at_slot(slotId : int) -> Item:
-	return _slots[str(slotId)]._item
-	
 	
 # json file
 func load_inventory(fileName : String) -> Dictionary:
@@ -320,80 +360,68 @@ func load_inventory(fileName : String) -> Dictionary:
 		return {}
 	
 	return data.result
-	
 
-func get_slot(id : int) -> Slot:
-	return _slots[inventoryName + str(id)]
-
-func _get_next_free_slot_id() -> String:
-	for i in range(max_inventory_size):
-		if _slots[inventoryName + str(i)].get_item() == null:
-			return inventoryName + str(i)
-	return ""
-	
 	
 func swap_selected():
 	swap_items(_selected, _lastSelected)
-#	var tempItem = _slots[_selected].get_item()
-#	var amount = _slots[_selected].get_amount()
-#	_slots[_selected].set_item(_slots[_lastSelected].get_item(), _slots[_lastSelected].get_amount())
-#	_slots[_lastSelected].set_item(tempItem, amount)
 	
 	
 func swap_items(idx1 : String, idx2 : String): 
 	var tempItem = _slots[idx1].get_item()
 	var amount = _slots[idx1].get_amount()
+	
 	_slots[idx1].set_item(_slots[idx2].get_item(), _slots[idx2].get_amount())
 	_slots[idx2].set_item(tempItem, amount)
 	
 
-# when released, swap items
-func _on_slot_released(index):
-	if not get_parent().is_visible() or Global.paused:
-		return
-		
-	_lastSelected = _selected
-	_selected = index
-	
-	emit_signal("on_slot_toggled", false, _selected, inventoryName)
-	
-	#if _isHolding:
-		#print("released at: "  + str(index))
-		#_isHolding = false
-#			# change item slots
-#			var closest = itemList.get_item_at_position(event.position, true)
-#			if closest != _selected and _selected != -1:
-#				#print('release at ' + str(closest))
-#				if closest != -1 and _itemSlots[str(_selected)] != null:
-#					_swap_items(_selected, closest)
+func set_weight(weight : float):
+	_currentWeight = weight
+	_update_weight()
+
+func add_weight(weight : float):
+	_currentWeight += weight
+	_update_weight()
+
+func get_weight() -> float:
+	return _currentWeight
+
+
+func _get_item_by_id(id : int) -> Item:
+	return _allItems[id]
+
+
+func _get_item_by_name(name : String) -> Item:
+	return _allItemNames[name]
 	
 
-func _on_slot_pressed(index : String):
-	if not get_parent().is_visible() or Global.paused:
-		return
-		
-	_lastSelected = _selected
-	_selected = index
-	#print("selected: " + str(index))
-	emit_signal("on_slot_toggled", true, _selected, inventoryName)
+func get_item(id : int) -> Item:
+	# ItemSlot.new(item, amount)
+	#return ItemSlot.new(_get_item_by_id(id), 1)
+	return _get_item_by_id(id) 
+
+
+func get_slot_size():
+	return _slots.size() - _registeredSlotNames.size()
+
+
+func get_slots() -> Dictionary:
+	return _slots
 	
-	if _get_selected_slot() == null:
-		#itemList.unselect(_selected)
-		_slots[str(_selected)].set_unselected()
-		return
-	_slots[_selected].set_selected()
-	
-	
-	#_isHolding = true
-	
-#	var item = _slots[str(_selected)].get_item()
-#	var atls = AtlasTexture.new()
-#	atls.atlas = _atlasTexture
-#	atls.region = item.item.get_texture_region()
-	#atls.margin = Rect2(0,3,0,0)
-	#_holdingItem = _slots[str(_selected)].get_item()
+func get_item_at_slot(slotId : int) -> Item:
+	return _slots[str(slotId)]._item
 	
 
+func get_slot(id : int) -> Slot:
+	return _slots[inventoryName + str(id)]
+
+
+func _get_next_free_slot_id() -> String:
+	for i in range(maxInventorySize):
+		if _slots[inventoryName + str(i)].get_item() == null:
+			return inventoryName + str(i)
+	return ""
+	
+	
 func get_selected_slot() -> Slot:
 	return _slots[_selected]
 
@@ -416,5 +444,39 @@ func get_item_id_by_name(itemName : String) -> String:
 			return inventoryName + str(i)
 			
 	# if item name not found
-	#print("couldn't find item with name: " + itemName)
+	printerr("couldn't find item with name: " + itemName)
 	return ""
+
+
+func _update_weight():
+	if has_node("background/weightLabel"):
+		if $background/weightLabel != null:
+			$background/weightLabel.text = str(_currentWeight) + " / " + str(maxWeight)
+
+
+# when released, swap items
+func _on_slot_released(index):
+	if not get_parent().is_visible() or Global.paused:
+		return
+		
+	_lastSelected = _selected
+	_selected = index
+	
+	emit_signal("on_slot_toggled", false, _selected, inventoryName)
+	
+
+func _on_slot_pressed(index : String):
+	if not get_parent().is_visible() or Global.paused:
+		return
+		
+	_lastSelected = _selected
+	_selected = index
+	#print("selected: " + str(index))
+	emit_signal("on_slot_toggled", true, _selected, inventoryName)
+	
+	if _get_selected_slot() == null:
+		#itemList.unselect(_selected)
+		_slots[str(_selected)].set_unselected()
+		return
+	_slots[_selected].set_selected()
+	

@@ -26,6 +26,6 @@ func _set_properties():
 	set_property(PropertyType.MAGIC_RESISTANCE, 1)
 	set_property(PropertyType.CARRY_WEIGHT, 100.0)
 	
-	set_property(PropertyType.CLASS, get_character_name(CharacterType.KNIGHT))
+	set_property(PropertyType.CLASS, get_character_type_name(CharacterType.KNIGHT))
 	set_property(PropertyType.LEVEL, 1)
 

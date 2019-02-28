@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
@@ -8,7 +8,78 @@
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=6]
 [ext_resource path="res://scenes/InventorySystem.tscn" type="PackedScene" id=7]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="VisualShaderNodeTexture" id=1]
+texture = ExtResource( 2 )
+
+[sub_resource type="VisualShaderNodeInput" id=2]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeColorOp" id=3]
+operator = 1
+
+[sub_resource type="VisualShaderNodeColorConstant" id=4]
+
+[sub_resource type="VisualShader" id=5]
+code = "shader_type canvas_item;
+uniform sampler2D tex_frg_3;
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:7
+	vec3 n_out7p0;
+	float n_out7p1;
+	n_out7p0 = vec3(1.000000,1.000000,1.000000);
+	n_out7p1 = 1.000000;
+
+// Input:5
+	vec3 n_out5p0;
+	n_out5p0 = vec3(UV,0.0);
+
+// Texture:3
+	vec3 n_out3p0;
+	float n_out3p1;
+	vec4 tex_frg_3_read = texture( tex_frg_3 , n_out5p0.xy );
+	n_out3p0 = tex_frg_3_read.rgb;
+	n_out3p1 = tex_frg_3_read.a;
+
+// ColorOp:6
+	vec3 n_out6p0;
+	n_out6p0=abs(n_out7p0-n_out3p0);
+
+// Output:0
+	COLOR.rgb = n_out6p0;
+	COLOR.a = n_out3p1;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -431.507, -202.5 )
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2( 460, 0 )
+nodes/fragment/3/node = SubResource( 1 )
+nodes/fragment/3/position = Vector2( -180, -20 )
+nodes/fragment/5/node = SubResource( 2 )
+nodes/fragment/5/position = Vector2( -440, -40 )
+nodes/fragment/6/node = SubResource( 3 )
+nodes/fragment/6/position = Vector2( 140, -60 )
+nodes/fragment/7/node = SubResource( 4 )
+nodes/fragment/7/position = Vector2( -160, -140 )
+nodes/fragment/connections = PoolIntArray( 5, 0, 3, 0, 3, 1, 0, 1, 6, 0, 0, 0, 3, 0, 6, 1, 7, 0, 6, 0 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+
+[sub_resource type="CircleShape2D" id=7]
 radius = 150.0
 
 [node name="gui" type="Control"]
@@ -25,7 +96,6 @@ playerNode = NodePath("")
 layer = 10
 
 [node name="PauseButton" type="TextureButton" parent="CanvasLayer"]
-editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
@@ -40,6 +110,27 @@ texture_focused = ExtResource( 2 )
 expand = true
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/PauseButton"]
+scale = Vector2( 5, 5 )
+normal = ExtResource( 2 )
+pressed = ExtResource( 2 )
+
+[node name="inventoryButton" type="TextureButton" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -90.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = 90.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 2 )
+texture_hover = ExtResource( 2 )
+texture_disabled = ExtResource( 2 )
+texture_focused = ExtResource( 2 )
+expand = true
+
+[node name="toggleInventory" type="TouchScreenButton" parent="CanvasLayer/inventoryButton"]
+material = SubResource( 6 )
+position = Vector2( 0, 124.619 )
 scale = Vector2( 5, 5 )
 normal = ExtResource( 2 )
 pressed = ExtResource( 2 )
@@ -92,3 +183,4 @@ margin_right = -0.119568
 margin_bottom = -2.27203
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/inventoryButton/toggleInventory" to="." method="_on_toggleInventory_pressed"]

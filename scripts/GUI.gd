@@ -22,8 +22,10 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
-		#print("visible")
 		inventorySystem.visible = ! inventorySystem.visible
+		get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
+		get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible
+		
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
@@ -40,3 +42,9 @@ func _on_TouchScreenButton_pressed():
 		# Disable touchpads
 		get_node("CanvasLayer/moveButton").disabled = true
 		get_node("CanvasLayer/shootButton").disabled = true
+
+
+func _on_toggleInventory_pressed():
+	inventorySystem.visible = ! inventorySystem.visible
+	get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
+	get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible
