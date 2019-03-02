@@ -7,8 +7,8 @@ const _backgroundTexture = preload("res://assets/inventory/slotBackground.png")
 const _backgroundTextureSelected = preload("res://assets/inventory/slotBackground_selected.png")
 
 # how many items has the stack
-onready var _labelAmount = $Label
-onready var _itemTexture = $ItemTexture
+onready var _labelAmount = $label
+onready var _itemTexture = $itemTexture
 
 var _texture : Texture = null
 
@@ -21,7 +21,6 @@ func init(id):
 	
 func _ready():
 	set_process_input(true)
-	pass
 	
 
 func _input(event):

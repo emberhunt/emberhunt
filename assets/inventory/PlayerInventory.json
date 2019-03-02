@@ -1,7 +1,7 @@
 {
 	"0" : {
 		"name" : "The Super Great Dingle Donger 9000",
-		"type" : "WEAPON_MELEE",
+		"type" : "GREAT_SWORD",
 		"value" : 10,
 		"weight" : 1.0,
 		"description" : "fant",
@@ -23,6 +23,7 @@
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
+		"slots_use" : 2,
 		"stack_size" : 4,
 		"stackable" : false,
 		"sellable" : true,
@@ -53,6 +54,7 @@
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 
+		"slots_use" : 2,
 		"stack_size" : 4,		
 		"stackable" : false,
 		"sellable" : true,
@@ -83,6 +85,7 @@
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
+		"slots_use" : 1,
 		"stack_size" : 4,
 		"stackable" : false,
 		"sellable" : true,
@@ -113,6 +116,7 @@
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
+		"slots_use" : 1,
 		"stack_size" : 4,
 		"stackable" : true,
 		"sellable" : true,
