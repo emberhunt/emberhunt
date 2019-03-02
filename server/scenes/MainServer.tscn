@@ -2,6 +2,6 @@
 
 [ext_resource path="res://server/scripts/MainServer.gd" type="Script" id=1]
 
-[node name="MainServer" type="Node2D"]
+[node name="Networking" type="Node"]
 script = ExtResource( 1 )
 

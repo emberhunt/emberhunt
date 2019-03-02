@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
@@ -13,16 +13,15 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 
-
 func _player_connected(id):
 	print(str(id)+" connected")
 
 func _player_disconnected(id):
 	print(str(id)+" disconnected")
 
-remote func registerNewAccount():
+remote func register_new_account():
 	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
-	rpc_id(get_tree().get_rpc_sender_id(), "receiveNewUUID", generateRandomUUID())
+	rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", generateRandomUUID())
 	
 func generateRandomUUID():
 	var intToStr = {0 : 0,
@@ -119,3 +118,9 @@ func generateRandomUUID():
 	file.store_line(JSON.print(data))
 	file.close()
 	return uuid
+
+
+# DEFINE ALL FUNCTIONS
+# Just pass
+remote func receive_new_uuid():
+	pass

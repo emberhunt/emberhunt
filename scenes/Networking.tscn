@@ -1,7 +1,9 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scripts/Networking.gd" type="Script" id=1]
+[ext_resource path="res://scripts/autoAssignScript.gd" type="Script" id=1]
 
-[node name="Networking" type="Node2D"]
+[node name="Main" type="Node"]
+
+[node name="autoAssignScript" type="Node" parent="."]
 script = ExtResource( 1 )
 
