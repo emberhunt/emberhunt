@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/button_notPressed.png-6000548a1fee46f7c26a32f7c1411cb3.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

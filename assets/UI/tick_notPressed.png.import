@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/tick_notPressed.png-e1a0b992bfc9bef6abc08514708d7c3a.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

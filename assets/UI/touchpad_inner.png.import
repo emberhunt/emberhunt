@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/touchpad_inner.png-3f6ecfd4a0d87cbb6ceb93663b26cd30.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
