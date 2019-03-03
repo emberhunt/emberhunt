@@ -48,7 +48,6 @@ texture = ExtResource( 4 )
 stretch_mode = 6
 
 [node name="buttons" type="Container" parent="."]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
