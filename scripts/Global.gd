@@ -9,7 +9,8 @@ var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
 var UUID = false
 
-var charactersData = {}
+# When not testing leave just {}, the server will send this data later
+var charactersData = {}#{0:{"name":"steve", "class" : "Mage", "level" : 47},1:{"name":"stacy", "class" : "Knight", "level" : 1}}
 
 # game paused
 var paused = false
@@ -39,7 +40,3 @@ func loadGame():
 
 func _ready():
 	loadGame()
-
-func _process(delta):
-	if Input.is_action_just_pressed("ui_page_up"):
-		print(charactersData)
