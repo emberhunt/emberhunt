@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="Char" type="Container"]
+
+[node name="Label" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Some Character"
+
