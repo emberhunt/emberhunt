@@ -14,6 +14,7 @@ func _ready():
 	get_tree().set_meta("network_peer", peer)
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	print("Server initialized")
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
