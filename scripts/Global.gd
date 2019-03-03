@@ -39,3 +39,7 @@ func loadGame():
 
 func _ready():
 	loadGame()
+
+func _process(delta):
+	if Input.is_action_just_pressed("ui_page_up"):
+		print(charactersData)

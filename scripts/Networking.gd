@@ -63,12 +63,17 @@ remote func receive_character_data(data):
 	# Check if it was sent by the server
 	if get_tree().get_rpc_sender_id() == 1:
 		# Check whether they have my UUID registered
-		if data != false:
-			# Store the data in Global.gd
-			Global.charactersData = data
+		if typeof(data) == TYPE_BOOL:
+			if data == false:
+				# My UUID is not registered on the servers
+				print("Server says that they don't have my UUID registered")
+			else:
+				# We should never get TRUE as data
+				print("Unexpected character data (TRUE); scripts/Networking.gd:receive_character_data()")
 		else:
-			# My UUID is not registered on the servers
-			print("Server says that they don't have my UUID registered")
+			# Store the data in Global.gd
+			print("Received characters data")
+			Global.charactersData = data
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
