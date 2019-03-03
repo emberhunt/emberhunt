@@ -1,5 +1,7 @@
 extends Node
 
+# This is the SERVER's side of networking
+
 const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
@@ -13,16 +15,50 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 
+# # # # # # # # # # # #
+# CONNECTED FUNCTIONS #
+# # # # # # # # # # # #
+
 func _player_connected(id):
 	print(str(id)+" connected")
 
 func _player_disconnected(id):
 	print(str(id)+" disconnected")
 
+# # # # # # # # # # #
+# REMOTE FUNCTIONS  #
+# # # # # # # # # # #
+
 remote func register_new_account():
 	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", generateRandomUUID())
-	
+	print("New account registered")
+
+remote func send_character_data(uuid):
+	# Get path to UUID's data.json
+	var path = "user://existingUUIDS"
+	for i in range(uuid.length()):
+		path = path+"/"+str(uuid[i])
+	# Check if the UUID is registered
+	var dir = Directory.new()
+	if not dir.dir_exists(path):
+		# The UUID is not registered yet
+		rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", false)
+		return
+	# Parse data.json
+	var file = File.new()
+	file.open(path+"/data.json", file.READ)
+	var text = file.get_as_text()
+	var data = parse_json(text)
+	file.close()
+	# Send the data back
+	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
+	pass
+
+# # # # # # # # # # #
+# NORMAL FUNCTIONS  #
+# # # # # # # # # # #
+
 func generateRandomUUID():
 	var intToStr = {0 : 0,
 					1 : 1,
@@ -89,6 +125,7 @@ func generateRandomUUID():
 	var uuid = ""
 	var path = "user://existingUUIDS"
 	var dirList = []
+	# Generate random UUID
 	for i in range(23):
 		randomize()
 		var x = intToStr[randi()%62]
@@ -112,6 +149,7 @@ func generateRandomUUID():
 	if file.open(path+"/data.json", File.WRITE) != 0:
 		print("Error creating file "+path+"/data.json")
 		return
+	# Data stored in data.json
 	var data = {
 		"chars" : []
 	}
@@ -120,7 +158,11 @@ func generateRandomUUID():
 	return uuid
 
 
-# DEFINE ALL FUNCTIONS
-# Just pass
+# # # # # # # # # # # # # #
+# OTHER REMOTE FUNCTIONS  #
+# # # # # # # # # # # # # #
+
 remote func receive_new_uuid():
+	pass
+remote func receive_character_data(data):
 	pass

@@ -9,6 +9,8 @@ var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
 var UUID = false
 
+var charactersData = {}
+
 # game paused
 var paused = false
 
@@ -34,6 +36,6 @@ func loadGame():
 	quality = file.get_value("Settings","quality", "High")
 	touchpadPosition = file.get_value("Settings","touchpadPosition", "Fixed")
 	UUID = file.get_value("Networking","uuid", false)
-	
+
 func _ready():
 	loadGame()
