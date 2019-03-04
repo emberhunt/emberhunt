@@ -73,7 +73,7 @@ remote func receive_character_data(data):
 		else:
 			# Store the data in Global.gd
 			print("Received characters data")
-			Global.charactersData = data
+			Global.charactersData = data.chars
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -84,6 +84,10 @@ func requestServerForMyCharacterData():
 	print("Requesting server for my character data")
 	rpc_id(1, "send_character_data", Global.UUID)
 
+func sendServeNewCharacterData(data):
+	print("Sending server my new character data")
+	rpc_id(1, "receive_new_character_data", Global.UUID, data)
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -91,4 +95,6 @@ func requestServerForMyCharacterData():
 remote func register_new_account():
 	pass
 remote func send_character_data(uuid):
+	pass
+remote func receive_new_character_data(uuid, data):
 	pass

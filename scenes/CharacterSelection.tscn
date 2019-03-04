@@ -24,7 +24,6 @@ margin_bottom = 540.0
 texture = ExtResource( 1 )
 
 [node name="Buttons" type="Container" parent="."]
-editor/display_folded = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -51,12 +50,12 @@ valign = 1
 uppercase = true
 
 [node name="ButtonPlay" type="TextureButton" parent="Buttons"]
-editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -450.0
 margin_right = -50.0
 margin_bottom = 50.0
+disabled = true
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
 expand = true
@@ -65,7 +64,29 @@ expand = true
 margin_right = 400.0
 margin_bottom = 45.0
 custom_fonts/font = ExtResource( 5 )
+custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 text = "Play"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="ButtonCreate" type="TextureButton" parent="Buttons"]
+editor/display_folded = true
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -200.0
+margin_top = -450.0
+margin_right = 200.0
+margin_bottom = -400.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 4 )
+expand = true
+
+[node name="Label" type="Label" parent="Buttons/ButtonCreate"]
+margin_right = 400.0
+margin_bottom = 45.0
+custom_fonts/font = ExtResource( 5 )
+text = "Create"
 align = 1
 valign = 1
 uppercase = true
@@ -93,7 +114,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -560.0
+margin_top = -460.0
 margin_right = -50.0
 margin_bottom = -150.0
 color = Color( 0, 0, 0, 0.572549 )
@@ -103,7 +124,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -560.0
+margin_top = -460.0
 margin_right = -50.0
 margin_bottom = -150.0
 scroll_horizontal_enabled = false
@@ -116,3 +137,4 @@ script = ExtResource( 6 )
 
 [connection signal="pressed" from="Buttons/ButtonBack" to="Buttons" method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Buttons/ButtonPlay" to="Buttons" method="_on_ButtonPlay_pressed"]
+[connection signal="pressed" from="Buttons/ButtonCreate" to="Buttons" method="_on_ButtonCreate_pressed"]

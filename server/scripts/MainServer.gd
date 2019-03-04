@@ -37,12 +37,9 @@ remote func register_new_account():
 
 remote func send_character_data(uuid):
 	# Get path to UUID's data.json
-	var path = "user://existingUUIDS"
-	for i in range(uuid.length()):
-		path = path+"/"+str(uuid[i])
+	var path = getPathToUuid(uuid)
 	# Check if the UUID is registered
-	var dir = Directory.new()
-	if not dir.dir_exists(path):
+	if not checkIfUuidIsRegistered(uuid):
 		# The UUID is not registered yet
 		rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", false)
 		return
@@ -56,6 +53,30 @@ remote func send_character_data(uuid):
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
 	pass
 
+remote func receive_new_character_data(uuid, data):
+	if checkIfUuidIsRegistered(uuid):
+		# Check if the data is valid
+		var classes = ["Knight","Berserker","Assasin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
+		if not (data in classes):
+			print("Received invalid new character data")
+		else:
+			# Register the new character
+			var path = getPathToUuid(uuid)
+			# Parse data.json
+			var file = File.new()
+			file.open(path+"/data.json", file.READ)
+			var text = file.get_as_text()
+			var parsed = parse_json(text)
+			file.close()
+			# Add the new data
+			parsed.chars[parsed.chars.size()] = {"class":data,"level":1}
+			# Write the new data
+			file = File.new()
+			file.open(path+"/data.json", file.WRITE)
+			file.store_line(JSON.print(parsed))
+			file.close()
+	else:
+		print("Received new character data on an UUID which is not registered")
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
 # # # # # # # # # # #
@@ -152,13 +173,29 @@ func generateRandomUUID():
 		return
 	# Data stored in data.json
 	var data = {
-		"chars" : []
+		"chars" : {}
 	}
 	file.store_line(JSON.print(data))
 	file.close()
 	return uuid
 
+func checkIfUuidIsRegistered(uuid):
+	# Get path to UUID's data.json
+	var path = "user://existingUUIDS"
+	for i in range(uuid.length()):
+		path = path+"/"+str(uuid[i])
+	# Check if the UUID is registered
+	var dir = Directory.new()
+	if not dir.dir_exists(path):
+		# The UUID is not registered yet
+		return false
+	return true
 
+func getPathToUuid(uuid):
+	var path = "user://existingUUIDS"
+	for i in range(uuid.length()):
+		path = path+"/"+str(uuid[i])
+	return path
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
