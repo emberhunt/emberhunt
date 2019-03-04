@@ -185,6 +185,8 @@ func _on_ButtonRestoreDefaults_pressed():
 	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value = default_values.bullet_pierce_random.y
 	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockback.value = default_values.bullet_knockback
 	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockbackRandom.value = default_values.bullet_knockback_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletType.value = default_values.bullet_type_id
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRotation.value = default_values.bullet_rotation
 	
 func _on_ButtonLoadWeapon_pressed():
 	var file = ConfigFile.new()
@@ -239,6 +241,8 @@ func _on_OptionButton_item_selected(ID):
 	$ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh.value = $weapon.stats.bullet_pierce_random.y
 	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockback.value = $weapon.stats.bullet_knockback
 	$ScrollContainer/SettingsContainer/InputContainer/SliderKnockbackRandom.value = $weapon.stats.bullet_knockback_random
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletType.value = $weapon.stats.bullet_type_id
+	$ScrollContainer/SettingsContainer/InputContainer/SliderBulletRotation.value = $weapon.stats.bullet_rotation
 
 func _on_SoundAttack_item_selected(ID):
 	var sfx = $ScrollContainer/SettingsContainer/InputContainer/SoundAttack.get_item_text(ID)
@@ -280,3 +284,11 @@ func _on_SliderKnockback_value_changed(value):
 func _on_SliderKnockbackRandom_value_changed(value):
 	$weapon.stats.bullet_knockback_random = value
 	$ScrollContainer/SettingsContainer/ValueContainer/ValueKnockbackRandom.text = str(value*100)
+
+func _on_SliderBulletType_value_changed(value):
+	$weapon.stats.bullet_type_id = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletType.text = str(value)
+
+func _on_SliderBulletRotation_value_changed(value):
+	$weapon.stats.bullet_rotation = value
+	$ScrollContainer/SettingsContainer/ValueContainer/ValueBulletRotation.text = str(value)
