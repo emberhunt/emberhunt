@@ -8,6 +8,7 @@ var origin = Vector2(0,0)
 var direction = Vector2(0,-1)
 var speed = 0
 var max_travel_distance = 0
+var rotation_speed = 0
 
 var damage = 0
 var knockback = 0
@@ -50,12 +51,17 @@ func _ini(stats, weapon_origin, weapon_rotation): # is called by weapon.gd befor
 		
 	impact_sound = stats.impact_sound
 	
+	$Sprite.frame = stats.bullet_type_id
+	rotation_speed = stats.bullet_rotation
+	
 func _physics_process(delta):
 	move_and_slide(direction*speed)
 	if gradient != null: # if we use a gradient
 		$Sprite.modulate = gradient.interpolate(abs((position-origin).length()) / max_travel_distance) # interpolate gradient colors based on travel distance
 	if abs((position-origin).length()) > max_travel_distance: # max travel distance reached? delete yourself!
 		queue_free()
+	if rotation_speed != 0:
+		rotation += deg2rad(rotation_speed)*delta
 		
 func _hit(): # called by enemies colliding with this bullet
 	if impact_sound != "":
