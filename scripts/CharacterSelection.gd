@@ -17,7 +17,6 @@ func _ready():
 		var scene = preload("res://scenes/CharacterSelectionListItem.tscn")
 		var scene_instance = scene.instance()
 		scene_instance.set_name("Char"+str(i))
-		print(Global.charactersData)
 		scene_instance.get_node("Class").set_text(Global.charactersData[str(i)]["class"])
 		scene_instance.get_node("Level").set_text(str(Global.charactersData[str(i)]["level"])+"LvL")
 		# Connect signals
