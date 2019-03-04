@@ -190,12 +190,11 @@ text = "Berserker"
 align = 1
 valign = 1
 
-[node name="Assasin" type="Container" parent="ScrollContainer/VBoxContainer"]
-editor/display_folded = true
+[node name="Assassin" type="Container" parent="ScrollContainer/VBoxContainer"]
 margin_top = 300.0
 margin_bottom = 300.0
 
-[node name="Assasin" type="TextureButton" parent="ScrollContainer/VBoxContainer/Assasin"]
+[node name="Assassin" type="TextureButton" parent="ScrollContainer/VBoxContainer/Assassin"]
 margin_right = 924.0
 margin_bottom = 150.0
 toggle_mode = true
@@ -203,18 +202,18 @@ texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
 expand = true
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Assasin/Assasin"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Assassin/Assassin"]
 margin_right = 180.0
 margin_bottom = 150.0
 texture = SubResource( 2 )
 expand = true
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Assasin/Assasin"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Assassin/Assassin"]
 margin_right = 927.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
-text = "Assasin"
+text = "Assassin"
 align = 1
 valign = 1
 
@@ -423,7 +422,7 @@ margin_bottom = 1500.0
 [connection signal="pressed" from="Buttons/ButtonFinish" to="Buttons" method="_on_ButtonFinish_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Knight/Knight" to="ScrollContainer/VBoxContainer" method="_on_Knight_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Berserker/Berserker" to="ScrollContainer/VBoxContainer" method="_on_Berserker_pressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/Assasin/Assasin" to="ScrollContainer/VBoxContainer" method="_on_Assasin_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Assassin/Assassin" to="ScrollContainer/VBoxContainer" method="_on_Assassin_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Sniper/Sniper" to="ScrollContainer/VBoxContainer" method="_on_Sniper_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Hunter/Hunter" to="ScrollContainer/VBoxContainer" method="_on_Hunter_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Arsonist/Arsonist" to="ScrollContainer/VBoxContainer" method="_on_Arsonist_pressed"]

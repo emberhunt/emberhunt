@@ -56,7 +56,7 @@ remote func send_character_data(uuid):
 remote func receive_new_character_data(uuid, data):
 	if checkIfUuidIsRegistered(uuid):
 		# Check if the data is valid
-		var classes = ["Knight","Berserker","Assasin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
+		var classes = ["Knight","Berserker","Assassin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
 		if not (data in classes):
 			print("Received invalid new character data")
 		else:
