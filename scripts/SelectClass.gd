@@ -17,7 +17,7 @@ func _on_Knight_pressed():
 		selected = "Knight"
 		changeFinishButtonState(true)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
@@ -35,7 +35,7 @@ func _on_Berserker_pressed():
 		selected = "Berserker"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
@@ -48,9 +48,9 @@ func _on_Berserker_pressed():
 		changeFinishButtonState(false)
 
 
-func _on_Assasin_pressed():
-	if get_node("Assasin/Assasin").is_pressed():
-		selected = "Assasin"
+func _on_Assassin_pressed():
+	if get_node("Assassin/Assassin").is_pressed():
+		selected = "Assassin"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -72,7 +72,7 @@ func _on_Sniper_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
 		get_node("Brand/Brand").set_pressed(false)
@@ -90,7 +90,7 @@ func _on_Hunter_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
 		get_node("Brand/Brand").set_pressed(false)
@@ -108,7 +108,7 @@ func _on_Arsonist_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Brand/Brand").set_pressed(false)
@@ -126,7 +126,7 @@ func _on_Brand_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
@@ -144,7 +144,7 @@ func _on_Herald_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
@@ -162,7 +162,7 @@ func _on_Redeemer_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
@@ -180,7 +180,7 @@ func _on_Druid_pressed():
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
-		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Assassin/Assassin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
 		get_node("Hunter/Hunter").set_pressed(false)
 		get_node("Arsonist/Arsonist").set_pressed(false)
