@@ -11,18 +11,19 @@ position = Vector2( 814.273, 455.253 )
 rotation = -0.846463
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+editor/display_folded = true
 margin_left = 7.0
 margin_top = 6.0
-margin_right = 474.0
-margin_bottom = 484.0
+margin_right = 488.0
+margin_bottom = 492.0
 
 [node name="SettingsContainer" type="HBoxContainer" parent="ScrollContainer"]
-margin_right = 454.0
-margin_bottom = 700.0
+margin_right = 466.0
+margin_bottom = 740.0
 
 [node name="InputContainer" type="VBoxContainer" parent="ScrollContainer/SettingsContainer"]
 margin_right = 179.0
-margin_bottom = 700.0
+margin_bottom = 740.0
 size_flags_horizontal = 3
 
 [node name="SliderDamage" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
@@ -163,304 +164,340 @@ max_value = 0.8
 step = 0.01
 ticks_on_borders = true
 
-[node name="PLACEHOLDER5" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+[node name="PLACEHOLDER6" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
 margin_top = 360.0
 margin_right = 179.0
 margin_bottom = 376.0
 ticks_on_borders = true
 
-[node name="SliderBulletScale" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+[node name="SliderPierce" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
 margin_top = 380.0
 margin_right = 179.0
 margin_bottom = 396.0
-min_value = 1.0
-max_value = 20.0
-value = 3.0
-ticks_on_borders = true
-
-[node name="SliderBulletScaleRandom" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 400.0
-margin_right = 179.0
-margin_bottom = 416.0
-max_value = 0.8
-step = 0.01
-ticks_on_borders = true
-
-[node name="PLACEHOLDER6" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-self_modulate = Color( 1, 1, 1, 0 )
-margin_top = 420.0
-margin_right = 179.0
-margin_bottom = 436.0
-ticks_on_borders = true
-
-[node name="SliderPierce" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 440.0
-margin_right = 179.0
-margin_bottom = 456.0
 max_value = 50.0
 ticks_on_borders = false
 
 [node name="SliderPierceRandomLow" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 460.0
+margin_top = 400.0
 margin_right = 179.0
-margin_bottom = 476.0
+margin_bottom = 416.0
 max_value = 49.0
 ticks_on_borders = false
 
 [node name="SliderPierceRandomHigh" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 480.0
+margin_top = 420.0
 margin_right = 179.0
-margin_bottom = 496.0
+margin_bottom = 436.0
 max_value = 50.0
 ticks_on_borders = false
 
 [node name="SliderKnockback" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 500.0
+margin_top = 440.0
 margin_right = 179.0
-margin_bottom = 516.0
+margin_bottom = 456.0
 min_value = -100.0
 max_value = 300.0
 ticks_on_borders = false
 
 [node name="SliderKnockbackRandom" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 520.0
+margin_top = 460.0
 margin_right = 179.0
-margin_bottom = 536.0
+margin_bottom = 476.0
 max_value = 1.0
 step = 0.01
 ticks_on_borders = false
 
-[node name="PLACEHOLDER7" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+[node name="PLACEHOLDER5" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
+margin_top = 480.0
+margin_right = 179.0
+margin_bottom = 496.0
+ticks_on_borders = true
+
+[node name="SliderBulletScale" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+margin_top = 500.0
+margin_right = 179.0
+margin_bottom = 516.0
+min_value = 1.0
+max_value = 15.0
+step = 0.25
+value = 3.0
+ticks_on_borders = true
+
+[node name="SliderBulletScaleRandom" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+margin_top = 520.0
+margin_right = 179.0
+margin_bottom = 536.0
+max_value = 0.8
+step = 0.01
+ticks_on_borders = true
+
+[node name="SliderBulletRotation" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
 margin_top = 540.0
 margin_right = 179.0
 margin_bottom = 556.0
+min_value = -1000.0
+max_value = 1000.0
+step = 10.0
+ticks_on_borders = false
+
+[node name="PLACEHOLDER7" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_top = 560.0
+margin_right = 179.0
+margin_bottom = 576.0
+ticks_on_borders = true
+
+[node name="SliderBulletType" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
+margin_top = 580.0
+margin_right = 179.0
+margin_bottom = 596.0
+max_value = 6.0
 ticks_on_borders = true
 
 [node name="BulletColor" type="ColorPickerButton" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 560.0
+margin_top = 600.0
 margin_right = 179.0
-margin_bottom = 580.0
-color = Color( 1, 0, 0, 1 )
+margin_bottom = 620.0
+color = Color( 1, 1, 1, 1 )
 
 [node name="BackgroundColor" type="ColorPickerButton" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 584.0
+margin_top = 624.0
 margin_right = 179.0
-margin_bottom = 604.0
+margin_bottom = 644.0
 
 [node name="PLACEHOLDER8" type="HSlider" parent="ScrollContainer/SettingsContainer/InputContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
-margin_top = 608.0
+margin_top = 648.0
 margin_right = 179.0
-margin_bottom = 624.0
+margin_bottom = 664.0
 ticks_on_borders = true
 
 [node name="CheckBoxHeavyAttack" type="CheckBox" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 628.0
+margin_top = 668.0
 margin_right = 179.0
-margin_bottom = 652.0
+margin_bottom = 692.0
 text = "Heavy attack"
 
 [node name="SoundAttack" type="OptionButton" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 656.0
+margin_top = 696.0
 margin_right = 179.0
-margin_bottom = 676.0
+margin_bottom = 716.0
 text = "Choose attack sound"
 
 [node name="SoundImpact" type="OptionButton" parent="ScrollContainer/SettingsContainer/InputContainer"]
-margin_top = 680.0
+margin_top = 720.0
 margin_right = 179.0
-margin_bottom = 700.0
+margin_bottom = 740.0
 text = "Choose impact sound"
 
 [node name="ValueContainer" type="VBoxContainer" parent="ScrollContainer/SettingsContainer"]
 margin_left = 183.0
-margin_right = 207.0
-margin_bottom = 700.0
-rect_min_size = Vector2( 24, 0 )
+margin_right = 219.0
+margin_bottom = 740.0
+rect_min_size = Vector2( 36, 0 )
 custom_constants/separation = 6
 
 [node name="ValueDamage" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 14.0
 text = "1"
 align = 1
 
 [node name="ValueBonusDamageLow" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 20.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 34.0
 text = "0"
 align = 1
 
 [node name="ValueBonusDamageHigh" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 40.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 54.0
 text = "0"
 align = 1
 
 [node name="PLACEHOLDER" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 60.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 74.0
 
 [node name="ValueFireRate" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 80.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 94.0
 text = "1"
 align = 1
 
 [node name="ValueFireRateRandom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 100.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 114.0
 text = "0"
 align = 1
 
 [node name="PLACEHOLDER2" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 120.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 134.0
 
 [node name="ValueBulletCount" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 140.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 154.0
 text = "1"
 align = 1
 
 [node name="ValueBulletRandomLow" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 160.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 174.0
 text = "0"
 align = 1
 
 [node name="ValueBulletRandomHigh" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 180.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 194.0
 text = "0"
 align = 1
 
 [node name="PLACEHOLDER4" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 200.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 214.0
 
 [node name="ValueBulletSpread" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 220.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 234.0
 text = "0"
 align = 1
 
 [node name="ValueBulletSpreadRandom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 240.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 254.0
 text = "0"
 align = 1
 
 [node name="PLACEHOLDER3" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 260.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 274.0
 
 [node name="ValueBulletSpeed" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 280.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 294.0
 text = "300"
 align = 1
 
 [node name="ValueBulletSpeedRandom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 300.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 314.0
 text = "0"
 align = 1
 
 [node name="ValueBulletRange" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 320.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 334.0
 text = "200"
 align = 1
 
 [node name="ValueBulletRangeRandom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 340.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 354.0
 text = "0"
 align = 1
 
-[node name="PLACEHOLDER5" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+[node name="PLACEHOLDER6" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 360.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 374.0
 
-[node name="ValueBulletScale" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 380.0
-margin_right = 24.0
-margin_bottom = 394.0
-text = "3"
-align = 1
-
-[node name="ValueBulletScaleRanom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 400.0
-margin_right = 24.0
-margin_bottom = 414.0
-text = "0"
-align = 1
-
-[node name="PLACEHOLDER6" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 420.0
-margin_right = 24.0
-margin_bottom = 434.0
-
 [node name="ValuePierce" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 440.0
-margin_right = 24.0
-margin_bottom = 454.0
+margin_top = 380.0
+margin_right = 36.0
+margin_bottom = 394.0
 text = "0"
 align = 1
 
 [node name="ValuePierceRandomLow" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 460.0
-margin_right = 24.0
-margin_bottom = 474.0
+margin_top = 400.0
+margin_right = 36.0
+margin_bottom = 414.0
 text = "0"
 align = 1
 
 [node name="ValuePierceRandomHigh" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 480.0
-margin_right = 24.0
-margin_bottom = 494.0
+margin_top = 420.0
+margin_right = 36.0
+margin_bottom = 434.0
 text = "0"
 align = 1
 
 [node name="ValueKnockback" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
-margin_top = 500.0
-margin_right = 24.0
-margin_bottom = 514.0
+margin_top = 440.0
+margin_right = 36.0
+margin_bottom = 454.0
 text = "0"
 align = 1
 
 [node name="ValueKnockbackRandom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 460.0
+margin_right = 36.0
+margin_bottom = 474.0
+text = "0"
+align = 1
+
+[node name="PLACEHOLDER5" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 480.0
+margin_right = 36.0
+margin_bottom = 494.0
+
+[node name="ValueBulletScale" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 500.0
+margin_right = 36.0
+margin_bottom = 514.0
+text = "3"
+align = 1
+
+[node name="ValueBulletScaleRanom" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
 margin_top = 520.0
-margin_right = 24.0
+margin_right = 36.0
 margin_bottom = 534.0
 text = "0"
 align = 1
 
+[node name="ValueBulletRotation" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 540.0
+margin_right = 36.0
+margin_bottom = 554.0
+text = "0"
+align = 1
+
+[node name="PLACEHOLDER7" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 560.0
+margin_right = 36.0
+margin_bottom = 574.0
+
+[node name="ValueBulletType" type="Label" parent="ScrollContainer/SettingsContainer/ValueContainer"]
+margin_top = 580.0
+margin_right = 36.0
+margin_bottom = 594.0
+text = "0"
+align = 1
+
 [node name="DescriptionContainer" type="VBoxContainer" parent="ScrollContainer/SettingsContainer"]
-margin_left = 211.0
-margin_right = 454.0
-margin_bottom = 700.0
+margin_left = 223.0
+margin_right = 466.0
+margin_bottom = 740.0
 size_flags_horizontal = 3
 custom_constants/separation = 6
 
@@ -567,73 +604,85 @@ margin_right = 243.0
 margin_bottom = 354.0
 text = "% random variance."
 
-[node name="PLACEHOLDER5" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+[node name="PLACEHOLDER6" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 360.0
 margin_right = 243.0
 margin_bottom = 374.0
 
-[node name="DescBulletScale" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+[node name="DescPierce" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 380.0
 margin_right = 243.0
 margin_bottom = 394.0
-text = "projectile size with"
-
-[node name="DescBulletScaleRandom" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 400.0
-margin_right = 243.0
-margin_bottom = 414.0
-text = "% random variance."
-
-[node name="PLACEHOLDER6" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 420.0
-margin_right = 243.0
-margin_bottom = 434.0
-
-[node name="DescPierce" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 440.0
-margin_right = 243.0
-margin_bottom = 454.0
 text = "target(s) will be pierced."
 
 [node name="DescPierceRandomLow" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 460.0
+margin_top = 400.0
 margin_right = 243.0
-margin_bottom = 474.0
+margin_bottom = 414.0
 text = "to"
 
 [node name="ValuePierceRandomHigh" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 480.0
+margin_top = 420.0
 margin_right = 243.0
-margin_bottom = 494.0
+margin_bottom = 434.0
 text = "random extra target(s) to pierce."
 
 [node name="DescKnockback" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
-margin_top = 500.0
+margin_top = 440.0
 margin_right = 243.0
-margin_bottom = 514.0
+margin_bottom = 454.0
 text = "pixel(s) knockback per hit with"
 
 [node name="DescKnockbackRandom" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+margin_top = 460.0
+margin_right = 243.0
+margin_bottom = 474.0
+text = "% random variance."
+
+[node name="PLACEHOLDER5" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+margin_top = 480.0
+margin_right = 243.0
+margin_bottom = 494.0
+
+[node name="DescBulletScale" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+margin_top = 500.0
+margin_right = 243.0
+margin_bottom = 514.0
+text = "projectile size with"
+
+[node name="DescBulletScaleRandom" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 520.0
 margin_right = 243.0
 margin_bottom = 534.0
 text = "% random variance."
 
-[node name="PLACEHOLDER7" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+[node name="DescBulletRotation" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 540.0
 margin_right = 243.0
 margin_bottom = 554.0
+text = "degree/sec projectile rotation."
 
-[node name="DescBulletColor" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+[node name="PLACEHOLDER7" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 560.0
 margin_right = 243.0
 margin_bottom = 574.0
-text = "bullet color."
 
-[node name="DescBackgroundColor" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+[node name="DescBulletType" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
 margin_top = 580.0
 margin_right = 243.0
 margin_bottom = 594.0
+text = "bullet type."
+
+[node name="DescBulletColor" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+margin_top = 600.0
+margin_right = 243.0
+margin_bottom = 614.0
+text = "bullet color."
+
+[node name="DescBackgroundColor" type="Label" parent="ScrollContainer/SettingsContainer/DescriptionContainer"]
+margin_top = 620.0
+margin_right = 243.0
+margin_bottom = 634.0
 text = "background color."
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -713,13 +762,15 @@ text = "Clear all projectiles"
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletSpeedRandom" to="." method="_on_SliderBulletSpeedRandom_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletRange" to="." method="_on_SliderBulletRange_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletRangeRandom" to="." method="_on_SliderBulletRangeRandom_value_changed"]
-[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletScale" to="." method="_on_SliderBulletScale_value_changed"]
-[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletScaleRandom" to="." method="_on_SliderBulletScaleRandom_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderPierce" to="." method="_on_SliderPierce_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomLow" to="." method="_on_SliderPierceRandomLow_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderPierceRandomHigh" to="." method="_on_SliderPierceRandomHigh_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderKnockback" to="." method="_on_SliderKnockback_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderKnockbackRandom" to="." method="_on_SliderKnockbackRandom_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletScale" to="." method="_on_SliderBulletScale_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletScaleRandom" to="." method="_on_SliderBulletScaleRandom_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletRotation" to="." method="_on_SliderBulletRotation_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/SettingsContainer/InputContainer/SliderBulletType" to="." method="_on_SliderBulletType_value_changed"]
 [connection signal="color_changed" from="ScrollContainer/SettingsContainer/InputContainer/BulletColor" to="." method="_on_BulletColor_color_changed"]
 [connection signal="color_changed" from="ScrollContainer/SettingsContainer/InputContainer/BackgroundColor" to="." method="_on_BackgroundColor_color_changed"]
 [connection signal="toggled" from="ScrollContainer/SettingsContainer/InputContainer/CheckBoxHeavyAttack" to="." method="_on_CheckBoxHeavyAttack_toggled"]
