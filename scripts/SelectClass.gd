@@ -19,6 +19,12 @@ func _on_Knight_pressed():
 		get_node("Berserker/Berserker").set_pressed(false)
 		get_node("Assasin/Assasin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
 	else:
 		selected = ""
 		changeFinishButtonState(false)
@@ -31,6 +37,12 @@ func _on_Berserker_pressed():
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Assasin/Assasin").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
 	else:
 		selected = ""
 		changeFinishButtonState(false)
@@ -43,6 +55,12 @@ func _on_Assasin_pressed():
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
 		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
 	else:
 		selected = ""
 		changeFinishButtonState(false)
@@ -53,8 +71,122 @@ func _on_Sniper_pressed():
 		selected = "Sniper"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
 		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Hunter_pressed():
+	if get_node("Hunter/Hunter").is_pressed():
+		selected = "Hunter"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
 		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Arsonist_pressed():
+	if get_node("Arsonist/Arsonist").is_pressed():
+		selected = "Arsonist"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
+		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Brand_pressed():
+	if get_node("Brand/Brand").is_pressed():
+		selected = "Brand"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
+		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Herald_pressed():
+	if get_node("Herald/Herald").is_pressed():
+		selected = "Herald"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
+		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Redeemer_pressed():
+	if get_node("Redeemer/Redeemer").is_pressed():
+		selected = "Redeemer"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
+		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Druid/Druid").set_pressed(false)
+	else:
+		selected = ""
+		changeFinishButtonState(false)
+
+
+func _on_Druid_pressed():
+	if get_node("Druid/Druid").is_pressed():
+		selected = "Druid"
+		changeFinishButtonState(true)
+		get_node("Knight/Knight").set_pressed(false)
+		get_node("Berserker/Berserker").set_pressed(false)
+		get_node("Assasin/Assasin").set_pressed(false)
+		get_node("Sniper/Sniper").set_pressed(false)
+		get_node("Hunter/Hunter").set_pressed(false)
+		get_node("Arsonist/Arsonist").set_pressed(false)
+		get_node("Brand/Brand").set_pressed(false)
+		get_node("Herald/Herald").set_pressed(false)
+		get_node("Redeemer/Redeemer").set_pressed(false)
 	else:
 		selected = ""
 		changeFinishButtonState(false)
