@@ -38,7 +38,11 @@ func _connected_fail():
 func _connected_ok():
 	# Check if I already have an UUID assigned
 	if not Global.UUID: # I don't
-		rpc_id(1, "register_new_account")
+		# Ask player for nickname or UUID
+		var scene = load("res://scenes/RequestForNickname.tscn")
+		var scene_instance = scene.instance()
+		scene_instance.set_name("RequestForNickname")
+		get_node("/root/").add_child(scene_instance)
 	else:
 		# Request for my character data
 		requestServerForMyCharacterData()
@@ -72,8 +76,13 @@ remote func receive_character_data(data):
 				print("Unexpected character data (TRUE); scripts/Networking.gd:receive_character_data()")
 		else:
 			# Store the data in Global.gd
-			print("Received characters data")
 			Global.charactersData = data.chars
+
+remote func answer_is_nickname_free(answer):
+	get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)
+
+remote func answer_is_uuid_valid(answer):
+	get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -81,20 +90,31 @@ remote func receive_character_data(data):
 
 func requestServerForMyCharacterData():
 	# Send RPC to server
-	print("Requesting server for my character data")
 	rpc_id(1, "send_character_data", Global.UUID)
 
 func sendServeNewCharacterData(data):
-	print("Sending server my new character data")
 	rpc_id(1, "receive_new_character_data", Global.UUID, data)
+
+func askServerIfThisNicknameIsFree(nickname):
+	rpc_id(1, "check_if_nickname_is_free", nickname)
+
+func registerAccount(nickname):
+	rpc_id(1, "register_new_account", nickname)
+
+func askServerIfThisUUIDIsValid(uuid):
+	rpc_id(1, "check_if_uuid_exists", uuid)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
 
-remote func register_new_account():
+remote func register_new_account(nickname):
 	pass
 remote func send_character_data(uuid):
 	pass
 remote func receive_new_character_data(uuid, data):
+	pass
+remote func check_if_nickname_is_free(nickname):
+	pass
+remote func check_if_uuid_exists(uuid):
 	pass

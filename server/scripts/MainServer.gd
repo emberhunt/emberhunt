@@ -7,6 +7,16 @@ const MAX_PLAYERS = 10
 
 
 func _ready():
+	# Get ready
+	# Check if serverData folder exists
+	var dir = Directory.new()
+	if not dir.dir_exists("user://serverData/"):
+		# Create it
+		dir.make_dir("user://serverData/")
+		print("Creating user://serverData/")
+	if not dir.dir_exists("user://serverData/accounts/"):
+		dir.make_dir("user://serverData/accounts/")
+		print("Creating user://serverData/accounts/")
 	# Initialize server
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
@@ -30,14 +40,20 @@ func _player_disconnected(id):
 # REMOTE FUNCTIONS  #
 # # # # # # # # # # #
 
-remote func register_new_account():
+remote func register_new_account(nickname):
 	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
-	rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", generateRandomUUID())
+	if nickname.length() <= 50:
+		if isNicknameFree(nickname):
+			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", generateRandomUUID(nickname))
+		else:
+			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
+	else:
+		rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
 	print("New account registered")
 
 remote func send_character_data(uuid):
 	# Get path to UUID's data.json
-	var path = getPathToUuid(uuid)
+	var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
 	# Check if the UUID is registered
 	if not checkIfUuidIsRegistered(uuid):
 		# The UUID is not registered yet
@@ -45,7 +61,7 @@ remote func send_character_data(uuid):
 		return
 	# Parse data.json
 	var file = File.new()
-	file.open(path+"/data.json", file.READ)
+	file.open(path+"data.json", file.READ)
 	var text = file.get_as_text()
 	var data = parse_json(text)
 	file.close()
@@ -61,10 +77,10 @@ remote func receive_new_character_data(uuid, data):
 			print("Received invalid new character data")
 		else:
 			# Register the new character
-			var path = getPathToUuid(uuid)
 			# Parse data.json
+			var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
 			var file = File.new()
-			file.open(path+"/data.json", file.READ)
+			file.open(path+"data.json", file.READ)
 			var text = file.get_as_text()
 			var parsed = parse_json(text)
 			file.close()
@@ -72,16 +88,31 @@ remote func receive_new_character_data(uuid, data):
 			parsed.chars[parsed.chars.size()] = {"class":data,"level":1}
 			# Write the new data
 			file = File.new()
-			file.open(path+"/data.json", file.WRITE)
+			file.open(path+"data.json", file.WRITE)
 			file.store_line(JSON.print(parsed))
 			file.close()
 	else:
 		print("Received new character data on an UUID which is not registered")
+
+remote func check_if_nickname_is_free(nickname):
+	if isNicknameFree(nickname):
+		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_nickname_free", true)
+	else:
+		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_nickname_free", false)
+
+remote func check_if_uuid_exists(uuid):
+	var content = listFolderContent("user://serverData/accounts/")
+	for account in content:
+		if account==uuid.sha256_text():
+			rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
+			return
+	rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", false)
+
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
 # # # # # # # # # # #
 
-func generateRandomUUID():
+func generateRandomUUID(nickname):
 	var intToStr = {0 : 0,
 					1 : 1,
 					2 : 2,
@@ -145,34 +176,26 @@ func generateRandomUUID():
 					60 : "Y",
 					61 : "Z"}
 	var uuid = ""
-	var path = "user://existingUUIDS"
-	var dirList = []
 	# Generate random UUID
-	for i in range(23):
+	for i in range(24):
 		randomize()
 		var x = intToStr[randi()%62]
 		uuid = uuid+str(x)
-		path = path+"/"+str(x)
-		dirList.append(str(x))
 	# check if the uuid is already taken
 	var dir = Directory.new()
-	if dir.dir_exists(path):
-		return generateRandomUUID()
+	if dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
+		return generateRandomUUID(nickname)
 	# continue if it's not
-	dir.open("user://existingUUIDS")
-	# Create the directory
-	var tempPath = "user://existingUUIDS/"
-	for i in range(23):
-		dir.make_dir(dirList[i])
-		dir.open(tempPath+dirList[i])
-		tempPath = tempPath+dirList[i]+"/"
+	# Create the account's directory
+	dir.make_dir("user://serverData/accounts/"+uuid.sha256_text())
 	# Create data.json to store account's data
 	var file = File.new()
-	if file.open(path+"/data.json", File.WRITE) != 0:
-		print("Error creating file "+path+"/data.json")
+	if file.open("user://serverData/accounts/"+uuid.sha256_text()+"/data.json", File.WRITE) != 0:
+		print("Error creating file user://serverData/accounts/"+uuid.sha256_text()+"/data.json")
 		return
 	# Data stored in data.json
 	var data = {
+		"nickname" : nickname.replace("\"", ""),
 		"chars" : {}
 	}
 	file.store_line(JSON.print(data))
@@ -180,22 +203,39 @@ func generateRandomUUID():
 	return uuid
 
 func checkIfUuidIsRegistered(uuid):
-	# Get path to UUID's data.json
-	var path = "user://existingUUIDS"
-	for i in range(uuid.length()):
-		path = path+"/"+str(uuid[i])
 	# Check if the UUID is registered
 	var dir = Directory.new()
-	if not dir.dir_exists(path):
+	if not dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
 		# The UUID is not registered yet
 		return false
 	return true
 
-func getPathToUuid(uuid):
-	var path = "user://existingUUIDS"
-	for i in range(uuid.length()):
-		path = path+"/"+str(uuid[i])
-	return path
+func listFolderContent(path):
+	var files = []
+	var dir = Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(file)
+	dir.list_dir_end()
+	return files
+
+func isNicknameFree(nickname):
+	var contents = listFolderContent("user://serverData/accounts/")
+	for account in contents:
+		var file = File.new()
+		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
+		var text = file.get_as_text()
+		var parsed = parse_json(text)
+		file.close()
+		if nickname == parsed.nickname:
+			return false
+	return true
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -203,4 +243,8 @@ func getPathToUuid(uuid):
 remote func receive_new_uuid():
 	pass
 remote func receive_character_data(data):
+	pass
+remote func answer_is_nickname_free(answer):
+	pass
+remote func answer_is_uuid_valid(answer):
 	pass
