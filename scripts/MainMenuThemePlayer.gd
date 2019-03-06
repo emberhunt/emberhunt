@@ -4,8 +4,9 @@ func set_sound_volume(amount): # Convert from percentage to decibels
 	return 10 * log(amount)
 
 func _process(delta):
+	var scenes = ["MainMenu", "Settings", "CharacterCreation", "CharacterSelection"]
 	# Check if the player is in correct scenes for the theme to be played
-	if get_tree().get_current_scene().get_name()=="MainMenu" or get_tree().get_current_scene().get_name()=="Settings":
+	if get_tree().get_current_scene().get_name() in scenes:
 		if Global.boolMusic and not is_playing():
 			# Music is ON in the settings and the theme is not playing
 			_set_playing(true) # Start playing
