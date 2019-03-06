@@ -1,10 +1,25 @@
 extends TextureButton
+tool
 
 signal on_slot_released(id)
 signal on_slot_pressed(id)
 
-const _backgroundTexture = preload("res://assets/inventory/slotBackground.png")
-const _backgroundTextureSelected = preload("res://assets/inventory/slotBackground_selected.png")
+#const _backgroundTexture = preload("res://assets/inventory/slotBackground.png")
+#const _backgroundTextureSelected = preload("res://assets/inventory/slotBackground_selected.png")
+
+export(Texture) var _backgroundTexture = null setget update_slot_background
+export(Texture) var _backgroundTextureSelected = null setget update_slot_background_selected
+
+
+func update_slot_background(bg):
+	_backgroundTexture = bg
+	texture_normal = _backgroundTexture
+	
+	
+func update_slot_background_selected(bg):
+	_backgroundTextureSelected = bg
+	texture_pressed = _backgroundTexture
+
 
 # how many items has the stack
 onready var _labelAmount = $label
@@ -12,12 +27,20 @@ onready var _itemTexture = $itemTexture
 
 var _texture : Texture = null
 
-var _id : String = ""
+var _id
 
 
 #custom init function
 func init(id):
 	_id = id
+
+#	if _backgroundTexture == null:
+#		print("default slot texture = null")
+#	else:
+#		print("NOT NULL")
+#		texture_normal = _backgroundTexture
+
+	
 	
 func _ready():
 	set_process_input(true)

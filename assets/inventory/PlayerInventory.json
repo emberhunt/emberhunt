@@ -97,7 +97,7 @@
 		"name" : "Healing potion",
 		"type" : "POTION",
 		"value" : 123,
-		"weight" : 0.13,
+		"weight" : 0.5,
 		"description" : "This will make you feel better!",
 		
 		"requirements" : {

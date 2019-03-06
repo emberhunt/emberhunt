@@ -1,117 +1,112 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ItemSlot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/inventory/inventory_background.tres" type="Texture" id=2]
+[ext_resource path="res://scenes/ItemSlot.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/inventory/inventory_name_background.tres" type="StyleBox" id=4]
 
 [node name="inventory" type="Control"]
 margin_left = 149.0
 margin_top = 60.0
-margin_right = 482.0
-margin_bottom = 338.0
+margin_right = 488.0
+margin_bottom = 309.0
 mouse_filter = 1
 script = ExtResource( 1 )
-maxInventorySize = 2
+columns = 0
 
-[node name="background" type="ColorRect" parent="."]
+[node name="background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 1
-color = Color( 0.223529, 0.160784, 0.0392157, 1 )
-
-[node name="slots" type="Control" parent="background"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = 29.0
-margin_right = -3.0
-margin_bottom = -3.0
-mouse_filter = 1
-
-[node name="itemSlot" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 95.074
-margin_top = 24.053
-margin_right = 135.074
-margin_bottom = 64.053
+texture = ExtResource( 2 )
 expand = true
 
-[node name="itemSlot2" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 94.052
-margin_top = 70.7958
-margin_right = 134.052
-margin_bottom = 110.796
-
-[node name="itemSlot3" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 94.052
-margin_top = 113.905
-margin_right = 134.052
-margin_bottom = 153.906
-
-[node name="itemSlot4" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 146.143
-margin_top = 88.758
-margin_right = 186.143
-margin_bottom = 128.758
-
-[node name="itemSlot5" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 35.974
-margin_top = 56.426
-margin_right = 75.974
-margin_bottom = 96.4264
-
-[node name="itemSlot6" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 95.2495
-margin_top = 157.613
-margin_right = 135.25
-margin_bottom = 197.614
-
-[node name="itemSlot7" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 220.985
-margin_top = 127.078
-margin_right = 260.985
-margin_bottom = 167.078
-
-[node name="itemSlot8" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 257.509
-margin_top = 31.8775
-margin_right = 297.509
-margin_bottom = 71.8779
-
-[node name="itemSlot9" parent="background/slots" instance=ExtResource( 2 )]
-margin_left = 264.095
-margin_top = 127.078
-margin_right = 304.095
-margin_bottom = 167.078
-
-[node name="colorTitlebar" type="ColorRect" parent="background"]
-anchor_right = 1.0
-margin_bottom = 25.0
-color = Color( 0.533333, 0.392157, 0.0901961, 1 )
-
-[node name="nameBackground" type="ColorRect" parent="background"]
-anchor_right = 1.0
-margin_left = 3.0
-margin_top = 3.0
-margin_right = -3.0
-margin_bottom = 22.0
-color = Color( 0.396078, 0.266667, 0.109804, 1 )
-
-[node name="name" type="Label" parent="background/nameBackground"]
+[node name="slots" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "inventory"
-align = 1
-valign = 1
+margin_left = 21.0
+margin_top = 38.0
+margin_right = -21.0
+margin_bottom = -25.0
 
-[node name="weightLabel" type="Label" parent="background"]
+[node name="itemSlot" parent="slots" instance=ExtResource( 3 )]
+margin_left = 16.4955
+margin_top = 38.1102
+margin_right = 56.4955
+margin_bottom = 78.1102
+
+[node name="itemSlot2" parent="slots" instance=ExtResource( 3 )]
+margin_left = 72.2387
+margin_top = 142.771
+margin_right = 112.239
+margin_bottom = 182.771
+
+[node name="itemSlot3" parent="slots" instance=ExtResource( 3 )]
+margin_left = 129.12
+margin_top = 81.9084
+margin_right = 169.12
+margin_bottom = 121.908
+
+[node name="itemSlot4" parent="slots" instance=ExtResource( 3 )]
+margin_left = 73.9451
+margin_top = 5.11926
+margin_right = 113.945
+margin_bottom = 45.1193
+
+[node name="itemSlot8" parent="slots" instance=ExtResource( 3 )]
+margin_left = 73.9451
+margin_top = 50.0551
+margin_right = 113.945
+margin_bottom = 90.0551
+
+[node name="itemSlot9" parent="slots" instance=ExtResource( 3 )]
+margin_left = 73.9451
+margin_top = 97.835
+margin_right = 113.945
+margin_bottom = 137.835
+
+[node name="itemSlot5" parent="slots" instance=ExtResource( 3 )]
+margin_left = 228.661
+margin_top = 27.8716
+margin_right = 268.661
+margin_bottom = 67.8716
+
+[node name="itemSlot6" parent="slots" instance=ExtResource( 3 )]
+margin_left = 199.652
+margin_top = 128.551
+margin_right = 239.652
+margin_bottom = 168.551
+
+[node name="itemSlot7" parent="slots" instance=ExtResource( 3 )]
+margin_left = 242.312
+margin_top = 128.551
+margin_right = 282.312
+margin_bottom = 168.551
+
+[node name="weightLabel" type="Label" parent="."]
 visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 3.0
-margin_top = -16.0
-margin_right = -3.0
-margin_bottom = -2.0
+margin_top = -23.0
+margin_right = -7.0
+margin_bottom = -9.0
 text = "0 / -1"
 align = 2
+valign = 1
+
+[node name="nameBackground" type="Panel" parent="."]
+anchor_right = 1.0
+margin_left = 27.0
+margin_top = 17.0
+margin_right = -120.0
+margin_bottom = 35.0
+custom_styles/panel = ExtResource( 4 )
+
+[node name="name" type="Label" parent="nameBackground"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "inventory"
+align = 1
 valign = 1
 
