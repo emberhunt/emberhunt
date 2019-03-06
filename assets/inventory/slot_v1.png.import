@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/projectile_demo.png-e52d3f448ebb2db2f8f45881eb45ccc3.stex"
+path="res://.import/slot_v1.png-3de1ec4cced6cdbecc7da8597b104821.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/bullets/projectile_demo.png"
-dest_files=[ "res://.import/projectile_demo.png-e52d3f448ebb2db2f8f45881eb45ccc3.stex" ]
+source_file="res://assets/inventory/slot_v1.png"
+dest_files=[ "res://.import/slot_v1.png-3de1ec4cced6cdbecc7da8597b104821.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

@@ -8,45 +8,47 @@
 [node name="inventorySystem" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 script = ExtResource( 1 )
+inventoriesPath = NodePath("inventories")
+mainInventoryPath = NodePath("inventories/equipment")
 
 [node name="inventories" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 0.216368
-margin_bottom = 0.216431
-mouse_filter = 2
+margin_left = 4.11963
+margin_top = 3.31152
+margin_right = 4.11963
+margin_bottom = 3.31158
+mouse_filter = 1
 
 [node name="chest" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 578.631
-margin_top = 147.21
-margin_right = 763.631
-margin_bottom = 285.21
-inventoryName = "chest"
+margin_left = 553.6
+margin_top = 39.6001
+margin_right = 811.6
+margin_bottom = 285.6
+inventorySize = 20
+columns = 5
 
 [node name="chest2" parent="inventories" instance=ExtResource( 2 )]
 margin_left = 580.0
 margin_top = 299.0
-margin_right = 762.0
-margin_bottom = 482.0
-inventoryName = "chest2"
-maxInventorySize = 12
+margin_right = 792.0
+margin_bottom = 501.0
+inventorySize = 12
 
 [node name="playerInventory" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 122.0
-margin_top = 289.0
-margin_right = 461.0
-margin_bottom = 514.0
-inventoryName = "playerInventory"
-maxInventorySize = 16
+margin_left = 197.0
+margin_top = 295.0
+margin_right = 409.0
+margin_bottom = 540.0
+inventorySize = 16
 
 [node name="equipment" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 122.0
-margin_top = 43.0
-margin_right = 461.0
-margin_bottom = 287.0
-inventoryName = "equipment"
-maxInventorySize = 9
+margin_left = 141.216
+margin_top = 32.5501
+margin_right = 480.216
+margin_bottom = 276.55
 weightEnabled = true
 maxWeight = 60.0
 
@@ -54,10 +56,12 @@ maxWeight = 60.0
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 
 [node name="itemSlotDescription" parent="." instance=ExtResource( 4 )]
 visible = false
 rect_pivot_offset = Vector2( -24, -24 )
+mouse_filter = 1
 
 [node name="descriptionField" type="Control" parent="."]
 visible = false
@@ -74,5 +78,4 @@ margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
 
-[connection signal="gui_input" from="." to="." method="_on_inventorySystem_gui_input"]
 [connection signal="mouse_exited" from="descriptionField" to="." method="_on_descriptionField_mouse_exited"]

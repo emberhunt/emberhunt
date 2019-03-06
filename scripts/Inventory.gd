@@ -1,6 +1,11 @@
 """
 This is a inventory that only can be used
 by including it in an inventory system
+
+- use EITHER:
+	1. Gridcontainer with colums and inventorySize export var
+	2. OR custom container, where you have to instanciate the 
+	   item slots yourself 
 """
 tool
 extends Control
@@ -8,6 +13,7 @@ extends Control
 # signaled, when pressed or released
 signal on_slot_toggled(is_pressed, _selected, inventoryName)
 
+# types
 
 const Item = preload("res://scripts/Item.gd")
 const ItemSlot = preload("res://scripts/ItemSlot.gd")
@@ -19,22 +25,25 @@ const itemSlotPrefab = preload("res://scenes/ItemSlot.tscn")
 
 # move this to global, don't load atlas texture for each inventory
 const _atlasTexture = preload("res://assets/inventory/items.png")
-const _slotBackground = preload("res://assets/inventory/slotBackground.png")
-const _emptySlot = preload("res://assets/inventory/empty_slot.png")
+#const _slotBackground = preload("res://assets/inventory/slotBackground.png")
 
 """
 This class is used as an wrapper for 
 the slot, the item, requirements and the amount of the items
 """
 class Slot:
+	const ItemSlot = preload("res://scripts/ItemSlot.gd")
+	
 	var _item : Item = null
-	var _slot #: TextureButton
+	var _slot : ItemSlot = null #: TextureButton
 	var _amount = 0
 	var _slotRequirements = {} # level, class, type of item
 	var _slotTypeRequirements : Array # ItemTypes
 
-	func _init(id : String):
-		_slot = itemSlotPrefab.instance()
+	func _init(id):
+		var slot = ItemSlot.new()
+		_slot = (itemSlotPrefab.instance() as ItemSlot)
+		#print("slotname: " + id)
 		_slot.init(id)
 		#_slot.set_amount(0)
 		#_slot = ItemSlotPrefab.instance()
@@ -109,20 +118,48 @@ class Slot:
 		
 	func get_slot_requirements() -> Dictionary:
 		return _slotRequirements
+		
 
 
-onready var itemSlots = $background/slots
-onready var weightLabel = $background/weightLabel
+# vars
 
-# this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
-# inventoryId should be the unique player id
-var inventoryId : int = -1
+onready var itemSlots = $slots
+onready var weightLabel = $weightLabel
+
+
 # the name should be something like: "playerinventory", "chest" or "merchant"
-export(String) var inventoryName = "inventory" setget update_inventory_name
-export(int) var maxInventorySize = 8
+export(String) var inventoryDisplayName = "inventory" setget update_inventory_name
+export(int) var inventorySize = 0 setget update_inventory_size
 export(int) var columns = 4 setget update_inventory_columns
 export(bool) var weightEnabled = false setget update_weight_enabled
 export(float) var maxWeight = -1 setget _update_max_weight
+	
+
+func update_inventory_size(size : int):
+	if size < 0:
+		return
+	
+	if has_node("slots") and $slots != null:
+		if not $slots.is_class("GridContainer"):
+			inventorySize = 0
+			return
+		
+		if $slots.get_child_count() != inventorySize:
+			_slots.clear()
+			for i in range($slots.get_child_count()):
+				$slots.get_child(0).free()
+	
+			inventorySize = 0
+	
+	if size > inventorySize: # create more slots
+		for i in range(size - inventorySize):
+			add_empty_slot()
+	elif size < inventorySize: #remove last slots
+		for i in range(inventorySize - size):
+			remove_last_slot()
+	
+	inventorySize = size
+	
 
 func _update_max_weight(newMax):
 	maxWeight = newMax
@@ -130,24 +167,25 @@ func _update_max_weight(newMax):
 
 func update_weight_enabled(enable : bool):
 	weightEnabled = enable
-	if has_node("background/weightLabel"):
-		if $background/weightLabel != null:
-			$background/weightLabel.set_visible(enable)
+	if has_node("weightLabel") and $weightLabel != null:
+		$weightLabel.set_visible(enable)
 	
 func update_inventory_name(name : String):
-	if not Engine.editor_hint:
-		return
-	
-	if has_node("background/weightLabel"):
-		if $background/weightLabel != null:
-			$background/nameBackground/name.text= name
-			inventoryName = name
+	if has_node("nameBackground/name") and $nameBackground/name != null:
+		$nameBackground/name.text= name
+		inventoryDisplayName = name
 
 func update_inventory_columns(cols : int):
+	if cols < 0:
+		return
 	# set colums to 0 for custom layout
-	if $background/slots.is_class("GridContainer"):
-		columns = cols
-		$background/slots.columns = columns
+	if has_node("slots") and $slots != null:
+		if not $slots.is_class("GridContainer"):
+			columns = 0
+			return
+		else:
+			columns = cols
+			$slots.columns = columns
 
 
 # how much can this inventory carry, negative means, no limit
@@ -156,72 +194,79 @@ var _currentWeight = 0.0
 
 
 # class Slot, contains all available slots
-var _slots = {}
+var _slots = []
 # contains string ids of all registered ids
-var _registeredSlotNames = []
+#var _registeredSlotNames = []
+
+# this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
+# inventoryId should be the unique player id
+var _id
 
 # arraypos = id, 
 var _allItems = []
 # to get items by names
 var _allItemNames = {}
 
-var _lastSelected : String = ""
-var _selected : String = ""
+var _lastSelected = -1
+var _selected = -1
 
 func _ready():
 	set_process(false)
 	set_process_input(true)
 	
-	$background/nameBackground/name.set_text(inventoryName)
-	inventoryName = self.name	
+	$nameBackground/name.set_text(inventoryDisplayName)
+	_id = self.name
 	
 	_load_all_items()
 	
 	# set colums to 0 for custom layout
-	if columns > 0 and itemSlots is GridContainer:
-		itemSlots.columns = columns
-
-		for i in range(maxInventorySize):
-			var textureRect = TextureRect.new()
-			textureRect.texture = _slotBackground
-			var emptySlot = Slot.new(inventoryName + str(i))
-			if i == 0:
-				emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
-						Character.get_character_type_name(Character.CharacterType.KNIGHT))
-				emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.GREAT_SWORD)])
-			add_slot(emptySlot)
-
+	if itemSlots is GridContainer:
+		pass
+#	if columns > 0 and itemSlots is GridContainer:
+#		itemSlots.columns = columns
+#
+#		for i in range(inventorySize):
+#			var textureRect = TextureRect.new()
+#			textureRect.texture = _slotBackground
+#			var emptySlot = Slot.new(inventoryName + str(i))
+#			if i == 0:
+#				emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
+#						Character.get_character_type_name(Character.CharacterType.KNIGHT))
+#				emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.GREAT_SWORD)])
+#			add_slot(emptySlot)
+#
 	else:
-		maxInventorySize = itemSlots.get_child_count()
-
-		for i in range(maxInventorySize):
-			itemSlots.get_child(i).init(inventoryName + str(i))
-
-		register_existing_slots()
+		inventorySize = itemSlots.get_child_count()
+		print("inventorySize: " + str(inventorySize))
+		for i in range(inventorySize):
+			itemSlots.get_child(i).init(i)
+	
+		add_existing_slots()
+		#register_existing_slots()
 		
 	
-func register_slot(name : String, slot : Slot):
-	_registeredSlotNames.append(name)
-	_slots[name] = slot
+#func register_slot(name : String, slot : Slot):
+#	_registeredSlotNames.append(name)
+#	_slots[name] = slot
 	
 
-func remove_all_registered_slots():
-	for i in range(_registeredSlotNames.size()):
-		_slots.erase(_registeredSlotNames[i])
+#func remove_all_registered_slots():
+#	for i in range(_registeredSlotNames.size()):
+#		_slots.erase(_registeredSlotNames[i])
 	
 	
-func _get_selected_slot() -> ItemSlot:
+func _get_selected_item() -> ItemSlot:
 	return _slots[_selected]._item
 	
 func _input(event):
-	if not get_parent().is_visible() or Global.paused:
+	if not is_visible() or Global.paused:
 		return
 	
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			pass
 		else:
-			if _lastSelected != "":
+			if _lastSelected != -1:
 				_slots[_lastSelected].set_unselected()
 
 #			# release
@@ -276,26 +321,77 @@ func can_carry_items(item : Item, amount : int = 1) -> bool:
 		return false
 	return true
 	
+
+func get_carry_weight() -> float:
+	return _currentWeight
+	
+
+func get_remainging_carry_weight() -> float:
+	return maxWeight - _currentWeight
+	
+
+func get_max_carry_weight() -> float:
+	return maxWeight
+	
 	
 # register slots if you want to add slots that already exist in the editor
-func register_existing_slots():
-	for i in range(maxInventorySize):
-		var newSlotIndex = inventoryName + str(_slots.size())
+func add_existing_slots():
+	#print("current slot size = " + str(_slots.size()))
+	for i in range(inventorySize):
+		var newSlotIndex = _slots.size()
 		var emptySlot = Slot.new(newSlotIndex)
-		_slots[newSlotIndex] = emptySlot
+		_slots.append(emptySlot)
 		_slots[newSlotIndex]._slot = itemSlots.get_child(i)
 		_slots[newSlotIndex]._slot.connect("on_slot_pressed", self, "_on_slot_pressed") 
 		_slots[newSlotIndex]._slot.connect("on_slot_released", self, "_on_slot_released") 
 
-	
-func add_slot(slot : Slot):
-	#print("adding slot")
-	var newSlotIndex = inventoryName + str(_slots.size())
-	_slots[newSlotIndex] = slot
-	$background/slots.add_child(_slots[newSlotIndex]._slot)
 
+func add_empty_slot():
+	if not (has_node("slots") and $slots != null):
+		return 
+	var newSlotIndex = _slots.size()
+	#print(newSlotIndex)
+	var emptySlot = Slot.new(newSlotIndex)
+#	if _slots.size() == 0:
+#		emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
+#				Character.get_character_type_name(Character.CharacterType.KNIGHT))
+#		emptySlot.set_slot_types([Item.get_type_name(Item.ItemType.GREAT_SWORD)])
+	
+	_slots.append(emptySlot)
+	$slots.add_child(_slots[newSlotIndex]._slot)
+	
 	_slots[newSlotIndex]._slot.connect("on_slot_pressed", self, "_on_slot_pressed") 
 	_slots[newSlotIndex]._slot.connect("on_slot_released", self, "_on_slot_released") 
+	
+	#print("added empty slot: " + newSlotIndex)
+	#print("with slot name: " + _slots[newSlotIndex]._slot.name)
+
+
+func remove_last_slot():
+	if not _slots.empty():
+		var lastKey := str(_slots.keys()[_slots.size() - 1])
+		var lastChild := str($slots.get_child($slots.get_child_count() - 1).name)
+		#print("removing last: " + lastKey  + " == " + lastChild)
+		remove_slot(lastKey)
+
+
+func remove_slot(slotId):
+	if not (has_node("slots") and $slots != null):
+		return 
+	
+	var deleteSlotName = slotId
+	var deleteNodeName = _slots[slotId]._slot.name
+	
+	#print("delete slot name: " + deleteSlotName)
+	#print("delete node name: " + deleteNodeName)
+	#print("delete node path name: " + deleteNodePath)
+	if not $slots.has_node(deleteNodeName):
+		for i in range($slots.get_child_count()):
+			print($slots.get_child(i).name)
+	
+	$slots.remove_child($slots.get_node(deleteNodeName))
+	_slots.erase(slotId)
+
 
 
 func remove_item(slotId : int, amount : int = 0) -> Item:
@@ -330,18 +426,11 @@ func add_item(item : Item, amount : int = 1) -> bool:
 	# if not stackable/not exist/full stack then add to new slot
 	var freeId = _get_next_free_slot_id()
 	#print(freePos)
-	if freeId == "":
+	if freeId == -1:
 		return false
 
 	#print("free at: " + str(freePos))
 	_slots[freeId].set_item(item, amount)
-#	var atls = AtlasTexture.new()
-#	atls.atlas = _atlasTexture
-#	atls.region = item.item.get_texture_region()
-#	atls.margin = Rect2(0,3,0,0)
-#	itemList.set_item_tooltip(freePos, item.item.get_description())
-#	itemList.set_item_tooltip_enabled(freePos, true)
-#	itemList.set_item_icon(freePos, atls)
 	_currentWeight += item.get_weight()
 	_update_weight()
 	return true
@@ -361,18 +450,29 @@ func load_inventory(fileName : String) -> Dictionary:
 	
 	return data.result
 
+
+func set_item(id, item, amount = 1):
+	var tempItem = _slots[id].set_item(item, amount)
 	
-func swap_selected():
-	swap_items(_selected, _lastSelected)
 	
+func get_item(id):
+	return _slots[id].get_item() 
 	
-func swap_items(idx1 : String, idx2 : String): 
-	var tempItem = _slots[idx1].get_item()
-	var amount = _slots[idx1].get_amount()
+
+func set_item_amount(id, amount):
+	_slots[id].set_amount(amount)
+
+
+func get_item_amount(id):
+	return _slots[id].get_amount()
 	
-	_slots[idx1].set_item(_slots[idx2].get_item(), _slots[idx2].get_amount())
-	_slots[idx2].set_item(tempItem, amount)
+
+func set_slot_selected(id):
+	_slots[id].set_selected()
 	
+func set_slot_unselected(id):
+	_slots[id].set_unselected()
+
 
 func set_weight(weight : float):
 	_currentWeight = weight
@@ -386,40 +486,33 @@ func get_weight() -> float:
 	return _currentWeight
 
 
-func _get_item_by_id(id : int) -> Item:
+func get_item_by_id(id : int) -> Item:
 	return _allItems[id]
 
 
 func _get_item_by_name(name : String) -> Item:
 	return _allItemNames[name]
 	
-
-func get_item(id : int) -> Item:
-	# ItemSlot.new(item, amount)
-	#return ItemSlot.new(_get_item_by_id(id), 1)
-	return _get_item_by_id(id) 
-
-
 func get_slot_size():
-	return _slots.size() - _registeredSlotNames.size()
+	return _slots.size() 
 
 
-func get_slots() -> Dictionary:
+func get_slots() -> Array:
 	return _slots
 	
 func get_item_at_slot(slotId : int) -> Item:
-	return _slots[str(slotId)]._item
+	return _slots[slotId]._item
 	
 
-func get_slot(id : int) -> Slot:
-	return _slots[inventoryName + str(id)]
+func get_slot(pos : int) -> Slot:
+	return _slots[pos]
 
 
-func _get_next_free_slot_id() -> String:
-	for i in range(maxInventorySize):
-		if _slots[inventoryName + str(i)].get_item() == null:
-			return inventoryName + str(i)
-	return ""
+func _get_next_free_slot_id():
+	for i in range(inventorySize):
+		if get_slot(i).get_item() == null:
+			return i
+	return -1
 	
 	
 func get_selected_slot() -> Slot:
@@ -432,16 +525,34 @@ func get_selected_item() -> Item:
 	
 func get_last_selected_slot() -> Slot:
 	return _slots[_lastSelected]
+	
 
-
+func get_slot_weight(id):
+	return _slots[id].get_weight()
+	
+	
 func get_last_selected_item() -> Item:
 	return _slots[_lastSelected]._item
+	
+	
+func get_id() -> String:
+	return _id
+	
+	
+# this should only be set 
+func _set_id(id):
+	_id = id
+
+
+func get_display_name() -> String:
+	return inventoryDisplayName
 
 
 func get_item_id_by_name(itemName : String) -> String:
+	#print("get_item_id_by_name in inventory")
 	for i in range(_allItems):
 		if itemName == _allItems[i].get_name():
-			return inventoryName + str(i)
+			return _allItems[i]
 			
 	# if item name not found
 	printerr("couldn't find item with name: " + itemName)
@@ -449,34 +560,26 @@ func get_item_id_by_name(itemName : String) -> String:
 
 
 func _update_weight():
-	if has_node("background/weightLabel"):
-		if $background/weightLabel != null:
-			$background/weightLabel.text = str(_currentWeight) + " / " + str(maxWeight)
+	if has_node("weightLabel") and $weightLabel != null:
+			$weightLabel.text = str(_currentWeight) + " / " + str(maxWeight)
 
 
-# when released, swap items
 func _on_slot_released(index):
-	if not get_parent().is_visible() or Global.paused:
+	if not is_visible() or Global.paused:
 		return
 		
 	_lastSelected = _selected
 	_selected = index
+	#print("released: " + str(index))
 	
-	emit_signal("on_slot_toggled", false, _selected, inventoryName)
+	emit_signal("on_slot_toggled", false, _selected, _id)
 	
 
-func _on_slot_pressed(index : String):
-	if not get_parent().is_visible() or Global.paused:
+func _on_slot_pressed(index):
+	if not is_visible() or Global.paused:
 		return
 		
 	_lastSelected = _selected
 	_selected = index
 	#print("selected: " + str(index))
-	emit_signal("on_slot_toggled", true, _selected, inventoryName)
-	
-	if _get_selected_slot() == null:
-		#itemList.unselect(_selected)
-		_slots[str(_selected)].set_unselected()
-		return
-	_slots[_selected].set_selected()
-	
+	emit_signal("on_slot_toggled", true, _selected, _id)
