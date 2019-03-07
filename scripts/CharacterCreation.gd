@@ -10,7 +10,19 @@ func _on_ButtonBack_pressed():
 
 func _on_ButtonFinish_pressed():
 	# Register the new character
-	var charData = {"class":get_node("../ScrollContainer/VBoxContainer").selected, "level": 1}
+	var selectedClass = get_node("../ScrollContainer/VBoxContainer").selected
+	var charData = {
+		"class" : selectedClass,
+		"level": 1,
+		"max_hp" : Global.init_stats[selectedClass].max_hp,
+		"max_mp" : Global.init_stats[selectedClass].max_mp,
+		"strength" : Global.init_stats[selectedClass].strength,
+		"agility" : Global.init_stats[selectedClass].agility,
+		"magic" : Global.init_stats[selectedClass].magic,
+		"luck" : Global.init_stats[selectedClass].luck,
+		"physical_defense" : Global.init_stats[selectedClass].physical_defense,
+		"magic_defense" : Global.init_stats[selectedClass].magic_defense
+	}
 	Global.charactersData[str(Global.charactersData.size())] = charData
 	# Send the selected class to the server
 	Networking.sendServeNewCharacterData(get_node("../ScrollContainer/VBoxContainer").selected)
