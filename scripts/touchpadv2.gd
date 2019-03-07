@@ -16,8 +16,7 @@ var isPressed = false
 func isInArea(pos):
 	if pos.x<2*radius+50 and pos.y>get_viewport().size.y-(2*radius+50):
 		return true
-	else:
-		return false
+	return false
 
 func init(playerBody : KinematicBody2D):
 	if playerBody == null:
