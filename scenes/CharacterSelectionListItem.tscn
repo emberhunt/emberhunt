@@ -5,25 +5,27 @@
 [ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=4]
 
+[sub_resource type="DynamicFont" id=1]
+size = 70
+font_data = ExtResource( 3 )
+
 [sub_resource type="DynamicFont" id=2]
 size = 70
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
-size = 70
-font_data = ExtResource( 3 )
-
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 4 )
 region = Rect2( 305.75, 111.625, 12.375, 16.625 )
 
 [node name="Char" type="Container"]
 margin_right = 924.0
 margin_bottom = 135.0
+mouse_filter = 1
 
 [node name="TextureButton" type="TextureButton" parent="."]
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 1 )
 texture_pressed = ExtResource( 2 )
@@ -35,7 +37,7 @@ margin_left = 200.0
 margin_top = 22.0
 margin_right = 694.0
 margin_bottom = 121.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Knight"
 
 [node name="Level" type="Label" parent="."]
@@ -43,7 +45,7 @@ margin_left = 730.0
 margin_top = 22.0
 margin_right = 898.0
 margin_bottom = 121.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "11LvL"
 align = 2
 valign = 1
@@ -53,7 +55,7 @@ margin_left = 50.0
 margin_top = 10.0
 margin_right = 137.0
 margin_bottom = 127.0
-texture = SubResource( 4 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 5
 
