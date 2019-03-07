@@ -77,6 +77,7 @@ remote func receive_character_data(data):
 		else:
 			# Store the data in Global.gd
 			Global.charactersData = data.chars
+			get_node("/root/MainMenu/Label").set_text(data.nickname)
 
 remote func answer_is_nickname_free(answer):
 	get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)

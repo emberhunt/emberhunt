@@ -132,6 +132,7 @@ margin_bottom = -150.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+editor/display_folded = true
 margin_bottom = 1500.0
 custom_constants/separation = 150
 script = ExtResource( 7 )
@@ -191,6 +192,7 @@ align = 1
 valign = 1
 
 [node name="Assassin" type="Container" parent="ScrollContainer/VBoxContainer"]
+editor/display_folded = true
 margin_top = 300.0
 margin_bottom = 300.0
 

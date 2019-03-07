@@ -6,6 +6,8 @@ const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
 
+var init_stats = Global.init_stats
+
 func _ready():
 	# Get ready
 	# Check if serverData folder exists
@@ -76,7 +78,6 @@ remote func receive_new_character_data(uuid, data):
 		if not (data in classes):
 			print("Received invalid new character data")
 		else:
-			# Register the new character
 			# Parse data.json
 			var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
 			var file = File.new()
@@ -84,13 +85,29 @@ remote func receive_new_character_data(uuid, data):
 			var text = file.get_as_text()
 			var parsed = parse_json(text)
 			file.close()
-			# Add the new data
-			parsed.chars[parsed.chars.size()] = {"class":data,"level":1}
-			# Write the new data
-			file = File.new()
-			file.open(path+"data.json", file.WRITE)
-			file.store_line(JSON.print(parsed))
-			file.close()
+			# Check if player already has 5 characters
+			if parsed.chars.size() < 5:
+				# Register the new character
+				parsed.chars[parsed.chars.size()] = {
+					"class":data,
+					"level":1,
+					"experience":0,
+					"max_hp": init_stats[data].max_hp,
+					"max_mp": init_stats[data].max_mp,
+					"strength": init_stats[data].strength,
+					"agility": init_stats[data].agility,
+					"magic": init_stats[data].magic,
+					"luck": init_stats[data].luck,
+					"physical_defense": init_stats[data].physical_defense,
+					"magic_defense": init_stats[data].magic_defense
+				}
+				# Write the new data
+				file = File.new()
+				file.open(path+"data.json", file.WRITE)
+				file.store_line(JSON.print(parsed))
+				file.close()
+			else:
+				print("Received new character data, but the account already has 5 characters")
 	else:
 		print("Received new character data on an UUID which is not registered")
 
