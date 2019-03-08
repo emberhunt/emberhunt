@@ -14,6 +14,7 @@ func _on_ButtonFinish_pressed():
 	var charData = {
 		"class" : selectedClass,
 		"level": 1,
+		"experience" : 0,
 		"max_hp" : Global.init_stats[selectedClass].max_hp,
 		"max_mp" : Global.init_stats[selectedClass].max_mp,
 		"strength" : Global.init_stats[selectedClass].strength,
