@@ -54,37 +54,28 @@ remote func register_new_account(nickname):
 	print("New account registered")
 
 remote func send_character_data(uuid):
-	# Get path to UUID's data.json
-	var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
+	var uuid_hash = uuid.sha256_text()
 	# Check if the UUID is registered
-	if not checkIfUuidIsRegistered(uuid):
+	if not checkIfUuidIsRegistered(uuid_hash):
 		# The UUID is not registered yet
 		rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", false)
 		return
 	# Parse data.json
-	var file = File.new()
-	file.open(path+"data.json", file.READ)
-	var text = file.get_as_text()
-	var data = parse_json(text)
-	file.close()
+	var data = getUuidData(uuid_hash)
 	# Send the data back
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
 	pass
 
 remote func receive_new_character_data(uuid, data):
-	if checkIfUuidIsRegistered(uuid):
+	var uuid_hash = uuid.sha256_text()
+	if checkIfUuidIsRegistered(uuid_hash):
 		# Check if the data is valid
 		var classes = ["Knight","Berserker","Assassin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
 		if not (data in classes):
 			print("Received invalid new character data")
 		else:
 			# Parse data.json
-			var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
-			var file = File.new()
-			file.open(path+"data.json", file.READ)
-			var text = file.get_as_text()
-			var parsed = parse_json(text)
-			file.close()
+			var parsed = getUuidData(uuid_hash)
 			# Check if player already has 5 characters
 			if parsed.chars.size() < 5:
 				# Register the new character
@@ -102,10 +93,7 @@ remote func receive_new_character_data(uuid, data):
 					"magic_defense": init_stats[data].magic_defense
 				}
 				# Write the new data
-				file = File.new()
-				file.open(path+"data.json", file.WRITE)
-				file.store_line(JSON.print(parsed))
-				file.close()
+				setUuidData(uuid_hash, parsed)
 			else:
 				print("Received new character data, but the account already has 5 characters")
 	else:
@@ -118,11 +106,11 @@ remote func check_if_nickname_is_free(nickname):
 		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_nickname_free", false)
 
 remote func check_if_uuid_exists(uuid):
-	var content = listFolderContent("user://serverData/accounts/")
-	for account in content:
-		if account==uuid.sha256_text():
-			rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
-			return
+	var uuid_hash = uuid.sha256_text()
+	if not checkIfUuidIsRegistered(uuid_hash):
+		# The UUID is not registered yet
+		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
+		return
 	rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", false)
 
 # # # # # # # # # # #
@@ -198,34 +186,57 @@ func generateRandomUUID(nickname):
 		randomize()
 		var x = intToStr[randi()%62]
 		uuid = uuid+str(x)
+	var uuid_hash = uuid.sha256_text()
 	# check if the uuid is already taken
-	var dir = Directory.new()
-	if dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
+	if checkIfUuidIsRegistered(uuid_hash):
 		return generateRandomUUID(nickname)
 	# continue if it's not
 	# Create the account's directory
-	dir.make_dir("user://serverData/accounts/"+uuid.sha256_text())
-	# Create data.json to store account's data
-	var file = File.new()
-	if file.open("user://serverData/accounts/"+uuid.sha256_text()+"/data.json", File.WRITE) != 0:
-		print("Error creating file user://serverData/accounts/"+uuid.sha256_text()+"/data.json")
-		return
+	var dir = Directory.new()
+	dir.make_dir("user://serverData/accounts/"+uuid_hash)
 	# Data stored in data.json
 	var data = {
 		"nickname" : nickname.replace("\"", ""),
 		"chars" : {}
 	}
-	file.store_line(JSON.print(data))
-	file.close()
+	setUuidData(uuid_hash,data)
 	return uuid
 
 func checkIfUuidIsRegistered(uuid):
 	# Check if the UUID is registered
 	var dir = Directory.new()
-	if not dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
-		# The UUID is not registered yet
+	if not dir.dir_exists("user://serverData/accounts/"+uuid):
 		return false
 	return true
+
+func isNicknameFree(nickname):
+	var contents = listFolderContent("user://serverData/accounts/")
+	for account in contents:
+		var file = File.new()
+		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
+		var text = file.get_as_text()
+		var parsed = parse_json(text)
+		file.close()
+		if nickname == parsed.nickname:
+			return false
+	return true
+
+func setUuidData(uuid_hash, data):
+	var file = File.new()
+	if file.open("user://serverData/accounts/"+uuid_hash+"/data.json", File.WRITE) != 0:
+		print("Error opening file user://serverData/accounts/"+uuid_hash+"/data.json")
+		return
+	file.store_line(JSON.print(data))
+	file.close()
+
+func getUuidData(uuid_hash):
+	var path = "user://serverData/accounts/"+uuid_hash+"/"
+	var file = File.new()
+	file.open(path+"data.json", file.READ)
+	var text = file.get_as_text()
+	var parsed = parse_json(text)
+	file.close()
+	return parsed
 
 func listFolderContent(path):
 	var files = []
@@ -240,18 +251,6 @@ func listFolderContent(path):
 			files.append(file)
 	dir.list_dir_end()
 	return files
-
-func isNicknameFree(nickname):
-	var contents = listFolderContent("user://serverData/accounts/")
-	for account in contents:
-		var file = File.new()
-		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
-		var text = file.get_as_text()
-		var parsed = parse_json(text)
-		file.close()
-		if nickname == parsed.nickname:
-			return false
-	return true
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #

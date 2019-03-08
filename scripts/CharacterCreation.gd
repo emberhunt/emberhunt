@@ -1,8 +1,5 @@
 extends Container
 
-func _ready():
-	# Get the character data from the server
-	Networking.requestServerForMyCharacterData()
 
 func _on_ButtonBack_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))

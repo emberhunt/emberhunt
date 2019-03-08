@@ -1,5 +1,7 @@
 extends Control
 
+func _ready():
+	$Label.set_text(Global.nickname)
 
 func _on_ButtonPlay_pressed():
 	Global.paused = false

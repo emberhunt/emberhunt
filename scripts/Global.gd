@@ -9,6 +9,7 @@ var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
 var UUID = false
 
+var nickname = "Offline"
 
 var charactersData = {}
 
