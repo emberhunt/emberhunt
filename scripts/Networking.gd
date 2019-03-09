@@ -80,12 +80,22 @@ remote func receive_character_data(data):
 			Global.nickname = data.nickname
 			if get_tree().get_current_scene().get_name() == "MainMenu":
 				get_node("/root/MainMenu/Label").set_text(data.nickname)
+			rpc_id(1, "join_world", Global.UUID, 0, "FortressOfTheDark")
 
 remote func answer_is_nickname_free(answer):
-	get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)
 
 remote func answer_is_uuid_valid(answer):
-	get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
+
+remote func receive_world_update(world_data):
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		print("received world update")
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -120,4 +130,6 @@ remote func receive_new_character_data(uuid, data):
 remote func check_if_nickname_is_free(nickname):
 	pass
 remote func check_if_uuid_exists(uuid):
+	pass
+remote func join_world(uuid, character_id, world):
 	pass

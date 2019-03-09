@@ -8,6 +8,10 @@ const MAX_PLAYERS = 10
 
 var init_stats = Global.init_stats
 
+
+var worlds = {}
+
+
 func _ready():
 	# Get ready
 	# Check if serverData folder exists
@@ -27,6 +31,22 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	print("Server initialized")
+	
+	# Create worlds
+	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
+	var scene_instance = scene.instance()
+	scene_instance.set_name("FortressOfTheDark")
+	addSceneToGroup(scene_instance, "FortressOfTheDark")
+	get_node("/root/MainServer/").add_child(scene_instance)
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}}
+	print("FortressOfTheDark created")
+
+func _process(delta):
+	
+	# Sync the worlds with all players
+	for world in worlds.keys():
+		for player in worlds[world].players.keys():
+			rpc_unreliable_id(int(player), "receive_world_update", worlds[world])
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -36,6 +56,9 @@ func _player_connected(id):
 	print(str(id)+" connected")
 
 func _player_disconnected(id):
+	for world in worlds.keys():
+		if worlds[world].players.has(id):
+			worlds[world].players.erase(id)
 	print(str(id)+" disconnected")
 
 # # # # # # # # # # #
@@ -112,6 +135,33 @@ remote func check_if_uuid_exists(uuid):
 		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
 		return
 	rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", false)
+
+remote func join_world(uuid, character_id, world):
+	# Check if the world exists
+	if world in worlds:
+		var uuid_hash = uuid.sha256_text()
+		# Check if uuid is registered
+		if checkIfUuidIsRegistered(uuid_hash):
+			# Check if the account has that character
+			var account_data = getUuidData(uuid_hash)
+			if str(character_id) in account_data.chars.keys():
+				# Check if any other characters are playing right now
+				for player_data in worlds[world].players.values():
+					if account_data.nickname == player_data.nickname:
+						# Another character is already playing
+						return
+				# Spawn the player
+				var scene = preload("res://scenes/otherPlayer.tscn")
+				var scene_instance = scene.instance()
+				scene_instance.set_name(account_data.nickname)
+				addSceneToGroup(scene_instance, world)
+				add_child(scene_instance)
+				worlds[world].players[get_tree().get_rpc_sender_id()] = {
+					"position" : scene_instance.position,
+					"stats" : account_data.chars[str(character_id)],
+					"nickname" : account_data.nickname
+				}
+
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -252,6 +302,13 @@ func listFolderContent(path):
 	dir.list_dir_end()
 	return files
 
+func addSceneToGroup(node, group):
+	node.add_to_group(group)
+	for N in node.get_children():
+		if N.get_child_count() > 0:
+			addSceneToGroup(N, group)
+		N.add_to_group(group)
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -263,4 +320,6 @@ remote func receive_character_data(data):
 remote func answer_is_nickname_free(answer):
 	pass
 remote func answer_is_uuid_valid(answer):
+	pass
+remote func receive_world_update(world_data):
 	pass
