@@ -75,6 +75,7 @@ pointing/emulate_touch_from_mouse=true
 
 [locale]
 
+test="en"
 locale_filter=[ 0, [ "en_US" ] ]
 
 [rendering]
