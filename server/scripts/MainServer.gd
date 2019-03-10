@@ -11,6 +11,8 @@ var init_stats = Global.init_stats
 
 var worlds = {}
 
+var time_start = OS.get_ticks_msec()
+
 
 func _ready():
 	# Get ready
@@ -42,11 +44,11 @@ func _ready():
 	print("FortressOfTheDark created")
 
 func _process(delta):
-	
+
 	# Sync the worlds with all players
 	for world in worlds.keys():
 		for player in worlds[world].players.keys():
-			rpc_unreliable_id(int(player), "receive_world_update", worlds[world])
+			rpc_unreliable_id(int(player), "receive_world_update", world, worlds[world])
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -58,6 +60,7 @@ func _player_connected(id):
 func _player_disconnected(id):
 	for world in worlds.keys():
 		if worlds[world].players.has(id):
+			get_node("/root/MainServer/players/" + worlds[world].players[id].nickname).queue_free()
 			worlds[world].players.erase(id)
 	print(str(id)+" disconnected")
 
@@ -155,12 +158,43 @@ remote func join_world(uuid, character_id, world):
 				var scene_instance = scene.instance()
 				scene_instance.set_name(account_data.nickname)
 				addSceneToGroup(scene_instance, world)
-				add_child(scene_instance)
+				get_node("/root/MainServer/players").add_child(scene_instance)
 				worlds[world].players[get_tree().get_rpc_sender_id()] = {
 					"position" : scene_instance.position,
 					"stats" : account_data.chars[str(character_id)],
-					"nickname" : account_data.nickname
+					"nickname" : account_data.nickname,
+					"lastUpdate" : OS.get_ticks_msec() - time_start
 				}
+
+remote func exit_world(world):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Remove it from the world
+			get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname).queue_free()
+			worlds[world].players.erase(get_tree().get_rpc_sender_id())
+
+remote func send_position(world, pos):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Validate if the position is legal
+			var node = get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname + "/body")
+			if not node.test_move(node.transform, pos-node.position): # No collisions
+				# Check the speed
+				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+100
+				var timeElapsed = (OS.get_ticks_msec() - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate
+				var maxLegalDistance = maxLegalSpeed*timeElapsed/1000
+				# Pythagorean theorem
+				var traveledDistance = sqrt( pow( pos.x-node.position.x, 2 ) + pow( pos.y-node.position.y, 2 ) )
+				# Check if it traveled more than we allow
+				if traveledDistance <= maxLegalDistance+1:
+					# Update player's position
+					node.position = pos
+					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
+					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = OS.get_ticks_msec() - time_start
 
 
 # # # # # # # # # # #
@@ -321,5 +355,5 @@ remote func answer_is_nickname_free(answer):
 	pass
 remote func answer_is_uuid_valid(answer):
 	pass
-remote func receive_world_update(world_data):
+remote func receive_world_update(world_name, world_data):
 	pass

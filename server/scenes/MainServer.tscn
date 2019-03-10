@@ -2,3 +2,5 @@
 
 [node name="MainServer" type="Node"]
 
+[node name="players" type="Node" parent="."]
+
