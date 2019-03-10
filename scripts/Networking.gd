@@ -80,7 +80,6 @@ remote func receive_character_data(data):
 			Global.nickname = data.nickname
 			if get_tree().get_current_scene().get_name() == "MainMenu":
 				get_node("/root/MainMenu/Label").set_text(data.nickname)
-			rpc_id(1, "join_world", Global.UUID, 0, "FortressOfTheDark")
 
 remote func answer_is_nickname_free(answer):
 	# Check if it was sent by the server
@@ -92,10 +91,12 @@ remote func answer_is_uuid_valid(answer):
 	if get_tree().get_rpc_sender_id() == 1:
 		get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
 
-remote func receive_world_update(world_data):
-	# Check if it was sent by the server
-	if get_tree().get_rpc_sender_id() == 1:
-		print("received world update")
+remote func receive_world_update(world_name, world_data):
+	# Check if it was sent by the server and if im still in that world
+	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
+		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
+		# Sync position with server
+		selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -117,6 +118,15 @@ func registerAccount(nickname):
 func askServerIfThisUUIDIsValid(uuid):
 	rpc_id(1, "check_if_uuid_exists", uuid)
 
+func requestToJoinWorld(world_name, charID):
+	rpc_id(1, "join_world", Global.UUID, charID, world_name)
+
+func sendPosition(pos):
+	rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos)
+
+func exitWorld():
+	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -132,4 +142,8 @@ remote func check_if_nickname_is_free(nickname):
 remote func check_if_uuid_exists(uuid):
 	pass
 remote func join_world(uuid, character_id, world):
+	pass
+remote func send_input(world, input):
+	pass
+remote func exit_world(world):
 	pass

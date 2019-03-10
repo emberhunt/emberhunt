@@ -13,6 +13,10 @@ var nickname = "Offline"
 
 var charactersData = {}
 
+var charID = 0
+
+var worldReadyFunctions = {}
+
 const init_stats = {
 	"Knight" : {
 		"max_hp" : 160,
@@ -144,3 +148,18 @@ func loadGame():
 
 func _ready():
 	loadGame()
+
+func spawnPlayerAndGUI(world_name):
+	# Add the player to the world
+	var scene = load("res://scenes/player.tscn")
+	var scene_instance = scene.instance()
+	scene_instance.set_name("player")
+	get_node("/root/"+world_name).add_child(scene_instance)
+	# Add the GUI
+	scene_instance = load("res://scenes/GUI.tscn").instance()
+	scene_instance.set_name("GUI")
+	get_node("/root/"+world_name).add_child(scene_instance)
+
+func WorldReady(world_name):
+	if worldReadyFunctions.has(world_name):
+		worldReadyFunctions[world_name].call_func(world_name)
