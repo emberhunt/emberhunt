@@ -11,10 +11,6 @@ var openedInv
 func _ready():
 	if mainInventorySystem == null:
 		printerr("no inventory selected!")
-	
-	_mainInv = get_node(mainInventorySystem)
-	
-	_mainInv.connect("on_item_inventory_swapped", self, "save_items")
 
 	for i in range(get_child_count()):
 		get_child(i).connect("on_area_entered", self, "add_to_main_inventory")
@@ -47,7 +43,13 @@ func add_to_main_inventory(invName, inventory):
 	#openedInv = InventoryPrefab.instance()
 	#openedInv.update_inventory_size(12)
 	#var inv = _mainInv.create_inventory(invName, slots)
-	inventory._set_id(_mainInv.add_inventory(inventory))
+	
+	if _mainInv == null:
+		_mainInv = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/inventorySystem")
+		if _mainInv != null:
+			_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+	if _mainInv != null:
+		inventory._set_id(_mainInv.add_inventory(inventory))
 	#get_node("/root/Console").write_line("id: " + str(openedInv.get_id()))
 	
 	#inv.update_inventory_size(slots.size())
@@ -57,6 +59,12 @@ func add_to_main_inventory(invName, inventory):
 
 func remove_inventories(invName):
 	openedInv.hide()
+	
+	if _mainInv == null:
+		_mainInv = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/inventorySystem")
+		if _mainInv != null:
+			_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+	
 	_mainInv.remove_all_except_main_inventory()
 	get_node("/root/Console").write_line("remove inventories")
 
