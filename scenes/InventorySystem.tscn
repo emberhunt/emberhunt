@@ -1,63 +1,52 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scripts/InventorySystem.gd" type="Script" id=1]
-[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/PlayerEquipment.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/inventory/InventorySystem.gd" type="Script" id=1]
+[ext_resource path="res://scenes/PlayerEquipment.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/itemSlotDescription.tscn" type="PackedScene" id=4]
 
 [node name="inventorySystem" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 script = ExtResource( 1 )
+inventoriesPath = NodePath("inventories")
+mainInventoryPath = NodePath("inventories/equipment")
 
 [node name="inventories" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 0.216368
-margin_bottom = 0.216431
-mouse_filter = 2
+mouse_filter = 1
 
-[node name="chest" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 578.631
-margin_top = 147.21
-margin_right = 763.631
-margin_bottom = 285.21
-inventoryName = "chest"
+[node name="equipment" parent="inventories" instance=ExtResource( 2 )]
+margin_left = 211.02
+margin_top = 186.882
+margin_right = 550.02
+margin_bottom = 430.881
+inventoryDisplayName = "Equipment"
+columns = 0
 
-[node name="chest2" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 580.0
-margin_top = 299.0
-margin_right = 762.0
-margin_bottom = 482.0
-inventoryName = "chest2"
-maxInventorySize = 12
-
-[node name="playerInventory" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 122.0
-margin_top = 289.0
-margin_right = 461.0
-margin_bottom = 514.0
-inventoryName = "playerInventory"
-maxInventorySize = 16
-
-[node name="equipment" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 122.0
-margin_top = 43.0
-margin_right = 461.0
-margin_bottom = 287.0
-inventoryName = "equipment"
-maxInventorySize = 9
-weightEnabled = true
-maxWeight = 60.0
+[node name="chest" parent="inventories" instance=ExtResource( 3 )]
+margin_left = 637.074
+margin_top = 185.151
+margin_right = 891.074
+margin_bottom = 431.151
+inventoryDisplayName = "Inventory"
+inventorySize = 20
+columns = 5
+weightEnabled = false
+maxWeight = 1e+007
 
 [node name="blocker" type="Control" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 
 [node name="itemSlotDescription" parent="." instance=ExtResource( 4 )]
 visible = false
 rect_pivot_offset = Vector2( -24, -24 )
+mouse_filter = 1
 
 [node name="descriptionField" type="Control" parent="."]
 visible = false
@@ -74,5 +63,4 @@ margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
 
-[connection signal="gui_input" from="." to="." method="_on_inventorySystem_gui_input"]
 [connection signal="mouse_exited" from="descriptionField" to="." method="_on_descriptionField_mouse_exited"]
