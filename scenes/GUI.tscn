@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
@@ -79,6 +79,9 @@ nodes/fragment/connections = PoolIntArray( 5, 0, 3, 0, 3, 1, 0, 1, 6, 0, 0, 0, 3
 [sub_resource type="ShaderMaterial" id=6]
 shader = SubResource( 5 )
 
+[sub_resource type="CircleShape2D" id=7]
+radius = 150.0
+
 [node name="gui" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -144,6 +147,7 @@ autostart = true
 
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
 position = Vector2( 149.88, 447.728 )
+shape = SubResource( 1 )
 script = ExtResource( 3 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
@@ -159,6 +163,7 @@ texture = ExtResource( 5 )
 [node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
 position = Vector2( 873.88, 447.728 )
+shape = SubResource( 1 )
 script = ExtResource( 6 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
@@ -176,7 +181,6 @@ margin_left = -0.119565
 margin_top = -2.27206
 margin_right = -0.119568
 margin_bottom = -2.27203
-mouse_filter = 1
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/inventoryButton/toggleInventory" to="." method="_on_toggleInventory_pressed"]

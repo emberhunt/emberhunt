@@ -116,6 +116,10 @@ window/stretch/aspect="expand"
 
 pointing/emulate_touch_from_mouse=true
 
+[locale]
+
+locale_filter=[ 0, [ "en_US" ] ]
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
