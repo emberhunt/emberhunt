@@ -2,7 +2,7 @@ extends "res://scripts/character.gd"
 
 class_name Player
 
-const InventorySystem = preload("res://scripts/InventorySystem.gd")
+const InventorySystem = preload("res://scripts/inventory/InventorySystem.gd")
 
 var inventory : InventorySystem
 

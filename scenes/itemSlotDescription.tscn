@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://scripts/itemSlotDescription.gd" type="Script" id=1]
+[ext_resource path="res://scripts/inventory/itemSlotDescription.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/acari-sans/AcariSans-BoldItalics.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/fonts/acari-sans/AcariSans-Italics.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/fonts/acari-sans/AcariSans-Bold.tres" type="DynamicFont" id=4]

@@ -176,7 +176,6 @@ margin_left = -0.119565
 margin_top = -2.27206
 margin_right = -0.119568
 margin_bottom = -2.27203
-mouse_filter = 1
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/inventoryButton/toggleInventory" to="." method="_on_toggleInventory_pressed"]
