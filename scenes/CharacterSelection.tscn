@@ -50,6 +50,7 @@ valign = 1
 uppercase = true
 
 [node name="ButtonPlay" type="TextureButton" parent="Buttons"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -450.0

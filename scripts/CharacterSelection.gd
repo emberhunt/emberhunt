@@ -5,6 +5,10 @@ var selected = false
 
 
 func _ready():
+	# Disable 'Create' button if there already are 5 characters
+	if Global.charactersData.size() >= 5:
+		get_node("../../Buttons/ButtonCreate").set_disabled(true)
+		get_node("../../Buttons/ButtonCreate/Label").set("custom_colors/font_color",Color(0.6431372549,0.6431372549,0.6431372549))
 	# Check if there are any characters
 	if Global.charactersData.size() == 0:
 		var node = Label.new()
