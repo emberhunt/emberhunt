@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://scripts/inventory/Inventory.gd" type="Script" id=1]
 [ext_resource path="res://assets/inventory/inventory_background.tres" type="Texture" id=2]
 [ext_resource path="res://scenes/ItemSlot.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/inventory/inventory_name_background.tres" type="StyleBox" id=4]
@@ -12,7 +12,7 @@ margin_right = 488.0
 margin_bottom = 309.0
 mouse_filter = 1
 script = ExtResource( 1 )
-columns = 0
+maxWeight = 1e+007
 
 [node name="background" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -91,7 +91,7 @@ margin_left = 3.0
 margin_top = -23.0
 margin_right = -7.0
 margin_bottom = -9.0
-text = "0 / -1"
+text = "0 / 9999999"
 align = 2
 valign = 1
 
