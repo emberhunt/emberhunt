@@ -186,11 +186,5 @@ margin_top = 18.6617
 margin_right = 42.3327
 margin_bottom = 32.6617
 
-[node name="SCD" type="Label" parent="CanvasLayer"]
-margin_left = 3.49906
-margin_top = 92.1419
-margin_right = 43.4991
-margin_bottom = 106.142
-
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/inventoryButton/toggleInventory" to="." method="_on_toggleInventory_pressed"]

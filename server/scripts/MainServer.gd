@@ -191,6 +191,11 @@ remote func send_position(world, pos):
 				var traveledDistance = (pos-node.position).length()
 				# Check if it traveled more than we allow
 				if traveledDistance <= maxLegalDistance+1:
+					# Check if the player is not trying to teleport
+					if traveledDistance > 100:
+						var motion = pos-node.position
+						var newMotion = Vector2((motion.x*traveledDistance)/100, (motion.y*traveledDistance)/100)
+						pos = node.position+newMotion
 					# Update player's position
 					node.position = pos
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
