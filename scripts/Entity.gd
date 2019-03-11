@@ -34,7 +34,7 @@ func _ready():
 	# TODO: add autoload script to get ids, probably by server
 	var uid = 0 # get_next_id()
 	
-	print("entity[" + str(uid) + "]")
+	#print("entity[" + str(uid) + "]")
 	set_property(PropertyType.ID, uid)
 	
 	

@@ -22,9 +22,7 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
-		inventorySystem.visible = ! inventorySystem.visible
-		get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
-		get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible
+		_on_toggleInventory_pressed()
 		
 		
 func _process(delta):
