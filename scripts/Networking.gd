@@ -77,12 +77,64 @@ remote func receive_character_data(data):
 		else:
 			# Store the data in Global.gd
 			Global.charactersData = data.chars
+			Global.nickname = data.nickname
+			if get_tree().get_current_scene().get_name() == "MainMenu":
+				get_node("/root/MainMenu/Label").set_text(data.nickname)
 
 remote func answer_is_nickname_free(answer):
-	get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		get_node("/root/RequestForNickname").receivedAnswerIfNicknameIsFree(answer)
 
 remote func answer_is_uuid_valid(answer):
-	get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
+
+remote func receive_world_update(world_name, world_data):
+	# Check if it was sent by the server and if im still in that world
+	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
+		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
+		# Sync position with server
+		if world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position != Vector2(0,0):
+			get_node("/root/FortressOfTheDark/GUI/CanvasLayer/SCD").set_text(str(world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position))
+		selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
+		# Update all other players
+		for player in world_data.players.keys():
+			if player == get_tree().get_network_unique_id():
+				continue
+			player = world_data.players[player]
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
+				# There's no PLAYERS node yet
+				var node = Node.new()
+				node.set_name("players")
+				get_node("/root/"+get_tree().get_current_scene().get_name()).add_child(node)
+			# Check if there's that player in our world
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").has_node(player.nickname):
+				# That player is not in our world yet
+				var scene = preload("res://scenes/otherPlayer.tscn")
+				var scene_instance = scene.instance()
+				scene_instance.set_name(player.nickname)
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
+			# Sync position
+			get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname).position = player.position
+		# Update all enemies
+		#
+		# Update all npcs
+		#
+		# Update all items
+		#
+		
+		# Check if any nodes got removed
+		# Players
+		if get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
+			for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").get_children():
+				var exists = false
+				for playerdata in world_data.players.values():
+					if player.get_name() == playerdata.nickname:
+						exists = true
+				if not exists:
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.get_name()).queue_free()
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -104,6 +156,15 @@ func registerAccount(nickname):
 func askServerIfThisUUIDIsValid(uuid):
 	rpc_id(1, "check_if_uuid_exists", uuid)
 
+func requestToJoinWorld(world_name, charID):
+	rpc_id(1, "join_world", Global.UUID, charID, world_name)
+
+func sendPosition(pos):
+	rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos)
+
+func exitWorld():
+	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -117,4 +178,10 @@ remote func receive_new_character_data(uuid, data):
 remote func check_if_nickname_is_free(nickname):
 	pass
 remote func check_if_uuid_exists(uuid):
+	pass
+remote func join_world(uuid, character_id, world):
+	pass
+remote func send_input(world, input):
+	pass
+remote func exit_world(world):
 	pass

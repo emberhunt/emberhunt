@@ -6,6 +6,14 @@ const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
 
+var init_stats = Global.init_stats
+
+
+var worlds = {}
+
+var time_start = OS.get_ticks_msec()
+
+
 func _ready():
 	# Get ready
 	# Check if serverData folder exists
@@ -25,6 +33,22 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	print("Server initialized")
+	
+	# Create worlds
+	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
+	var scene_instance = scene.instance()
+	scene_instance.set_name("FortressOfTheDark")
+	addSceneToGroup(scene_instance, "FortressOfTheDark")
+	get_node("/root/MainServer/").add_child(scene_instance)
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}}
+	print("FortressOfTheDark created")
+
+func _process(delta):
+
+	# Sync the worlds with all players
+	for world in worlds.keys():
+		for player in worlds[world].players.keys():
+			rpc_unreliable_id(int(player), "receive_world_update", world, worlds[world])
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -34,6 +58,10 @@ func _player_connected(id):
 	print(str(id)+" connected")
 
 func _player_disconnected(id):
+	for world in worlds.keys():
+		if worlds[world].players.has(id):
+			get_node("/root/MainServer/players/" + worlds[world].players[id].nickname).queue_free()
+			worlds[world].players.erase(id)
 	print(str(id)+" disconnected")
 
 # # # # # # # # # # #
@@ -52,45 +80,48 @@ remote func register_new_account(nickname):
 	print("New account registered")
 
 remote func send_character_data(uuid):
-	# Get path to UUID's data.json
-	var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
+	var uuid_hash = uuid.sha256_text()
 	# Check if the UUID is registered
-	if not checkIfUuidIsRegistered(uuid):
+	if not checkIfUuidIsRegistered(uuid_hash):
 		# The UUID is not registered yet
 		rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", false)
 		return
 	# Parse data.json
-	var file = File.new()
-	file.open(path+"data.json", file.READ)
-	var text = file.get_as_text()
-	var data = parse_json(text)
-	file.close()
+	var data = getUuidData(uuid_hash)
 	# Send the data back
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
 	pass
 
 remote func receive_new_character_data(uuid, data):
-	if checkIfUuidIsRegistered(uuid):
+	var uuid_hash = uuid.sha256_text()
+	if checkIfUuidIsRegistered(uuid_hash):
 		# Check if the data is valid
 		var classes = ["Knight","Berserker","Assassin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
 		if not (data in classes):
 			print("Received invalid new character data")
 		else:
-			# Register the new character
 			# Parse data.json
-			var path = "user://serverData/accounts/"+uuid.sha256_text()+"/"
-			var file = File.new()
-			file.open(path+"data.json", file.READ)
-			var text = file.get_as_text()
-			var parsed = parse_json(text)
-			file.close()
-			# Add the new data
-			parsed.chars[parsed.chars.size()] = {"class":data,"level":1}
-			# Write the new data
-			file = File.new()
-			file.open(path+"data.json", file.WRITE)
-			file.store_line(JSON.print(parsed))
-			file.close()
+			var parsed = getUuidData(uuid_hash)
+			# Check if player already has 5 characters
+			if parsed.chars.size() < 5:
+				# Register the new character
+				parsed.chars[parsed.chars.size()] = {
+					"class":data,
+					"level":1,
+					"experience":0,
+					"max_hp": init_stats[data].max_hp,
+					"max_mp": init_stats[data].max_mp,
+					"strength": init_stats[data].strength,
+					"agility": init_stats[data].agility,
+					"magic": init_stats[data].magic,
+					"luck": init_stats[data].luck,
+					"physical_defense": init_stats[data].physical_defense,
+					"magic_defense": init_stats[data].magic_defense
+				}
+				# Write the new data
+				setUuidData(uuid_hash, parsed)
+			else:
+				print("Received new character data, but the account already has 5 characters")
 	else:
 		print("Received new character data on an UUID which is not registered")
 
@@ -101,12 +132,70 @@ remote func check_if_nickname_is_free(nickname):
 		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_nickname_free", false)
 
 remote func check_if_uuid_exists(uuid):
-	var content = listFolderContent("user://serverData/accounts/")
-	for account in content:
-		if account==uuid.sha256_text():
-			rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
-			return
+	var uuid_hash = uuid.sha256_text()
+	if not checkIfUuidIsRegistered(uuid_hash):
+		# The UUID is not registered yet
+		rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", true)
+		return
 	rpc_id(get_tree().get_rpc_sender_id(), "answer_is_uuid_valid", false)
+
+remote func join_world(uuid, character_id, world):
+	# Check if the world exists
+	if world in worlds:
+		var uuid_hash = uuid.sha256_text()
+		# Check if uuid is registered
+		if checkIfUuidIsRegistered(uuid_hash):
+			# Check if the account has that character
+			var account_data = getUuidData(uuid_hash)
+			if str(character_id) in account_data.chars.keys():
+				# Check if any other characters are playing right now
+				for player_data in worlds[world].players.values():
+					if account_data.nickname == player_data.nickname:
+						# Another character is already playing
+						return
+				# Spawn the player
+				var scene = preload("res://scenes/otherPlayer.tscn")
+				var scene_instance = scene.instance()
+				scene_instance.set_name(account_data.nickname)
+				addSceneToGroup(scene_instance, world)
+				get_node("/root/MainServer/players").add_child(scene_instance)
+				worlds[world].players[get_tree().get_rpc_sender_id()] = {
+					"position" : scene_instance.position,
+					"stats" : account_data.chars[str(character_id)],
+					"nickname" : account_data.nickname,
+					"lastUpdate" : OS.get_ticks_msec() - time_start
+				}
+
+remote func exit_world(world):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Remove it from the world
+			get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname).queue_free()
+			worlds[world].players.erase(get_tree().get_rpc_sender_id())
+
+remote func send_position(world, pos):
+	var time_now = OS.get_ticks_msec()
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Validate if the position is legal
+			var node = get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname + "/body")
+			if not node.test_move(node.transform, pos-node.position): # No collisions
+				# Check the speed
+				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+100
+				var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
+				var maxLegalDistance = maxLegalSpeed*timeElapsed
+				var traveledDistance = (pos-node.position).length()
+				# Check if it traveled more than we allow
+				if traveledDistance <= maxLegalDistance+1:
+					# Update player's position
+					node.position = pos
+					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
+					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
+
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -181,34 +270,57 @@ func generateRandomUUID(nickname):
 		randomize()
 		var x = intToStr[randi()%62]
 		uuid = uuid+str(x)
+	var uuid_hash = uuid.sha256_text()
 	# check if the uuid is already taken
-	var dir = Directory.new()
-	if dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
+	if checkIfUuidIsRegistered(uuid_hash):
 		return generateRandomUUID(nickname)
 	# continue if it's not
 	# Create the account's directory
-	dir.make_dir("user://serverData/accounts/"+uuid.sha256_text())
-	# Create data.json to store account's data
-	var file = File.new()
-	if file.open("user://serverData/accounts/"+uuid.sha256_text()+"/data.json", File.WRITE) != 0:
-		print("Error creating file user://serverData/accounts/"+uuid.sha256_text()+"/data.json")
-		return
+	var dir = Directory.new()
+	dir.make_dir("user://serverData/accounts/"+uuid_hash)
 	# Data stored in data.json
 	var data = {
 		"nickname" : nickname.replace("\"", ""),
 		"chars" : {}
 	}
-	file.store_line(JSON.print(data))
-	file.close()
+	setUuidData(uuid_hash,data)
 	return uuid
 
 func checkIfUuidIsRegistered(uuid):
 	# Check if the UUID is registered
 	var dir = Directory.new()
-	if not dir.dir_exists("user://serverData/accounts/"+uuid.sha256_text()):
-		# The UUID is not registered yet
+	if not dir.dir_exists("user://serverData/accounts/"+uuid):
 		return false
 	return true
+
+func isNicknameFree(nickname):
+	var contents = listFolderContent("user://serverData/accounts/")
+	for account in contents:
+		var file = File.new()
+		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
+		var text = file.get_as_text()
+		var parsed = parse_json(text)
+		file.close()
+		if nickname == parsed.nickname:
+			return false
+	return true
+
+func setUuidData(uuid_hash, data):
+	var file = File.new()
+	if file.open("user://serverData/accounts/"+uuid_hash+"/data.json", File.WRITE) != 0:
+		print("Error opening file user://serverData/accounts/"+uuid_hash+"/data.json")
+		return
+	file.store_line(JSON.print(data))
+	file.close()
+
+func getUuidData(uuid_hash):
+	var path = "user://serverData/accounts/"+uuid_hash+"/"
+	var file = File.new()
+	file.open(path+"data.json", file.READ)
+	var text = file.get_as_text()
+	var parsed = parse_json(text)
+	file.close()
+	return parsed
 
 func listFolderContent(path):
 	var files = []
@@ -224,17 +336,12 @@ func listFolderContent(path):
 	dir.list_dir_end()
 	return files
 
-func isNicknameFree(nickname):
-	var contents = listFolderContent("user://serverData/accounts/")
-	for account in contents:
-		var file = File.new()
-		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
-		var text = file.get_as_text()
-		var parsed = parse_json(text)
-		file.close()
-		if nickname == parsed.nickname:
-			return false
-	return true
+func addSceneToGroup(node, group):
+	node.add_to_group(group)
+	for N in node.get_children():
+		if N.get_child_count() > 0:
+			addSceneToGroup(N, group)
+		N.add_to_group(group)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
@@ -247,4 +354,6 @@ remote func receive_character_data(data):
 remote func answer_is_nickname_free(answer):
 	pass
 remote func answer_is_uuid_valid(answer):
+	pass
+remote func receive_world_update(world_name, world_data):
 	pass

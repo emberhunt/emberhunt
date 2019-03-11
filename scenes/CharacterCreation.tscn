@@ -73,6 +73,7 @@ valign = 1
 uppercase = true
 
 [node name="ButtonFinish" type="TextureButton" parent="Buttons"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -450.0
@@ -138,10 +139,13 @@ script = ExtResource( 7 )
 
 [node name="Knight" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
+mouse_filter = 1
 
 [node name="Knight" type="TextureButton" parent="ScrollContainer/VBoxContainer/Knight"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -166,10 +170,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 150.0
 margin_bottom = 150.0
+mouse_filter = 1
 
 [node name="Berserker" type="TextureButton" parent="ScrollContainer/VBoxContainer/Berserker"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -191,12 +198,16 @@ align = 1
 valign = 1
 
 [node name="Assassin" type="Container" parent="ScrollContainer/VBoxContainer"]
+editor/display_folded = true
 margin_top = 300.0
 margin_bottom = 300.0
+mouse_filter = 1
 
 [node name="Assassin" type="TextureButton" parent="ScrollContainer/VBoxContainer/Assassin"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -221,10 +232,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 450.0
 margin_bottom = 450.0
+mouse_filter = 1
 
 [node name="Sniper" type="TextureButton" parent="ScrollContainer/VBoxContainer/Sniper"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -249,10 +263,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 600.0
 margin_bottom = 600.0
+mouse_filter = 1
 
 [node name="Hunter" type="TextureButton" parent="ScrollContainer/VBoxContainer/Hunter"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -277,10 +294,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 750.0
 margin_bottom = 750.0
+mouse_filter = 1
 
 [node name="Arsonist" type="TextureButton" parent="ScrollContainer/VBoxContainer/Arsonist"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -305,10 +325,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 900.0
 margin_bottom = 900.0
+mouse_filter = 1
 
 [node name="Brand" type="TextureButton" parent="ScrollContainer/VBoxContainer/Brand"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -333,10 +356,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 1050.0
 margin_bottom = 1050.0
+mouse_filter = 1
 
 [node name="Herald" type="TextureButton" parent="ScrollContainer/VBoxContainer/Herald"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -361,10 +387,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 1200.0
 margin_bottom = 1200.0
+mouse_filter = 1
 
 [node name="Redeemer" type="TextureButton" parent="ScrollContainer/VBoxContainer/Redeemer"]
+editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -389,11 +418,13 @@ valign = 1
 editor/display_folded = true
 margin_top = 1350.0
 margin_bottom = 1350.0
+mouse_filter = 1
 
 [node name="Druid" type="TextureButton" parent="ScrollContainer/VBoxContainer/Druid"]
 editor/display_folded = true
 margin_right = 924.0
 margin_bottom = 150.0
+mouse_filter = 1
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=2]
@@ -7,6 +7,11 @@
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
 [ext_resource path="res://assets/fonts/Gobold.tres" type="DynamicFont" id=7]
+[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=8]
+
+[sub_resource type="DynamicFont" id=1]
+size = 34
+font_data = ExtResource( 8 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -136,6 +141,16 @@ margin_bottom = 19.0
 grow_horizontal = 0
 text = "v 0_0_0"
 align = 1
+valign = 1
+
+[node name="Label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -70.0
+margin_right = 300.0
+custom_fonts/font = SubResource( 1 )
+text = "OFFLINE"
 valign = 1
 
 [connection signal="pressed" from="buttons/ButtonPlay" to="." method="_on_ButtonPlay_pressed"]

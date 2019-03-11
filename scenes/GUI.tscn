@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
@@ -79,9 +79,6 @@ nodes/fragment/connections = PoolIntArray( 5, 0, 3, 0, 3, 1, 0, 1, 6, 0, 0, 0, 3
 [sub_resource type="ShaderMaterial" id=6]
 shader = SubResource( 5 )
 
-[sub_resource type="CircleShape2D" id=7]
-radius = 150.0
-
 [node name="gui" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -96,6 +93,7 @@ playerNode = NodePath("")
 layer = 10
 
 [node name="PauseButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
@@ -115,6 +113,7 @@ normal = ExtResource( 2 )
 pressed = ExtResource( 2 )
 
 [node name="inventoryButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
@@ -146,8 +145,8 @@ wait_time = 4096.0
 autostart = true
 
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
+editor/display_folded = true
 position = Vector2( 149.88, 447.728 )
-shape = SubResource( 1 )
 script = ExtResource( 3 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
@@ -163,7 +162,6 @@ texture = ExtResource( 5 )
 [node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
 position = Vector2( 873.88, 447.728 )
-shape = SubResource( 1 )
 script = ExtResource( 6 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
@@ -181,6 +179,18 @@ margin_left = -0.119565
 margin_top = -2.27206
 margin_right = -0.119568
 margin_bottom = -2.27203
+
+[node name="FPS" type="Label" parent="CanvasLayer"]
+margin_left = 2.3327
+margin_top = 18.6617
+margin_right = 42.3327
+margin_bottom = 32.6617
+
+[node name="SCD" type="Label" parent="CanvasLayer"]
+margin_left = 3.49906
+margin_top = 92.1419
+margin_right = 43.4991
+margin_bottom = 106.142
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/inventoryButton/toggleInventory" to="." method="_on_toggleInventory_pressed"]
