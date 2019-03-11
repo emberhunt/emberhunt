@@ -4,12 +4,12 @@
 extends Control
 
 onready var debugLabel = $CanvasLayer/debugLabel 
+onready var fpsLabel = $CanvasLayer/FPS
 
 export(NodePath) var playerNode = "../player"
 
 onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
-
 
 func _ready():
 	set_process_input(true)
@@ -29,6 +29,7 @@ func _input(event):
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
+	fpsLabel.set_text("FPS: "+str(round(1/delta)))
 	
 
 func _on_TouchScreenButton_pressed():
