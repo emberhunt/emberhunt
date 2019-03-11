@@ -96,8 +96,6 @@ remote func receive_world_update(world_name, world_data):
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
 		# Sync position with server
-		if world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position != Vector2(0,0):
-			get_node("/root/FortressOfTheDark/GUI/CanvasLayer/SCD").set_text(str(world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position))
 		selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
 		# Update all other players
 		for player in world_data.players.keys():
@@ -123,6 +121,8 @@ remote func receive_world_update(world_name, world_data):
 		# Update all npcs
 		#
 		# Update all items
+		#
+		# Update all projectiles
 		#
 		
 		# Check if any nodes got removed
@@ -165,6 +165,9 @@ func sendPosition(pos):
 func exitWorld():
 	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
+func shootBullets(path_to_scene, rotation, stats):
+	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, rotation, stats)
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -184,4 +187,6 @@ remote func join_world(uuid, character_id, world):
 remote func send_input(world, input):
 	pass
 remote func exit_world(world):
+	pass
+remote func shoot_bullets(world, path_to_scene, rotation, stats):
 	pass

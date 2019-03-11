@@ -4,7 +4,8 @@ var direction = 0
 var attacking = false
 var can_attack = true
 var attacked_recently = false
-var bullet_scene = preload("res://scenes/default_bullet.tscn")
+const bullet_scene_path = "res://scenes/default_bullet.tscn"
+var bullet_scene = preload(bullet_scene_path)
 
 export var stats = {
 	damage = 1, 							# base damage
@@ -71,6 +72,8 @@ func _attack():
 				
 		new_bullet._ini(stats,global_position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
 		$bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
+		# Send the bullet data to server
+		Networking.shootBullet(bullet_scene_path, rotation, stats)
 	
 	can_attack = false # disable attacks until cooldown passed
 	$fire_rate.set_wait_time((1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random)) # set the fire_rate timer to the according time

@@ -1,6 +1,8 @@
 extends Control
 
 func _ready():
+	# Lower FPS for testing reasons
+	#Engine.set_target_fps(5)
 	$Label.set_text(Global.nickname)
 
 func _on_ButtonPlay_pressed():

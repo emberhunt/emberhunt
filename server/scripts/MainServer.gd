@@ -40,7 +40,7 @@ func _ready():
 	scene_instance.set_name("FortressOfTheDark")
 	addSceneToGroup(scene_instance, "FortressOfTheDark")
 	get_node("/root/MainServer/").add_child(scene_instance)
-	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}}
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}, "projectiles" : {}}
 	print("FortressOfTheDark created")
 
 func _process(delta):
@@ -191,11 +191,22 @@ remote func send_position(world, pos):
 				var traveledDistance = (pos-node.position).length()
 				# Check if it traveled more than we allow
 				if traveledDistance <= maxLegalDistance+1:
+					# Check if the player is not trying to teleport
+					if traveledDistance > 100:
+						var motion = pos-node.position
+						var newMotion = Vector2((motion.x*traveledDistance)/100, (motion.y*traveledDistance)/100)
+						pos = node.position+newMotion
 					# Update player's position
 					node.position = pos
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
+remote func shoot_bullets(world, path_to_scene, rotation, stats):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			pass
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
