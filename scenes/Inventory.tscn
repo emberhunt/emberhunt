@@ -1,60 +1,60 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://scripts/inventory/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://assets/inventory/inventory_background.tres" type="Texture" id=2]
+[ext_resource path="res://assets/inventory/inventory_name_background.tres" type="StyleBox" id=3]
 
 [node name="inventory" type="Control"]
-margin_right = 489.0
-margin_bottom = 299.0
+margin_right = 218.0
+margin_bottom = 210.0
 rect_pivot_offset = Vector2( -290, -110 )
 mouse_filter = 1
 script = ExtResource( 1 )
+inventorySize = 12
 weightEnabled = true
 maxWeight = 20.0
 
-[node name="background" type="ColorRect" parent="."]
+[node name="background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 1
-color = Color( 0.223529, 0.160784, 0.0392157, 1 )
+texture = ExtResource( 2 )
+expand = true
 
-[node name="slots" type="GridContainer" parent="background"]
+[node name="weightLabel" type="Label" parent="."]
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
-margin_top = 32.0
-margin_right = -5.0
-margin_bottom = -5.0
-columns = 4
+margin_left = -3.0
+margin_top = -24.0
+margin_right = -11.0
+margin_bottom = -6.0
+text = "0 / 20"
+align = 2
+valign = 1
 
-[node name="colorTitlebar" type="ColorRect" parent="background"]
+[node name="nameBackground" type="Panel" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
-margin_bottom = 25.0
-color = Color( 0.533333, 0.392157, 0.0901961, 1 )
+margin_left = 25.0
+margin_top = 15.0
+margin_right = -25.0
+margin_bottom = 35.0
+custom_styles/panel = ExtResource( 3 )
 
-[node name="nameBackground" type="ColorRect" parent="background"]
+[node name="name" type="Label" parent="nameBackground"]
 anchor_right = 1.0
-margin_left = 3.0
-margin_top = 3.0
-margin_right = -3.0
-margin_bottom = 22.0
-color = Color( 0.396078, 0.266667, 0.109804, 1 )
-
-[node name="name" type="Label" parent="background/nameBackground"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_top = 3.24303
+margin_bottom = 17.243
 text = "inventory"
 align = 1
 valign = 1
 
-[node name="weightLabel" type="Label" parent="background"]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = -16.0
-margin_right = -2.0
-margin_bottom = -2.0
-text = "0 / 20"
-align = 2
-valign = 1
+[node name="slots" type="GridContainer" parent="."]
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 20.4202
+margin_top = 44.4013
+margin_right = 75.4455
+margin_bottom = 36.1745
+columns = 4
 
