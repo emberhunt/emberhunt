@@ -40,7 +40,7 @@ func _ready():
 	scene_instance.set_name("FortressOfTheDark")
 	addSceneToGroup(scene_instance, "FortressOfTheDark")
 	get_node("/root/MainServer/").add_child(scene_instance)
-	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}}
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}, "projectiles" : {}}
 	print("FortressOfTheDark created")
 
 func _process(delta):
@@ -201,6 +201,12 @@ remote func send_position(world, pos):
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
+remote func shoot_bullets(world, path_to_scene, rotation, stats):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			pass
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #

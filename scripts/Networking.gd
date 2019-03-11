@@ -122,6 +122,8 @@ remote func receive_world_update(world_name, world_data):
 		#
 		# Update all items
 		#
+		# Update all projectiles
+		#
 		
 		# Check if any nodes got removed
 		# Players
@@ -163,6 +165,9 @@ func sendPosition(pos):
 func exitWorld():
 	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
+func shootBullets(path_to_scene, rotation, stats):
+	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, rotation, stats)
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -182,4 +187,6 @@ remote func join_world(uuid, character_id, world):
 remote func send_input(world, input):
 	pass
 remote func exit_world(world):
+	pass
+remote func shoot_bullets(world, path_to_scene, rotation, stats):
 	pass
