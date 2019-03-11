@@ -176,6 +176,7 @@ remote func exit_world(world):
 			worlds[world].players.erase(get_tree().get_rpc_sender_id())
 
 remote func send_position(world, pos):
+	var time_now = OS.get_ticks_msec()
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
@@ -185,16 +186,15 @@ remote func send_position(world, pos):
 			if not node.test_move(node.transform, pos-node.position): # No collisions
 				# Check the speed
 				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+100
-				var timeElapsed = (OS.get_ticks_msec() - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate
-				var maxLegalDistance = maxLegalSpeed*timeElapsed/1000
-				# Pythagorean theorem
-				var traveledDistance = sqrt( pow( pos.x-node.position.x, 2 ) + pow( pos.y-node.position.y, 2 ) )
+				var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
+				var maxLegalDistance = maxLegalSpeed*timeElapsed
+				var traveledDistance = (pos-node.position).length()
 				# Check if it traveled more than we allow
 				if traveledDistance <= maxLegalDistance+1:
 					# Update player's position
 					node.position = pos
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
-					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = OS.get_ticks_msec() - time_start
+					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
 
 # # # # # # # # # # #

@@ -96,7 +96,45 @@ remote func receive_world_update(world_name, world_data):
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
 		# Sync position with server
-		selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
+		if world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position != Vector2(0,0):
+			get_node("/root/FortressOfTheDark/GUI/CanvasLayer/SCD").set_text(str(world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position))
+		selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
+		# Update all other players
+		for player in world_data.players.keys():
+			if player == get_tree().get_network_unique_id():
+				continue
+			player = world_data.players[player]
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
+				# There's no PLAYERS node yet
+				var node = Node.new()
+				node.set_name("players")
+				get_node("/root/"+get_tree().get_current_scene().get_name()).add_child(node)
+			# Check if there's that player in our world
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").has_node(player.nickname):
+				# That player is not in our world yet
+				var scene = preload("res://scenes/otherPlayer.tscn")
+				var scene_instance = scene.instance()
+				scene_instance.set_name(player.nickname)
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
+			# Sync position
+			get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname).position = player.position
+		# Update all enemies
+		#
+		# Update all npcs
+		#
+		# Update all items
+		#
+		
+		# Check if any nodes got removed
+		# Players
+		if get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
+			for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").get_children():
+				var exists = false
+				for playerdata in world_data.players.values():
+					if player.get_name() == playerdata.nickname:
+						exists = true
+				if not exists:
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.get_name()).queue_free()
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
