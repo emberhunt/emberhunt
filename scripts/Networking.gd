@@ -96,8 +96,6 @@ remote func receive_world_update(world_name, world_data):
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
 		# Sync position with server
-		if world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position != Vector2(0,0):
-			get_node("/root/FortressOfTheDark/GUI/CanvasLayer/SCD").set_text(str(world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position))
 		selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
 		# Update all other players
 		for player in world_data.players.keys():

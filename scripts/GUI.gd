@@ -29,7 +29,8 @@ func _input(event):
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
-	fpsLabel.set_text("FPS: "+str(round(1/delta)))
+	if delta != 0:
+		fpsLabel.set_text("FPS: "+str(round(1/delta)))
 	
 
 func _on_TouchScreenButton_pressed():
