@@ -13,6 +13,7 @@ var worlds = {}
 
 var time_start = OS.get_ticks_msec()
 
+onready var bullet_container = get_node("/root/MainServer/projectiles")
 
 func _ready():
 	# Get ready
@@ -201,12 +202,37 @@ remote func send_position(world, pos):
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
-remote func shoot_bullets(world, path_to_scene, rotation, stats):
+remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			pass
+			# Check if the player should be able to shoot:
+			#
+			
+			# Shoot
+			var extra_bullets = 0																				# 
+			var extra_bullet_range = range(stats.bullet_count_random.x,stats.bullet_count_random.y+1)			# \
+			if len(extra_bullet_range) != 0:																	#	calculate random_bullet_count
+				extra_bullets = extra_bullet_range[randi()%len(extra_bullet_range)]								# /
+			
+			var rotation_step = -1																				# \
+			if stats.bullet_spread != 0 and stats.bullet_count + extra_bullets > 1:								#	calculate spread step based on bullet_count and bullet_spread
+				rotation_step = float(stats.bullet_spread) / float(stats.bullet_count+extra_bullets)			# /
+			
+			for bullet_number in range(stats.bullet_count+extra_bullets): 													# for each bullet do:
+				var new_bullet = load(path_to_scene).instance() 																		# instance new bullet
+				var s_bullet_rotation = bullet_rotation 																					# set base rotation to weapon rotation
+				if rotation_step != -1:																							# if there is a fixed spread step
+					bullet_rotation += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
+				if stats.bullet_spread_random != 0: 																			# if there is a random spread
+					bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
+						
+				new_bullet._ini(stats,worlds[world].players[get_tree().get_rpc_sender_id()].position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
+				new_bullet.add_to_group(world)
+				bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
+			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullet_rotation, stats, worlds[world].players[get_tree().get_rpc_sender_id()].position], [get_tree().get_rpc_sender_id()])
+
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -353,6 +379,47 @@ func addSceneToGroup(node, group):
 		if N.get_child_count() > 0:
 			addSceneToGroup(N, group)
 		N.add_to_group(group)
+
+func rpc_all_in_world(world, function_name, args = [], exceptions = []):
+	# Check if world exists
+	if world in worlds:
+		for player_id in worlds[world].players.keys():
+			if not (player_id in exceptions):
+				# There's probably a better way to do this, but I'm not a pro
+				# And I couldn't find anything on the internet
+				if args.size() == 0:
+					rpc_id(player_id, function_name)
+				elif args.size() == 1:
+					rpc_id(player_id, function_name, args[0])
+				elif args.size() == 2:
+					rpc_id(player_id, function_name, args[0], args[1])
+				elif args.size() == 3:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2])
+				elif args.size() == 4:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3])
+				elif args.size() == 5:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4])
+				elif args.size() == 6:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4], args[5])
+				elif args.size() == 7:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4], args[5], args[6])
+				elif args.size() == 8:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4], args[5], args[6],
+						args[7])
+				elif args.size() == 9:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4], args[5], args[6],
+						args[7], args[8])
+				elif args.size() == 10:
+					rpc_id(player_id, function_name, args[0], args[1],
+						args[2], args[3], args[4], args[5], args[6],
+						args[7], args[8], args[9])
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
