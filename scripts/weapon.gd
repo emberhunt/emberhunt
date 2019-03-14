@@ -10,7 +10,7 @@ var bullet_scene = preload(bullet_scene_path)
 export var stats = {
 	damage = 1, 							# base damage
 	damage_random = Vector2(0,0), 			# adds x to y damage
-	fire_rate = 1.0, 						# attacks per second
+	fire_rate = 51.0, 						# attacks per second
 	fire_rate_random = 0, 					# 0-1 to randomly change the firerate by fire_rate_random*100 % in both directions
 	bullet_count = 1, 						# amount of bullets per attack
 	bullet_count_random = Vector2(0,0), 	# adds x to y bullets per attack
@@ -30,7 +30,7 @@ export var stats = {
 	bullet_effects = {}, 					# placeholder for ailments / effects a bullet may have | we have no parser for that yet
 	bullet_type_id = 0,					# 0 - projectiles in the projectile sheet, defines wich sprite the bullet will have
 	bullet_color = Color(1,1,1,1), 			# if no gradient is defined, the bullet will be modulated with this value
-	bullet_gradient = Gradient, 			# a color ramp to interpolate bullet colors based on traveled distance
+	bullet_gradient = "",#Gradient, 			# a color ramp to interpolate bullet colors based on traveled distance
 	heavy_attack = false,
 	attack_sound = "",
 	impact_sound = ""
@@ -72,9 +72,9 @@ func _attack():
 				
 		new_bullet._ini(stats,global_position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
 		$bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
-		# Send the bullet data to server
-		Networking.shootBullet(bullet_scene_path, rotation, stats)
-	
+		
+	# Send the bullet data to server
+	Networking.shootBullets(str(bullet_scene_path), rotation, stats)
 	can_attack = false # disable attacks until cooldown passed
 	$fire_rate.set_wait_time((1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random)) # set the fire_rate timer to the according time
 	$fire_rate.start()

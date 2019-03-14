@@ -115,7 +115,8 @@ remote func receive_world_update(world_name, world_data):
 				scene_instance.set_name(player.nickname)
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
 			# Sync position
-			get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname).position = player.position
+			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname+"/body")
+			playernode.position = player.position
 		# Update all enemies
 		#
 		# Update all npcs
@@ -135,6 +136,29 @@ remote func receive_world_update(world_name, world_data):
 						exists = true
 				if not exists:
 					get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.get_name()).queue_free()
+
+remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_position):
+	# Check if it was sent by the server and if im still in that world
+	if get_tree().get_rpc_sender_id() == 1 and world == get_tree().get_current_scene().get_name():
+		var extra_bullets = 0																				# 
+		var extra_bullet_range = range(stats.bullet_count_random.x,stats.bullet_count_random.y+1)			# \
+		if len(extra_bullet_range) != 0:																	#	calculate random_bullet_count
+			extra_bullets = extra_bullet_range[randi()%len(extra_bullet_range)]								# /
+		
+		var rotation_step = -1																				# \
+		if stats.bullet_spread != 0 and stats.bullet_count + extra_bullets > 1:								#	calculate spread step based on bullet_count and bullet_spread
+			rotation_step = float(stats.bullet_spread) / float(stats.bullet_count+extra_bullets)			# /
+		
+		for bullet_number in range(stats.bullet_count+extra_bullets): 													# for each bullet do:
+			var new_bullet = load(path_to_scene).instance() 																		# instance new bullet
+			var s_bullet_rotation = bullet_rotation 																					# set base rotation to weapon rotation
+			if rotation_step != -1:																							# if there is a fixed spread step
+				bullet_rotation += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
+			if stats.bullet_spread_random != 0: 																			# if there is a random spread
+				bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
+					
+			new_bullet._ini(stats,shooter_position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
+			get_node("/root/"+world+"/bullet_container").add_child(new_bullet) 																		# add bullet to the bullet container
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -165,8 +189,8 @@ func sendPosition(pos):
 func exitWorld():
 	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
-func shootBullets(path_to_scene, rotation, stats):
-	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, rotation, stats)
+func shootBullets(path_to_scene, bullet_rotation, stats):
+	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
@@ -187,6 +211,4 @@ remote func join_world(uuid, character_id, world):
 remote func send_input(world, input):
 	pass
 remote func exit_world(world):
-	pass
-remote func shoot_bullets(world, path_to_scene, rotation, stats):
 	pass
