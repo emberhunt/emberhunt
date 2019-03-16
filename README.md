@@ -20,3 +20,4 @@ This game is being created thanks to these people:
 * [PonasM](https://github.com/PonasKovas) - programming
 * Rokas Sutkus - sound designing
 * [Altered Beats](soundcloud.com/altrdbts) - composer
+* [cobrapitz](https://github.com/cobrapitz) - programming
