@@ -41,7 +41,7 @@ func _ready():
 	scene_instance.set_name("FortressOfTheDark")
 	addSceneToGroup(scene_instance, "FortressOfTheDark")
 	get_node("/root/MainServer/").add_child(scene_instance)
-	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "npcs": {}, "enemies" : {}, "projectiles" : {}}
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}}
 	print("FortressOfTheDark created")
 
 func _process(delta):
@@ -164,7 +164,8 @@ remote func join_world(uuid, character_id, world):
 					"position" : scene_instance.position,
 					"stats" : account_data.chars[str(character_id)],
 					"nickname" : account_data.nickname,
-					"lastUpdate" : OS.get_ticks_msec() - time_start
+					"lastUpdate" : OS.get_ticks_msec() - time_start,
+					"inventory" : {} # Should be loaded from user://serverData/uuidHASH/data.json
 				}
 
 remote func exit_world(world):
@@ -233,6 +234,21 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
 				bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
 			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullet_rotation, stats, worlds[world].players[get_tree().get_rpc_sender_id()].position], [get_tree().get_rpc_sender_id()])
 
+remote func pickup_item(world, item_id, quantity, slot):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Check if that item exists
+			if item_id in worlds[world].items:
+				# Check if enough of it is there
+				if quantity <= worlds[world].items[item_id].quantity:
+					# Check if the player should be able to pick it up
+					# with area2D or something, also check if they have
+					# enough space in their inventory
+					
+					# Pick it up
+					worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot] = {"item_id" : item_id, "quantity" : quantity}
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
