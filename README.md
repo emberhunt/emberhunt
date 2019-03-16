@@ -8,7 +8,7 @@ A God of Darkness sends knights of darkness to the surface world to conquer it, 
 
 ## Contributing
 
-Everyone is welcome to contribute and help develope this project. We need programmers, artists, sound-engineers, testers, writers... If you want to help, just [join our discord](https://discord.gg/eEVGG7v), and we will discuss how you can help.
+Everyone is welcome to contribute and help develop this project. We need programmers, artists, sound-engineers, testers, writers... If you want to help, just [join our discord](https://discord.gg/eEVGG7v), and we will discuss how you can help.
 
 ## Documentation
 
