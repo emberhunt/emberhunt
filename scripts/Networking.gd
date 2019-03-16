@@ -192,8 +192,8 @@ func exitWorld():
 func shootBullets(path_to_scene, bullet_rotation, stats):
 	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
-func askServerToPickUpItem(item_id, quantity):
-	rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
+func askServerToPickUpItem(item_id, quantity, slot):
+	rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity, slot)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
@@ -215,5 +215,5 @@ remote func send_input(world, input):
 	pass
 remote func exit_world(world):
 	pass
-remote func pickup_item(world, item_id, quantity):
+remote func pickup_item(world, item_id, quantity, slot):
 	pass
