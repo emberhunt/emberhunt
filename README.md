@@ -21,3 +21,5 @@ This game is being created thanks to these people:
 * Rokas Sutkus - sound designing
 * [Altered Beats](soundcloud.com/altrdbts) - composer
 * [cobrapitz](https://github.com/cobrapitz) - programming
+* Maksym Novikov - writing
+* Cap’n Saicin - art
