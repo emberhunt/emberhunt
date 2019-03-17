@@ -17,6 +17,14 @@ func _ready():
 		get_child(i).connect("on_area_exited", self, "remove_inventories")
 
 
+func init(inventorySystemPath):
+	_mainInv = get_node(inventorySystemPath)
+	if _mainInv == null:
+		get_node("/root/Console").write_line("[color=red]ERROR:[/color] couldn't find inventory!")
+			
+	_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+
+
 func save_items(inv1, inv2):
 	get_node("/root/Console").write_line("saving items...")
 #	if inv1.get_id() == openedInv.get_id():
@@ -40,31 +48,10 @@ func add_to_main_inventory(invName, inventory):
 	openedInv = inventory
 	openedInv.show()
 	get_node("/root/Console").write_line("test adding inventory")
-	#openedInv = InventoryPrefab.instance()
-	#openedInv.update_inventory_size(12)
-	#var inv = _mainInv.create_inventory(invName, slots)
-	
-	if _mainInv == null:
-		_mainInv = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/inventorySystem")
-		if _mainInv != null:
-			_mainInv.connect("on_item_inventory_swapped", self, "save_items")
-	if _mainInv != null:
-		inventory._set_id(_mainInv.add_inventory(inventory))
-	#get_node("/root/Console").write_line("id: " + str(openedInv.get_id()))
-	
-	#inv.update_inventory_size(slots.size())
-	#inv._slots = slots
-	#openedInv = inv
-	#openedInvs.append(inv)
+	inventory._set_id(_mainInv.add_inventory(inventory))
 
 func remove_inventories(invName):
 	openedInv.hide()
-	
-	if _mainInv == null:
-		_mainInv = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/inventorySystem")
-		if _mainInv != null:
-			_mainInv.connect("on_item_inventory_swapped", self, "save_items")
-	
 	_mainInv.remove_all_except_main_inventory()
 	get_node("/root/Console").write_line("remove inventories")
 
