@@ -38,7 +38,10 @@ margin_bottom = 540.0
 texture = ExtResource( 1 )
 
 [node name="Label" type="Label" parent="."]
-margin_right = 1024.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -512.0
+margin_right = 512.0
 margin_bottom = 140.0
 custom_fonts/font = SubResource( 1 )
 text = "Select Class"
@@ -113,39 +116,47 @@ align = 1
 valign = 1
 
 [node name="ListBackground" type="ColorRect" parent="."]
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -460.0
+margin_top = 140.0
 margin_right = -50.0
 margin_bottom = -150.0
 color = Color( 0, 0, 0, 0.572549 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -460.0
+margin_top = 140.0
 margin_right = -50.0
 margin_bottom = -150.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+editor/display_folded = true
+margin_right = 912.0
 margin_bottom = 1500.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_constants/separation = 150
 script = ExtResource( 7 )
 
 [node name="Knight" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
+margin_right = 912.0
 mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Knight" type="TextureButton" parent="ScrollContainer/VBoxContainer/Knight"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -159,7 +170,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Knight/Knight"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Knight"
@@ -169,14 +183,20 @@ valign = 1
 [node name="Berserker" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 150.0
+margin_right = 912.0
 margin_bottom = 150.0
 mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Berserker" type="TextureButton" parent="ScrollContainer/VBoxContainer/Berserker"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 toggle_mode = true
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
@@ -190,7 +210,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Berserker/Berserker"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Berserker"
@@ -200,12 +223,14 @@ valign = 1
 [node name="Assassin" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 300.0
+margin_right = 912.0
 margin_bottom = 300.0
 mouse_filter = 1
 
 [node name="Assassin" type="TextureButton" parent="ScrollContainer/VBoxContainer/Assassin"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -221,7 +246,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Assassin/Assassin"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Assassin"
@@ -231,12 +259,14 @@ valign = 1
 [node name="Sniper" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 450.0
+margin_right = 912.0
 margin_bottom = 450.0
 mouse_filter = 1
 
 [node name="Sniper" type="TextureButton" parent="ScrollContainer/VBoxContainer/Sniper"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -252,7 +282,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Sniper/Sniper"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Sniper"
@@ -262,12 +295,14 @@ valign = 1
 [node name="Hunter" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 600.0
+margin_right = 912.0
 margin_bottom = 600.0
 mouse_filter = 1
 
 [node name="Hunter" type="TextureButton" parent="ScrollContainer/VBoxContainer/Hunter"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -283,7 +318,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Hunter/Hunter"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Hunter"
@@ -293,12 +331,14 @@ valign = 1
 [node name="Arsonist" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 750.0
+margin_right = 912.0
 margin_bottom = 750.0
 mouse_filter = 1
 
 [node name="Arsonist" type="TextureButton" parent="ScrollContainer/VBoxContainer/Arsonist"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -314,7 +354,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Arsonist/Arsonist"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Arsonist"
@@ -324,12 +367,14 @@ valign = 1
 [node name="Brand" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 900.0
+margin_right = 912.0
 margin_bottom = 900.0
 mouse_filter = 1
 
 [node name="Brand" type="TextureButton" parent="ScrollContainer/VBoxContainer/Brand"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -345,7 +390,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Brand/Brand"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Brand"
@@ -355,12 +403,14 @@ valign = 1
 [node name="Herald" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 1050.0
+margin_right = 912.0
 margin_bottom = 1050.0
 mouse_filter = 1
 
 [node name="Herald" type="TextureButton" parent="ScrollContainer/VBoxContainer/Herald"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -376,7 +426,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Herald/Herald"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Herald"
@@ -386,12 +439,14 @@ valign = 1
 [node name="Redeemer" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 1200.0
+margin_right = 912.0
 margin_bottom = 1200.0
 mouse_filter = 1
 
 [node name="Redeemer" type="TextureButton" parent="ScrollContainer/VBoxContainer/Redeemer"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -407,7 +462,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Redeemer/Redeemer"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Redeemer"
@@ -417,12 +475,14 @@ valign = 1
 [node name="Druid" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
 margin_top = 1350.0
+margin_right = 912.0
 margin_bottom = 1350.0
 mouse_filter = 1
 
 [node name="Druid" type="TextureButton" parent="ScrollContainer/VBoxContainer/Druid"]
 editor/display_folded = true
-margin_right = 924.0
+anchor_right = 1.0
+margin_right = 12.0
 margin_bottom = 150.0
 mouse_filter = 1
 toggle_mode = true
@@ -438,7 +498,10 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Druid/Druid"]
-margin_right = 927.0
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -462.0
+margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
 text = "Druid"
@@ -447,6 +510,7 @@ valign = 1
 
 [node name="Container" type="Container" parent="ScrollContainer/VBoxContainer"]
 margin_top = 1500.0
+margin_right = 912.0
 margin_bottom = 1500.0
 
 [connection signal="pressed" from="Buttons/ButtonBack" to="Buttons" method="_on_ButtonBack_pressed"]
