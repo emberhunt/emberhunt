@@ -1,6 +1,6 @@
 # Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) [![License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-informational.svg)](LICENSE)
 
-This project is completely free and open-source android MMORPG game.
+This project is completely free and open-source mobile MMORPG game, created with [Godot](https://godotengine.org/).
 
 ## Lore
 
@@ -18,5 +18,9 @@ Read the [wiki](../../wiki).
 
 This game is being created thanks to these people:
 * [PonasM](https://github.com/PonasKovas) - programming
-* Rokas Sutkus - sound designing
+* Rokas Sutkus - sound design
 * [Altered Beats](soundcloud.com/altrdbts) - composer
+* [cobrapitz](https://github.com/cobrapitz) - programming
+* Maksym Novikov - writing
+* Cap’n Saicin - art
+* Varied Scribbles - sound design
