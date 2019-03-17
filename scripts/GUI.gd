@@ -52,13 +52,13 @@ func _on_toggleInventory_pressed():
 
 func setTouchpadsState(state):
 	get_node("CanvasLayer/moveButton").disabled = !state
-	get_node("CanvasLayer/moveButton").isPressed = state
+	get_node("CanvasLayer/moveButton").isPressed = false
 	get_node("CanvasLayer/moveButton")._playerBody.direction = 0
 	get_node("CanvasLayer/moveButton")._playerBody.speed = 0
 	get_node("CanvasLayer/moveButton/buttonSprite").hide()
 	get_node("CanvasLayer/moveButton/background").hide()
 	get_node("CanvasLayer/shootButton").disabled = !state
-	get_node("CanvasLayer/shootButton").isPressed = state
+	get_node("CanvasLayer/shootButton").isPressed = false
 	get_node("CanvasLayer/shootButton")._weaponNode.rotation = 0
 	get_node("CanvasLayer/shootButton")._weaponNode.attacking = false
 	get_node("CanvasLayer/shootButton/buttonSprite").hide()
