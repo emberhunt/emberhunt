@@ -189,14 +189,14 @@ remote func send_position(world, pos):
 				# Check the speed
 				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+100
 				var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
-				var maxLegalDistance = maxLegalSpeed*timeElapsed
+				var maxLegalDistance = maxLegalSpeed*timeElapsed*Vector2(0.25, 0.25)
 				var traveledDistance = (pos-node.position).length()
 				# Check if it traveled more than we allow
 				if traveledDistance <= maxLegalDistance+1:
 					# Check if the player is not trying to teleport
-					if traveledDistance > 100:
+					if traveledDistance > 25:
 						var motion = pos-node.position
-						var newMotion = Vector2((motion.x*traveledDistance)/100, (motion.y*traveledDistance)/100)
+						var newMotion = Vector2((motion.x*traveledDistance)/25, (motion.y*traveledDistance)/25)
 						pos = node.position+newMotion
 					# Update player's position
 					node.position = pos
