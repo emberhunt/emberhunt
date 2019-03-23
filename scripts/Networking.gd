@@ -94,7 +94,7 @@ remote func answer_is_uuid_valid(answer):
 remote func receive_world_update(world_name, world_data):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
-		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/player/body")
+		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/player")
 		# Sync position with server
 		# Check if anything is in the way
 		if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):

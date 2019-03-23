@@ -187,15 +187,13 @@
 10/shapes = [  ]
 10/z_index = 0
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 6.5, 4 )
 
 [node name="FortressOfTheDark" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
-z_index = -4096
-z_as_relative = false
 tile_set = SubResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
@@ -234,20 +232,21 @@ position = Vector2( 96.8423, 189.474 )
 _itemId = 2
 _amount = 1
 
-[node name="bullet_container" type="Node" parent="."]
+[node name="YSort" type="YSort" parent="."]
 
-[node name="rock" type="StaticBody2D" parent="."]
-position = Vector2( 4.173, 60 )
-z_index = 60
-z_as_relative = false
+[node name="rock" type="StaticBody2D" parent="YSort"]
+editor/display_folded = true
+position = Vector2( 0.0862694, 63.0651 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Sprite" type="Sprite" parent="rock"]
+[node name="Sprite" type="Sprite" parent="YSort/rock"]
 texture = ExtResource( 8 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="rock"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/rock"]
 position = Vector2( 0.056561, 4.034 )
-shape = SubResource( 3 )
+shape = SubResource( 2 )
+
+[node name="bullet_container" type="YSort" parent="."]
 
