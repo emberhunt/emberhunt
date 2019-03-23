@@ -5,7 +5,7 @@ var direction = 0 # Joystick direction
 var motion = Vector2(0,0) # Movement vector
 
 func _process(delta):
-	var motion = (Global.charactersData[Global.charID].agility+100)*(speed/100)*direction*Vector2(0.25, 0.25) #Calculate the movement vector using the joystick variables
+	var motion = (Global.charactersData[Global.charID].agility+25)*(speed/100)*direction*Vector2(1, 1) #Calculate the movement vector using the joystick variables
 	# PC testing
 	if Input.is_action_pressed("ui_left"):		#\
 		motion += Vector2(-2500,0)*delta		# |
