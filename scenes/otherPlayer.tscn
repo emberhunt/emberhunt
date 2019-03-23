@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=1]
 
@@ -9,10 +9,6 @@ region = Rect2( 304.5, 111.25, 14.25, 19 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5, 4 )
 
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 1 )
-region = Rect2( 165.5, 101.25, 5.5, 12 )
-
 [node name="player" type="KinematicBody2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -21,14 +17,4 @@ texture = SubResource( 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0.397762, 3.18208 )
 shape = SubResource( 2 )
-
-[node name="weapon" type="Node2D" parent="."]
-editor/display_folded = true
-
-[node name="weapon_sprite" type="Sprite" parent="weapon"]
-texture = SubResource( 3 )
-
-[node name="fire_rate" type="Timer" parent="weapon"]
-
-[node name="bullet_container" type="Node" parent="weapon"]
 
