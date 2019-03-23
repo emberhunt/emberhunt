@@ -108,7 +108,7 @@ remote func receive_world_update(world_name, world_data):
 			player = world_data.players[player]
 			if not get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
 				# There's no PLAYERS node yet
-				var node = Node.new()
+				var node = YSort.new()
 				node.set_name("players")
 				get_node("/root/"+get_tree().get_current_scene().get_name()).add_child(node)
 			# Check if there's that player in our world
@@ -119,7 +119,7 @@ remote func receive_world_update(world_name, world_data):
 				scene_instance.set_name(player.nickname)
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
 			# Sync position
-			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname+"/body")
+			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname)
 			playernode.position = player.position
 		# Update all enemies
 		#

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/playerBody.gd" type="Script" id=1]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=2]
@@ -11,10 +11,6 @@ region = Rect2( 304.5, 111.25, 14.25, 19 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5, 4 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 2 )
-region = Rect2( 165.5, 101.25, 5.5, 12 )
 
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -40,9 +36,6 @@ script = ExtResource( 3 )
 
 [node name="weapon" type="Node2D" parent="."]
 script = ExtResource( 4 )
-
-[node name="weapon_sprite" type="Sprite" parent="weapon"]
-texture = SubResource( 3 )
 
 [node name="fire_rate" type="Timer" parent="weapon"]
 

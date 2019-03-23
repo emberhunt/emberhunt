@@ -38,7 +38,6 @@ export var stats = {
 
 func _process(delta):
 	if attacking: # attack touchpad is in use
-		get_node("weapon_sprite").show()
 		if can_attack and not stats.heavy_attack: # attack is not on cooldown and not a heavy attack
 			_attack()
 		elif can_attack and stats.heavy_attack:
@@ -47,7 +46,6 @@ func _process(delta):
 		if stats.heavy_attack and attacked_recently: # pad released and attack is heavy attack
 			_attack()
 		attacked_recently = false
-		get_node("weapon_sprite").hide()
 		
 func _attack():
 	if stats.attack_sound != "":
