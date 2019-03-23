@@ -184,7 +184,7 @@ remote func send_position(world, pos):
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Validate if the position is legal
-			var node = get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname + "/body")
+			var node = get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname)
 			if not node.test_move(node.transform, pos-node.position): # No collisions
 				# Check the speed
 				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25

@@ -6,7 +6,7 @@ extends Control
 onready var debugLabel = $CanvasLayer/debugLabel 
 onready var fpsLabel = $CanvasLayer/FPS
 
-export(NodePath) var playerNode = "../player"
+export(NodePath) var playerNode = "../YSort/player"
 
 onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
@@ -14,7 +14,7 @@ var playerBody : KinematicBody2D = null
 func _ready():
 	set_process_input(true)
 	inventorySystem.hide()
-	playerBody = get_node("../player").get_child(0)
+	playerBody = get_node("../YSort/player")
 	
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))

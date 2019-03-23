@@ -18,4 +18,4 @@ func _process(delta):
 	move_and_slide(motion)# Move according to the motion vector
 	Networking.sendPosition(position)
 	# set according z-index
-	z_index = position.y
+	#z_index = position.y
