@@ -39,7 +39,6 @@ drag_margin_bottom = 0.02
 script = ExtResource( 3 )
 
 [node name="weapon" type="Node2D" parent="."]
-editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="weapon_sprite" type="Sprite" parent="weapon"]
@@ -49,3 +48,4 @@ texture = SubResource( 3 )
 
 [node name="bullet_container" type="Node" parent="weapon"]
 
+[connection signal="timeout" from="weapon/fire_rate" to="weapon" method="_on_fire_rate_timeout"]
