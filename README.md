@@ -19,7 +19,7 @@ Read the [wiki](../../wiki).
 This game is being created thanks to these people:
 * [PonasM](https://github.com/PonasKovas) - programming
 * Rokas Sutkus - sound design
-* [Altered Beats](soundcloud.com/altrdbts) - composer
+* [Altered Beats](https://soundcloud.com/altrdbts) - composer
 * [cobrapitz](https://github.com/cobrapitz) - programming
 * Maksym Novikov - writing
 * Cap’n Saicin - art
