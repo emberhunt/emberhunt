@@ -391,10 +391,29 @@ func listFolderContent(path):
 
 func addSceneToGroup(node, group):
 	node.add_to_group(group)
+	if node is KinematicBody2D or \
+		node is RigidBody2D or \
+		node is StaticBody2D:
+			for world in worlds.keys():
+				addWorldToCollisionExceptions(node, get_node("/root/MainServer/"+world))
 	for N in node.get_children():
 		if N.get_child_count() > 0:
 			addSceneToGroup(N, group)
 		N.add_to_group(group)
+
+func addWorldToCollisionExceptions(node, exception):
+	# Only these nodes can be added to the exceptions list
+	if exception is KinematicBody2D or \
+		exception is RigidBody2D or \
+		exception is StaticBody2D:
+			node.add_collision_exception_with(exception)
+	for N in exception.get_children():
+		if N.get_child_count() > 0:
+			addWorldToCollisionExceptions(node, N)
+		if N is KinematicBody2D or \
+			N is RigidBody2D or \
+			N is StaticBody2D:
+				node.add_collision_exception_with(N)
 
 func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 	# Check if world exists
