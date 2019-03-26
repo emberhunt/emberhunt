@@ -79,9 +79,7 @@ static func get_type_from_name(itemTypeName : String):
 	for type in _itemTypes.keys():
 		if _itemTypes[type] == itemTypeName:
 			return type
-	
-	printerr("couldn't find item name")
-	assert(true)
+	#printerr("couldn't find item name: " + str(itemTypeName))
 	return null
 	
 
@@ -89,9 +87,7 @@ static func get_type_name(itemType) -> String:
 	for name in _itemTypes.values():
 		if name == _itemTypes[itemType]:
 			return name
-	
-	printerr("couldn't find item name")
-	assert(true)
+	#printerr("couldn't find item name: " + str(itemType))
 	return ""
 
 	
