@@ -24,18 +24,19 @@ margin_bottom = 540.0
 texture = ExtResource( 1 )
 
 [node name="Buttons" type="Container" parent="."]
-anchor_top = 1.0
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -110.0
-margin_bottom = -25.0
 script = ExtResource( 2 )
 
 [node name="ButtonBack" type="TextureButton" parent="Buttons"]
 editor/display_folded = true
+anchor_top = 1.0
+anchor_bottom = 1.0
 margin_left = 50.0
+margin_top = -100.0
 margin_right = 450.0
-margin_bottom = 50.0
+margin_bottom = -50.0
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
 expand = true
@@ -52,10 +53,13 @@ uppercase = true
 [node name="ButtonPlay" type="TextureButton" parent="Buttons"]
 editor/display_folded = true
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = -450.0
+margin_top = -100.0
 margin_right = -50.0
-margin_bottom = 50.0
+margin_bottom = -50.0
 disabled = true
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
@@ -76,9 +80,9 @@ editor/display_folded = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -200.0
-margin_top = -450.0
+margin_top = 50.0
 margin_right = 200.0
-margin_bottom = -400.0
+margin_bottom = 100.0
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 4 )
 expand = true
@@ -111,30 +115,35 @@ align = 1
 valign = 1
 
 [node name="ListBackground" type="ColorRect" parent="."]
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -460.0
+margin_top = 140.0
 margin_right = -50.0
 margin_bottom = -150.0
 color = Color( 0, 0, 0, 0.572549 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -460.0
+margin_top = 140.0
 margin_right = -50.0
 margin_bottom = -150.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-custom_constants/separation = 136
+margin_right = 924.0
+margin_bottom = 310.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 150
 script = ExtResource( 6 )
 
 [node name="span" type="Container" parent="ScrollContainer/VBoxContainer"]
+margin_right = 924.0
 
 [connection signal="pressed" from="Buttons/ButtonBack" to="Buttons" method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Buttons/ButtonPlay" to="Buttons" method="_on_ButtonPlay_pressed"]

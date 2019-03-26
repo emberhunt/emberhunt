@@ -6,7 +6,7 @@ extends Control
 onready var debugLabel = $CanvasLayer/debugLabel 
 onready var fpsLabel = $CanvasLayer/FPS
 
-export(NodePath) var playerNode = "../player"
+export(NodePath) var playerNode = "../YSort/player"
 
 onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
@@ -14,7 +14,7 @@ var playerBody : KinematicBody2D = null
 func _ready():
 	set_process_input(true)
 	inventorySystem.hide()
-	playerBody = get_node("../player").get_child(0)
+	playerBody = get_node("../YSort/player")
 	
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))
@@ -39,34 +39,26 @@ func _on_TouchScreenButton_pressed():
 		var scene_instance = scene.instance()
 		scene_instance.set_name("PauseMenu")
 		$CanvasLayer.add_child(scene_instance)
-		# Disable touchpads
-		get_node("CanvasLayer/moveButton").disabled = true
-		get_node("CanvasLayer/moveButton").isPressed = false
-		get_node("CanvasLayer/moveButton")._playerBody.direction = 0
-		get_node("CanvasLayer/moveButton")._playerBody.speed = 0
-		get_node("CanvasLayer/moveButton/buttonSprite").global_position = get_node("CanvasLayer/moveButton").origin
-		get_node("CanvasLayer/moveButton/buttonSprite").hide()
-		get_node("CanvasLayer/moveButton/background").hide()
-		get_node("CanvasLayer/shootButton").disabled = true
-		get_node("CanvasLayer/shootButton").isPressed = false
-		get_node("CanvasLayer/shootButton")._weaponNode.rotation = 0
-		get_node("CanvasLayer/shootButton")._weaponNode.attacking = false
-		get_node("CanvasLayer/shootButton/buttonSprite").global_position = get_node("CanvasLayer/shootButton").origin
-		get_node("CanvasLayer/shootButton/buttonSprite").hide()
-		get_node("CanvasLayer/shootButton/background").hide()
+		# disable touchads
+		setTouchpadsState(false)
 
 
 func _on_toggleInventory_pressed():
-	inventorySystem.visible = ! inventorySystem.visible
-	# Disable touchpads
-	get_node("CanvasLayer/moveButton").disabled = inventorySystem.visible
-	get_node("CanvasLayer/moveButton").isPressed = ! inventorySystem.visible
+	if not Global.paused:
+		inventorySystem.visible = ! inventorySystem.visible
+		# Disable/Enable touchpads and stuff
+		setTouchpadsState(!inventorySystem.visible)
+
+
+func setTouchpadsState(state):
+	get_node("CanvasLayer/moveButton").disabled = !state
+	get_node("CanvasLayer/moveButton").isPressed = false
 	get_node("CanvasLayer/moveButton")._playerBody.direction = 0
 	get_node("CanvasLayer/moveButton")._playerBody.speed = 0
 	get_node("CanvasLayer/moveButton/buttonSprite").hide()
 	get_node("CanvasLayer/moveButton/background").hide()
-	get_node("CanvasLayer/shootButton").disabled = inventorySystem.visible
-	get_node("CanvasLayer/shootButton").isPressed = ! inventorySystem.visible
+	get_node("CanvasLayer/shootButton").disabled = !state
+	get_node("CanvasLayer/shootButton").isPressed = false
 	get_node("CanvasLayer/shootButton")._weaponNode.rotation = 0
 	get_node("CanvasLayer/shootButton")._weaponNode.attacking = false
 	get_node("CanvasLayer/shootButton/buttonSprite").hide()
