@@ -23,12 +23,14 @@ func _ready():
 
 
 func init(path):
-	_mainInv = get_node(path + "inventorySystem")
-	_addItemButton = get_node(path + "addItemButton")
-	if _mainInv == null or _addItemButton == null:
-		get_node("/root/Console/console").error("couldn't find inventory!")
-	_mainInv.connect("on_item_inventory_swapped", self, "save_items")
-	_addItemButton.connect("pressed", self, "pickup_item")
+	if get_tree().get_current_scene().get_name() != "MainServer":
+		_mainInv = get_node(path + "inventorySystem")
+		_addItemButton = get_node(path + "addItemButton")
+		
+		if _mainInv == null or _addItemButton == null:
+			get_node("/root/Console/console").error("couldn't find inventory!")
+		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+		_addItemButton.connect("pressed", self, "pickup_item")
 
 
 func pickup_range_exited(child, itemId, amount):

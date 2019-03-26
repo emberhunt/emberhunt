@@ -9,7 +9,7 @@ var _mainInv : InventorySystem = null
 var openedInv
 
 func _ready():
-	if mainInventorySystem == null:
+	if mainInventorySystem == null and get_tree().get_current_scene().get_name() != "MainServer":
 		printerr("no inventory selected!")
 
 	for i in range(get_child_count()):
@@ -18,11 +18,12 @@ func _ready():
 
 
 func init(inventorySystemPath):
-	_mainInv = get_node(inventorySystemPath + "inventorySystem")
-	if _mainInv == null:
-		get_node("/root/Console/console").error("couldn't find inventory!")
+	if get_tree().get_current_scene().get_name() != "MainServer":
+		_mainInv = get_node(inventorySystemPath + "inventorySystem")
+		if _mainInv == null:
+			get_node("/root/Console/console").error("couldn't find inventory!")
 
-	_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
 
 
 func save_items(inv1, inv2):
