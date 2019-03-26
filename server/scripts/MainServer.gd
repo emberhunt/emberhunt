@@ -43,6 +43,15 @@ func _ready():
 	get_node("/root/MainServer/").add_child(scene_instance)
 	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}}
 	print("FortressOfTheDark created")
+	
+	
+	scene_instance = scene.instance()
+	scene_instance.set_name("AnotherWorld")
+	addSceneToGroup(scene_instance, "AnotherWorld")
+	scene_instance.position.x = 50
+	get_node("/root/MainServer/").add_child(scene_instance)
+	worlds['AnotherWorld'] = {"players" : {}, "items" : {}, "enemies" : {}}
+	print("AnotherWorld created")
 
 func _process(delta):
 
@@ -395,11 +404,11 @@ func addSceneToGroup(node, group):
 		node is RigidBody2D or \
 		node is StaticBody2D:
 			for world in worlds.keys():
-				addWorldToCollisionExceptions(node, get_node("/root/MainServer/"+world))
-	for N in node.get_children():
-		if N.get_child_count() > 0:
+				if not world == group:
+					addWorldToCollisionExceptions(node, get_node("/root/MainServer/"+world))
+	if node.get_child_count() > 0:
+		for N in node.get_children():
 			addSceneToGroup(N, group)
-		N.add_to_group(group)
 
 func addWorldToCollisionExceptions(node, exception):
 	# Only these nodes can be added to the exceptions list
@@ -407,13 +416,9 @@ func addWorldToCollisionExceptions(node, exception):
 		exception is RigidBody2D or \
 		exception is StaticBody2D:
 			node.add_collision_exception_with(exception)
-	for N in exception.get_children():
-		if N.get_child_count() > 0:
-			addWorldToCollisionExceptions(node, N)
-		if N is KinematicBody2D or \
-			N is RigidBody2D or \
-			N is StaticBody2D:
-				node.add_collision_exception_with(N)
+	if exception.get_child_count() > 0:
+		for E in exception.get_children():
+			addWorldToCollisionExceptions(node, E)
 
 func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 	# Check if world exists
