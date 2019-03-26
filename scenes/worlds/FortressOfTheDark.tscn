@@ -204,31 +204,29 @@ __meta__ = {
 }
 
 [node name="chests" type="Node2D" parent="."]
-editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="chest" parent="chests" instance=ExtResource( 5 )]
-position = Vector2( -87.3687, -225.264 )
+position = Vector2( -33.1672, -67.0714 )
 
 [node name="chest2" parent="chests" instance=ExtResource( 5 )]
-position = Vector2( 217.895, -231.58 )
+position = Vector2( 121.467, -77.1689 )
 
 [node name="pickupItems" type="Node2D" parent="."]
-editor/display_folded = true
 script = ExtResource( 6 )
 
 [node name="itemDrop" parent="pickupItems" instance=ExtResource( 7 )]
-position = Vector2( -231.58, -103.158 )
+position = Vector2( -74.6479, 58.1858 )
 _itemId = 0
 _amount = 1
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 7 )]
-position = Vector2( 61.0528, -251.58 )
+position = Vector2( 197.187, 11.234 )
 _itemId = 1
 _amount = 1
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 7 )]
-position = Vector2( 96.8423, 189.474 )
+position = Vector2( 77.3045, 77.6047 )
 _itemId = 2
 _amount = 1
 
