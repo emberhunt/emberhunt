@@ -43,15 +43,6 @@ func _ready():
 	get_node("/root/MainServer/").add_child(scene_instance)
 	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}}
 	print("FortressOfTheDark created")
-	
-	
-	scene_instance = scene.instance()
-	scene_instance.set_name("AnotherWorld")
-	addSceneToGroup(scene_instance, "AnotherWorld")
-	scene_instance.position.x = 50
-	get_node("/root/MainServer/").add_child(scene_instance)
-	worlds['AnotherWorld'] = {"players" : {}, "items" : {}, "enemies" : {}}
-	print("AnotherWorld created")
 
 func _process(delta):
 
