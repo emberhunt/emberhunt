@@ -123,6 +123,7 @@ const init_stats = {
 
 # data of all items loaded once
 var allItems = {}
+var allDialogs = {}
 
 # game paused
 var paused = false
@@ -191,10 +192,28 @@ func loadItems():
 				
 		allItems[i] = newItem
 		
+func load_dialogs():
+	var file = File.new()
+	file.open("res://assets/dialogs/dialogs.json", file.READ)
+	var dataText = file.get_as_text()
+	file.close()
+	var data = JSON.parse(dataText)
+	
+	if data.error != OK:
+		get_node("/root/Console/console").error("couldn't load dialogs!")
+		return
+	else:
+		get_node("/root/Console/console").warn("loading dialogs was successful!")
+	
+	data = data.result
+	for i in range(data.size()):
+		var conversation = data[data.keys()[i]]
+		allDialogs[data.keys()[i]] = conversation
+
 func _ready():
 	loadItems()
+	load_dialogs()
 	loadGame()
-	
 
 func spawnPlayerAndGUI(world_name):
 	# Add the player to the world
