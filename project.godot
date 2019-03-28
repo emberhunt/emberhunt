@@ -91,6 +91,7 @@ run/main_scene="res://scenes/MainMenu.tscn"
 boot_splash/image="res://assets/splashScreen.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://assets/icon_192x192.png"
+run/main_scene.server="res://server/scenes/MainServer.tscn"
 
 [autoload]
 
