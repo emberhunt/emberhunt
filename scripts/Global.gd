@@ -220,6 +220,7 @@ func spawnPlayerAndGUI(world_name):
 	var scene = load("res://scenes/player.tscn")
 	var scene_instance = scene.instance()
 	scene_instance.set_name("player")
+	scene_instance.add_to_group("player")
 	get_node("/root/"+world_name+"/YSort").add_child(scene_instance)
 	# Add the GUI
 	scene_instance = load("res://scenes/GUI.tscn").instance()

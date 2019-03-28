@@ -70,3 +70,9 @@ func _hit(): # called by enemies colliding with this bullet
 		queue_free()
 	else:					# reduce remaining pierces by one
 		pierce_left -= 1
+
+func _on_Area2D_body_entered(body):
+	# Check if its not an enemy or a player
+	# Because that would mean it's a wall
+	if not body.is_in_group("player") or body.is_in_group("enemy"):
+		queue_free()
