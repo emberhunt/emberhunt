@@ -117,6 +117,7 @@ remote func receive_world_update(world_name, world_data):
 				var scene = preload("res://scenes/otherPlayer.tscn")
 				var scene_instance = scene.instance()
 				scene_instance.set_name(player.nickname)
+				scene_instance.add_to_group("player")
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
 			# Sync position
 			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname)
