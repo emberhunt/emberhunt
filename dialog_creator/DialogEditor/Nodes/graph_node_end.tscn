@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://DialogEditor/graph_node_end.gd" type="Script" id=1]
+[ext_resource path="res://dialog_creator/DialogEditor/graph_node_end.gd" type="Script" id=1]
 
 [node name="graphNodeEnd" type="GraphNode"]
 self_modulate = Color( 1, 0, 0, 1 )

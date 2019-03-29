@@ -1,14 +1,12 @@
 extends Control
 
-class_name DialogCreator
-
 
 # prefabs
-const textPrefab = preload("res://DialogEditor/Nodes/graph_node_text.tscn")
-const eventPrefab = preload("res://DialogEditor/Nodes/graph_node_event.tscn")
-const decisionPrefab = preload("res://DialogEditor/Nodes/graph_node_decision.tscn")
-const endPrefab = preload("res://DialogEditor/Nodes/graph_node_end.tscn")
-const startPrefab = preload("res://DialogEditor/Nodes/graph_node_start.tscn")
+const textPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_text.tscn")
+const eventPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_event.tscn")
+const decisionPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_decision.tscn")
+const endPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_end.tscn")
+const startPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_start.tscn")
 
 # data from files
 export(String, FILE) var npcFile
@@ -50,6 +48,9 @@ var _allNodes = {}
 
 
 func _ready():
+	for i in range($graphEdit.get_child_count()):
+		print($graphEdit.get_child(i).name)
+	
 	set_process_input(true)
 	popup.connect("id_pressed", self, "_on_item_pressed")
 	dialogSelector.connect("id_pressed", self, "_on_loadedDialogsSelection_item_selected")
@@ -286,7 +287,7 @@ func _on_saveFileDialog_file_selected(filePath):
 	var newConversation = {}
 	#print("nodes = " + str($graphEdit.get_child_count() - 2))
 	for i in range($graphEdit.get_child_count()):
-		if $graphEdit.get_child(i).name != "@@2" and $graphEdit.get_child(i).name != "CLAYER":
+		if not "@@" in $graphEdit.get_child(i).name and $graphEdit.get_child(i).name != "CLAYER":
 			var node = _allNodes[$graphEdit.get_child(i).name]
 			var type = node.get_type()
 			
@@ -447,7 +448,7 @@ func _load_conversation(conversation):
 func clear_all():
 	var it = 0
 	for i in range($graphEdit.get_child_count()):
-		if $graphEdit.get_child(it).name != "@@2" and $graphEdit.get_child(it).name != "CLAYER":
+		if not "@@" in $graphEdit.get_child(it).name and $graphEdit.get_child(it).name != "CLAYER":
 			var child = $graphEdit.get_child(it)
 			$graphEdit.remove_child(child)
 			child.queue_free()

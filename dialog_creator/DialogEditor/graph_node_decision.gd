@@ -1,4 +1,4 @@
-extends "res://DialogEditor/default_graph_node.gd"
+extends "res://dialog_creator/DialogEditor/default_graph_node.gd"
 
 
 var _choicesAmount = 1
