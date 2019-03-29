@@ -12,8 +12,8 @@ func _process(delta):
 
 
 func interation_range_entered(npc):
-	print("interation")
-	pass
+	print("interact")
+	$dialogSystem.start_conversation("Gertrud")
 
 
 func sight_range_entered(npc):
