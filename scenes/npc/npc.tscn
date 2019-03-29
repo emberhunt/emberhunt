@@ -20,6 +20,7 @@ texture = ExtResource( 2 )
 
 [node name="sightRange" type="Area2D" parent="."]
 
+
 [node name="shape2" type="CollisionShape2D" parent="sightRange"]
 shape = SubResource( 1 )
 

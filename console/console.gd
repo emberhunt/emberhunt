@@ -361,35 +361,34 @@ func update_docking(dock):
 	var rectSize : Vector2
 	rectSize = get_viewport_rect().size
 	
-	match (dockingStation):
-		"top":
-			rect_position = Vector2(0.0, 0.0)
-			rect_size.x = rectSize.x
-			rect_size.y = mdefaultSize.y
-			showTitleBar = false
-		"bottom":
-			rect_position = Vector2(0.0, rectSize.y - mdefaultSize.y)
-			rect_size.y = mdefaultSize.y
-			rect_size.x = rectSize.x
-			showTitleBar = false
-		"left":
-			rect_position = Vector2(0.0, 0.0)
-			rect_size.x = rectSize.x * 0.5
-			rect_size.y = rectSize.y
-			showTitleBar = false
-		"right":
-			rect_position = Vector2(rectSize.x * 0.5,  0.0)
-			rect_size.x = rectSize.x * 0.5
-			rect_size.y = rectSize.y
-			showTitleBar = false
-		"full_screen":
-			rect_position = Vector2(0.0, 0.0)
-			rect_size = rectSize
-			showTitleBar = false
-		"custom":
-			rect_size = mdefaultSize
-		_:
-			return
+	if dockingStation == "top":
+		rect_position = Vector2(0.0, 0.0)
+		rect_size.x = rectSize.x
+		rect_size.y = mdefaultSize.y
+		showTitleBar = false
+	elif dockingStation == "bottom":
+		rect_position = Vector2(0.0, rectSize.y - mdefaultSize.y)
+		rect_size.y = mdefaultSize.y
+		rect_size.x = rectSize.x
+		showTitleBar = false
+	elif dockingStation == "left":
+		rect_position = Vector2(0.0, 0.0)
+		rect_size.x = rectSize.x * 0.5
+		rect_size.y = rectSize.y
+		showTitleBar = false
+	elif dockingStation == "right":
+		rect_position = Vector2(rectSize.x * 0.5,  0.0)
+		rect_size.x = rectSize.x * 0.5
+		rect_size.y = rectSize.y
+		showTitleBar = false
+	elif dockingStation == "full_screen":
+		rect_position = Vector2(0.0, 0.0)
+		rect_size = rectSize
+		showTitleBar = false
+	elif dockingStation == "custom":
+		rect_size = mdefaultSize
+	else:
+		return
 	update_visibility_titlebar(showTitleBar) # it is reachable
 	property_list_changed_notify()
 
