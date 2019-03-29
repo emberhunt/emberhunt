@@ -2,7 +2,10 @@ extends Control
 
 enum TYPE {
 	TEXT,
-	DECISION
+	DECISION,
+	END,
+	ENTRY,
+	EVENT
 }
 
 var _type

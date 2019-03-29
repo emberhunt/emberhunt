@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/dialog/dialog_system.gd" type="Script" id=1]
 [ext_resource path="res://scenes/dialog/dialog_text.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/dialog/dialog_decision.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/dialog/dialog_event.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/dialog/dialog_entry.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/dialog/dialog_end.tscn" type="PackedScene" id=6]
 
 [node name="dialogSystem" type="Control"]
 anchor_right = 1.0
@@ -23,5 +26,19 @@ margin_right = 304.5
 margin_bottom = 0.0
 
 [node name="dialogDecision" parent="dialogs" instance=ExtResource( 3 )]
+margin_left = 340.717
+margin_top = 185.39
+margin_right = -362.283
+margin_bottom = -258.61
+
+[node name="dialogEvent" parent="dialogs" instance=ExtResource( 4 )]
+margin_left = 66.8073
+margin_top = 275.58
+margin_right = -813.193
+margin_bottom = -233.42
+
+[node name="dialogEntry" parent="dialogs" instance=ExtResource( 5 )]
+
+[node name="dialogEnd" parent="dialogs" instance=ExtResource( 6 )]
 
 [connection signal="on_button_pressed" from="dialogs/dialogDecision" to="." method="_on_dialogDecision_on_button_pressed"]
