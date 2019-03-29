@@ -60,6 +60,7 @@ margin_top = 38.0
 margin_right = 129.0
 margin_bottom = 69.48
 rect_min_size = Vector2( 0, 31.48 )
+wrap_enabled = true
 
 [node name="hSeparator" type="HSeparator" parent="."]
 margin_left = 16.0

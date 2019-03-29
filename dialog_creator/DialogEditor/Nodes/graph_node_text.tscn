@@ -64,6 +64,7 @@ margin_top = 74.0
 margin_right = 161.0
 margin_bottom = 165.85
 rect_min_size = Vector2( 0, 91.85 )
+wrap_enabled = true
 
 [connection signal="close_request" from="." to="." method="_on_graphNode_close_request"]
 [connection signal="resize_request" from="." to="." method="_on_graphNode_resize_request"]
