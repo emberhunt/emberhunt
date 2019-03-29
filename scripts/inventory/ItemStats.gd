@@ -15,8 +15,9 @@ enum ItemType {
 	SHURIKEN,
 	THROWING_DAGGER,
 	STAVE,
-	TOME,
+	SCROLL,
 	WAND,
+	PRIMAL_FOCUS,
 	
 	# Offhand
 	SHIELD,
@@ -52,8 +53,9 @@ const _itemTypes = {
 	ItemType.HARP_BOW : "HARP_BOW",
 	ItemType.SHURIKEN : "SHURIKEN",
 	ItemType.THROWING_DAGGER : "THROWING_DAGGER",
-	ItemType.TOME : "TOME",
+	ItemType.SCROLL : "SCROLL",
 	ItemType.WAND : "WAND",
+	ItemType.PRIMAL_FOCUS : "PRIMAL_FOCUS",
 	
 	ItemType.SHIELD : "SHIELD",
 	ItemType.BANNER : "BANNER",
@@ -111,6 +113,8 @@ var _type
 # Dicts
 var _effects
 var _requirements
+var _stats # currently only used for weapons
+
 
 var _stackSize : int = 1
 var _stackable : bool
@@ -120,7 +124,7 @@ var _sellable : bool
 var _consumable : bool 
 
 
-func _init(id, name, type, weight, value, effects, requirements, description, texturePath, textureRegion, \
+func _init(id, name, type, weight, value, effects, requirements, stats, description, texturePath, textureRegion, \
 			slotsUse, stackSize, stackable = false, usable = false, discardable = true, sellable = true, consumable = false):
 	_id = id
 	_name = name
@@ -129,6 +133,7 @@ func _init(id, name, type, weight, value, effects, requirements, description, te
 	_weight = weight
 	_effects = effects
 	_requirements = requirements
+	_stats = stats
 	_description = description
 	_texturePath = texturePath
 	_usable = usable
@@ -161,6 +166,9 @@ func get_effects() -> Dictionary:
 
 func get_requirements() -> Dictionary:
 	return _requirements
+	
+func get_stats() -> Dictionary:
+	return _stats
 	
 func get_description() -> String:
 	return _description

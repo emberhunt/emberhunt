@@ -123,11 +123,11 @@ func set_user_color(input : Array):
 func show_default_commands(_input : Array):
 	_consoleRef.new_line()
 	for i in range(_consoleRef.basicCommandsSize):
-		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, true)
-		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description())
-		_consoleRef.append_message_no_event(" (args: ")
+		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, false, true)
+		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description(), false)
+		_consoleRef.append_message_no_event(" (args: ", false)
 		_consoleRef._print_args(i)
-		_consoleRef.append_message_no_event(")")
+		_consoleRef.append_message_no_event(")", false)
 		_consoleRef.new_line()
 
 
@@ -145,12 +145,12 @@ func toggle_titlebar(_input : Array):
 
 func alias(input : Array):
 	if input.size() < 2:
-		_consoleRef.append_message("not enough arguments!")
+		_consoleRef.append_message("not enough arguments!", false)
 		return
 	
 	var cmd = _consoleRef.get_command(input[1])
 	if cmd == null:
-		_consoleRef.append_message(_consoleRef.COMMAND_NOT_FOUND_MSG)
+		_consoleRef.append_message(_consoleRef.COMMAND_NOT_FOUND_MSG, false)
 		return
 		
 	var command = _consoleRef.copy_command(cmd)
@@ -186,11 +186,11 @@ func set_theme(input : Array):
 func help_all(_input : Array):
 	_consoleRef.new_line()
 	for i in range(_consoleRef.commands.size()):
-		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, true)
-		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description())
-		_consoleRef.append_message_no_event(" (args: ")
+		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, false, true)
+		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description(), false)
+		_consoleRef.append_message_no_event(" (args: ", false)
 		_consoleRef._print_args(i)
-		_consoleRef.append_message_no_event(")")
+		_consoleRef.append_message_no_event(")", false)
 		_consoleRef.new_line()
 
 
@@ -261,7 +261,7 @@ func decrease_size(input : Array):
 
 
 func clear(_input : Array):
-	_consoleRef.textLabel.clear()
+	_consoleRef.get_node("offset/richTextLabel").clear()
 	
 	
 func exit(_input : Array):
@@ -274,30 +274,30 @@ func man(input : Array):
 	_consoleRef.new_line()
 	for i in range(_consoleRef.commands.size()):
 		if _consoleRef.commands[i].get_name() == command:
-			_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, true)
-			_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description())
-			_consoleRef.append_message_no_event(" (args: ")
+			_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, false, true)
+			_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description(), false)
+			_consoleRef.append_message_no_event(" (args: ", false)
 			_consoleRef._print_args(i)
-			_consoleRef.append_message_no_event(")")
+			_consoleRef.append_message_no_event(")", false)
 			_consoleRef.new_line()
 			return
 	
-	_consoleRef.append_message_no_event("[color=red]Couldn't find command '%s'[/color]" % command)
+	_consoleRef.append_message_no_event("[color=red]Couldn't find command '%s'[/color]" % command, false)
 		
 	
 func help(_input : Array):
 	_consoleRef.new_line()
 	if _firstHelp:
 		_firstHelp = false
-		_consoleRef.append_message_no_event("'help' shows user added commands. Use 'helpAll' to show all commands")
+		_consoleRef.append_message_no_event("'help' shows user added commands. Use 'helpAll' to show all commands", false)
 		_consoleRef.new_line()
 	
 	for ti in range(_consoleRef.commands.size() - _consoleRef.basicCommandsSize):
 		var i = ti + _consoleRef.basicCommandsSize
 		_consoleRef.new_line()
-		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, true)
-		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description())
-		_consoleRef.append_message_no_event(" (args: ")
+		_consoleRef.append_message_no_event("%s%s" % [_consoleRef.commandSign, _consoleRef.commands[i].get_name()], false, false, false, true)
+		_consoleRef.append_message_no_event(": %s" % _consoleRef.commands[i].get_description(), false)
+		_consoleRef.append_message_no_event(" (args: ", false)
 		_consoleRef._print_args(i)
-		_consoleRef.append_message_no_event(")")
+		_consoleRef.append_message_no_event(")", false)
 		

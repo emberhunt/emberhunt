@@ -73,28 +73,23 @@ func _ready():
 	
 func cmd_add_item(input : Array):
 	var mainInv = $inventories/equipment
-	get_node("/root/Console/console").new_line()
-	get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	mainInv.add_item(mainInv.get_item_by_id(int(input[0])))
-	get_node("/root/Console/console").new_line()
-	get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	
 	
 func cmd_remove_item(input : Array):
 	var mainInv = $inventories/playerInventory
-	get_node("/root/Console/console").new_line()
-	get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	mainInv.remove_item(int(input[0]), 1)
-	get_node("/root/Console/console").new_line()
-	get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 
 
 func cmd_show_all_items(_input : Array):
 	var mainInv = $inventories/playerInventory
 	
 	for i in range(mainInv._allItems.size()):
-		get_node("/root/Console/console").new_line()
-		get_node("/root/Console/console").append_message_without_history(str(mainInv._allItems[i].get_name()))
+		get_node("/root/Console/console").write_line(str(mainInv._allItems[i].get_name()))
 	#mainInv.remove_item(int(input[0]), 1)
 	#get_node("/root/Console/console").new_line()
 	#get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
@@ -129,7 +124,7 @@ func create_inventory(invName, itemList):
 	
 	_inventories.append(inventory)
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	get_node("/root/Console").write_line("added i: " + inventory.name)
+	get_node("/root/Console/console").write_line("added i: " + inventory.name)
 	
 	return _inventories[_inventories.size() - 1]
 
@@ -144,7 +139,7 @@ func add_inventory(inventory):
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
 	get_child(0).add_child(inventory)
 	#inventory.name = invName
-	get_node("/root/Console").write_line("added i: " + inventory.name)
+	get_node("/root/Console/console").write_line("added i: " + inventory.name)
 	
 	return _inventories.size() - 1
 	#for item in itemList:

@@ -24,7 +24,7 @@ margin_top = 186.882
 margin_right = 550.02
 margin_bottom = 430.881
 inventoryDisplayName = "Equipment"
-columns = 0
+columns = 4
 
 [node name="chest" parent="inventories" instance=ExtResource( 3 )]
 margin_left = 637.074

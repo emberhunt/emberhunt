@@ -1,0 +1,143 @@
+{
+	"0" : {
+		"name" : "The Super Great Dingle Donger 9000",
+		"type" : "GREAT_SWORD",
+		"value" : 10,
+		"weight" : 1.0,
+		"description" : "fant",
+		
+		"requirements" : {
+			"level" : 10,
+			"str" : 20
+		},
+						
+		"effects" : {
+			"str" : 1
+		},
+		
+		"stats" : {
+			
+		},
+		
+		"texture_region" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 2,
+		"stack_size" : 4,
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : false,
+		"consumable" : false,
+		"discardable" : true
+	},
+	"1" : {
+		"name" : "The Tome Of Darkness",
+		"type" : "TOME",
+		"value" : 1524,
+		"weight" : 2.0,
+		"description" : "The darklords secrets!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"health" : 1
+		},
+		
+		"stats" : {
+			
+		},
+		
+		"texture_region" : {
+			"x" : 32,
+			"y" : 0,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+
+		"slots_use" : 2,
+		"stack_size" : 4,		
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : false,
+		"consumable" : false,
+		"discardable" : true
+	},
+	"2" : {
+		"name" : "asd",
+		"type" : "TOME",
+		"value" : 123,
+		"weight" : 3.0,
+		"description" : "This is a really old tome!",
+		
+		"requirements" : {
+			"level" : 33
+		},
+						
+		"effects" : {
+			"str" : 5
+		},
+		
+		"stats" : {
+			
+		},
+		
+		"texture_region" : {
+			"x" : 32,
+			"y" : 32,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 4,
+		"stackable" : false,
+		"sellable" : true,
+		"usable" : true,
+		"consumable" : false,
+		"discardable" : true
+	},
+	"3" : {
+		"name" : "Healing potion",
+		"type" : "POTION",
+		"value" : 123,
+		"weight" : 0.5,
+		"description" : "This will make you feel better!",
+		
+		"requirements" : {
+			"level" : 10
+		},
+						
+		"effects" : {
+			"str" : 200
+		},
+		
+		"stats" : {
+			
+		},
+		
+		"texture_region" : {
+			"x" : 128,
+			"y" : 160,
+			"w" : 32,
+			"h" : 32
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 4,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : true,
+		"consumable" : true,
+		"discardable" : true
+	}
+}
