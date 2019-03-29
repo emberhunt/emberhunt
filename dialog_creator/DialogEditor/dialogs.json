@@ -1,0 +1,62 @@
+{
+	"conversations_with_test_villager" : {
+		"defaultBegin" : "0",
+		"defaultEnd" : "0",
+		"currentBegin" : "0",
+		
+		# each should also contain:
+		# position
+		# 
+		
+		"0" : {
+			"type" : "entry"
+			"entry" : "0"
+		},
+		"1" : {
+			"next" : "1",
+			"speaker" : "villager_1",
+			"type" : "text",
+			
+			"text" : "Hello there!"
+		},
+		"2" : {
+			"type" : "decision",
+			
+			"text" : "Do you like items?",
+			
+			"choices" : {
+				"0" : {
+					"next" : "2",
+					"text" : "Yes"
+				},
+				"1" : {
+					"next" : "3",
+					"text" : "No"
+				}
+			}
+		},
+		"3" : {
+			"next" : "4",
+			"type" : "event",
+			"event_type" : "Add Stats",
+			
+			"event_params" : {
+				"0" : "str",
+				"1" : "100"
+			}
+		},
+		"4" : {
+			"next" : "4",
+			"type" : "event",
+			"event_type" : "Add Item",
+			
+			"event_params" : {
+				"0" : "Healing Potion",
+				"1" : "5"
+			}
+		}
+		"5" : {
+			"type" : "end"
+		}
+	}
+}

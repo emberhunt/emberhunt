@@ -1,0 +1,10 @@
+{
+	"0" : {
+		"name" : "quest_1",
+		"description" : "Catch a fish"
+	},
+	"1" : {
+		"name" : "quest_2",
+		"description" : "Catch another fish"
+	}
+}

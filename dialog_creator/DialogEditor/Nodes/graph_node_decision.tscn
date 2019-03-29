@@ -1,0 +1,108 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://DialogEditor/graph_node_decision.gd" type="Script" id=1]
+
+[node name="graphNodeDecision" type="GraphNode"]
+self_modulate = Color( 1, 0, 0.984314, 1 )
+margin_right = 145.0
+margin_bottom = 118.0
+title = "Decision"
+show_close = true
+resizable = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 0, 0.913725, 1 )
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color( 1, 1, 1, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color( 1, 1, 1, 1 )
+slot/4/right_enabled = true
+slot/4/right_type = 0
+slot/4/right_color = Color( 1, 0, 1, 1 )
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color( 1, 1, 1, 1 )
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+
+[node name="questionDescription" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 129.0
+margin_bottom = 38.0
+text = "Text"
+
+[node name="text" type="TextEdit" parent="."]
+margin_left = 16.0
+margin_top = 38.0
+margin_right = 129.0
+margin_bottom = 69.48
+rect_min_size = Vector2( 0, 31.48 )
+
+[node name="hSeparator" type="HSeparator" parent="."]
+margin_left = 16.0
+margin_top = 70.0
+margin_right = 129.0
+margin_bottom = 74.0
+
+[node name="choicesDescription" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 75.0
+margin_right = 129.0
+margin_bottom = 89.0
+text = "Choices"
+
+[node name="choice" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 90.0
+margin_right = 129.0
+margin_bottom = 114.0
+
+[node name="choiceNumber" type="Label" parent="choice"]
+margin_top = 5.0
+margin_right = 8.0
+margin_bottom = 19.0
+text = "0"
+
+[node name="lineEdit" type="LineEdit" parent="choice"]
+margin_left = 12.0
+margin_right = 70.0
+margin_bottom = 24.0
+
+[node name="additionalChoice" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 115.0
+margin_right = 129.0
+margin_bottom = 138.0
+
+[node name="button" type="Button" parent="additionalChoice"]
+margin_right = 28.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 23, 23 )
+text = " + "
+
+[connection signal="close_request" from="." to="." method="_on_graphNode_close_request"]
+[connection signal="resize_request" from="." to="." method="_on_graphNode_resize_request"]
+[connection signal="pressed" from="additionalChoice/button" to="." method="_on_button_pressed"]
