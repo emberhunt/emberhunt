@@ -416,7 +416,7 @@ func get_weight() -> float:
 
 
 func get_item_by_id(id : int) -> Item:
-	return Global.allItems.values()[id]
+	return Global.allItems[id]
 
 
 func get_slot_size():

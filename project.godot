@@ -49,11 +49,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://dialog_creator/DialogEditor/default_graph_node.gd"
 }, {
-"base": "Control",
-"class": "DialogBase",
-"language": "GDScript",
-"path": "res://dialog_creator/DialogEditor/dialog_base.gd"
-}, {
 "base": "Node2D",
 "class": "Entity",
 "language": "GDScript",
@@ -88,7 +83,6 @@ _global_script_class_icons={
 "ConsoleUser": "",
 "DefaultCommands": "",
 "DefaultGraphNode": "",
-"DialogBase": "",
 "Entity": "",
 "InventorySystem": "",
 "Item": "",
