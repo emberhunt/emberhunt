@@ -44,11 +44,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://console/default_commands.gd"
 }, {
-"base": "Control",
-"class": "DialogText",
-"language": "GDScript",
-"path": "res://scripts/dialog/dialog_text.gd"
-}, {
 "base": "Node2D",
 "class": "Entity",
 "language": "GDScript",
@@ -82,7 +77,6 @@ _global_script_class_icons={
 "ConsoleRights": "",
 "ConsoleUser": "",
 "DefaultCommands": "",
-"DialogText": "",
 "Entity": "",
 "InventorySystem": "",
 "Item": "",
