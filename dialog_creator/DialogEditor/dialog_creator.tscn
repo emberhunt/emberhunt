@@ -1,0 +1,120 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://DialogEditor/dialog_creator.gd" type="Script" id=1]
+
+[node name="dialogCreator" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+npcFile = "res://Data/NPCData.json"
+playerStatsFile = "res://Data/PlayerStats.json"
+itemsFile = "res://Data/ItemData.json"
+animationsFile = "res://Data/Animations.json"
+questFile = "res://Data/QuestsData.json"
+
+[node name="graphEdit" type="GraphEdit" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+right_disconnects = true
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color( 0.67451, 0.67451, 0.67451, 1 )
+margin_left = 217.828
+margin_top = 6.0184
+margin_right = 351.828
+margin_bottom = 35.0184
+
+[node name="menuButton" type="MenuButton" parent="."]
+margin_left = 219.085
+margin_top = 6.0
+margin_right = 352.085
+margin_bottom = 35.0
+text = "Add Dialog Node"
+items = [ "Text", null, 0, false, false, 0, 0, null, "", false, "Decision", null, 0, false, false, 1, 0, null, "", false, "Event", null, 0, false, false, 2, 0, null, "", false, "End", null, 0, false, false, 3, 0, null, "", false, "Entry Point", null, 0, false, false, 4, 0, null, "", false ]
+switch_on_hover = true
+
+[node name="save" type="Button" parent="."]
+margin_left = 377.122
+margin_top = 10.7895
+margin_right = 444.122
+margin_bottom = 30.7895
+text = "Save"
+
+[node name="load" type="Button" parent="."]
+margin_left = 623.836
+margin_top = 13.0
+margin_right = 690.836
+margin_bottom = 33.0
+text = "Load"
+
+[node name="fileDialog" type="FileDialog" parent="."]
+margin_left = 220.211
+margin_top = 146.158
+margin_right = 727.211
+margin_bottom = 503.158
+window_title = "Open a File"
+dialog_hide_on_ok = true
+mode = 0
+access = 2
+current_dir = "G:/Projects/BitBucket/DialogEditor"
+current_file = "Dialogs"
+current_path = "G:/Projects/BitBucket/DialogEditor/Dialogs"
+
+[node name="saveFileDialog" type="FileDialog" parent="."]
+margin_left = 260.983
+margin_top = 153.802
+margin_right = 633.983
+margin_bottom = 422.802
+access = 2
+current_dir = "G:/Projects/BitBucket/DialogEditor"
+current_file = "Dialogs.json"
+current_path = "G:/Projects/BitBucket/DialogEditor/Dialogs.json"
+
+[node name="deleteAll" type="Button" parent="."]
+margin_left = 1202.65
+margin_top = 13.0
+margin_right = 1278.65
+margin_bottom = 33.0
+text = "Delete All"
+
+[node name="loadedDialogsSelection" type="MenuButton" parent="."]
+margin_left = 699.0
+margin_top = 13.0
+margin_right = 847.0
+margin_bottom = 33.0
+disabled = true
+text = "loaded dialogs..."
+
+[node name="dialogNameEdit" type="LineEdit" parent="."]
+margin_left = 446.957
+margin_top = 8.62098
+margin_right = 561.957
+margin_bottom = 32.621
+placeholder_text = "dialog name..."
+
+[node name="startNodeText" type="Label" parent="."]
+margin_left = 889.646
+margin_top = 16.8422
+margin_right = 956.646
+margin_bottom = 30.8422
+text = "Start Node:"
+
+[node name="startNode" type="OptionButton" parent="."]
+margin_left = 967.464
+margin_top = 14.036
+margin_right = 1085.46
+margin_bottom = 34.036
+disabled = true
+text = "start node..."
+
+[connection signal="connection_request" from="graphEdit" to="." method="_on_graphEdit_connection_request"]
+[connection signal="connection_to_empty" from="graphEdit" to="." method="_on_graphEdit_connection_to_empty"]
+[connection signal="delete_nodes_request" from="graphEdit" to="." method="_on_graphEdit_delete_nodes_request"]
+[connection signal="disconnection_request" from="graphEdit" to="." method="_on_graphEdit_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="graphEdit" to="." method="_on_graphEdit_duplicate_nodes_request"]
+[connection signal="node_selected" from="graphEdit" to="." method="_on_graphEdit_node_selected"]
+[connection signal="pressed" from="save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="load" to="." method="_on_load_pressed"]
+[connection signal="file_selected" from="fileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="saveFileDialog" to="." method="_on_saveFileDialog_file_selected"]
+[connection signal="pressed" from="deleteAll" to="." method="_on_deleteAll_pressed"]
