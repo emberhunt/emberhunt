@@ -420,8 +420,8 @@ func update_text_color(selected):
 			textColor = _get_color_by_name(textColorSelector)
 		
 		set_default_text_color(textColor)
-				
-				
+
+
 func update_theme(selected):
 	designSelector = selected
 
