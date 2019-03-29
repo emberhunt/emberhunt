@@ -333,7 +333,7 @@ func remove_item(slotId : int, amount : int = 0) -> Item:
 
 # add item to inventory
 #return false if couldn't add item to inv
-func add_item(item : Item, amount : int = 1) -> bool:
+func add_item(item : Item, amount : int = 1):
 	# search if same item exists and is stackable,
 	# and if it is stackable, is it max stacked
 	
@@ -351,19 +351,17 @@ func add_item(item : Item, amount : int = 1) -> bool:
 					currentSlot.set_amount(currentSlot.get_amount() + 1)
 					_currentWeight += item.get_weight()
 					_update_weight()
-					return true
+					return i
 
 	# if not stackable/not exist/full stack then add to new slot
 	var freeId = _get_next_free_slot_id()
-	#print(freePos)
 	if freeId == -1:
-		return false
+		return -1
 
-	#print("free at: " + str(freePos))
 	_slots[freeId].set_item(item, amount)
 	_currentWeight += item.get_weight()
 	_update_weight()
-	return true
+	return freeId
 
 	
 # ToDo

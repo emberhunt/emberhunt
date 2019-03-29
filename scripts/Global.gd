@@ -152,16 +152,16 @@ func loadGame():
 
 func loadItems():
 	var file = File.new()
-	file.open("res://assets/inventory/PlayerInventory.json", file.READ)
+	file.open("res://assets/inventory/all_items.json", file.READ)
 	var dataText = file.get_as_text()
 	file.close()
 	var data = JSON.parse(dataText)
 	
 	if data.error != OK:
-		get_node("/root/Console").write_line("[color=red]couldn't load items![/color]")
+		get_node("/root/Console/console").error("couldn't load items!")
 		return
 	else:
-		get_node("/root/Console").write_line("[color=yellow]loading items was successful![/color]")
+		get_node("/root/Console/console").warn("loading items was successful!")
 		
 		#print("Problems loading " + fileName + " (in Inventory.gd)")
 
@@ -176,6 +176,7 @@ func loadItems():
 				itemData["value"],
 				itemData["effects"],
 				itemData["requirements"],
+				itemData["stats"],
 				itemData["description"],
 				itemData["texture_path"],
 				itemData["texture_region"],
@@ -191,8 +192,9 @@ func loadItems():
 		allItems[i] = newItem
 		
 func _ready():
-	loadGame()
 	loadItems()
+	loadGame()
+	
 
 func spawnPlayerAndGUI(world_name):
 	# Add the player to the world
