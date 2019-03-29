@@ -18,8 +18,6 @@ func _ready():
 		$dialogs.get_child(i).hide()
 	
 	set_process_input(true)
-	#start_conversation("Manfred")
-	#start_conversation("Gertrud")
 	
 func _input(event):
 	if event is InputEventMouseButton:

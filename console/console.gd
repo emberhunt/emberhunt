@@ -566,7 +566,7 @@ func create_log_file(filePath):
 	if logEnabled:
 		var dir = Directory.new()
 		if not dir.file_exists(filePath):
-			print("fikle does not exists to save log file!")
+			print("log file for console doesn't exist!")
 		logFile = File.new()
 		logFile.open(filePath, logFile.WRITE_READ)
 		logFileCreated = true
