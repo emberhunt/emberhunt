@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://DialogEditor/dialog_creator.gd" type="Script" id=1]
+[ext_resource path="res://dialog_creator/DialogEditor/dialog_creator.gd" type="Script" id=1]
 
 [node name="dialogCreator" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-npcFile = "res://Data/NPCData.json"
-playerStatsFile = "res://Data/PlayerStats.json"
-itemsFile = "res://Data/ItemData.json"
-animationsFile = "res://Data/Animations.json"
-questFile = "res://Data/QuestsData.json"
+npcFile = "res://dialog_creator/Data/NPCData.json"
+playerStatsFile = "res://dialog_creator/Data/PlayerStats.json"
+itemsFile = "res://dialog_creator/Data/ItemData.json"
+animationsFile = "res://dialog_creator/Data/Animations.json"
+questFile = "res://dialog_creator/Data/QuestsData.json"
 
 [node name="graphEdit" type="GraphEdit" parent="."]
 anchor_right = 1.0
@@ -57,8 +57,7 @@ dialog_hide_on_ok = true
 mode = 0
 access = 2
 current_dir = "G:/Projects/BitBucket/DialogEditor"
-current_file = "Dialogs"
-current_path = "G:/Projects/BitBucket/DialogEditor/Dialogs"
+current_path = "G:/Projects/BitBucket/DialogEditor/"
 
 [node name="saveFileDialog" type="FileDialog" parent="."]
 margin_left = 260.983
@@ -67,8 +66,7 @@ margin_right = 633.983
 margin_bottom = 422.802
 access = 2
 current_dir = "G:/Projects/BitBucket/DialogEditor"
-current_file = "Dialogs.json"
-current_path = "G:/Projects/BitBucket/DialogEditor/Dialogs.json"
+current_path = "G:/Projects/BitBucket/DialogEditor/"
 
 [node name="deleteAll" type="Button" parent="."]
 margin_left = 1202.65
