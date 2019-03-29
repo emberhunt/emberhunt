@@ -37,7 +37,7 @@
 	},
 	"1" : {
 		"name" : "The Tome Of Darkness",
-		"type" : "TOME",
+		"type" : "GREAT_SWORD",
 		"value" : 1524,
 		"weight" : 2.0,
 		"description" : "The darklords secrets!",
@@ -72,7 +72,7 @@
 	},
 	"2" : {
 		"name" : "asd",
-		"type" : "TOME",
+		"type" : "GREAT_SWORD",
 		"value" : 123,
 		"weight" : 3.0,
 		"description" : "This is a really old tome!",

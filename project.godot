@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://console/default_commands.gd"
 }, {
+"base": "GraphNode",
+"class": "DefaultGraphNode",
+"language": "GDScript",
+"path": "res://dialog_creator/DialogEditor/default_graph_node.gd"
+}, {
 "base": "Node2D",
 "class": "Entity",
 "language": "GDScript",
@@ -77,6 +82,7 @@ _global_script_class_icons={
 "ConsoleRights": "",
 "ConsoleUser": "",
 "DefaultCommands": "",
+"DefaultGraphNode": "",
 "Entity": "",
 "InventorySystem": "",
 "Item": "",
@@ -124,5 +130,6 @@ locale_filter=[ 0, [ "en_US" ] ]
 
 [rendering]
 
+threads/thread_model=2
 environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
