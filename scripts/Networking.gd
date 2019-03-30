@@ -129,8 +129,6 @@ remote func receive_world_update(world_name, world_data):
 		#
 		# Update all items
 		#
-		# Update all projectiles
-		#
 		
 		# Check if any nodes got removed
 		# Players
@@ -171,35 +169,55 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_
 # # # # # # # # # # #
 
 func requestServerForMyCharacterData():
-	# Send RPC to server
-	rpc_id(1, "send_character_data", Global.UUID)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		# Send RPC to server
+		rpc_id(1, "send_character_data", Global.UUID)
 
 func sendServeNewCharacterData(data):
-	rpc_id(1, "receive_new_character_data", Global.UUID, data)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "receive_new_character_data", Global.UUID, data)
 
 func askServerIfThisNicknameIsFree(nickname):
-	rpc_id(1, "check_if_nickname_is_free", nickname)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "check_if_nickname_is_free", nickname)
 
 func registerAccount(nickname):
-	rpc_id(1, "register_new_account", nickname)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "register_new_account", nickname)
 
 func askServerIfThisUUIDIsValid(uuid):
-	rpc_id(1, "check_if_uuid_exists", uuid)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "check_if_uuid_exists", uuid)
 
 func requestToJoinWorld(world_name, charID):
-	rpc_id(1, "join_world", Global.UUID, charID, world_name)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "join_world", Global.UUID, charID, world_name)
 
 func sendPosition(pos):
-	rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos)
 
 func exitWorld():
-	rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
 func shootBullets(path_to_scene, bullet_rotation, stats):
-	rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
 func askServerToPickUpItem(item_id, quantity, slot):
-	rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity, slot)
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity, slot)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
