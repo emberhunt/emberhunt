@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "192.168.1.169"
+const SERVER_IP = "nam.zvaigzdele.lt"
 const SERVER_PORT = 22122
 
 func _ready():
