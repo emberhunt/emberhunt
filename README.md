@@ -10,6 +10,11 @@ A God of Darkness sends knights of darkness to the surface world to conquer it, 
 
 Everyone is welcome to contribute and help develop this project. We need programmers, artists, sound-engineers, testers, writers... If you want to help, just [join our discord](https://discord.gg/eEVGG7v), and we will discuss how you can help.
 
+## Donating
+
+You can donate [here](https://beerpay.io/PonasKovas/emberhunt)<br />
+The money will be used to keep the servers running.
+
 ## Documentation
 
 Read the [wiki](../../wiki).
