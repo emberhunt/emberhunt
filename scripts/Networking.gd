@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "192.168.1.139"
+const SERVER_IP = "192.168.1.169"
 const SERVER_PORT = 22122
 
 func _ready():
@@ -36,6 +36,7 @@ func _connected_fail():
 	pass # Could not even connect to server; abort.
 
 func _connected_ok():
+	print("Connected to the server")
 	# Check if I already have an UUID assigned
 	if not Global.UUID: # I don't
 		# Ask player for nickname or UUID
