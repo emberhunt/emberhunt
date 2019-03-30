@@ -1,4 +1,4 @@
-# Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Server Status](https://img.shields.io/uptimerobot/status/m782308158-ad4dfbeb4bebb76a2b9622bc.svg?label=server) ![Commit activity](https://img.shields.io/github/commit-activity/m/PonasKovas/emberhunt.svg?color=darkgreen) [![License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-informational.svg)](LICENSE)
+# Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Server Status](https://img.shields.io/uptimerobot/status/m782308158-ad4dfbeb4bebb76a2b9622bc.svg?label=server) ![Commit activity](https://img.shields.io/github/last-commit/PonasKovas/emberhunt.svg?color=darkgreen) [![License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-informational.svg)](LICENSE) [![Beerpay](https://img.shields.io/beerpay/PonasKovas/emberhunt.svg)](https://beerpay.io/PonasKovas/emberhunt)
 
 This project is completely free and open-source mobile MMORPG game, created with [Godot](https://godotengine.org/).
 
@@ -9,6 +9,11 @@ A God of Darkness sends knights of darkness to the surface world to conquer it, 
 ## Contributing
 
 Everyone is welcome to contribute and help develop this project. We need programmers, artists, sound-engineers, testers, writers... If you want to help, just [join our discord](https://discord.gg/eEVGG7v), and we will discuss how you can help.
+
+## Donating
+
+You can donate [here](https://beerpay.io/PonasKovas/emberhunt)<br />
+The money will be used to keep the servers running.
 
 ## Documentation
 
