@@ -5,7 +5,6 @@ const Inventory = preload("res://scripts/inventory/Inventory.gd")
 
 var inventory 
 var buttonPath 
-	
 
 var _mainInv : Inventory = null
 var _addItemButton : Button

@@ -22,3 +22,4 @@ func _on_sightRange_body_entered(body):
 
 func _on_interactionRange_body_exited(body):
 	emit_signal("on_interaction_range_exited", self)
+

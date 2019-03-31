@@ -14,10 +14,10 @@ func _ready():
 		get_child(i).connect("on_sight_entered", self, "sight_range_entered")
 
 func init(path):
-	_openDialogButton = get_node(path + "/openDialog")
-	
-	_openDialogButton.connect("pressed", self, "start_conversation")
-	_openDialogButton.get_child(0).connect("pressed", self, "start_conversation")
+	if get_tree().get_current_scene().get_name() != "MainServer":
+		_openDialogButton = get_node(path + "/openDialog")
+		_openDialogButton.connect("pressed", self, "start_conversation")
+		_openDialogButton.get_child(0).connect("pressed", self, "start_conversation")
 	
 
 func interation_range_entered(npc):
@@ -34,4 +34,5 @@ func start_conversation():
 			start_conversation(_npc.conversationName, _npc.npcName)
 
 func sight_range_entered(npc):
-	_openDialogButton.hide()
+	if _openDialogButton != null:
+		_openDialogButton.hide()

@@ -68,11 +68,6 @@ _global_script_classes=[ {
 "class": "ItemDrop",
 "language": "GDScript",
 "path": "res://scripts/item_drop.gd"
-}, {
-"base": "Node2D",
-"class": "Player",
-"language": "GDScript",
-"path": "res://scripts/player.gd"
 } ]
 _global_script_class_icons={
 "Character": "",
@@ -86,8 +81,7 @@ _global_script_class_icons={
 "Entity": "",
 "InventorySystem": "",
 "Item": "",
-"ItemDrop": "",
-"Player": ""
+"ItemDrop": ""
 }
 
 [application]

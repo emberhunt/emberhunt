@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/inventory/InventorySystem.gd" type="Script" id=1]
-[ext_resource path="res://scenes/PlayerEquipment.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/itemSlotDescription.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/inventory/PlayerEquipment.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/inventory/Inventory.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/inventory/itemSlotDescription.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/playerStats.tscn" type="PackedScene" id=5]
 
 [node name="inventorySystem" type="Control"]
 anchor_right = 1.0
@@ -19,17 +20,17 @@ anchor_bottom = 1.0
 mouse_filter = 1
 
 [node name="equipment" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 83.0778
-margin_top = 34.3852
-margin_right = 422.078
-margin_bottom = 278.384
+margin_left = 83.0
+margin_top = 34.0
+margin_right = 422.0
+margin_bottom = 299.0
 inventoryDisplayName = "Equipment"
 
 [node name="chest" parent="inventories" instance=ExtResource( 3 )]
 margin_left = 118.844
-margin_top = 289.831
+margin_top = 316.14
 margin_right = 372.844
-margin_bottom = 535.831
+margin_bottom = 562.14
 inventoryDisplayName = "Inventory"
 inventorySize = 20
 columns = 5
@@ -65,5 +66,11 @@ margin_top = 125.779
 margin_right = 551.151
 margin_bottom = 125.779
 mouse_filter = 1
+
+[node name="playerStats" parent="." instance=ExtResource( 5 )]
+margin_left = 438.0
+margin_top = 59.0
+margin_right = -174.0
+margin_bottom = -248.0
 
 [connection signal="mouse_exited" from="itemSlotDescription/descriptionField" to="." method="_on_descriptionField_mouse_exited"]
