@@ -105,7 +105,7 @@ Global="*res://scripts/Global.gd"
 SoundPlayer="*res://scenes/SoundPlayer.tscn"
 MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
 Networking="*res://scenes/Networking.tscn"
-Console="*res://scenes/Console.tscn"
+DebugConsole="*res://scenes/Console.tscn"
 
 [debug]
 

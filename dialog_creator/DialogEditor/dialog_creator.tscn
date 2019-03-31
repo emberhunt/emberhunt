@@ -60,10 +60,10 @@ current_dir = "G:/Projects/BitBucket/DialogEditor"
 current_path = "G:/Projects/BitBucket/DialogEditor/"
 
 [node name="saveFileDialog" type="FileDialog" parent="."]
-margin_left = 260.983
-margin_top = 153.802
-margin_right = 633.983
-margin_bottom = 422.802
+margin_left = 221.809
+margin_top = 140.434
+margin_right = 785.809
+margin_bottom = 495.434
 access = 2
 current_dir = "G:/Projects/BitBucket/DialogEditor"
 current_path = "G:/Projects/BitBucket/DialogEditor/"

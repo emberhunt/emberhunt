@@ -48,6 +48,7 @@ var _allNodes = {}
 
 
 func _ready():
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,SceneTree.STRETCH_ASPECT_EXPAND, Vector2(0,0))
 	set_process_input(true)
 	popup.connect("id_pressed", self, "_on_item_pressed")
 	dialogSelector.connect("id_pressed", self, "_on_loadedDialogsSelection_item_selected")

@@ -63,3 +63,5 @@ func setTouchpadsState(state):
 	get_node("CanvasLayer/shootButton")._weaponNode.attacking = false
 	get_node("CanvasLayer/shootButton/buttonSprite").hide()
 	get_node("CanvasLayer/shootButton/background").hide()
+
+

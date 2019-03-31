@@ -22,7 +22,6 @@ export(NodePath) var inventoriesPath = ""
 export(NodePath) var mainInventoryPath = ""
 
 onready var itemDescription = $itemSlotDescription
-onready var itemDescriptionField = $descriptionField
 onready var blocker = $blocker
 onready var draggenItem = $draggenItem
 
@@ -44,15 +43,15 @@ var holding = false
 func _ready():
 	var addItemRef = CommandRef.new(self, "cmd_add_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var addItemCommand = Command.new('addItem',  addItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(addItemCommand)
+	DebugConsole.add_command(addItemCommand)
 
 	var removeItemRef = CommandRef.new(self, "cmd_remove_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var removeItemCommand = Command.new('removeItem',  removeItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(removeItemCommand)
+	DebugConsole.add_command(removeItemCommand)
 	
 	var showAllItemRef = CommandRef.new(self, "cmd_show_all_items", CommandRef.COMMAND_REF_TYPE.FUNC, 0)
 	var showAllItemCommand = Command.new('showAllItems',  showAllItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(showAllItemCommand)
+	DebugConsole.add_command(showAllItemCommand)
 	
 	set_process_input(true)
 #
@@ -73,26 +72,26 @@ func _ready():
 	
 func cmd_add_item(input : Array):
 	var mainInv = $inventories/equipment
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
+	DebugConsole.write_line(str(mainInv.get_carry_weight()))
 	mainInv.add_item(mainInv.get_item_by_id(int(input[0])))
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
+	DebugConsole.write_line(str(mainInv.get_carry_weight()))
 	
 	
 func cmd_remove_item(input : Array):
 	var mainInv = $inventories/playerInventory
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
+	DebugConsole.write_line(str(mainInv.get_carry_weight()))
 	mainInv.remove_item(int(input[0]), 1)
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
+	DebugConsole.write_line(str(mainInv.get_carry_weight()))
 
 
 func cmd_show_all_items(_input : Array):
 	var mainInv = $inventories/playerInventory
 	
 	for i in range(mainInv._allItems.size()):
-		get_node("/root/Console/console").write_line(str(mainInv._allItems[i].get_name()))
+		DebugConsole.write_line(str(mainInv._allItems[i].get_name()))
 	#mainInv.remove_item(int(input[0]), 1)
-	#get_node("/root/Console/console").new_line()
-	#get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+	#DebugConsole.new_line()
+	#DebugConsole.append_message_without_history(str(mainInv.get_carry_weight()))
 
 	
 func _process(delta):
@@ -124,7 +123,7 @@ func create_inventory(invName, itemList):
 	
 	_inventories.append(inventory)
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	get_node("/root/Console/console").write_line("added i: " + inventory.name)
+	DebugConsole.write_line("added i: " + inventory.name)
 	
 	return _inventories[_inventories.size() - 1]
 
@@ -137,9 +136,10 @@ func add_inventory(inventory):
 #			_inventories[_inventories.size() - 1].add_item(inventory._slots[i]._item)
 #			get_node("/root/Console").write_line("added item: " + inventory._slots[i]._item.get_name())
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	get_child(0).add_child(inventory)
-	#inventory.name = invName
-	get_node("/root/Console/console").write_line("added i: " + inventory.name)
+	if not get_child(0).has_node(inventory.name):
+		get_child(0).add_child(inventory)
+
+	DebugConsole.write_line("added i: " + inventory.name)
 	
 	return _inventories.size() - 1
 	#for item in itemList:
@@ -176,7 +176,7 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 	if Global.paused:
 		return
 	
-	get_node("/root/Console").write_line(id)
+	DebugConsole.write_line(id)
 	
 	lastSelectedInv = selectedInv
 	selectedInv = inv
@@ -202,12 +202,9 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 		if selectedId == pressedId and lastSelectedInv == selectedInv:
 			var pos = _inventories[inv].get_slot(pressedId)._slot.rect_global_position
 			var size = _inventories[inv].get_slot(pressedId)._slot.rect_size
-			itemDescription.rect_global_position = Vector2(pos.x + size.x * 0.5, pos.y + size.y * 0.8)
-			itemDescriptionField.rect_global_position = pos
+			itemDescription.rect_global_position = Vector2(pos.x - size.x * 1.5, pos.y - size.y * 1.2)
 			 
 			itemDescription.set_description(_inventories[inv].get_slot(pressedId).get_item())
-			blocker.set_visible(true)
-			itemDescriptionField.set_visible(true)
 			itemDescription.set_visible(true)
 		
 		# swap items
@@ -339,10 +336,8 @@ func _check_requirements_type(item, slot) -> bool:
 	
 			
 func _on_descriptionField_mouse_exited():
-	if itemDescription.is_visible():
-		itemDescription.set_visible(false)
-		itemDescriptionField.set_visible(false)
-		blocker.set_visible(false)
+	itemDescription.set_visible(false)
+
 
 
 		

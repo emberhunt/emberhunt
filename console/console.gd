@@ -60,7 +60,7 @@ var mdefaultSize := Vector2(550.0, 275.0)
 var commands := []
 var basicCommandsSize := 0
 
-var user := ConsoleUser.new("user") 
+var user
 
 const VARIADIC_COMMANDS = 65535 # amount of parameters
 
@@ -318,13 +318,11 @@ func update_slide_in_animation(anim):
 
 func update_user_name(uName : String):
 	userName = uName
-	user.set_name(userName)
 
 
 func update_user_rights(rightsName : String):
 	userRights = rightsName
-	user.set_rights(ConsoleRights.get_rights_by_name(rightsName))
-
+	
 	update_user_name_color(ConsoleRights.get_rights_color(ConsoleRights.get_rights_by_name(userRights)))
 	property_list_changed_notify()
 	
@@ -548,8 +546,13 @@ func update_visibility_line(show):
 
 func _ready():
 	set_process_input(true)
+	isShown = is_visible_in_tree()
 	
 	user = ConsoleUser.new(userName)
+	user.set_name(userName)
+	user.set_rights(ConsoleRights.get_rights_by_name(userRights))
+	
+	
 	add_basic_commands()
 	basicCommandsSize = commands.size()
 	create_log_file(logFileName)

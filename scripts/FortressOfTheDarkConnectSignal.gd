@@ -7,5 +7,6 @@ func _ready():
 	
 	get_node("pickupItems").init(path)
 	get_node("chests").init(path)
+	get_node("npcs").init(path)
 	
 	

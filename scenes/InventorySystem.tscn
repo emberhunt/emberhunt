@@ -19,17 +19,17 @@ anchor_bottom = 1.0
 mouse_filter = 1
 
 [node name="equipment" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 211.02
-margin_top = 186.882
-margin_right = 550.02
-margin_bottom = 430.881
+margin_left = 83.0778
+margin_top = 34.3852
+margin_right = 422.078
+margin_bottom = 278.384
 inventoryDisplayName = "Equipment"
 
 [node name="chest" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 637.074
-margin_top = 185.151
-margin_right = 891.074
-margin_bottom = 431.151
+margin_left = 118.844
+margin_top = 289.831
+margin_right = 372.844
+margin_bottom = 535.831
 inventoryDisplayName = "Inventory"
 inventorySize = 20
 columns = 5
@@ -44,15 +44,12 @@ mouse_filter = 1
 
 [node name="itemSlotDescription" parent="." instance=ExtResource( 4 )]
 visible = false
-rect_pivot_offset = Vector2( -24, -24 )
-mouse_filter = 1
 
-[node name="descriptionField" type="Control" parent="."]
-visible = false
-margin_left = 1.0
-margin_right = 343.0
-margin_bottom = 233.0
-rect_pivot_offset = Vector2( 16, 16 )
+[node name="descriptionField" type="Control" parent="itemSlotDescription"]
+margin_left = -14.2963
+margin_top = -14.4043
+margin_right = 327.704
+margin_bottom = 218.596
 mouse_filter = 1
 
 [node name="draggenItem" type="TextureRect" parent="."]
@@ -62,4 +59,11 @@ margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
 
-[connection signal="mouse_exited" from="descriptionField" to="." method="_on_descriptionField_mouse_exited"]
+[node name="chestPos" type="Control" parent="."]
+margin_left = 551.151
+margin_top = 125.779
+margin_right = 551.151
+margin_bottom = 125.779
+mouse_filter = 1
+
+[connection signal="mouse_exited" from="itemSlotDescription/descriptionField" to="." method="_on_descriptionField_mouse_exited"]

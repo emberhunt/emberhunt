@@ -7,7 +7,6 @@
 [node name="inventory" type="Control"]
 margin_right = 218.0
 margin_bottom = 210.0
-rect_pivot_offset = Vector2( -290, -110 )
 mouse_filter = 1
 script = ExtResource( 1 )
 inventorySize = 12

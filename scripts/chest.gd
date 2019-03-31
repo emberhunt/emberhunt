@@ -15,9 +15,7 @@ func _ready():
 	_inventory._update_max_weight(999999)
 	_add_item(0)
 
-
 func _on_area_body_entered(body):
-	get_node("/root/Console").write_line("entered")
 	emit_signal("on_area_entered", name, _inventory)
 
 func _on_area_body_exited(body):
