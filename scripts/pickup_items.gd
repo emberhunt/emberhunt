@@ -3,8 +3,8 @@ extends Node2D
 
 const Inventory = preload("res://scripts/inventory/Inventory.gd")
 
-export(NodePath) var inventory = "/root/FortressOfTheDark/GUI/CanvasLayer/inventorySystem"
-var buttonPath = "/root/FortressOfTheDark/GUI/CanvasLayer/addItemButton"
+var inventory 
+var buttonPath 
 	
 
 var _mainInv : Inventory = null
@@ -17,6 +17,9 @@ var _amount
 
 
 func _ready():
+	inventory = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/inventorySystem"
+	buttonPath = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/addItemButton"
+	
 	for i in range(get_child_count()):
 		get_child(i).connect("on_pickup_range_entered", self, "pickup_range_entered")
 		get_child(i).connect("on_pickup_range_exited", self, "pickup_range_exited")
@@ -25,12 +28,13 @@ func _ready():
 func init(path):
 	if get_tree().get_current_scene().get_name() != "MainServer":
 		_mainInv = get_node(path + "inventorySystem")
-		_addItemButton = get_node(path + "addItemButton")
+		_addItemButton = get_node(buttonPath)
 		
 		if _mainInv == null or _addItemButton == null:
-			get_node("/root/Console/console").error("couldn't find inventory!")
+			DebugConsole.error("couldn't find inventory!")
 		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
 		_addItemButton.connect("pressed", self, "pickup_item")
+		_addItemButton.get_child(0).connect("pressed", self, "pickup_item")
 
 
 func pickup_range_exited(child, itemId, amount):
@@ -47,10 +51,11 @@ func pickup_range_entered(child, itemId, amount):
 func pickup_item():
 	var addedToSlot = _mainInv.get_inventory().add_item(Global.allItems[_itemId], _amount)
 	if addedToSlot != -1:
-		Networking.pickup_item(get_tree().get_current_scene().get_name(), _itemId, _amount, addedToSlot)
-		get_node("/root/Console/console").write_line("picked up: " + str(_amount) + " " + Global.allItems[_itemId].get_name())
-		remove_child(_child)
-		_child.queue_free()
+		if Global.nickname != "Offline":
+			Networking.askServerToPickUpItem(_child.name, _amount)
+		else:
+			_child.call_deferred("queue_free")
+		DebugConsole.write_line("picked up: " + str(_amount) + " " + Global.allItems[_itemId].get_name())
 	else:
-		get_node("/root/Console/console").write_line("Couldn't pick up item")
+		DebugConsole.write_line("Couldn't pick up item")
 		
