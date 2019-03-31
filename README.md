@@ -1,4 +1,4 @@
-# Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Commit activity](https://img.shields.io/github/last-commit/PonasKovas/emberhunt.svg?color=yellow) ![Server Status](http://mykolo.we2host.lt/pingServer/) [![License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-informational.svg)](LICENSE) [![Beerpay](https://img.shields.io/beerpay/PonasKovas/emberhunt.svg)](https://beerpay.io/PonasKovas/emberhunt)
+# Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Commit activity](https://img.shields.io/github/last-commit/PonasKovas/emberhunt.svg?color=yellow) ![Server Status](http://mykolo.we2host.lt/pingServer?) [![License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-informational.svg)](LICENSE) [![Beerpay](https://img.shields.io/beerpay/PonasKovas/emberhunt.svg)](https://beerpay.io/PonasKovas/emberhunt)
 
 This project is completely free and open-source mobile MMORPG game, created with [Godot](https://godotengine.org/).
 
