@@ -10,9 +10,12 @@ var _conversationStarted = false
 var _init = false # single dialog box init
 var _dialog
 
+var _dialogPartner
+
 var _conversation = {}
 
 func _ready():
+	show()
 	# hide children
 	for i in range($dialogs.get_child_count()):
 		$dialogs.get_child(i).hide()
@@ -20,11 +23,14 @@ func _ready():
 	set_process_input(true)
 	
 func _input(event):
+	if not _conversationStarted:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			_handle_next_dialog()
 			
 func _handle_next_dialog():
+
 	if _conversation[_index][0] == DialogType.TYPE.END:
 		get_dialog_type(_conversation[_index][0]).hide()
 		stop_conversation()
@@ -74,13 +80,14 @@ func _on_dialogDecision_on_button_pressed(buttonId):
 	_init = false
 	_handle_next_dialog()
 
-func start_conversation(conversationName):
+func start_conversation(conversationName, partner):
 	if _conversationStarted:
 		return
 	
 	if not Global.allDialogs.has(conversationName):
-		get_node("/root/Console/console").error("Couldn't find dialog: " + conversationName)
+		DebugConsole.error("Couldn't find dialog: " + conversationName)
 		return
+	_dialogPartner = partner
 	_conversationStarted = true
 	var conversation : Dictionary = Global.allDialogs[conversationName]
 
@@ -94,7 +101,13 @@ func start_conversation(conversationName):
 		var dialog = conversation[conversation.keys()[i]]
 		match (dialog.type):
 			"Text":
-				_conversation[conversation.keys()[i]] = [DialogType.TYPE.TEXT, [dialog.next, dialog.text]]
+				var speaker = dialog.speaker
+				if dialog.speaker == "{partner}":
+					speaker = _dialogPartner
+				elif dialog.speaker == "{player}":
+					speaker = "You"
+					
+				_conversation[conversation.keys()[i]] = [DialogType.TYPE.TEXT, [dialog.next, dialog.text, speaker]]
 			"Entry Point":
 				_conversation[conversation.keys()[i]] = [DialogType.TYPE.ENTRY, dialog.next]
 			"End":

@@ -5,6 +5,9 @@ signal on_button_pressed(buttonId)
 var _next = []
 
 func init(choices : Array):
+	for i in range($vBoxContainer.get_child_count()):
+		$vBoxContainer.get_child(0).free()
+	
 	for i in range(choices.size()):
 		var button = Button.new()
 		$vBoxContainer.add_child(button)

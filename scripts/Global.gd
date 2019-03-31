@@ -159,10 +159,10 @@ func loadItems():
 	var data = JSON.parse(dataText)
 	
 	if data.error != OK:
-		get_node("/root/Console/console").error("couldn't load items!")
+		DebugConsole.error("couldn't load items!")
 		return
 	else:
-		get_node("/root/Console/console").warn("loading items was successful!")
+		DebugConsole.warn("loading items was successful!")
 		
 		#print("Problems loading " + fileName + " (in Inventory.gd)")
 
@@ -200,10 +200,10 @@ func load_dialogs():
 	var data = JSON.parse(dataText)
 	
 	if data.error != OK:
-		get_node("/root/Console/console").error("couldn't load dialogs!")
+		DebugConsole.error("couldn't load dialogs!")
 		return
 	else:
-		get_node("/root/Console/console").warn("loading dialogs was successful!")
+		DebugConsole.warn("loading dialogs was successful!")
 	
 	data = data.result
 	for i in range(data.size()):

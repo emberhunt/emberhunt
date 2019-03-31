@@ -13,18 +13,19 @@ class_name InventorySystem
 signal on_item_inventory_swapped(inv1, inv2)
 
 
-const InventoryPrefab = preload("res://scenes/Inventory.tscn")
+const InventoryPrefab = preload("res://scenes/inventory/Inventory.tscn")
 const Inventory = preload("res://scripts/inventory/Inventory.gd")
 const SlotRequirement = preload("res://scripts/inventory/SlotRequirement.gd")
 const Item = preload("res://scripts/inventory/ItemStats.gd")
 
+export(bool) var weightEnabled = false
 export(NodePath) var inventoriesPath = ""
 export(NodePath) var mainInventoryPath = ""
 
 onready var itemDescription = $itemSlotDescription
-onready var itemDescriptionField = $descriptionField
 onready var blocker = $blocker
 onready var draggenItem = $draggenItem
+onready var playerStats = $playerStats
 
 
 # key is the player/chest id
@@ -41,18 +42,20 @@ var pressedId : int
 
 var holding = false
 
+var _stats = {}
+
 func _ready():
 	var addItemRef = CommandRef.new(self, "cmd_add_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var addItemCommand = Command.new('addItem',  addItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(addItemCommand)
+	DebugConsole.add_command(addItemCommand)
 
 	var removeItemRef = CommandRef.new(self, "cmd_remove_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var removeItemCommand = Command.new('removeItem',  removeItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(removeItemCommand)
+	DebugConsole.add_command(removeItemCommand)
 	
 	var showAllItemRef = CommandRef.new(self, "cmd_show_all_items", CommandRef.COMMAND_REF_TYPE.FUNC, 0)
 	var showAllItemCommand = Command.new('showAllItems',  showAllItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
-	get_node("/root/Console/console").add_command(showAllItemCommand)
+	DebugConsole.add_command(showAllItemCommand)
 	
 	set_process_input(true)
 #
@@ -69,30 +72,32 @@ func _ready():
 	
 	add_inventory(chest)
 	add_inventory(playerEquipment)
+
+func update_stats_visibility():
+	if get_child(0).get_child_count() <= 2:
+		$playerStats.visible = true
+	else:
+		$playerStats.visible = false
 	
-	
+
+func set_player_stats(stats):
+	playerStats.set_stats(stats)
+
 func cmd_add_item(input : Array):
 	var mainInv = $inventories/equipment
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	mainInv.add_item(mainInv.get_item_by_id(int(input[0])))
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	
 	
 func cmd_remove_item(input : Array):
 	var mainInv = $inventories/playerInventory
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 	mainInv.remove_item(int(input[0]), 1)
-	get_node("/root/Console/console").write_line(str(mainInv.get_carry_weight()))
 
 
 func cmd_show_all_items(_input : Array):
 	var mainInv = $inventories/playerInventory
 	
 	for i in range(mainInv._allItems.size()):
-		get_node("/root/Console/console").write_line(str(mainInv._allItems[i].get_name()))
-	#mainInv.remove_item(int(input[0]), 1)
-	#get_node("/root/Console/console").new_line()
-	#get_node("/root/Console/console").append_message_without_history(str(mainInv.get_carry_weight()))
+		DebugConsole.write_line(str(mainInv._allItems[i].get_name()))
 
 	
 func _process(delta):
@@ -124,7 +129,7 @@ func create_inventory(invName, itemList):
 	
 	_inventories.append(inventory)
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	get_node("/root/Console/console").write_line("added i: " + inventory.name)
+	DebugConsole.write_line("added i: " + inventory.name)
 	
 	return _inventories[_inventories.size() - 1]
 
@@ -137,9 +142,10 @@ func add_inventory(inventory):
 #			_inventories[_inventories.size() - 1].add_item(inventory._slots[i]._item)
 #			get_node("/root/Console").write_line("added item: " + inventory._slots[i]._item.get_name())
 	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	get_child(0).add_child(inventory)
-	#inventory.name = invName
-	get_node("/root/Console/console").write_line("added i: " + inventory.name)
+	if not get_child(0).has_node(inventory.name):
+		get_child(0).add_child(inventory)
+
+	DebugConsole.write_line("added i: " + inventory.name)
 	
 	return _inventories.size() - 1
 	#for item in itemList:
@@ -176,7 +182,7 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 	if Global.paused:
 		return
 	
-	get_node("/root/Console").write_line(id)
+	#DebugConsole.write_line(id)
 	
 	lastSelectedInv = selectedInv
 	selectedInv = inv
@@ -202,12 +208,9 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 		if selectedId == pressedId and lastSelectedInv == selectedInv:
 			var pos = _inventories[inv].get_slot(pressedId)._slot.rect_global_position
 			var size = _inventories[inv].get_slot(pressedId)._slot.rect_size
-			itemDescription.rect_global_position = Vector2(pos.x + size.x * 0.5, pos.y + size.y * 0.8)
-			itemDescriptionField.rect_global_position = pos
+			itemDescription.rect_global_position = Vector2(pos.x - size.x * 1.5, pos.y - size.y * 1.2)
 			 
 			itemDescription.set_description(_inventories[inv].get_slot(pressedId).get_item())
-			blocker.set_visible(true)
-			itemDescriptionField.set_visible(true)
 			itemDescription.set_visible(true)
 		
 		# swap items
@@ -253,11 +256,14 @@ func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 	var amount = slot1.get_amount()
 	
 	# weight without items
-	inv1.add_weight(-slot1.get_weight())
-	inv2.add_weight(-slot2.get_weight())
+	if weightEnabled:
+		inv1.add_weight(-slot1.get_weight())
+		inv2.add_weight(-slot2.get_weight())
 	
 	# no swap, if weight too much
-	if (inv1.get_carry_weight() + slot2.get_weight() > maxWeight1) or \
+	
+	if weightEnabled and \
+			(inv1.get_carry_weight() + slot2.get_weight() > maxWeight1) or \
 			(inv2.get_carry_weight() + slot1.get_weight() > maxWeight2):
 		print("can't carry anymore")
 		inv1.add_weight(slot1.get_weight())
@@ -271,8 +277,9 @@ func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 		slot1.set_item(slot2.get_item(), slot2.get_amount())
 		slot2.set_item(item1, amount1)
 		
-		inv1.add_weight(slot1.get_weight())
-		inv2.add_weight(slot2.get_weight())
+		if weightEnabled:
+			inv1.add_weight(slot1.get_weight())
+			inv2.add_weight(slot2.get_weight())
 		emit_signal("on_item_inventory_swapped", inv1, inv2)
 		
 
@@ -294,8 +301,9 @@ func _part_swap(fromInv, fromSlot : Inventory.Slot, toInv, toSlot : Inventory.Sl
 		print("can't carry anymore")
 		return
 	
-	fromInv.set_weight(fromInv.get_weight() - addItemsAmount * itemWeight)
-	toInv.set_weight(toInv.get_weight() + addItemsAmount * itemWeight)
+	if weightEnabled:
+		fromInv.set_weight(fromInv.get_weight() - addItemsAmount * itemWeight)
+		toInv.set_weight(toInv.get_weight() + addItemsAmount * itemWeight)
 	
 	fromSlot.set_amount(fromSlot.get_amount() - addItemsAmount)
 	toSlot.set_amount(toSlot.get_amount() + addItemsAmount)
@@ -311,6 +319,9 @@ func _part_swap(fromInv, fromSlot : Inventory.Slot, toInv, toSlot : Inventory.Sl
 
 
 func _get_carryable_items_amount(inv : Inventory, slot) -> int:
+	if not weightEnabled:
+		return slot.get_amount()
+
 	var remainingCarryWeight = inv.get_remainging_carry_weight()
 	for i in range(slot.get_amount()):
 		if (slot.get_item().get_weight() * (slot.get_amount() - i)) > remainingCarryWeight:
@@ -339,10 +350,8 @@ func _check_requirements_type(item, slot) -> bool:
 	
 			
 func _on_descriptionField_mouse_exited():
-	if itemDescription.is_visible():
-		itemDescription.set_visible(false)
-		itemDescriptionField.set_visible(false)
-		blocker.set_visible(false)
+	itemDescription.set_visible(false)
+
 
 
 		

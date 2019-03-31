@@ -1,4 +1,4 @@
-extends "res://dialog_creator/DialogEditor/default_graph_node.gd"
+extends "default_graph_node.gd"
 
 
 var items = {}

@@ -9,6 +9,7 @@ func init(text):
 	$text.percent_visible = 0
 	_next = text[0]
 	$text.set_bbcode(text[1])
+	$speakerBackground/speaker.text = text[2]
 	_started = false
 	_finished = false
 	
