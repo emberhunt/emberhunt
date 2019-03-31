@@ -7,7 +7,7 @@
 extents = Vector2( 150, 150 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 40, 40 )
+extents = Vector2( 26.7553, 31.4157 )
 
 [node name="npc" type="Node2D"]
 script = ExtResource( 1 )
@@ -16,10 +16,10 @@ script = ExtResource( 1 )
 position = Vector2( 0, -46.1955 )
 
 [node name="sprite" type="Sprite" parent="."]
+scale = Vector2( 0.422334, 0.422334 )
 texture = ExtResource( 2 )
 
 [node name="sightRange" type="Area2D" parent="."]
-
 
 [node name="shape2" type="CollisionShape2D" parent="sightRange"]
 shape = SubResource( 1 )
@@ -31,3 +31,4 @@ shape = SubResource( 2 )
 
 [connection signal="body_entered" from="sightRange" to="." method="_on_sightRange_body_entered"]
 [connection signal="body_entered" from="interactionRange" to="." method="_on_interactionRange_body_entered"]
+[connection signal="body_exited" from="interactionRange" to="." method="_on_interactionRange_body_exited"]

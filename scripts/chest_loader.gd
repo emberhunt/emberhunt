@@ -3,31 +3,70 @@ extends Node2D
 #const InventoryPrefab = preload("res://scenes/Inventory.tscn")
 const InventorySystem = preload("res://scripts/inventory/InventorySystem.gd")
 
-export(NodePath) var mainInventorySystem = null
+var mainInventorySystem
 
 var _mainInv : InventorySystem = null
 var openedInv
 
+var _openChestButton
+
+var _invName
+var _inv
+
 func _ready():
-	if mainInventorySystem == null and get_tree().get_current_scene().get_name() != "MainServer":
-		printerr("no inventory selected!")
-
+	mainInventorySystem = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/inventorySystem"
+	
 	for i in range(get_child_count()):
-		get_child(i).connect("on_area_entered", self, "add_to_main_inventory")
-		get_child(i).connect("on_area_exited", self, "remove_inventories")
+		get_child(i).connect("on_area_entered", self, "on_interaction_range_entered")
+		get_child(i).connect("on_area_exited", self, "on_interaction_range_exited")
 
 
-func init(inventorySystemPath):
+func init(path):
 	if get_tree().get_current_scene().get_name() != "MainServer":
-		_mainInv = get_node(inventorySystemPath + "inventorySystem")
+		_mainInv = get_node(path + "inventorySystem")
 		if _mainInv == null:
-			get_node("/root/Console/console").error("couldn't find inventory!")
+			DebugConsole.error("couldn't find inventory!")
 
 		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+		_openChestButton = get_node(path + "/openChest")
+		_openChestButton.connect("pressed", self, "open_inventory")
+		_openChestButton.get_child(0).connect("pressed", self, "open_inventory")
 
+func on_interaction_range_entered(invName, inventory):
+	_invName = invName
+	_inv = inventory
+	_openChestButton.show()
+
+func on_interaction_range_exited(_invName):
+	_openChestButton.hide()
+	if _mainInv.visible:
+		get_node("/root/" + get_tree().get_current_scene().get_name() + "/GUI")._on_toggleInventory_pressed()
+	else:
+		remove_inventories()
+
+func open_inventory():
+	_openChestButton.hide()
+	add_to_main_inventory(_invName, _inv)
+	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI")._on_toggleInventory_pressed()
+	
+func add_to_main_inventory(invName, inventory):
+	openedInv = inventory
+	openedInv.show()
+	openedInv.rect_global_position = _mainInv.get_node("chestPos").rect_global_position
+	DebugConsole.write_line("test adding inventory")
+	inventory._set_id(_mainInv.add_inventory(inventory))
+
+func remove_inventories():
+	if openedInv != null:
+		openedInv.hide()
+	else:
+		openedInv = null
+		
+	_mainInv.remove_all_except_main_inventory()
+	DebugConsole.write_line("remove inventories")
 
 func save_items(inv1, inv2):
-	get_node("/root/Console/console").write_line("saving items...")
+	DebugConsole.write_line("saving items...")
 #	if inv1.get_id() == openedInv.get_id():
 #		for i in range(inv1._slots.size()):
 #			openedInv._slots[i] = inv1._slots[i] 
@@ -44,22 +83,6 @@ func save_items(inv1, inv2):
 #			get_node(openedInvs[i].name)._slots = openedInvs[i]._slots
 #			get_node("/root/Console").write_line("found and saved")
 #			break
-
-func add_to_main_inventory(invName, inventory):
-	openedInv = inventory
-	openedInv.show()
-	get_node("/root/Console/console").write_line("test adding inventory")
-	inventory._set_id(_mainInv.add_inventory(inventory))
-
-func remove_inventories(invName):
-	openedInv.hide()
-	_mainInv.remove_all_except_main_inventory()
-	get_node("/root/Console/console").write_line("remove inventories")
-
-
-
-
-
 
 
 

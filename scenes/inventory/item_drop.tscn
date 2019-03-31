@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/inventory/items.tres" type="Texture" id=1]
+[ext_resource path="res://scripts/item_drop.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 31.3649, 30.5374 )
+
+[node name="itemDrop" type="Sprite"]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="area" type="Area2D" parent="."]
+
+[node name="shape" type="CollisionShape2D" parent="area"]
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="area" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="area" to="." method="_on_area_body_exited"]

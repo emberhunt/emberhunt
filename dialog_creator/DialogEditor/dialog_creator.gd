@@ -2,11 +2,11 @@ extends Control
 
 
 # prefabs
-const textPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_text.tscn")
-const eventPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_event.tscn")
-const decisionPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_decision.tscn")
-const endPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_end.tscn")
-const startPrefab = preload("res://dialog_creator/DialogEditor/Nodes/graph_node_start.tscn")
+const textPrefab = preload("Nodes/graph_node_text.tscn")
+const eventPrefab = preload("Nodes/graph_node_event.tscn")
+const decisionPrefab = preload("Nodes/graph_node_decision.tscn")
+const endPrefab = preload("Nodes/graph_node_end.tscn")
+const startPrefab = preload("Nodes/graph_node_start.tscn")
 
 # data from files
 export(String, FILE) var npcFile
@@ -48,9 +48,7 @@ var _allNodes = {}
 
 
 func _ready():
-	for i in range($graphEdit.get_child_count()):
-		print($graphEdit.get_child(i).name)
-	
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,SceneTree.STRETCH_ASPECT_EXPAND, Vector2(0,0))
 	set_process_input(true)
 	popup.connect("id_pressed", self, "_on_item_pressed")
 	dialogSelector.connect("id_pressed", self, "_on_loadedDialogsSelection_item_selected")

@@ -21,7 +21,7 @@ const SlotRequirement = preload("res://scripts/inventory/SlotRequirement.gd")
 const Character = preload("res://scripts/character.gd")
 
 
-const itemSlotPrefab = preload("res://scenes/ItemSlot.tscn")
+const itemSlotPrefab = preload("res://scenes/inventory/ItemSlot.tscn")
 
 # move this to global, don't load atlas texture for each inventory
 const _atlasTexture = preload("res://assets/inventory/items.png")
@@ -337,9 +337,9 @@ func add_item(item : Item, amount : int = 1):
 	# search if same item exists and is stackable,
 	# and if it is stackable, is it max stacked
 	
-	if maxWeight > 0.0 and item.get_weight() + _currentWeight > maxWeight:
-		#print('too weak to carry more')
-		return false
+	if weightEnabled:
+		if item.get_weight() + _currentWeight > maxWeight:
+			return false
 	
 	for i in range(_slots.size()):
 		var currentSlot = get_slot(i)
@@ -349,8 +349,9 @@ func add_item(item : Item, amount : int = 1):
 				if currentSlot.get_amount() < curItem.get_stack_size():
 					#print("item id of stackable: " + str(currentSlot.get_amount()))
 					currentSlot.set_amount(currentSlot.get_amount() + 1)
-					_currentWeight += item.get_weight()
-					_update_weight()
+					if weightEnabled:
+						_currentWeight += item.get_weight()
+						_update_weight()
 					return i
 
 	# if not stackable/not exist/full stack then add to new slot
@@ -359,8 +360,9 @@ func add_item(item : Item, amount : int = 1):
 		return -1
 
 	_slots[freeId].set_item(item, amount)
-	_currentWeight += item.get_weight()
-	_update_weight()
+	if weightEnabled:
+		_currentWeight += item.get_weight()
+		_update_weight()
 	return freeId
 
 	
@@ -475,7 +477,6 @@ func get_display_name() -> String:
 
 
 func get_item_id_by_name(itemName : String) -> String:
-	#print("get_item_id_by_name in inventory")
 	for i in range(Global.allItems.values()):
 		if itemName == Global.allItems.values()[i].get_name():
 			return Global.allItems.values()[i]
@@ -496,7 +497,6 @@ func _on_slot_released(index):
 		
 	_lastSelected = _selected
 	_selected = index
-	#print("released: " + str(index))
 	
 	emit_signal("on_slot_toggled", false, _selected, _id)
 	
@@ -507,5 +507,4 @@ func _on_slot_pressed(index):
 		
 	_lastSelected = _selected
 	_selected = index
-	#print("selected: " + str(index))
 	emit_signal("on_slot_toggled", true, _selected, _id)

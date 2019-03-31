@@ -7,7 +7,7 @@ self_modulate = Color( 0, 1, 0.929412, 1 )
 margin_left = 67.0
 margin_top = 53.0
 margin_right = 244.0
-margin_bottom = 246.0
+margin_bottom = 263.0
 title = "Text"
 show_close = true
 resizable = true
@@ -35,6 +35,18 @@ slot/3/left_color = Color( 1, 1, 1, 1 )
 slot/3/right_enabled = false
 slot/3/right_type = 0
 slot/3/right_color = Color( 1, 1, 1, 1 )
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color( 1, 1, 1, 1 )
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color( 1, 1, 1, 1 )
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color( 1, 1, 1, 1 )
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 
 [node name="speakerDescription" type="Label" parent="."]
@@ -44,27 +56,56 @@ margin_right = 161.0
 margin_bottom = 38.0
 text = "Speaker"
 
-[node name="speaker" type="OptionButton" parent="."]
+[node name="player" type="CheckBox" parent="."]
 margin_left = 16.0
 margin_top = 38.0
 margin_right = 161.0
-margin_bottom = 58.0
+margin_bottom = 62.0
+text = "Player"
+
+[node name="dialogPartner" type="CheckBox" parent="."]
+margin_left = 16.0
+margin_top = 63.0
+margin_right = 161.0
+margin_bottom = 87.0
+text = "Dialog Partner"
+
+[node name="hBoxContainer" type="HBoxContainer" parent="."]
+editor/display_folded = true
+visible = false
+margin_left = 16.0
+margin_top = 88.0
+margin_right = 161.0
+margin_bottom = 112.0
+
+[node name="custom" type="CheckBox" parent="hBoxContainer"]
+margin_right = 24.0
+margin_bottom = 24.0
+align = 2
+
+[node name="speaker" type="OptionButton" parent="hBoxContainer"]
+margin_left = 28.0
+margin_right = 108.0
+margin_bottom = 24.0
 text = "pedda"
 
 [node name="textDescription" type="Label" parent="."]
 margin_left = 16.0
-margin_top = 59.0
+margin_top = 113.0
 margin_right = 161.0
-margin_bottom = 73.0
+margin_bottom = 127.0
 text = "Text"
 
 [node name="text" type="TextEdit" parent="."]
 margin_left = 16.0
-margin_top = 74.0
+margin_top = 128.0
 margin_right = 161.0
-margin_bottom = 165.85
-rect_min_size = Vector2( 0, 91.85 )
+margin_bottom = 194.3
+rect_min_size = Vector2( 0, 66.3 )
 wrap_enabled = true
 
 [connection signal="close_request" from="." to="." method="_on_graphNode_close_request"]
 [connection signal="resize_request" from="." to="." method="_on_graphNode_resize_request"]
+[connection signal="pressed" from="player" to="." method="_on_player_pressed"]
+[connection signal="pressed" from="dialogPartner" to="." method="_on_dialogPartner_pressed"]
+[connection signal="pressed" from="hBoxContainer/custom" to="." method="_on_custom_pressed"]
