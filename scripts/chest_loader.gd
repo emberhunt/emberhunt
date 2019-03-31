@@ -37,9 +37,12 @@ func on_interaction_range_entered(invName, inventory):
 	_inv = inventory
 	_openChestButton.show()
 
-func on_interaction_range_exited(invName):
+func on_interaction_range_exited(_invName):
 	_openChestButton.hide()
-	remove_inventories(invName)
+	if _mainInv.visible:
+		get_node("/root/" + get_tree().get_current_scene().get_name() + "/GUI")._on_toggleInventory_pressed()
+	else:
+		remove_inventories()
 
 func open_inventory():
 	_openChestButton.hide()
@@ -53,7 +56,7 @@ func add_to_main_inventory(invName, inventory):
 	DebugConsole.write_line("test adding inventory")
 	inventory._set_id(_mainInv.add_inventory(inventory))
 
-func remove_inventories(invName):
+func remove_inventories():
 	if openedInv != null:
 		openedInv.hide()
 	else:

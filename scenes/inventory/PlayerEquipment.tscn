@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/inventory/Inventory.gd" type="Script" id=1]
 [ext_resource path="res://assets/inventory/inventory_background.tres" type="Texture" id=2]
-[ext_resource path="res://scenes/ItemSlot.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/inventory/ItemSlot.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/inventory/inventory_name_background.tres" type="StyleBox" id=4]
 
 [node name="inventory" type="Control"]
