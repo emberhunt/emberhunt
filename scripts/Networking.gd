@@ -169,10 +169,8 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_
 # # # # # # # # # # #
 
 func requestServerForMyCharacterData():
-	# Check if we are connected to the server
-	if Global.nickname != "Offline":
-		# Send RPC to server
-		rpc_id(1, "send_character_data", Global.UUID)
+	# Send RPC to server
+	rpc_id(1, "send_character_data", Global.UUID)
 
 func sendServeNewCharacterData(data):
 	# Check if we are connected to the server
@@ -181,18 +179,13 @@ func sendServeNewCharacterData(data):
 
 func askServerIfThisNicknameIsFree(nickname):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
-		rpc_id(1, "check_if_nickname_is_free", nickname)
+	rpc_id(1, "check_if_nickname_is_free", nickname)
 
 func registerAccount(nickname):
-	# Check if we are connected to the server
-	if Global.nickname != "Offline":
-		rpc_id(1, "register_new_account", nickname)
+	rpc_id(1, "register_new_account", nickname)
 
 func askServerIfThisUUIDIsValid(uuid):
-	# Check if we are connected to the server
-	if Global.nickname != "Offline":
-		rpc_id(1, "check_if_uuid_exists", uuid)
+	rpc_id(1, "check_if_uuid_exists", uuid)
 
 func requestToJoinWorld(world_name, charID):
 	# Check if we are connected to the server
