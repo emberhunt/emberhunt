@@ -215,7 +215,7 @@ func shootBullets(path_to_scene, bullet_rotation, stats):
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
 
-func askServerToPickUpItem(item_id, quantity, slot):
+func askServerToPickUpItem(item_id, quantity):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
 		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
