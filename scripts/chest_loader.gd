@@ -50,11 +50,11 @@ func open_inventory():
 	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI")._on_toggleInventory_pressed()
 	
 func add_to_main_inventory(invName, inventory):
-	openedInv = inventory
-	openedInv.show()
-	openedInv.rect_global_position = _mainInv.get_node("chestPos").rect_global_position
-	DebugConsole.write_line("test adding inventory")
-	inventory._set_id(_mainInv.add_inventory(inventory))
+	#openedInv = inventory
+	#openedInv.show()
+	#openedInv.rect_global_position = _mainInv.get_node("chestPos").rect_position
+	DebugConsole.write_line("adding inventory: " + invName)
+	#inventory._set_id(_mainInv.add_inventory(inventory))
 
 func remove_inventories():
 	if openedInv != null:

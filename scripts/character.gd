@@ -33,7 +33,6 @@ const _characterTypes = {
 	
 }
 
-
 static func get_character_type_name(characterType) -> String:
 	if _characterTypes.has(characterType):
 		return _characterTypes[characterType]
