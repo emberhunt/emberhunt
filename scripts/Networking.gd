@@ -103,10 +103,10 @@ remote func receive_world_update(world_name, world_data):
 		else:
 			selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
 		# Update all other players
-		for player in world_data.players.keys():
-			if player == get_tree().get_network_unique_id():
+		for playerID in world_data.players.keys():
+			if playerID == get_tree().get_network_unique_id():
 				continue
-			player = world_data.players[player]
+			var player = world_data.players[playerID]
 			if not get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
 				# There's no PLAYERS node yet
 				var node = YSort.new()
@@ -122,7 +122,11 @@ remote func receive_world_update(world_name, world_data):
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
 			# Sync position
 			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname)
-			playernode.position = player.position
+			playernode.speed = world_data.players[playerID].stats.agility+25
+			if (playernode.position-player.position).length() < 25:
+				playernode.move(player.position)
+			else:
+				playernode.position = player.position
 		# Update all enemies
 		#
 		# Update all npcs
