@@ -235,7 +235,7 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
 				bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
 			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullet_rotation, stats, worlds[world].players[get_tree().get_rpc_sender_id()].position], [get_tree().get_rpc_sender_id()])
 
-remote func pickup_item(world, item_id, quantity, slot):
+remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
@@ -247,9 +247,9 @@ remote func pickup_item(world, item_id, quantity, slot):
 					# Check if the player should be able to pick it up
 					# with area2D or something, also check if they have
 					# enough space in their inventory
-					
+					print("item pickup request")
 					# Pick it up
-					worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot] = {"item_id" : item_id, "quantity" : quantity}
+					#worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot] = {"item_id" : item_id, "quantity" : quantity}
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
