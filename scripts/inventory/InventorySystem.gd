@@ -26,7 +26,7 @@ onready var itemDescription = $itemSlotDescription
 onready var blocker = $blocker
 onready var draggenItem = $draggenItem
 onready var playerStats = $playerStats
-
+onready var inventoryTypes = $types
 
 # key is the player/chest id
 var _inventories = []
@@ -45,6 +45,8 @@ var holding = false
 var _stats = {}
 
 func _ready():
+	#$playerStats.show()
+	
 	var addItemRef = CommandRef.new(self, "cmd_add_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var addItemCommand = Command.new('addItem',  addItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
 	DebugConsole.add_command(addItemCommand)
@@ -67,11 +69,11 @@ func _ready():
 	var playerEquipment = $inventories/equipment
 	playerEquipment.add_item(playerEquipment.get_item_by_id(1))
 	
-	var chest = $inventories/chest
-	chest.add_item(chest.get_item_by_id(3))
+	var inv = $inventories/inventory
+	inv.add_item(inv.get_item_by_id(3))
 	
-	add_inventory(chest)
-	add_inventory(playerEquipment)
+	add_existing_inventory(inv)
+	add_existing_inventory(playerEquipment)
 
 func update_stats_visibility():
 	if get_child(0).get_child_count() <= 2:
@@ -133,7 +135,7 @@ func create_inventory(invName, itemList):
 	
 	return _inventories[_inventories.size() - 1]
 
-func add_inventory(inventory):
+func add_existing_inventory(inventory):
 	#var inventory = Inventory.new()
 	inventory._set_id(_inventories.size())
 	_inventories.append(inventory)
@@ -148,14 +150,31 @@ func add_inventory(inventory):
 	DebugConsole.write_line("added i: " + inventory.name)
 	
 	return _inventories.size() - 1
-	#for item in itemList:
-	#	inventory.add_item(item)
+
+# items = { "item_id", "amount" }
+func add_inventory(type, inventory):
+	var slots = inventory.get_slots()
+	var inv = get_inventory_prefab(type)
+	for i in range(slots.size()):
+		var key = slots.keys()[i]
+		var value = slots[slots.keys()[i]]
+		var item = value.get_item()
+		var amount = value.get_amount()
+		
+		inv.set_item(i, item, amount)
 	
+	DebugConsole.info("Added inventory: " + str(type))
+	inventoryTypes.remove_child(inv)
+	add_existing_inventory(inv)
 	
-	#get_child(0).add_child(inventory)
-	#_inventories[_inventories.size() - 1].set_visible(true)
-	#_inventories[_inventories.size() - 1].rect_global_position = rect_global_position
+
+func get_inventory_prefab(typeName):
+	for i in range(inventoryTypes.get_child_count()):
+		if typeName == inventoryTypes.get_child(i).name:
+			return inventoryTypes.get_child(i)
 	
+	DebugConsole.error("couldn't find inventory prefab: " + typeName)
+	return null
 
 func remove_inventory(index):
 	#_inventories[_inventories.size() - 1].set_visible(false)
@@ -173,9 +192,10 @@ func remove_inventory_by_name(invName):
 
 func remove_all_except_main_inventory():
 	for i in range(_inventories.size() - 2):
-		_inventories.remove(2)
-		#get_child(0).get_child(i+2).free()
-		get_child(0).remove_child(get_child(i+2))
+		if get_child(0).get_child(i).name == "inventory" or get_child(0).get_child(i).name == "equipment":
+			continue
+		_inventories.remove(i)
+		get_child(0).remove_child(get_child(i))
 
 
 func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):

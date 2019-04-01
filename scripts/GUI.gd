@@ -19,6 +19,9 @@ func _ready():
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))
 
+	update_player_stats()
+	
+func update_player_stats():
 	$CanvasLayer/inventorySystem.set_player_stats(\
 			get_node("/root/" + get_tree().get_current_scene().get_name() + "/YSort/player/stats").\
 			get_properties())

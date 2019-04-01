@@ -12,7 +12,6 @@ margin_right = 488.0
 margin_bottom = 309.0
 mouse_filter = 1
 script = ExtResource( 1 )
-columns = 0
 maxWeight = 1e+007
 
 [node name="background" type="TextureRect" parent="."]
