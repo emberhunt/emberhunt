@@ -216,6 +216,8 @@ func askServerToPickUpItem(item_id, quantity):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
 		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
+	else:
+		pickup_item(get_tree().get_current_scene().get_name(), item_id, quantity)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #

@@ -5,7 +5,7 @@ const InventorySystem = preload("res://scripts/inventory/InventorySystem.gd")
 
 var mainInventorySystem
 
-var _mainInv : InventorySystem = null
+var _invSystem : InventorySystem = null
 var openedInv
 
 var _openChestButton
@@ -14,6 +14,9 @@ var _invName
 var _inv
 
 func _ready():
+	if get_tree().get_current_scene().get_name() == "MainServer":
+		return
+
 	mainInventorySystem = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/inventorySystem"
 	
 	for i in range(get_child_count()):
@@ -22,15 +25,17 @@ func _ready():
 
 
 func init(path):
-	if get_tree().get_current_scene().get_name() != "MainServer":
-		_mainInv = get_node(path + "inventorySystem")
-		if _mainInv == null:
-			DebugConsole.error("couldn't find inventory!")
+	if get_tree().get_current_scene().get_name() == "MainServer":
+		return
+		
+	_invSystem = get_node(path + "inventorySystem")
+	if _invSystem == null:
+		DebugConsole.error("couldn't find inventory!")
 
-		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
-		_openChestButton = get_node(path + "/openChest")
-		_openChestButton.connect("pressed", self, "open_inventory")
-		_openChestButton.get_child(0).connect("pressed", self, "open_inventory")
+	_invSystem.connect("on_item_inventory_swapped", self, "save_items")
+	_openChestButton = get_node(path + "/openChest")
+	_openChestButton.connect("pressed", self, "open_inventory")
+	_openChestButton.get_child(0).connect("pressed", self, "open_inventory")
 
 func on_interaction_range_entered(invName, inventory):
 	_invName = invName
@@ -39,30 +44,25 @@ func on_interaction_range_entered(invName, inventory):
 
 func on_interaction_range_exited(_invName):
 	_openChestButton.hide()
-	if _mainInv.visible:
+	if _invSystem.visible:
 		get_node("/root/" + get_tree().get_current_scene().get_name() + "/GUI")._on_toggleInventory_pressed()
 	else:
 		remove_inventories()
 
 func open_inventory():
 	_openChestButton.hide()
-	add_to_main_inventory(_invName, _inv)
+	var temp = { 0 : { "item_id" : 0, "amount" : 1} }
+	_invSystem.open_inventory("smallChest", temp)
+	DebugConsole.write_line("adding inventory: " + invName)
 	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI")._on_toggleInventory_pressed()
 	
-func add_to_main_inventory(invName, inventory):
-	#openedInv = inventory
-	#openedInv.show()
-	#openedInv.rect_global_position = _mainInv.get_node("chestPos").rect_position
-	DebugConsole.write_line("adding inventory: " + invName)
-	#inventory._set_id(_mainInv.add_inventory(inventory))
-
 func remove_inventories():
 	if openedInv != null:
 		openedInv.hide()
 	else:
 		openedInv = null
 		
-	_mainInv.remove_all_except_main_inventory()
+	_invSystem.remove_all_except_main_inventory()
 	DebugConsole.write_line("remove inventories")
 
 func save_items(inv1, inv2):

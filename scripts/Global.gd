@@ -10,6 +10,8 @@ var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
 var UUID = false
 
+const itemAtlas = preload("res://assets/inventory/items.png")
+
 var nickname = "Offline"
 
 var charactersData = {}
@@ -121,9 +123,12 @@ const init_stats = {
 	}
 }
 
+
 # data of all items loaded once
 var allItems = {}
 var allDialogs = {}
+var playerInventory = {}
+var playerEquipment = {}
 
 # game paused
 var paused = false
@@ -165,7 +170,7 @@ func loadItems():
 		DebugConsole.warn("loading items was successful!")
 		
 		#print("Problems loading " + fileName + " (in Inventory.gd)")
-
+	
 	data = data.result
 	for i in range(data.size()):
 		var itemData = data[str(i)]
@@ -205,6 +210,22 @@ func load_dialogs():
 	else:
 		DebugConsole.warn("loading dialogs was successful!")
 	
+	data = data.result
+	for i in range(data.size()):
+		var conversation = data[data.keys()[i]]
+		allDialogs[data.keys()[i]] = conversation
+
+func load_inventory():
+	var file = File.new()
+	file.open("res://assets/inventory/inventories.json", file.READ)
+	var data = JSON.parse(file.get_as_text())
+
+	if data.error != OK:
+		DebugConsole.error("couldn't load inventory!")
+		return
+	else:
+		DebugConsole.warn("loading inventory was successful!")
+
 	data = data.result
 	for i in range(data.size()):
 		var conversation = data[data.keys()[i]]

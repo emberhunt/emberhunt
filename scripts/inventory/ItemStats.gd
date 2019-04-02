@@ -1,6 +1,5 @@
 class_name Item
 
-
 enum ItemType {
 	# Weapons
 	SPEAR,
