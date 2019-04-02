@@ -7,123 +7,19 @@ by including it in an inventory system
 	2. OR custom container, where you have to instanciate the 
 	   item slots yourself 
 """
-tool
+#tool
 extends Control
 
 # signaled, when pressed or released
 signal on_slot_toggled(is_pressed, _selected, inventoryName)
 
 # types
-
 const Item = preload("res://scripts/inventory/ItemStats.gd")
+const Slot = preload("res://scripts/inventory/slot.gd")
 const ItemSlot = preload("res://scripts/inventory/ItemSlot.gd")
-const SlotRequirement = preload("res://scripts/inventory/SlotRequirement.gd")
 const Character = preload("res://scripts/character.gd")
 
-
-const itemSlotPrefab = preload("res://scenes/inventory/ItemSlot.tscn")
-
-# move this to global, don't load atlas texture for each inventory
-const _atlasTexture = preload("res://assets/inventory/items.png")
-#const _slotBackground = preload("res://assets/inventory/slotBackground.png")
-
-"""
-This class is used as an wrapper for 
-the slot, the item, requirements and the amount of the items
-"""
-class Slot:
-	const ItemSlot = preload("res://scripts/inventory/ItemSlot.gd")
-	
-	var _item : Item = null
-	var _slot : ItemSlot = null #: TextureButton
-	var _amount = 0
-	var _slotRequirements = {} # level, class, type of item
-	var _slotTypeRequirements : Array # ItemTypes
-
-	func _init(id):
-		var slot = ItemSlot.new()
-		_slot = (itemSlotPrefab.instance() as ItemSlot)
-		#print("slotname: " + id)
-		_slot.init(id)
-		#_slot.set_amount(0)
-		#_slot = ItemSlotPrefab.instance()
-		pass
-		
-	func set_slot_types(types : Array):
-		_slotTypeRequirements = types
-		
-	func accepts_slot_type(type) -> bool:
-		if _slotTypeRequirements.empty():
-			return true
-		return _slotTypeRequirements.has(type)
-	
-	func get_slot_types() -> Array:
-		return _slotTypeRequirements
-	
-	func set_amount(amount : int):
-		_amount = amount
-		_slot.set_amount(amount)
-		
-	# if amount = 0, delete whole slot, else n>0 remove n items
-	func remove_item(amount : int = 0):
-		if amount == 0:
-			_slot.set_item_texture(null)
-			_item = null
-			_amount = 0
-		else:
-			_amount -= amount
-			if _amount <= 0:
-				_amount = 0
-				_item = null
-				_slot.set_item_texture(null)
-		_slot.set_amount(_amount)	
-			
-		
-	func set_item(item : Item, amount):
-		_item = item
-		_amount = amount
-		_slot.set_amount(_amount)
-		
-		var atls = AtlasTexture.new()
-		if item == null:
-			atls = null
-		else:
-			atls.atlas = _atlasTexture
-			atls.region = _item.get_texture_region()
-			atls.margin = Rect2(0,3,0,0)
-		_slot.set_item_texture(atls)
-		
-	func get_item() -> Item:
-		return _item
-		
-	func get_amount() -> int:
-		return _amount
-		
-	func get_weight() -> float:
-		if _item != null:
-			return _item.get_weight() * get_amount()
-		else:
-			return 0.0
-			
-	func set_selected():
-		_slot.set_selected()
-		
-	func set_unselected():
-		_slot.set_unselected()
-		
-	func add_slot_requirement(requirementType, value):
-		_slotRequirements[SlotRequirement.get_requirement_name(requirementType)] = value
-		
-	func has_slot_requirements() -> bool:
-		return _slotRequirements.size() > 0
-		
-	func get_slot_requirements() -> Dictionary:
-		return _slotRequirements
-		
-
-
 # vars
-
 onready var itemSlots = $slots
 onready var weightLabel = $weightLabel
 
@@ -134,70 +30,12 @@ export(int) var inventorySize = 0 setget update_inventory_size
 export(int) var columns = 4 setget update_inventory_columns
 export(bool) var weightEnabled = false setget update_weight_enabled
 export(float) var maxWeight = -1 setget _update_max_weight
-	
-
-func update_inventory_size(size : int):
-	if size < 0:
-		return
-	
-	if has_node("slots") and $slots != null:
-		if not $slots.is_class("GridContainer"):
-			inventorySize = 0
-			return
-		
-		if $slots.get_child_count() != inventorySize:
-			_slots.clear()
-			for i in range($slots.get_child_count()):
-				$slots.get_child(0).free()
-	
-			inventorySize = 0
-	
-	if size > inventorySize: # create more slots
-		for i in range(size - inventorySize):
-			add_empty_slot()
-	elif size < inventorySize: #remove last slots
-		for i in range(inventorySize - size):
-			remove_last_slot()
-	
-	inventorySize = size
-	
-
-func _update_max_weight(newMax):
-	maxWeight = newMax
-	_update_weight()
-
-func update_weight_enabled(enable : bool):
-	weightEnabled = enable
-	if has_node("weightLabel") and $weightLabel != null:
-		$weightLabel.set_visible(enable)
-	
-func update_inventory_name(name : String):
-	if has_node("nameBackground/name") and $nameBackground/name != null:
-		$nameBackground/name.text= name
-		inventoryDisplayName = name
-
-func update_inventory_columns(cols : int):
-	if cols < 0:
-		return
-	# set colums to 0 for custom layout
-	if has_node("slots") and $slots != null:
-		if not $slots.is_class("GridContainer"):
-			columns = 0
-			return
-		else:
-			columns = cols
-			$slots.columns = columns
-
 
 # how much can this inventory carry, negative means, no limit
-
 var _currentWeight = 0.0
-
 
 # class Slot, contains all available slots
 var _slots = []
-# contains string ids of all registered ids
-#var _registeredSlotNames = []
 
 # this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
 # inventoryId should be the unique player id
@@ -207,7 +45,6 @@ var _lastSelected = -1
 var _selected = -1
 
 func _ready():
-	set_process(false)
 	set_process_input(true)
 	
 	$nameBackground/name.set_text(inventoryDisplayName)
@@ -224,7 +61,6 @@ func _ready():
 		inventorySize = itemSlots.get_child_count()
 		for i in range(inventorySize):
 			itemSlots.get_child(i).init(i)
-	
 		add_existing_slots()
 		
 	
@@ -247,11 +83,11 @@ func can_carry_items(item : Item, amount : int = 1) -> bool:
 	if _currentWeight + (item.get_weight() * float(amount)) > maxWeight:
 		return false
 	return true
-	
+
 
 func get_carry_weight() -> float:
 	return _currentWeight
-	
+
 
 func get_remainging_carry_weight() -> float:
 	return maxWeight - _currentWeight
@@ -277,7 +113,6 @@ func add_empty_slot():
 	if not (has_node("slots") and $slots != null):
 		return 
 	var newSlotIndex = _slots.size()
-	#print(newSlotIndex)
 	var emptySlot = Slot.new(newSlotIndex)
 #	if _slots.size() == 0:
 #		emptySlot.add_slot_requirement(SlotRequirement.SlotRequirement.CLASS, \
@@ -289,35 +124,17 @@ func add_empty_slot():
 	
 	_slots[newSlotIndex]._slot.connect("on_slot_pressed", self, "_on_slot_pressed") 
 	_slots[newSlotIndex]._slot.connect("on_slot_released", self, "_on_slot_released") 
-	
-	#print("added empty slot: " + newSlotIndex)
-	#print("with slot name: " + _slots[newSlotIndex]._slot.name)
 
 
 func remove_last_slot():
 	if not _slots.empty():
-		#var lastKey := str()
-		#var lastChild := str($slots.get_child($slots.get_child_count() - 1).name)
-		#print("removing last: " + lastKey  + " == " + lastChild)
 		remove_slot(_slots.size() - 1)
 
 
 func remove_slot(slotId):
 	if not (has_node("slots") and $slots != null):
 		return 
-	
-	#var deleteSlotName = slotId
-	#var deleteNodeName = _slots[slotId]._slot.name
-	
-	#print("delete slot name: " + deleteSlotName)
-	#print("delete node name: " + deleteNodeName)
-	#print("delete node path name: " + deleteNodePath)
-	#if not $slots.has_node(deleteNodeName):
-		#for i in range($slots.get_child_count()):
-			#print($slots.get_child(i).name)
-	
-	#$slots.remove_child($slots.get_node(deleteNodeName))
-	#_slots.erase(slotId)
+
 	_slots.remove(slotId)
 	$slots.remove_child(get_child(slotId))
 
@@ -365,25 +182,31 @@ func add_item(item : Item, amount : int = 1):
 		_update_weight()
 	return freeId
 
+func get_inventory_save_data() -> Dictionary:
+	var slots = {}
+	for i in range(_slots.size()):
+		var slot = _slots[_slots.keys()[i]]
+		
+		var itemId = slot.get_item().get_item_id()
+		var amount = slot.get_amount()
+		
+		slots[_id] = { _slots.keys()[i] : { "item_id" : itemId, "amount" : amount } }
 	
-# ToDo
-# json file
-func load_inventory(fileName : String) -> Dictionary:
-	var file = File.new()
-	file.open(fileName, file.READ)
-	var dataText = file.get_as_text()
-	file.close()
-	var data = JSON.parse(dataText)
-	
-	if data.error != OK:
-		print("Problems loading " + fileName + " (in Inventory.gd)")
-		return {}
-	
-	return data.result
+	return slots
 
+# slots max size
+func load_inventory_from_data(invName, slotSize, columns, weightEnabled, data):
+	update_inventory_size(slotSize)
+	update_inventory_columns(columns)
+	_update_max_weight(weightEnabled)
+	update_inventory_name(invName)
+	
+	for i in range(data.size()):
+		var slot = data[data.keys()[i]]
+		set_item(data.keys()[i], slot.item_id, slot.amount)
 
 func set_item(id, item, amount = 1):
-	var tempItem = _slots[id].set_item(item, amount)
+	var tempItem = _slots[id].set_item(get_item(item), amount)
 	
 	
 func get_item(id):
@@ -432,7 +255,7 @@ func get_item_at_slot(slotId : int) -> Item:
 	return _slots[slotId]._item
 	
 
-func get_slot(pos : int) -> Slot:
+func get_slot(pos : int):
 	return _slots[pos]
 
 
@@ -443,7 +266,7 @@ func _get_next_free_slot_id():
 	return -1
 	
 	
-func get_selected_slot() -> Slot:
+func get_selected_slot():
 	return _slots[_selected]
 
 
@@ -451,7 +274,7 @@ func get_selected_item() -> Item:
 	return _slots[_selected]._item
 	
 	
-func get_last_selected_slot() -> Slot:
+func get_last_selected_slot():
 	return _slots[_lastSelected]
 	
 
@@ -508,3 +331,56 @@ func _on_slot_pressed(index):
 	_lastSelected = _selected
 	_selected = index
 	emit_signal("on_slot_toggled", true, _selected, _id)
+
+
+func update_inventory_size(size : int):
+	if size < 0:
+		return
+	
+	if has_node("slots") and $slots != null:
+		if not $slots.is_class("GridContainer"):
+			inventorySize = 0
+			return
+		
+		if $slots.get_child_count() != inventorySize:
+			_slots.clear()
+			for i in range($slots.get_child_count()):
+				$slots.get_child(0).free()
+	
+			inventorySize = 0
+	
+	if size > inventorySize: # create more slots
+		for i in range(size - inventorySize):
+			add_empty_slot()
+	elif size < inventorySize: #remove last slots
+		for i in range(inventorySize - size):
+			remove_last_slot()
+	
+	inventorySize = size
+	
+
+func _update_max_weight(newMax):
+	maxWeight = newMax
+	_update_weight()
+
+func update_weight_enabled(enable : bool):
+	weightEnabled = enable
+	if has_node("weightLabel") and $weightLabel != null:
+		$weightLabel.set_visible(enable)
+	
+func update_inventory_name(name : String):
+	if has_node("nameBackground/name") and $nameBackground/name != null:
+		$nameBackground/name.text= name
+		inventoryDisplayName = name
+
+func update_inventory_columns(cols : int):
+	if cols < 0:
+		return
+	# set colums to 0 for custom layout
+	if has_node("slots") and $slots != null:
+		if not $slots.is_class("GridContainer"):
+			columns = 0
+			return
+		else:
+			columns = cols
+			$slots.columns = columns

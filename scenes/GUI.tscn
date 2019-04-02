@@ -61,7 +61,6 @@ scale = Vector2( 0.498126, 0.467679 )
 normal = ExtResource( 3 )
 
 [node name="addItemButton" type="TextureButton" parent="CanvasLayer"]
-editor/display_folded = true
 visible = false
 margin_left = 880.0
 margin_top = 280.0
@@ -71,7 +70,7 @@ mouse_filter = 1
 texture_normal = ExtResource( 4 )
 expand = true
 
-[node name="addItemTouch" type="TouchScreenButton" parent="CanvasLayer/addItemButton"]
+[node name="touch" type="TouchScreenButton" parent="CanvasLayer/addItemButton"]
 scale = Vector2( 0.883642, 0.415395 )
 normal = ExtResource( 4 )
 

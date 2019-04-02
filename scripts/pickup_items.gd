@@ -16,6 +16,8 @@ var _amount
 
 
 func _ready():
+	if get_tree().get_current_scene().get_name() == "MainServer":
+		return
 	inventory = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/inventorySystem"
 	buttonPath = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/addItemButton"
 	
@@ -31,7 +33,7 @@ func init(path):
 		
 		if _mainInv == null or _addItemButton == null:
 			DebugConsole.error("couldn't find inventory!")
-		_mainInv.connect("on_item_inventory_swapped", self, "save_items")
+		#_mainInv.connect("on_item_inventory_swapped", self, "save_items")
 		_addItemButton.connect("pressed", self, "pickup_item")
 		_addItemButton.get_child(0).connect("pressed", self, "pickup_item")
 

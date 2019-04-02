@@ -14,7 +14,7 @@ func _ready():
 
 func init(invPrefab):
 	
-	for i in range(
+	#for i in range(
 	
 	_inventory.update_inventory_size(12)
 	_inventory.update_weight_enabled(false)

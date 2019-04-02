@@ -29,7 +29,8 @@ onready var playerStats = $playerStats
 onready var inventoryTypes = $types
 
 # key is the player/chest id
-var _inventories = []
+#var _inventories = []
+var _inventoryTypeNames = []
 var _mainInventoryId : int
 
 var selectedInv
@@ -45,7 +46,7 @@ var holding = false
 var _stats = {}
 
 func _ready():
-	#$playerStats.show()
+	$playerStats.show()
 	
 	var addItemRef = CommandRef.new(self, "cmd_add_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
 	var addItemCommand = Command.new('addItem',  addItemRef, [], '.', ConsoleRights.CallRights.ADMIN)
@@ -74,6 +75,9 @@ func _ready():
 	
 	add_existing_inventory(inv)
 	add_existing_inventory(playerEquipment)
+	
+	for i in range($types.get_child_count()):
+		_inventoryTypeNames.append($types.get_child(i).name)
 
 func update_stats_visibility():
 	if get_child(0).get_child_count() <= 2:
@@ -114,59 +118,66 @@ func _input(event):
 
 
 func get_inventory():
-	return _inventories[_mainInventoryId]
+	return $inventories/inventory
+
+func get_equipment():
+	return $inventories/equipment
 	
 	
 # return the id of the created inventory
-func create_inventory(invName, itemList):
-	var inventory : Inventory = InventoryPrefab.instance()
-	inventory.update_inventory_size(12)
-	
-	get_child(0).add_child(inventory)
-	inventory._set_id(_inventories.size())
-	inventory.name = invName
-	
-	for item in itemList:
-		inventory.add_item(item._item)
-	
-	_inventories.append(inventory)
-	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	DebugConsole.write_line("added i: " + inventory.name)
-	
-	return _inventories[_inventories.size() - 1]
+#func create_inventory(invName, itemList):
+#	var inventory : Inventory = InventoryPrefab.instance()
+#	inventory.update_inventory_size(12)
+#
+#	get_child(0).add_child(inventory)
+#	inventory._set_id($inventories.get_child_count())
+#	inventory.name = invName
+#
+#	for item in itemList:
+#		inventory.add_item(item._item)
+#
+#	inventory.connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
+#	$inventories.add_child(inventory)
+#	DebugConsole.write_line("added i: " + inventory.name)
+#
+#	return $inventories.get_child_count() - 1
 
 func add_existing_inventory(inventory):
-	#var inventory = Inventory.new()
-	inventory._set_id(_inventories.size())
-	_inventories.append(inventory)
-#	for i in range(inventory._slots.size()):
-#		if inventory._slots[i]._item != null:
-#			_inventories[_inventories.size() - 1].add_item(inventory._slots[i]._item)
-#			get_node("/root/Console").write_line("added item: " + inventory._slots[i]._item.get_name())
-	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
+	$playerStats.hide()
+	inventory._set_id($inventories.get_child_count())
+	inventory.get_parent().remove_child(inventory)
+	$inventories.add_child(inventory)
+	
+	inventory.connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
 	if not get_child(0).has_node(inventory.name):
 		get_child(0).add_child(inventory)
-
+		inventory.set_visible(true)
+	
 	DebugConsole.write_line("added i: " + inventory.name)
 	
-	return _inventories.size() - 1
+	return $inventories.get_child_count() - 1
 
 # items = { "item_id", "amount" }
-func add_inventory(type, inventory):
-	var slots = inventory.get_slots()
+func open_inventory(type, data):
 	var inv = get_inventory_prefab(type)
-	for i in range(slots.size()):
-		var key = slots.keys()[i]
-		var value = slots[slots.keys()[i]]
-		var item = value.get_item()
-		var amount = value.get_amount()
-		
-		inv.set_item(i, item, amount)
-	
-	DebugConsole.info("Added inventory: " + str(type))
-	inventoryTypes.remove_child(inv)
+	inv.get_parent().remove_child(inv)
+	for i in range(data.size()):
+		var value = data[data.keys()[i]]
+		inv.set_item(data.keys()[i], value.item_id, value.amount)
+
+	DebugConsole.warn("Added inventory: " + str(type))
 	add_existing_inventory(inv)
+
+func close_inventory(type):
+	$playerStats.show()
 	
+	for i in range($inventories.get_child_count()):
+		for l in range(_inventoryTypeNames.size()):
+			if $inventories.get_child(i).name == _inventoryTypeNames:
+				var inv = $inventories.get_child(i)
+				inv.set_visible(false)
+				inv.get_parent().remove_child(inv)
+				$types.add_child(inv)
 
 func get_inventory_prefab(typeName):
 	for i in range(inventoryTypes.get_child_count()):
@@ -177,40 +188,34 @@ func get_inventory_prefab(typeName):
 	return null
 
 func remove_inventory(index):
-	#_inventories[_inventories.size() - 1].set_visible(false)
-	#_inventories[index].set_visible(false)
-	_inventories.remove(index)
+	$playerStats.show()
 	
-	get_child(0).remove_child(get_child(index))
-
+	var inv = $inventories.get_child(index)
+	inv.set_visible(false)
+	inv.get_parent().remove_child(inv)
+	$types.add_child(inv)
 	
 func remove_inventory_by_name(invName):
-	for i in range(_inventories.size()):
-		if invName != _inventories.keys()[i]:
-			_inventories.remove(i)
+	for i in range($inventories.get_child_count()):
+		if invName == $inventories.get_child(i).name:
+			$inventories.remove_child($inventories.get_child(i))
 
 
 func remove_all_except_main_inventory():
-	for i in range(_inventories.size() - 2):
-		if get_child(0).get_child(i).name == "inventory" or get_child(0).get_child(i).name == "equipment":
+	for i in range($inventories.get_child_count()):
+		if $inventories.get_child(i).name == "inventory" or $inventories.get_child(i).name == "equipment":
 			continue
-		_inventories.remove(i)
-		get_child(0).remove_child(get_child(i))
-
+		$inventories.remove_child($inventories.get_child(i))
+		remove_inventory(i)
 
 func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 	if Global.paused:
 		return
 	
-	#DebugConsole.write_line(id)
-	
 	lastSelectedInv = selectedInv
 	selectedInv = inv
 	lastSelectedId = selectedId
 	selectedId = id
-		
-	#print(selectedId)
-	#print(selectedInv)
 	
 	if is_pressed: 
 		if _inventories[inv].get_item(id) != null : # make dragged item visible
@@ -218,11 +223,8 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 			pressedId = selectedId
 			draggenItem.set_visible(true)
 			draggenItem.texture = _inventories[inv].get_slot(selectedId)._slot.get_child(0).texture
-			#print("pressed: " + str(pressedId))
 			
 	elif holding and not is_pressed:
-		#_inventories[inv].get_slots()[lastSelectedId].set_unselected()
-		#_inventories[inv].get_slots()[selectedId].set_unselected()
 		holding = false
 		
 		if selectedId == pressedId and lastSelectedInv == selectedInv:
