@@ -1,6 +1,5 @@
 extends Node2D
 
-
 const Inventory = preload("res://scripts/inventory/Inventory.gd")
 
 var buttonPath 

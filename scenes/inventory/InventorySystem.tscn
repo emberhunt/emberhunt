@@ -19,18 +19,20 @@ anchor_bottom = 1.0
 mouse_filter = 1
 
 [node name="equipment" parent="inventories" instance=ExtResource( 2 )]
-margin_left = 83.0
+margin_left = 71.0
 margin_top = 34.0
-margin_right = 422.0
-margin_bottom = 299.0
+margin_right = 394.0
+margin_bottom = 290.0
+mouse_filter = 0
 inventoryDisplayName = "Equipment"
 columns = 0
 
 [node name="inventory" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 118.844
-margin_top = 316.14
-margin_right = 372.844
-margin_bottom = 562.14
+margin_left = 106.567
+margin_top = 297.724
+margin_right = 360.567
+margin_bottom = 543.724
+mouse_filter = 0
 inventoryDisplayName = "Inventory"
 inventorySize = 20
 columns = 5
@@ -38,28 +40,31 @@ maxWeight = 1e+007
 
 [node name="smallChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 528.183
+margin_left = 678.868
 margin_top = 93.239
-margin_right = 695.183
+margin_right = 845.868
 margin_bottom = 291.239
+mouse_filter = 0
 inventoryDisplayName = "Small Chest"
 inventorySize = 9
 columns = 3
 
 [node name="mediumChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 530.183
+margin_left = 680.868
 margin_top = 95.239
-margin_right = 742.183
+margin_right = 892.868
 margin_bottom = 296.239
+mouse_filter = 0
 inventoryDisplayName = "Medium Chest"
 
 [node name="bigChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 529.183
+margin_left = 679.868
 margin_top = 90.239
-margin_right = 738.183
+margin_right = 888.868
 margin_bottom = 333.239
+mouse_filter = 0
 inventoryDisplayName = "Big Chest"
 inventorySize = 16
 
@@ -79,5 +84,15 @@ margin_left = -4.43213
 margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
+
+[node name="consumeField" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -85.0
+margin_top = -78.0
+margin_right = 107.0
+margin_bottom = 78.0
 
 [connection signal="mouse_exited" from="itemSlotDescription/descriptionField" to="." method="_on_descriptionField_mouse_exited"]

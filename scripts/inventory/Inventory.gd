@@ -7,7 +7,7 @@ by including it in an inventory system
 	2. OR custom container, where you have to instanciate the 
 	   item slots yourself 
 """
-tool
+#tool
 extends Control
 
 # signaled, when pressed or released
