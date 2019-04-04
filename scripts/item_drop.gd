@@ -10,7 +10,6 @@ signal on_pickup_range_exited(child, item, amount)
 export(int) var _itemId = -1
 export(int) var _amount = 0
 
-
 func _ready():
 	pass
 

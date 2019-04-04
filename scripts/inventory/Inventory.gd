@@ -7,7 +7,7 @@ by including it in an inventory system
 	2. OR custom container, where you have to instanciate the 
 	   item slots yourself 
 """
-#tool
+tool
 extends Control
 
 # signaled, when pressed or released
@@ -31,24 +31,18 @@ export(int) var columns = 4 setget update_inventory_columns
 export(bool) var weightEnabled = false setget update_weight_enabled
 export(float) var maxWeight = -1 setget _update_max_weight
 
-# how much can this inventory carry, negative means, no limit
 var _currentWeight = 0.0
 
-# class Slot, contains all available slots
 var _slots = []
-
-# this will be assigned by the inventory system, -1 means it's not opened/not in an inventory system
-# inventoryId should be the unique player id
-var _id
 
 var _lastSelected = -1
 var _selected = -1
 
 func _ready():
+	update_inventory_size(inventorySize)
 	set_process_input(true)
 	
 	$nameBackground/name.set_text(inventoryDisplayName)
-	_id = self.name
 	
 	for i in range(Global.allItems.size()):
 		Global.allItems.values().append(Global.allItems.values()[i])
@@ -99,7 +93,6 @@ func get_max_carry_weight() -> float:
 	
 # register slots if you want to add slots that already exist in the editor
 func add_existing_slots():
-	#print("current slot size = " + str(_slots.size()))
 	for i in range(inventorySize):
 		var newSlotIndex = _slots.size()
 		var emptySlot = Slot.new(newSlotIndex)
@@ -138,6 +131,10 @@ func remove_slot(slotId):
 	_slots.remove(slotId)
 	$slots.remove_child(get_child(slotId))
 
+func clear():
+	for i in range(_slots.size()):
+		_slots[i]._item = null
+		_slots[i]._amount = 0
 
 func remove_item(slotId : int, amount : int = 0) -> Item:
 	var item = get_slot(slotId)._item
@@ -190,7 +187,7 @@ func get_inventory_save_data() -> Dictionary:
 		var itemId = slot.get_item().get_item_id()
 		var amount = slot.get_amount()
 		
-		slots[_id] = { _slots.keys()[i] : { "item_id" : itemId, "amount" : amount } }
+		slots[_slots.keys()[i]] = { "item_id" : itemId, "amount" : amount }
 	
 	return slots
 
@@ -206,7 +203,7 @@ func load_inventory_from_data(invName, slotSize, columns, weightEnabled, data):
 		set_item(data.keys()[i], slot.item_id, slot.amount)
 
 func set_item(id, item, amount = 1):
-	var tempItem = _slots[id].set_item(get_item(item), amount)
+	_slots[id].set_item(get_item_by_id(item), amount)
 	
 	
 func get_item(id):
@@ -287,14 +284,8 @@ func get_last_selected_item() -> Item:
 	
 	
 func get_id() -> String:
-	return _id
+	return self.name
 	
-	
-# this should only be set 
-func _set_id(id):
-	_id = id
-
-
 func get_display_name() -> String:
 	return inventoryDisplayName
 
@@ -321,7 +312,7 @@ func _on_slot_released(index):
 	_lastSelected = _selected
 	_selected = index
 	
-	emit_signal("on_slot_toggled", false, _selected, _id)
+	emit_signal("on_slot_toggled", false, _selected, self.name)
 	
 
 func _on_slot_pressed(index):
@@ -330,7 +321,7 @@ func _on_slot_pressed(index):
 		
 	_lastSelected = _selected
 	_selected = index
-	emit_signal("on_slot_toggled", true, _selected, _id)
+	emit_signal("on_slot_toggled", true, _selected, self.name)
 
 
 func update_inventory_size(size : int):

@@ -56,8 +56,8 @@ window_title = "Open a File"
 dialog_hide_on_ok = true
 mode = 0
 access = 2
-current_dir = "G:/Projects/BitBucket/DialogEditor"
-current_path = "G:/Projects/BitBucket/DialogEditor/"
+current_dir = "C:/Users/cobra/Documents/Godot Projects/emberhunt"
+current_path = "C:/Users/cobra/Documents/Godot Projects/emberhunt/"
 
 [node name="saveFileDialog" type="FileDialog" parent="."]
 margin_left = 221.809
@@ -65,8 +65,8 @@ margin_top = 140.434
 margin_right = 785.809
 margin_bottom = 495.434
 access = 2
-current_dir = "G:/Projects/BitBucket/DialogEditor"
-current_path = "G:/Projects/BitBucket/DialogEditor/"
+current_dir = "C:/Users/cobra/Documents/Godot Projects/emberhunt"
+current_path = "C:/Users/cobra/Documents/Godot Projects/emberhunt/"
 
 [node name="deleteAll" type="Button" parent="."]
 margin_left = 945.65

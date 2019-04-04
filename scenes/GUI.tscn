@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=8]
 [ext_resource path="res://scenes/dialog/dialog_system.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/inventory/InventorySystem.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/playerStats.tscn" type="PackedScene" id=11]
 
 [node name="gui" type="Control"]
 anchor_right = 1.0
@@ -61,6 +62,7 @@ scale = Vector2( 0.498126, 0.467679 )
 normal = ExtResource( 3 )
 
 [node name="addItemButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
 visible = false
 margin_left = 880.0
 margin_top = 280.0
@@ -181,11 +183,16 @@ texture = ExtResource( 7 )
 visible = false
 
 [node name="inventorySystem" parent="CanvasLayer" instance=ExtResource( 10 )]
-visible = false
 margin_left = -0.119565
 margin_top = -2.27206
 margin_right = -0.119568
 margin_bottom = -2.27203
+
+[node name="playerStats" parent="CanvasLayer/inventorySystem" instance=ExtResource( 11 )]
+margin_left = 628.989
+margin_top = 304.914
+margin_right = -10.0111
+margin_bottom = -9.08582
 
 [node name="FPS" type="Label" parent="CanvasLayer"]
 margin_left = 2.3327
