@@ -212,11 +212,17 @@ position = Vector2( 79.373, 14.4605 )
 npcName = "Fant"
 conversationName = "test"
 
+[node name="npc2" parent="npcs" instance=ExtResource( 5 )]
+position = Vector2( 13.3502, -70.9758 )
+npcName = "Fant"
+conversationName = "villager_5"
+
 [node name="chests" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
 [node name="chest" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( -42.0771, -12.9967 )
+_type = "mediumChest"
 
 [node name="chest2" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( 98.0585, -51.322 )

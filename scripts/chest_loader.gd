@@ -51,9 +51,8 @@ func on_interaction_range_exited(_invName):
 
 func open_inventory():
 	_openChestButton.hide()
-	var temp = { 0 : { "item_id" : 0, "amount" : 1} }
-	_invSystem.open_inventory("smallChest", temp)
-	DebugConsole.write_line("adding inventory: " + invName)
+	_invSystem.open_inventory(_invName, _inv)
+	DebugConsole.write_line("adding inventory: " + _invName)
 	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI")._on_toggleInventory_pressed()
 	
 func remove_inventories():
@@ -62,7 +61,7 @@ func remove_inventories():
 	else:
 		openedInv = null
 		
-	_invSystem.remove_all_except_main_inventory()
+	_invSystem.close_all_except_main_inventory()
 	DebugConsole.write_line("remove inventories")
 
 func save_items(inv1, inv2):

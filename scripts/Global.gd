@@ -174,9 +174,9 @@ func loadItems():
 	data = data.result
 	for i in range(data.size()):
 		var itemData = data[str(i)]
-		var newItem = Item.new(
+		allItems[i] = Item.new(
 				i,
-				itemData["name"], 
+				itemData["name"],
 				Item.get_type_from_name(itemData["type"]),
 				itemData["weight"],
 				itemData["value"],
@@ -195,8 +195,6 @@ func loadItems():
 				itemData["consumable"]
 				)
 				
-		allItems[i] = newItem
-		
 func load_dialogs():
 	var file = File.new()
 	file.open("res://assets/dialogs/dialogs.json", file.READ)

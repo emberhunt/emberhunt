@@ -1,17 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/inventory/InventorySystem.gd" type="Script" id=1]
 [ext_resource path="res://scenes/inventory/PlayerEquipment.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/inventory/Inventory.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/inventory/itemSlotDescription.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/playerStats.tscn" type="PackedScene" id=5]
 
 [node name="inventorySystem" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 script = ExtResource( 1 )
-weightEnabled = null
 inventoriesPath = NodePath("inventories")
 mainInventoryPath = NodePath("inventories/equipment")
 
@@ -38,6 +36,33 @@ inventorySize = 20
 columns = 5
 maxWeight = 1e+007
 
+[node name="smallChest" parent="inventories" instance=ExtResource( 3 )]
+visible = false
+margin_left = 528.183
+margin_top = 93.239
+margin_right = 695.183
+margin_bottom = 291.239
+inventoryDisplayName = "Small Chest"
+inventorySize = 9
+columns = 3
+
+[node name="mediumChest" parent="inventories" instance=ExtResource( 3 )]
+visible = false
+margin_left = 530.183
+margin_top = 95.239
+margin_right = 742.183
+margin_bottom = 296.239
+inventoryDisplayName = "Medium Chest"
+
+[node name="bigChest" parent="inventories" instance=ExtResource( 3 )]
+visible = false
+margin_left = 529.183
+margin_top = 90.239
+margin_right = 738.183
+margin_bottom = 333.239
+inventoryDisplayName = "Big Chest"
+inventorySize = 16
+
 [node name="itemSlotDescription" parent="." instance=ExtResource( 4 )]
 visible = false
 
@@ -54,49 +79,5 @@ margin_left = -4.43213
 margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
-
-[node name="chestPos" type="Control" parent="."]
-visible = false
-margin_left = 551.151
-margin_top = 125.779
-margin_right = 551.151
-margin_bottom = 125.779
-mouse_filter = 1
-
-[node name="playerStats" parent="." instance=ExtResource( 5 )]
-margin_left = 606.006
-margin_top = 294.209
-margin_right = -5.99353
-margin_bottom = -12.791
-
-[node name="types" type="Control" parent="."]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-mouse_filter = 1
-
-[node name="smallChest" parent="types" instance=ExtResource( 3 )]
-margin_left = 551.183
-margin_top = 147.239
-margin_right = 718.183
-margin_bottom = 345.239
-inventoryDisplayName = "Small Chest"
-inventorySize = 9
-columns = 3
-
-[node name="mediumChest" parent="types" instance=ExtResource( 3 )]
-margin_left = 553.183
-margin_top = 149.239
-margin_right = 765.183
-margin_bottom = 350.239
-inventoryDisplayName = "Medium Chest"
-
-[node name="bigChest" parent="types" instance=ExtResource( 3 )]
-margin_left = 552.183
-margin_top = 144.239
-margin_right = 761.183
-margin_bottom = 387.239
-inventoryDisplayName = "Big Chest"
-inventorySize = 16
 
 [connection signal="mouse_exited" from="itemSlotDescription/descriptionField" to="." method="_on_descriptionField_mouse_exited"]

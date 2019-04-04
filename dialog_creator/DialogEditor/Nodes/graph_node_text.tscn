@@ -61,6 +61,7 @@ margin_left = 16.0
 margin_top = 38.0
 margin_right = 161.0
 margin_bottom = 62.0
+shortcut_in_tooltip = false
 text = "Player"
 
 [node name="dialogPartner" type="CheckBox" parent="."]
@@ -68,6 +69,7 @@ margin_left = 16.0
 margin_top = 63.0
 margin_right = 161.0
 margin_bottom = 87.0
+shortcut_in_tooltip = false
 text = "Dialog Partner"
 
 [node name="hBoxContainer" type="HBoxContainer" parent="."]
