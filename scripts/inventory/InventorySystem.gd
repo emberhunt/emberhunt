@@ -59,10 +59,16 @@ func _ready():
 	# This to test functionality
 	
 	var playerEquipment = $inventories/equipment
-	playerEquipment.add_item(playerEquipment.get_item_by_id(1))
+	#playerEquipment.add_item(playerEquipment.get_item_by_id(1))
 	
 	var inv = $inventories/inventory
-	inv.add_item(inv.get_item_by_id(3))
+	#inv.add_item(inv.get_item_by_id(3))
+	
+	load_save_data({ \
+			"inventory" : { "slotSize" : 20, "columns" : 5, "weightEnabled" : false, \
+				"slots" : { 0 : {"item_id" : 0, "amount" : 1}}}, \
+			"equipment" : { "slotSize" : 12, "columns" : 4, "weightEnabled" : false, \
+				"slots" : {1 : {"item_id" : 1, "amount" : 1}}}})
 	
 	for i in range($inventories.get_child_count()):
 		$inventories.get_child(i).connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
@@ -80,7 +86,21 @@ func cmd_show_all_items(_input : Array):
 	
 	for i in range(mainInv._allItems.size()):
 		DebugConsole.write_line(str(mainInv._allItems[i].get_name()))
-	
+
+func get_save_data():
+	var saveData = {}
+	saveData.inventory = {}
+	saveData.equipment = {}
+	saveData.inventory = $inventories.get_node("inventory").get_inventory_save_data()
+	saveData.equipment = $inventories.get_node("equipment").get_inventory_save_data()
+
+func load_save_data(data):
+	#slotSize, columns, weightEnabled, data
+	$inventories.get_node("inventory").load_inventory_from_data(\
+			data.inventory.slotSize, data.inventory.columns, data.inventory.weightEnabled, data.inventory.slots)
+	$inventories.get_node("equipment").load_inventory_from_data(\
+			data.equipment.slotSize, data.equipment.columns, data.equipment.weightEnabled, data.equipment.slots)
+
 func _process(delta):
 	if holding:
 		draggenItem.rect_global_position = get_viewport().get_mouse_position()

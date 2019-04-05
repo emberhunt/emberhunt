@@ -23,7 +23,6 @@ func _ready():
 		get_child(i).connect("on_area_entered", self, "on_interaction_range_entered")
 		get_child(i).connect("on_area_exited", self, "on_interaction_range_exited")
 
-
 func init(path):
 	if get_tree().get_current_scene().get_name() == "MainServer":
 		return
