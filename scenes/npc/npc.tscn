@@ -20,14 +20,20 @@ scale = Vector2( 0.422334, 0.422334 )
 texture = ExtResource( 2 )
 
 [node name="sightRange" type="Area2D" parent="."]
+editor/display_folded = true
 
 [node name="shape2" type="CollisionShape2D" parent="sightRange"]
 shape = SubResource( 1 )
 
 [node name="interactionRange" type="Area2D" parent="."]
+editor/display_folded = true
 
 [node name="shape" type="CollisionShape2D" parent="interactionRange"]
 shape = SubResource( 2 )
+
+[node name="path" type="Node2D" parent="."]
+
+[node name="idle" type="Node2D" parent="path"]
 
 [connection signal="body_entered" from="sightRange" to="." method="_on_sightRange_body_entered"]
 [connection signal="body_entered" from="interactionRange" to="." method="_on_interactionRange_body_entered"]

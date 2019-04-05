@@ -123,13 +123,12 @@ func remove_last_slot():
 	if not _slots.empty():
 		remove_slot(_slots.size() - 1)
 
-
 func remove_slot(slotId):
 	if not (has_node("slots") and $slots != null):
 		return 
 
 	_slots.remove(slotId)
-	$slots.remove_child(get_child(slotId))
+	get_child(slotId).queue_free()
 
 func clear():
 	for i in range(_slots.size()):
@@ -180,23 +179,26 @@ func add_item(item : Item, amount : int = 1):
 	return freeId
 
 func get_inventory_save_data() -> Dictionary:
-	var slots = {}
+	var data = {}
+	data.slotSize = _slots.size()
+	data.columns = columns
+	data.maxWeight = maxWeight
+	data.weightEnabled = weightEnabled
 	for i in range(_slots.size()):
 		var slot = _slots[_slots.keys()[i]]
 		
 		var itemId = slot.get_item().get_item_id()
 		var amount = slot.get_amount()
 		
-		slots[_slots.keys()[i]] = { "item_id" : itemId, "amount" : amount }
+		data.slots[_slots.keys()[i]] = { "item_id" : itemId, "amount" : amount }
 	
-	return slots
+	return data
 
 # slots max size
-func load_inventory_from_data(invName, slotSize, columns, weightEnabled, data):
+func load_inventory_from_data(slotSize, columns, weightEnabled, data):
 	update_inventory_size(slotSize)
 	update_inventory_columns(columns)
-	_update_max_weight(weightEnabled)
-	update_inventory_name(invName)
+	update_weight_enabled(weightEnabled)
 	
 	for i in range(data.size()):
 		var slot = data[data.keys()[i]]
