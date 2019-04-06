@@ -21,10 +21,11 @@ anchor_left = 0.5
 anchor_top = 0.513
 anchor_right = 0.5
 anchor_bottom = 0.513
-margin_left = -15.8898
-margin_top = -17.0709
-margin_right = 16.1102
-margin_bottom = 13.9291
+margin_left = -17.2388
+margin_top = -20.8182
+margin_right = -1.23882
+margin_bottom = -4.81816
+rect_scale = Vector2( 2, 2 )
 
 [node name="label" type="Label" parent="."]
 anchor_left = 0.556

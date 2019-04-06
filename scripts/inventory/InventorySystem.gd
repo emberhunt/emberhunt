@@ -23,9 +23,7 @@ export(NodePath) var inventoriesPath = ""
 export(NodePath) var mainInventoryPath = ""
 
 onready var itemDescription = $itemSlotDescription
-onready var blocker = $blocker
 onready var draggenItem = $draggenItem
-onready var inventoryTypes = $types
 
 # key is the player/chest id
 var _inventoryTypeNames = []
@@ -59,10 +57,8 @@ func _ready():
 	# This to test functionality
 	
 	var playerEquipment = $inventories/equipment
-	#playerEquipment.add_item(playerEquipment.get_item_by_id(1))
 	
 	var inv = $inventories/inventory
-	#inv.add_item(inv.get_item_by_id(3))
 	
 	load_save_data({ \
 			"inventory" : { "slotSize" : 20, "columns" : 5, "weightEnabled" : false, \

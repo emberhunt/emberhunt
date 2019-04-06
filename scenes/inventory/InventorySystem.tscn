@@ -28,10 +28,10 @@ inventoryDisplayName = "Equipment"
 columns = 0
 
 [node name="inventory" parent="inventories" instance=ExtResource( 3 )]
-margin_left = 106.567
-margin_top = 297.724
-margin_right = 360.567
-margin_bottom = 543.724
+margin_left = 627.066
+margin_top = 48.8593
+margin_right = 881.066
+margin_bottom = 294.859
 mouse_filter = 0
 inventoryDisplayName = "Inventory"
 inventorySize = 20
@@ -40,10 +40,10 @@ maxWeight = 1e+007
 
 [node name="smallChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 678.868
-margin_top = 93.239
-margin_right = 845.868
-margin_bottom = 291.239
+margin_left = 672.22
+margin_top = 309.306
+margin_right = 839.22
+margin_bottom = 507.306
 mouse_filter = 0
 inventoryDisplayName = "Small Chest"
 inventorySize = 9
@@ -51,19 +51,19 @@ columns = 3
 
 [node name="mediumChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 680.868
-margin_top = 95.239
-margin_right = 892.868
-margin_bottom = 296.239
+margin_left = 652.059
+margin_top = 309.09
+margin_right = 864.059
+margin_bottom = 510.09
 mouse_filter = 0
 inventoryDisplayName = "Medium Chest"
 
 [node name="bigChest" parent="inventories" instance=ExtResource( 3 )]
 visible = false
-margin_left = 679.868
-margin_top = 90.239
-margin_right = 888.868
-margin_bottom = 333.239
+margin_left = 651.059
+margin_top = 306.306
+margin_right = 860.059
+margin_bottom = 549.306
 mouse_filter = 0
 inventoryDisplayName = "Big Chest"
 inventorySize = 16
@@ -84,6 +84,8 @@ margin_left = -4.43213
 margin_top = 1.10803
 margin_right = 35.5679
 margin_bottom = 41.108
+rect_scale = Vector2( 2, 2 )
+rect_pivot_offset = Vector2( 32, 32 )
 
 [node name="consumeField" type="Control" parent="."]
 anchor_left = 0.5

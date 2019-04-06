@@ -7,12 +7,12 @@
 extents = Vector2( 31.3649, 30.5374 )
 
 [node name="itemDrop" type="Sprite"]
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 96, 0, 32, 32 )
+region_rect = Rect2( 0, 0, 16, 16 )
 script = ExtResource( 2 )
-_itemId = 3
+_itemId = 0
 
 [node name="area" type="Area2D" parent="."]
 

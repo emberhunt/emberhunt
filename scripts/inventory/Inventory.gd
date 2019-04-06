@@ -44,9 +44,6 @@ func _ready():
 	
 	$nameBackground/name.set_text(inventoryDisplayName)
 	
-	for i in range(Global.allItems.size()):
-		Global.allItems.values().append(Global.allItems.values()[i])
-	
 	# set colums to 0 for custom layout
 	if itemSlots is GridContainer:
 		pass

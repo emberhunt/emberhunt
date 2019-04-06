@@ -3,16 +3,21 @@
 """
 extends Node2D
 
+signal property_changed
+
 class_name Entity
 
 enum PropertyType {
 	# general
 	ID,
 	
+	GOLD,
+	EXPERIENCE,
+	
 	# character
-	CURRENT_HEALTH,
+	HEALTH,
 	MAX_HEALTH,
-	CURRENT_MANA,
+	MANA,
 	MAX_MANA,
 	STRENGTH,
 	AGILITY,
@@ -27,8 +32,7 @@ enum PropertyType {
 	CLASS
 }
 
-var properties = {}
-
+var _properties = {}
 
 func _ready():
 	# TODO: add autoload script to get ids, probably by server
@@ -37,30 +41,35 @@ func _ready():
 	#print("entity[" + str(uid) + "]")
 	set_property(PropertyType.ID, uid)
 	
-	
 func get_properties() -> Dictionary:
-	return properties
-
+	return _properties
 
 func has_property(propertyType) -> bool:
-	return properties.has(propertyType)
-	
+	return _properties.has(propertyType)
 	
 func set_property(propertType, value):
-	properties[get_property_name(propertType)] = value
+	_properties[get_property_name(propertType)] = value
+	emit_signal("property_changed", _properties)
 	
-	
+func get_property(propertyType):
+	return _properties[get_property_name(propertyType)] 
+
 func get_property_name(propertyType):
 	match (propertyType):
 		PropertyType.ID:
 			return "uid" 
 			
+		PropertyType.GOLD:
+			return "gold" 		
+		PropertyType.EXPERIENCE:
+			return "experience" 
+			
 		PropertyType.MAX_HEALTH:
 			return "healthMax" 
-		PropertyType.CURRENT_HEALTH:
-			return "healthCurrent" 
-		PropertyType.CURRENT_MANA:
-			return "manaCurrent" 
+		PropertyType.HEALTH:
+			return "health" 
+		PropertyType.MANA:
+			return "mana" 
 		PropertyType.MAX_MANA:
 			return "manaMax" 
 		PropertyType.STRENGTH:
@@ -88,6 +97,3 @@ func get_property_name(propertyType):
 			return ""
 			
 			
-func get_property(propertyType):
-	return properties[get_property_name(propertyType)] 
-

@@ -189,10 +189,10 @@ margin_right = -0.119568
 margin_bottom = -2.27203
 
 [node name="playerStats" parent="CanvasLayer/inventorySystem" instance=ExtResource( 11 )]
-margin_left = 628.989
-margin_top = 304.914
-margin_right = -10.0111
-margin_bottom = -9.08582
+margin_left = 39.675
+margin_top = 295.867
+margin_right = -599.325
+margin_bottom = -18.1323
 
 [node name="FPS" type="Label" parent="CanvasLayer"]
 margin_left = 2.3327
