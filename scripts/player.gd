@@ -6,9 +6,9 @@ func _ready():
 	_set_properties()
 
 func _set_properties():
-	set_property(PropertyType.CURRENT_HEALTH, 50)
+	set_property(PropertyType.HEALTH, 50)
 	set_property(PropertyType.MAX_HEALTH, 100)
-	set_property(PropertyType.CURRENT_MANA, 50)
+	set_property(PropertyType.MANA, 50)
 	set_property(PropertyType.MAX_MANA, 100)
 	set_property(PropertyType.STRENGTH, 1)
 	set_property(PropertyType.AGILITY, 1)

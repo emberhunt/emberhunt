@@ -12,6 +12,10 @@ onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
 
 func _ready():
+	if is_inside_tree():
+		Global.guiPath = self.get_path()
+		DebugConsole.warn("GUI path: " + Global.guiPath)
+		
 	set_process_input(true)
 	inventorySystem.hide()
 	playerBody = get_node("../YSort/player")

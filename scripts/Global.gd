@@ -20,6 +20,9 @@ var charID = 0
 
 var worldReadyFunctions = {}
 
+var playerPath = ""
+var guiPath = ""
+
 const init_stats = {
 	"Knight" : {
 		"max_hp" : 160,

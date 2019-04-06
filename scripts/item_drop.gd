@@ -12,7 +12,7 @@ export(int) var _itemId = -1 setget update_item_id
 export(int) var _amount = 1
 export(bool) var _autoSelectRegion = true
 
-var _itemTextureSize = 32
+var _itemTextureSize = 16
 
 func _ready():
 	pass
