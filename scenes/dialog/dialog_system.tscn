@@ -18,12 +18,9 @@ anchor_bottom = 1.0
 mouse_filter = 1
 
 [node name="dialogText" parent="dialogs" instance=ExtResource( 2 )]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-margin_left = -304.5
-margin_top = -162.0
-margin_right = 304.5
+margin_left = 208.0
+margin_top = 438.0
+margin_right = -216.0
 margin_bottom = 0.0
 
 [node name="dialogDecision" parent="dialogs" instance=ExtResource( 3 )]
@@ -35,7 +32,7 @@ mouse_filter = 1
 
 [node name="dialogEvent" parent="dialogs" instance=ExtResource( 4 )]
 margin_left = 208.0
-margin_top = 482.0
+margin_top = 471.0
 margin_right = -216.0
 margin_bottom = 0.0
 mouse_filter = 1

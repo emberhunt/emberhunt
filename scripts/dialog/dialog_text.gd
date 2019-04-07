@@ -5,11 +5,11 @@ var _next
 
 
 func init(text):
-	$text.set_visible_characters(0)
-	$text.percent_visible = 0
 	_next = text[0]
 	$text.set_bbcode(text[1])
 	$speakerBackground/speaker.text = text[2]
+	$text.set_visible_characters(0)
+	$text.percent_visible = 0
 	_started = false
 	_finished = false
 	
