@@ -225,7 +225,7 @@ position = Vector2( -42.0771, -12.9967 )
 _type = "mediumChest"
 
 [node name="chest2" parent="chests" instance=ExtResource( 7 )]
-position = Vector2( 98.0585, -51.322 )
+position = Vector2( 70.4549, -43.0768 )
 
 [node name="pickupItems" type="Node2D" parent="."]
 script = ExtResource( 8 )
@@ -237,10 +237,10 @@ region_rect = Rect2( 16, 0, 16, 16 )
 _itemId = 1
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 197.187, 11.234 )
+position = Vector2( -46.9433, 61.4223 )
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 77.3045, 77.6047 )
+position = Vector2( -81.8641, 29.2088 )
 region_rect = Rect2( 32, 0, 16, 16 )
 _itemId = 2
 
