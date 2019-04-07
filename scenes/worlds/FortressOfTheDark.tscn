@@ -215,7 +215,7 @@ conversationName = "test"
 [node name="npc2" parent="npcs" instance=ExtResource( 5 )]
 position = Vector2( 13.3502, -70.9758 )
 npcName = "Fant"
-conversationName = "villager_5"
+conversationName = "Villager_5"
 
 [node name="chests" type="Node2D" parent="."]
 script = ExtResource( 6 )
@@ -233,17 +233,15 @@ script = ExtResource( 8 )
 [node name="itemDrop" parent="pickupItems" instance=ExtResource( 9 )]
 editor/display_folded = true
 position = Vector2( -44.2791, 30.8979 )
-region_rect = Rect2( 32, 0, 32, 32 )
+region_rect = Rect2( 16, 0, 16, 16 )
 _itemId = 1
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
 position = Vector2( 197.187, 11.234 )
-region_rect = Rect2( 0, 0, 32, 32 )
-_itemId = 0
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
 position = Vector2( 77.3045, 77.6047 )
-region_rect = Rect2( 64, 0, 32, 32 )
+region_rect = Rect2( 32, 0, 16, 16 )
 _itemId = 2
 
 [node name="YSort" type="YSort" parent="."]

@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "nam.zvaigzdele.lt"
+const SERVER_IP = "localhost"
 const SERVER_PORT = 22122
 
 func _ready():
@@ -22,20 +22,23 @@ func _ready():
 # # # # # # # # # # # #
 
 func _player_connected(id):
+	DebugConsole.warn("Player connected: " + str(id))
 	pass
 
 func _player_disconnected(id):
+	DebugConsole.warn("Player disconnected: " + str(id))
 	pass
 
 func _server_disconnected():
-	
+	DebugConsole.warn("Server disconnected!")
 	pass # Server kicked us; show error and abort.
 
 func _connected_fail():
-	
+	DebugConsole.warn("Couldn't connect to server!")
 	pass # Could not even connect to server; abort.
 
 func _connected_ok():
+	DebugConsole.warn("Connected to the server!")
 	print("Connected to the server")
 	# Check if I already have an UUID assigned
 	if not Global.UUID: # I don't
@@ -72,8 +75,11 @@ remote func receive_character_data(data):
 			if data == false:
 				# My UUID is not registered on the servers
 				print("Server says that they don't have my UUID registered")
+				DebugConsole.warn("Server says that they don't have my UUID registered")
+				
 			else:
 				# We should never get TRUE as data
+				DebugConsole.warn("Unexpected character data (TRUE); scripts/Networking.gd:receive_character_data()")
 				print("Unexpected character data (TRUE); scripts/Networking.gd:receive_character_data()")
 		else:
 			# Store the data in Global.gd
@@ -240,5 +246,6 @@ remote func send_input(world, input):
 remote func exit_world(world):
 	pass
 remote func pickup_item(world, itemName, quantity):
+	DebugConsole.warn("picking up " + str(quantity) + " of " + str(itemName))
 	var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
 	pickupItem.call_deferred("queue_free")

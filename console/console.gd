@@ -791,7 +791,7 @@ func warn(message, addToLog = true):
 	if not addNewLineAfterMsg:
 		new_line()
 	_logPrefix = WARN_MSG_PREFIX
-	append_message(WARN_MSG % message, addToLog)
+	append_message_no_event(WARN_MSG % message, addToLog)
 	if addNewLineAfterMsg:
 		new_line()
 		
@@ -800,7 +800,7 @@ func error(message, addToLog = true):
 	if not addNewLineAfterMsg:
 		new_line()
 	_logPrefix = ERROR_MSG_PREFIX
-	append_message(ERROR_MSG % message, addToLog)
+	append_message_no_event(ERROR_MSG % message, addToLog)
 	if addNewLineAfterMsg:
 		new_line()
 		
@@ -809,7 +809,7 @@ func success(message, addToLog = true):
 	if not addNewLineAfterMsg:
 		new_line()
 	_logPrefix = SUCCESSFUL_MSG_PREFIX
-	append_message(SUCCESSFUL_MSG % message, addToLog)
+	append_message_no_event(SUCCESSFUL_MSG % message, addToLog)
 	if addNewLineAfterMsg:
 		new_line()
 
@@ -817,7 +817,7 @@ func success(message, addToLog = true):
 func send_message(message : String, addToLog = true, userPrefix = false, messageSignPrefix = false,  clickableMeta = false, sendToConsole = true, flags = 0):
 	if not addNewLineAfterMsg:
 		new_line()
-	append_message(message, userPrefix, addToLog, messageSignPrefix, clickableMeta, sendToConsole, flags)
+	append_message(message, addToLog, userPrefix, messageSignPrefix, clickableMeta, sendToConsole, flags)
 	if addNewLineAfterMsg:
 		new_line()
 
@@ -1102,7 +1102,7 @@ func _print_args(commandIndex : int):
 		if commands[i].get_expected_args()[0] == VARIADIC_COMMANDS:
 			append_message_no_event("variadic", false)
 		else:
-			append_message_no_event("1", false)
+			append_message_no_event(str(commands[i].get_expected_args()[0]), false)
 	else:
 		append_message_no_event("0", false)
 

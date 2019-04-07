@@ -14,7 +14,9 @@ var playerBody : KinematicBody2D = null
 func _ready():
 	if is_inside_tree():
 		Global.guiPath = self.get_path()
-		DebugConsole.warn("GUI path: " + Global.guiPath)
+		DebugConsole.warn("GUI path: " + Global.guiPath + "\n")
+	var stats = get_node(Global.playerPath).get_node("stats").get_properties()
+	$CanvasLayer/inventorySystem/playerStats.set_stats(stats)
 		
 	set_process_input(true)
 	inventorySystem.hide()

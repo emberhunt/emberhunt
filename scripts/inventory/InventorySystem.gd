@@ -89,6 +89,7 @@ func get_save_data():
 	saveData.equipment = {}
 	saveData.inventory = $inventories.get_node("inventory").get_inventory_save_data()
 	saveData.equipment = $inventories.get_node("equipment").get_inventory_save_data()
+	return saveData
 
 func load_save_data(data):
 	#slotSize, columns, weightEnabled, data
