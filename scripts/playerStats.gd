@@ -9,7 +9,6 @@ func _ready():
 func set_stats(stats : Dictionary):
 	var text := ""
 	_text.bbcode_enabled = true
-	print(stats)
 	for i in range(stats.size()):
 		var key = stats.keys()[i]
 		var value = stats[key]

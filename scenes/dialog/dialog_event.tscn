@@ -5,8 +5,8 @@
 [node name="dialogEvent" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -955.0
-margin_bottom = -552.0
+margin_right = -424.0
+margin_bottom = -470.0
 script = ExtResource( 1 )
 
 [node name="background" type="Panel" parent="."]
@@ -19,5 +19,5 @@ anchor_bottom = 1.0
 margin_left = 5.0
 margin_top = 5.0
 margin_right = -5.0
-margin_bottom = -5.0
+margin_bottom = -4.0
 
