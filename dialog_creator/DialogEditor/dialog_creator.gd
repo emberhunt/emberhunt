@@ -134,7 +134,7 @@ func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_win
 			prefab = eventPrefab.instance()
 			prefab.set_item_suggestions("Add Item", itemsData, 1)
 			prefab.set_item_suggestions("Take Item", itemsData, 1)
-			prefab.set_item_suggestions("Offer Quest", questData)
+			prefab.set_item_suggestions("Accept Quest", questData)
 			prefab.set_item_suggestions("Fail Quest", questData)
 			prefab.set_item_suggestions("Set Stats", playerStats, 1)
 			prefab.set_item_suggestions("Add Stats", playerStats, 1)

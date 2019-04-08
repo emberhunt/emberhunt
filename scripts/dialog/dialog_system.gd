@@ -30,7 +30,6 @@ func _input(event):
 			_handle_next_dialog()
 			
 func _handle_next_dialog():
-
 	if _conversation[_index][0] == DialogType.TYPE.END:
 		get_dialog_type(_conversation[_index][0]).hide()
 		stop_conversation()
@@ -48,9 +47,9 @@ func _handle_next_dialog():
 				_init = false
 				_lastIndex = _index
 				_index = _dialog.get_next()
-				_handle_next_dialog()					
-			elif _dialog.has_started():
+				_handle_next_dialog()
 				_dialog.finish()
+			elif _dialog.has_started():
 				_init = false
 				_lastIndex = _index
 				_index = _dialog.get_next()
