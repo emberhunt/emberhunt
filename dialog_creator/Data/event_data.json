@@ -1,0 +1,27 @@
+{
+    "Add Stats" : {
+        "Health" : 1,
+        "Mana" : 1,
+        "Experience" : 1,
+        "Agility" : 1,
+        "Strength" : 1
+    },
+
+    "Accept Quest" : {
+        "quest_1" : 0
+    },
+    "Fail Quest" : {
+        "quest_1" : 0
+    },
+
+    "Add Item" : {
+        "item_1" : 1,
+        "item_2" : 1,
+        "item_3" : 1
+    },
+    "Take Item" : {
+        "item_1" : 1,
+        "item_2" : 1,
+        "item_3" : 1
+    }
+}

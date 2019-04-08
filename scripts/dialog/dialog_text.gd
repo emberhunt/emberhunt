@@ -14,9 +14,12 @@ func init(text):
 	_finished = false
 	
 func start():
+	$text.set_visible_characters(0)
+	$text.percent_visible = 0
 	$textSpeedTimer.wait_time = 0.0015 * textSpeed
 	$textSpeedTimer.start()
 	_started = true
+	_finished = false
 
 func _on_textSpeedTimer_timeout():
 	$text.percent_visible += 0.05
