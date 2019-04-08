@@ -1,27 +1,29 @@
 {
     "Add Stats" : {
-        "Health" : 1,
-        "Mana" : 1,
-        "Experience" : 1,
-        "Agility" : 1,
-        "Strength" : 1
+        "data" : ["Health", "Mana", "Experience", "Agility", "Strength"],
+        "text" : "Added {0} {data_name}!",
+        "slider" : 1
     },
 
     "Accept Quest" : {
-        "quest_1" : 0
+        "data" : ["quest_1"],
+        "text" : "Accepted Quest {data_name}!",
+        "slider" : 0
     },
     "Fail Quest" : {
-        "quest_1" : 0
+        "data" : ["quest_1"],
+        "text" : "Failed Quest {data_name}!",
+        "slider" : 0
     },
 
     "Add Item" : {
-        "item_1" : 1,
-        "item_2" : 1,
-        "item_3" : 1
+        "data" : ["item_1", "item_2"],
+        "text" : "Added {0} {data_name}!",
+        "slider" : 1
     },
     "Take Item" : {
-        "item_1" : 1,
-        "item_2" : 1,
-        "item_3" : 1
+        "data" : ["item_1", "item_2"],
+        "text" : "Took {0} {data_name}!",
+        "slider" : 1
     }
 }

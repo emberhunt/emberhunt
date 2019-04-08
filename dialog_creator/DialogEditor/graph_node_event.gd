@@ -7,13 +7,16 @@ var itemsAmount = {}
 var _nextSuccess
 var _nextFailure
 
+var _text
+
 var _currentSelected
 
 func _ready():
 	pass
 
-func set_item_suggestions(key : String, suggestions : Array, additionalLineEdits = 0):
+func set_item_suggestions(key : String, info, suggestions : Array, additionalLineEdits = 0):
 	items[key] = []
+	_text = info
 	itemsAmount[key] = additionalLineEdits
 	$eventType.add_item(key)
 	for i in range(suggestions.size()):
@@ -45,7 +48,6 @@ func set_selected_item(type, args : Dictionary):
 		var child = get_child(i+4)
 		child.value = int(args.event_params[str(i+1)])
 	
-
 func _set_items(key):
 	_currentSelected = key
 	# delete existing items
@@ -69,10 +71,8 @@ func get_event_param_amount():
 		return ""
 	return itemsAmount[_currentSelected] + 1
 
-
 func get_event_param(index):
 	var child = get_child(3 + index)
-	print(child.get_class())
 	if child.get_class() == "OptionButton":
 		return child.get_item_text(child.selected)
 	else:
@@ -86,6 +86,9 @@ func _on_eventType_item_selected(id):
 		return
 	id -= 1
 	_set_items(items.keys()[id])
+
+func get_text():
+	return _text
 	
 func get_selected_key():
 	return $eventType.get_item_text($eventType.selected)
