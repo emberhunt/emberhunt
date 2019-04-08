@@ -10,20 +10,14 @@ const startPrefab = preload("Nodes/graph_node_start.tscn")
 
 # data from files
 export(String, FILE) var npcFile
-export(String, FILE) var playerStatsFile
-export(String, FILE) var itemsFile
-export(String, FILE) var animationsFile
-export(String, FILE) var questFile
+export(String, FILE) var dataFilePath
 
 onready var popup : Popup = get_node("menuButton").get_popup()
 onready var dialogSelector : Popup = get_node("loadedDialogsSelection").get_popup()
 onready var graphEdit : GraphEdit = get_node("graphEdit")
 
 var npcData = []
-var playerStats = []
-var itemsData = []
-var animations = []
-var questData = []
+var _data = {}
 
 # used when loading
 #var _allDialogs = {}
@@ -34,6 +28,7 @@ var _lastFile = ""
 var _loadMode = false
 
 var _entryAmount = 1
+var _entryMap = {}
 
 var nodeSpawn = Vector2(90.0, 90.0)
 var nodesIndex = 0
@@ -54,7 +49,6 @@ func _ready():
 	dialogSelector.connect("id_pressed", self, "_on_loadedDialogsSelection_item_selected")
 	_load_data()
 	
-
 func _input(event):
 	if Input.is_key_pressed(KEY_ESCAPE): 
 		$fileDialog.hide()
@@ -71,41 +65,23 @@ func _load_data():
 	for i in range(fileContent.size()):
 		npcData.append(fileContent[fileContent.keys()[i]].name)
 	
-	# item names
-	var itemFile = File.new()
-	itemFile.open(itemsFile, itemFile.READ)
-	var itemText = itemFile.get_as_text()
-	var itemFileContent = parse_json(itemText)
-	itemFile.close()
+	# event data
+	var dataFile = File.new()
+	dataFile.open(dataFilePath, dataFile.READ)
+	var dataFileContent = parse_json(dataFile.get_as_text())
+	dataFile.close()
 	
-	for i in range(itemFileContent.size()):
-		itemsData.append(itemFileContent[itemFileContent.keys()[i]].name)
-	
-	# player stats
-	var statsFile = File.new()
-	statsFile.open(playerStatsFile, statsFile.READ)
-	var playerText = statsFile.get_as_text()
-	var playerFileContent = parse_json(playerText)
-	statsFile.close()
-	
-	for i in range(playerFileContent.size()):
-		playerStats.append(playerFileContent.keys()[i])
-		
-	# quests
-	var questsFile = File.new()
-	questsFile.open(questFile, questsFile.READ)
-	var questText = questsFile.get_as_text()
-	var questFileContent = parse_json(questText)
-	questsFile.close()
-	
-	for i in range(questFileContent.size()):
-		questData.append(questFileContent[questFileContent.keys()[i]].name)
-		
+	for i in range(dataFileContent.size()):
+		var key = dataFileContent.keys()[i]
+		_data[key] = {}
+		_data[key].data = dataFileContent[key].data
+		_data[key].text = dataFileContent[key].text
+		_data[key].slider = dataFileContent[key].slider
 
 func _on_item_pressed(id):
 	_create_node(popup.get_item_text(id))
 
-func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_window_size().x / 2.8,OS.get_window_size().y / 2), values = {}):
+func _create_node(type, size = Vector2(-1.0, -1.0), position = $graphEdit.scroll_offset + Vector2(OS.get_window_size().x / 2.8,OS.get_window_size().y / 2), values = {}):
 	var prefab
 	
 	if not values.empty():
@@ -129,20 +105,16 @@ func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_win
 					var text = values.choices[str(i)].text
 					prefab.add_choice(i, text, next)
 					_allConnections.append([str(values["nodesIndex"]), i, values.choices[str(i)].next, 0])
-					
+
 		"Event":
 			prefab = eventPrefab.instance()
-			prefab.set_item_suggestions("Add Item", itemsData, 1)
-			prefab.set_item_suggestions("Take Item", itemsData, 1)
-			prefab.set_item_suggestions("Accept Quest", questData)
-			prefab.set_item_suggestions("Fail Quest", questData)
-			prefab.set_item_suggestions("Set Stats", playerStats, 1)
-			prefab.set_item_suggestions("Add Stats", playerStats, 1)
-			
+			for key in _data:
+				prefab.set_item_suggestions(key, _data[key].text, _data[key].data, _data[key].slider)
+					
 			var entries = []
 			for i in range($startNode.get_popup().get_item_count()):
 				entries.append($startNode.get_popup().get_item_text(i))
-			prefab.set_item_suggestions("Set Entry", entries)
+			prefab.set_item_suggestions("Set Entry", "", entries)
 			if not values.empty():
 				prefab.set_selected_item(values.event_type, values)
 				_allConnections.append([str(values["nodesIndex"]), 0, values.next_success, 0])
@@ -153,19 +125,21 @@ func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_win
 			
 		"Entry Point":
 			prefab = startPrefab.instance()
+			prefab.connect("on_deletion", self, "_remove_entry_id")
 			
 			if $startNode.disabled:
 				$startNode.disabled = false
 			
 			if not values.empty():
 				prefab.set_entry_point(values.entry)
-				$startNode.add_item(str(values.entry))
+				$startNode.add_item(str(values.entry), values.entry)
 				if _entryIds <= int(values.entry):
 					_entryIds = int(values.entry) + 1
 					
 			else:
 				prefab.set_entry_point(_entryIds)
-				$startNode.add_item(str(_entryIds))
+				$startNode.add_item(str(_entryIds), _entryIds)
+				_entryMap[str(_entryIds)] = $startNode.get_popup().get_item_count()-1
 				_entryIds += 1
 		_:
 			printerr("not recognized dialog type!")
@@ -177,6 +151,10 @@ func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_win
 		_nodeIds += 1
 	
 	prefab.offset = position
+		
+	if size.x != -1.0 and size.y != -1.0:
+		prefab.rect_size = size
+		
 	prefab.set_type(type)
 
 	if not values.empty():
@@ -194,7 +172,7 @@ func _create_node(type, position = $graphEdit.scroll_offset + Vector2(OS.get_win
 				for i in range($startNode.get_popup().get_item_count()):
 					entries.append($startNode.get_popup().get_item_text(i))
 				child.clear_item_suggestions("Set Entry")
-				child.set_item_suggestions("Set Entry", entries)
+				child.set_item_suggestions("Set Entry", "", entries)
 				if child.get_selected_key() == "Set Entry":
 					child.set_selected("Set Entry")
 				
@@ -206,12 +184,28 @@ func _on_graphNodeText_raise_request():
 #	print("raise")
 	pass
 
-
 func _on_graphNodeText_dragged(from, to):
 #	print("fromto")
 #	print(from)
 #	print(to)
 	pass
+
+func _remove_entry_id(id):
+	for i in range($startNode.get_item_count()):
+		if $startNode.get_item_text(i) == id:
+			var sel = $startNode.get_selected_id()
+			$startNode.remove_item(i)
+			_entryMap.erase(id)
+	
+			if sel != $startNode.get_selected_id():
+				if $startNode.get_item_count() > 0:
+					$startNode.select(0)
+					$startNode.text = $startNode.get_item_text(0)
+				else:
+					$startNode.text = ""			
+			else:
+				$startNode.text = ""
+			break
 
 func _on_graphEdit_connection_request(from, from_slot, to, to_slot):
 	$graphEdit.connect_node(from, from_slot, to, to_slot)
@@ -236,8 +230,8 @@ func _on_graphEdit_disconnection_request(from, from_slot, to, to_slot):
 	$graphEdit.disconnect_node(from, from_slot, to, to_slot)
 
 func _on_graphEdit_delete_nodes_request():
-	print("delete")
-
+	pass
+	
 func _on_graphEdit_duplicate_nodes_request():
 #	if _selected != null:
 #		if _selected.title == "Start Node":
@@ -266,7 +260,6 @@ func _on_load_pressed():
 
 func _on_saveFileDialog_file_selected(filePath):
 	_lastFile = filePath
-	#print(_lastFile)	
 	
 	if $graphEdit.get_child_count() <= 2:
 		return
@@ -293,6 +286,8 @@ func _on_saveFileDialog_file_selected(filePath):
 			newDialog["type"] = type
 			newDialog["x"] = node.offset.x
 			newDialog["y"] = node.offset.y
+			newDialog["w"] = node.rect_size.x
+			newDialog["h"] = node.rect_size.y
 			
 			match (type):
 				"Entry Point":
@@ -362,6 +357,7 @@ func _on_saveFileDialog_file_selected(filePath):
 					newDialog["event_params"] = event_params
 					newDialog["next_success"] = next_success
 					newDialog["next_failure"] = next_failure
+					newDialog["text"] = node.get_text()
 				
 				_:
 					print("type doens't exist: " + str(node["type"]))
@@ -395,17 +391,12 @@ func _on_FileDialog_file_selected(filePath):
 	if _loadedDialogs.size() == 1:
 		_load_conversation(_loadedDialogs.keys()[0])
 
-
 func _load_conversation(conversation):
 	# load all dialogs
-	#print("loading: " + conversation)
-	
 	var conv = _loadedDialogs[conversation]
 	for c in range(conv.size()):
 		var dial = conv[conv.keys()[c]]
-		#print(dial) 
 		if conv.keys()[c] == "currentBegin":
-			#print("current")
 			continue
 		var arr = {}
 		if dial.type != "Decision" and dial.type != "End" and dial.type != "Event":
@@ -428,20 +419,20 @@ func _load_conversation(conversation):
 				arr["event_params"] = dial.event_params
 				arr["next_success"] = dial.next_success
 				arr["next_failure"] = dial.next_failure
+				arr["text"] = dial.text
 			_:
 				print("type doens't exist: " + str(dial["type"]))
-		#print(conv.keys()[c])
 		arr["nodesIndex"] = str(conv.keys()[c])
-		_create_node(dial.type, Vector2(float(dial.x), float(dial.y)), arr)
-			
+		if dial.has("w") and dial.has("h"):
+			_create_node(dial.type, Vector2(float(dial.w), float(dial.h)), Vector2(float(dial.x), float(dial.y)), arr)
+		else:
+			_create_node(dial.type, Vector2(-1.0, -1.0), Vector2(float(dial.x), float(dial.y)), arr)
+		
 	for i in range(_allConnections.size()):
 		var con = _allConnections[i]
 		if con[2] == "":
 			continue
-		#print("connecting " + str(_allNodes[str(con[0])].name) + " to " + str(_allNodes[str(con[2])].name) + \
-		#		" from port " + str(con[1]) + " to " + str(con[3]))
 		$graphEdit.connect_node(_allNodes[str(con[0])].name, con[1], _allNodes[str(con[2])].name, con[3])
-
 
 func clear_all():
 	var it = 0
@@ -470,4 +461,3 @@ func _on_loadedDialogsSelection_item_selected(ID):
 	var conversation = $loadedDialogsSelection.get_popup().get_item_text(ID)
 	_load_conversation(conversation)
 	$dialogNameEdit.text = conversation
-

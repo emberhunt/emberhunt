@@ -115,6 +115,7 @@ func start_conversation(conversationName, partner):
 				var next = []
 				next.append(dialog.next_success)
 				next.append(dialog.next_failure)
+				next.append(dialog.next_failure)
 				_conversation[conversation.keys()[i]] = [DialogType.TYPE.EVENT, next]
 			"Decision":
 				var choices = []

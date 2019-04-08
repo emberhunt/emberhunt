@@ -7,10 +7,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
 npcFile = "res://dialog_creator/Data/NPCData.json"
-playerStatsFile = "res://dialog_creator/Data/PlayerStats.json"
-itemsFile = "res://dialog_creator/Data/ItemData.json"
-animationsFile = "res://dialog_creator/Data/Animations.json"
-questFile = "res://dialog_creator/Data/QuestsData.json"
+dataFilePath = "res://dialog_creator/Data/event_data.json"
 
 [node name="graphEdit" type="GraphEdit" parent="."]
 anchor_right = 1.0
