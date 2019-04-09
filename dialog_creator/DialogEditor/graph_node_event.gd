@@ -3,6 +3,7 @@ extends "default_graph_node.gd"
 
 var items = {}
 var itemsAmount = {}
+var _texts = {}
 
 var _nextSuccess
 var _nextFailure
@@ -37,15 +38,15 @@ func set_selected_item(type, args : Dictionary):
 			_on_eventType_item_selected(i)
 			$eventType.select(i)
 			
-	for i in range(typeChild.get_item_count()):
-		if typeChild.get_item_text(i) == args.event_params["0"]:
-			typeChild.select(i)
+	var fChild = get_child(3)
+	for i in range(fChild.get_item_count()):
+		if fChild.get_item_text(i) == args.event_params["0"]:
+			fChild.select(i)
 	
 	for i in range(args.event_params.size() - 1):
 		var child = get_child(i+4)
 		child.value = int(args.event_params[str(i+1)])
 	
-
 func _set_items(key):
 	_currentSelected = key
 	# delete existing items
@@ -69,10 +70,8 @@ func get_event_param_amount():
 		return ""
 	return itemsAmount[_currentSelected] + 1
 
-
 func get_event_param(index):
 	var child = get_child(3 + index)
-	print(child.get_class())
 	if child.get_class() == "OptionButton":
 		return child.get_item_text(child.selected)
 	else:
@@ -86,7 +85,7 @@ func _on_eventType_item_selected(id):
 		return
 	id -= 1
 	_set_items(items.keys()[id])
-	
+
 func get_selected_key():
 	return $eventType.get_item_text($eventType.selected)
 

@@ -23,26 +23,20 @@ export(NodePath) var inventoriesPath = ""
 export(NodePath) var mainInventoryPath = ""
 
 onready var itemDescription = $itemSlotDescription
-onready var blocker = $blocker
 onready var draggenItem = $draggenItem
-onready var playerStats = $playerStats
-
 
 # key is the player/chest id
-var _inventories = []
-var _mainInventoryId : int
+var _inventoryTypeNames = []
 
 var selectedInv
 var lastSelectedInv
 
-var selectedId : int
-var lastSelectedId : int
+var selectedId
+var lastSelectedId
 
-var pressedId : int
+var pressedId
 
 var holding = false
-
-var _stats = {}
 
 func _ready():
 	var addItemRef = CommandRef.new(self, "cmd_add_item", CommandRef.COMMAND_REF_TYPE.FUNC, 1)
@@ -59,39 +53,29 @@ func _ready():
 	
 	set_process_input(true)
 #
-	_mainInventoryId = 0#get_node(mainInventoryPath).get_id()
-	
 	# This will be loaded by file later on.
 	# This to test functionality
 	
 	var playerEquipment = $inventories/equipment
-	playerEquipment.add_item(playerEquipment.get_item_by_id(1))
 	
-	var chest = $inventories/chest
-	chest.add_item(chest.get_item_by_id(3))
+	var inv = $inventories/inventory
 	
-	add_inventory(chest)
-	add_inventory(playerEquipment)
-
-func update_stats_visibility():
-	if get_child(0).get_child_count() <= 2:
-		$playerStats.visible = true
-	else:
-		$playerStats.visible = false
+	load_save_data({ \
+			"inventory" : { "slotSize" : 20, "columns" : 5, "weightEnabled" : false, \
+				"slots" : { 0 : {"item_id" : 0, "amount" : 1}}}, \
+			"equipment" : { "slotSize" : 12, "columns" : 4, "weightEnabled" : false, \
+				"slots" : {1 : {"item_id" : 1, "amount" : 1}}}})
 	
-
-func set_player_stats(stats):
-	playerStats.set_stats(stats)
-
+	for i in range($inventories.get_child_count()):
+		$inventories.get_child(i).connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
+	
 func cmd_add_item(input : Array):
 	var mainInv = $inventories/equipment
 	mainInv.add_item(mainInv.get_item_by_id(int(input[0])))
 	
-	
 func cmd_remove_item(input : Array):
 	var mainInv = $inventories/playerInventory
 	mainInv.remove_item(int(input[0]), 1)
-
 
 func cmd_show_all_items(_input : Array):
 	var mainInv = $inventories/playerInventory
@@ -99,138 +83,118 @@ func cmd_show_all_items(_input : Array):
 	for i in range(mainInv._allItems.size()):
 		DebugConsole.write_line(str(mainInv._allItems[i].get_name()))
 
-	
+func get_save_data():
+	var saveData = {}
+	saveData.inventory = {}
+	saveData.equipment = {}
+	saveData.inventory = $inventories.get_node("inventory").get_inventory_save_data()
+	saveData.equipment = $inventories.get_node("equipment").get_inventory_save_data()
+	return saveData
+
+func load_save_data(data):
+	#slotSize, columns, weightEnabled, data
+	$inventories.get_node("inventory").load_inventory_from_data(\
+			data.inventory.slotSize, data.inventory.columns, data.inventory.weightEnabled, data.inventory.slots)
+	$inventories.get_node("equipment").load_inventory_from_data(\
+			data.equipment.slotSize, data.equipment.columns, data.equipment.weightEnabled, data.equipment.slots)
+
 func _process(delta):
 	if holding:
 		draggenItem.rect_global_position = get_viewport().get_mouse_position()
-
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and not event.is_pressed():
 		holding = false
 		draggenItem.set_visible(false)
 
+func get_main_inventory():
+	return $inventories/inventory
 
-func get_inventory():
-	return _inventories[_mainInventoryId]
+func get_equipment():
+	return $inventories/equipment
 	
-	
-# return the id of the created inventory
-func create_inventory(invName, itemList):
-	var inventory : Inventory = InventoryPrefab.instance()
-	inventory.update_inventory_size(12)
-	
-	get_child(0).add_child(inventory)
-	inventory._set_id(_inventories.size())
-	inventory.name = invName
-	
-	for item in itemList:
-		inventory.add_item(item._item)
-	
-	_inventories.append(inventory)
-	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	DebugConsole.write_line("added i: " + inventory.name)
-	
-	return _inventories[_inventories.size() - 1]
+# data is structured like: slot_id = { "item_id", "amount" }
+func open_inventory(type, data):
+	var inv = get_inventory_by_name(type)
+	inv.show()
+	inv.clear()
+	for i in range(data.size()):
+		var value = data[data.keys()[i]]
+		inv.set_item(data.keys()[i], value.item_id, value.amount)
+		DebugConsole.warn("Added: "+ str(data.keys()[i]) + " -> " + str(value.item_id))
+	DebugConsole.warn("Opened " + str(type))
 
-func add_inventory(inventory):
-	#var inventory = Inventory.new()
-	inventory._set_id(_inventories.size())
-	_inventories.append(inventory)
-#	for i in range(inventory._slots.size()):
-#		if inventory._slots[i]._item != null:
-#			_inventories[_inventories.size() - 1].add_item(inventory._slots[i]._item)
-#			get_node("/root/Console").write_line("added item: " + inventory._slots[i]._item.get_name())
-	_inventories[_inventories.size() - 1].connect("on_slot_toggled", self, "_on_PlayerInventory_on_slot_toggled")
-	if not get_child(0).has_node(inventory.name):
-		get_child(0).add_child(inventory)
+func close_opened_inventory(type):
+	for i in range($inventories.get_child_count()):
+		for l in range(_inventoryTypeNames.size()):
+			if $inventories.get_child(i).name == _inventoryTypeNames:
+				var inv = $inventories.get_child(i)
+				inv.set_visible(false)
+	DebugConsole.warn("Closed: " + str(type))
 
-	DebugConsole.write_line("added i: " + inventory.name)
-	
-	return _inventories.size() - 1
-	#for item in itemList:
-	#	inventory.add_item(item)
-	
-	
-	#get_child(0).add_child(inventory)
-	#_inventories[_inventories.size() - 1].set_visible(true)
-	#_inventories[_inventories.size() - 1].rect_global_position = rect_global_position
-	
+func get_inventory_by_name(invName):
+	for i in range($inventories.get_child_count()):
+		if $inventories.get_child(i).name == invName:
+			return $inventories.get_child(i)
+	DebugConsole.error("Couldn't find inventory with name: " + invName)
+	return null
 
 func remove_inventory(index):
-	#_inventories[_inventories.size() - 1].set_visible(false)
-	#_inventories[index].set_visible(false)
-	_inventories.remove(index)
-	
-	get_child(0).remove_child(get_child(index))
-
+	var inv = $inventories.get_child(index)
+	inv.set_visible(false)
 	
 func remove_inventory_by_name(invName):
-	for i in range(_inventories.size()):
-		if invName != _inventories.keys()[i]:
-			_inventories.remove(i)
+	for i in range($inventories.get_child_count()):
+		if invName == $inventories.get_child(i).name:
+			$inventories.get_child(i).set_visible(false)
 
-
-func remove_all_except_main_inventory():
-	for i in range(_inventories.size() - 2):
-		_inventories.remove(2)
-		#get_child(0).get_child(i+2).free()
-		get_child(0).remove_child(get_child(i+2))
-
+func close_all_except_main_inventory():
+	for i in range($inventories.get_child_count()):
+		if $inventories.get_child(i).name == "inventory" or $inventories.get_child(i).name == "equipment":
+			continue
+		$inventories.get_child(i).set_visible(false)
 
 func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 	if Global.paused:
 		return
 	
-	#DebugConsole.write_line(id)
-	
 	lastSelectedInv = selectedInv
 	selectedInv = inv
 	lastSelectedId = selectedId
 	selectedId = id
-		
-	#print(selectedId)
-	#print(selectedInv)
-	
-	if is_pressed: 
-		if _inventories[inv].get_item(id) != null : # make dragged item visible
+	if is_pressed:
+		if get_inventory_by_name(inv).get_item(id) != null : # make dragged item visible
 			holding = true
 			pressedId = selectedId
 			draggenItem.set_visible(true)
-			draggenItem.texture = _inventories[inv].get_slot(selectedId)._slot.get_child(0).texture
-			#print("pressed: " + str(pressedId))
-			
+			draggenItem.texture = get_inventory_by_name(inv).get_slot(selectedId)._slot.get_child(0).texture
+						
 	elif holding and not is_pressed:
-		#_inventories[inv].get_slots()[lastSelectedId].set_unselected()
-		#_inventories[inv].get_slots()[selectedId].set_unselected()
 		holding = false
 		
 		if selectedId == pressedId and lastSelectedInv == selectedInv:
-			var pos = _inventories[inv].get_slot(pressedId)._slot.rect_global_position
-			var size = _inventories[inv].get_slot(pressedId)._slot.rect_size
+			var pos = get_inventory_by_name(inv).get_slot(pressedId)._slot.rect_global_position
+			var size = get_inventory_by_name(inv).get_slot(pressedId)._slot.rect_size
 			itemDescription.rect_global_position = Vector2(pos.x - size.x * 1.5, pos.y - size.y * 1.2)
 			 
-			itemDescription.set_description(_inventories[inv].get_slot(pressedId).get_item())
+			itemDescription.set_description(get_inventory_by_name(inv).get_slot(pressedId).get_item())
 			itemDescription.set_visible(true)
 		
 		# swap items
 		if _check_requirements_for_slot_swap( \
-				_inventories[lastSelectedInv].get_slots()[lastSelectedId], \
-				_inventories[selectedInv].get_slots()[selectedId]):
+				get_inventory_by_name(lastSelectedInv).get_slots()[lastSelectedId], \
+				get_inventory_by_name(selectedInv).get_slots()[selectedId]):
 			swap_items()
-			#_inventories[selectedInv].swap_items(selectedId, lastSelectedId)  # swap items
-
 
 func swap_items():
-	var toInv = _inventories[selectedInv]
-	var fromInv = _inventories[lastSelectedInv]
+	var toInv = get_inventory_by_name(selectedInv)
+	var fromInv = get_inventory_by_name(lastSelectedInv)
 	
 	var toSlot = toInv.get_slot(selectedId)
 	var fromSlot = fromInv.get_slot(lastSelectedId)
 	
 	var toItem = toSlot.get_item()
 	var fromItem = fromSlot.get_item()
-	
 	
 	# nothing to swap
 	if fromItem == null and toItem == null:
@@ -247,7 +211,6 @@ func swap_items():
 		# stackable, part swap (try stack)
 		else:
 			_part_swap(fromInv, fromSlot, toInv, toSlot)
-	
 
 func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 	var maxWeight1 = inv1.get_max_carry_weight()
@@ -261,7 +224,6 @@ func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 		inv2.add_weight(-slot2.get_weight())
 	
 	# no swap, if weight too much
-	
 	if weightEnabled and \
 			(inv1.get_carry_weight() + slot2.get_weight() > maxWeight1) or \
 			(inv2.get_carry_weight() + slot1.get_weight() > maxWeight2):
@@ -281,7 +243,6 @@ func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 			inv1.add_weight(slot1.get_weight())
 			inv2.add_weight(slot2.get_weight())
 		emit_signal("on_item_inventory_swapped", inv1, inv2)
-		
 
 func _part_swap(fromInv, fromSlot : Inventory.Slot, toInv, toSlot : Inventory.Slot):
 	var maxWeight = toInv.get_max_carry_weight()
@@ -313,11 +274,6 @@ func _part_swap(fromInv, fromSlot : Inventory.Slot, toInv, toSlot : Inventory.Sl
 	
 	emit_signal("on_item_inventory_swapped", fromInv, toInv)
 	
-	# check if enough stacksize available
-	
-
-
-
 func _get_carryable_items_amount(inv : Inventory, slot) -> int:
 	if not weightEnabled:
 		return slot.get_amount()
@@ -330,7 +286,6 @@ func _get_carryable_items_amount(inv : Inventory, slot) -> int:
 			return slot.get_amount() - i
 	return 0
 
-
 func _check_requirements_for_slot_swap(firstSlot, secondSlot) -> bool:
 	if selectedId == lastSelectedId and lastSelectedInv == selectedInv:
 		return false
@@ -340,7 +295,6 @@ func _check_requirements_for_slot_swap(firstSlot, secondSlot) -> bool:
 		return false
 	return true
 	
-	
 func _check_requirements_type(item, slot) -> bool:
 	if item == null:
 		return true
@@ -348,10 +302,7 @@ func _check_requirements_type(item, slot) -> bool:
 		return true
 	return false
 	
-			
 func _on_descriptionField_mouse_exited():
 	itemDescription.set_visible(false)
 
 
-
-		

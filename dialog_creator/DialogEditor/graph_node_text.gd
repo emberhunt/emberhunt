@@ -32,16 +32,14 @@ func _on_custom_pressed():
 	$player.pressed = false
 
 func _on_dialogPartner_pressed():
-	$player.pressed = ! $player.pressed
-	$hBoxContainer/custom.pressed = false
+	$player.pressed = ! $dialogPartner.pressed
 	if $player.pressed:
 		$hBoxContainer/speaker.text = "{player}"
 	else:
 		$hBoxContainer/speaker.text = "{partner}"
 
 func _on_player_pressed():
-	$dialogPartner.pressed = ! $dialogPartner.pressed
-	$hBoxContainer/custom.pressed = false
+	$dialogPartner.pressed = ! $player.pressed
 	if $player.pressed:
 		$hBoxContainer/speaker.text = "{player}"
 	else:
