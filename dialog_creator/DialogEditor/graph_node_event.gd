@@ -3,20 +3,18 @@ extends "default_graph_node.gd"
 
 var items = {}
 var itemsAmount = {}
+var _texts = {}
 
 var _nextSuccess
 var _nextFailure
-
-var _text
 
 var _currentSelected
 
 func _ready():
 	pass
 
-func set_item_suggestions(key : String, info, suggestions : Array, additionalLineEdits = 0):
+func set_item_suggestions(key : String, suggestions : Array, additionalLineEdits = 0):
 	items[key] = []
-	_text = info
 	itemsAmount[key] = additionalLineEdits
 	$eventType.add_item(key)
 	for i in range(suggestions.size()):
@@ -40,9 +38,10 @@ func set_selected_item(type, args : Dictionary):
 			_on_eventType_item_selected(i)
 			$eventType.select(i)
 			
-	for i in range(typeChild.get_item_count()):
-		if typeChild.get_item_text(i) == args.event_params["0"]:
-			typeChild.select(i)
+	var fChild = get_child(3)
+	for i in range(fChild.get_item_count()):
+		if fChild.get_item_text(i) == args.event_params["0"]:
+			fChild.select(i)
 	
 	for i in range(args.event_params.size() - 1):
 		var child = get_child(i+4)
@@ -87,9 +86,6 @@ func _on_eventType_item_selected(id):
 	id -= 1
 	_set_items(items.keys()[id])
 
-func get_text():
-	return _text
-	
 func get_selected_key():
 	return $eventType.get_item_text($eventType.selected)
 

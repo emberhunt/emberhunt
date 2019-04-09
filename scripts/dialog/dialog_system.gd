@@ -68,6 +68,7 @@ func _handle_next_dialog():
 		elif _conversation[_index][0] == DialogType.TYPE.EVENT:
 			_init = false
 			_lastIndex = _index
+			_dialog.execute_event()
 			_index = _dialog.get_next_success()
 			#_index = _dialog.get_next_failure()
 					
@@ -115,7 +116,8 @@ func start_conversation(conversationName, partner):
 				var next = []
 				next.append(dialog.next_success)
 				next.append(dialog.next_failure)
-				next.append(dialog.next_failure)
+				next.append(dialog.event_type)
+				next.append(dialog.event_params)
 				_conversation[conversation.keys()[i]] = [DialogType.TYPE.EVENT, next]
 			"Decision":
 				var choices = []

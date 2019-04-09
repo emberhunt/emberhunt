@@ -70,24 +70,37 @@ func get_properties() -> Dictionary:
 	return _properties
 
 func has_property(propertyType) -> bool:
-	return _properties.has(propertyType)
+	return _properties.has(get_property_name(propertyType))
 	
 func set_property(propertType, value):
 	_properties[get_property_name(propertType)] = value
 	emit_signal("property_changed", _properties)
+
+func set_property_by_name(propertyType, value):
+	if _properties.has(propertyType):
+		_properties[propertyType] = value
+		emit_signal("property_changed", _properties)
+	else:
+		DebugConsole.warn("Couldn't find property type: " + str(propertyType))
 	
 func get_property(propertyType):
 	return _properties[get_property_name(propertyType)] 
 
-func get_property_by_name(propertyType):
-	for i in range(_properties.size()):
+func get_property_by_name(propertyName):
+	return _properties[propertyName]
+
+# returns the property type
+func get_property_type_by_name(propertyType):
+	for i in range(_propertyDict.size()):
 		if _propertyDict.values()[i] == propertyType:
 			return _propertyDict.keys()[i]
-	DebugConsole.error("Couldn't find property type by name: " + str(propertyType))
-	return null
-	
-func get_property_name(propertyType):
-	if _propertyDict.has(propertyType):
-		return _propertyDict[propertyType]
 	DebugConsole.error("Couldn't find property type: " + str(propertyType))
+	return null
+
+# returns the property name of a property type
+func get_property_name(propertyType):
+	for i in range(_propertyDict.size()):
+		if _propertyDict.keys()[i] == propertyType:
+			return _propertyDict.values()[i]
+	DebugConsole.error("Couldn't find property type by name: " + str(propertyType))
 	return null

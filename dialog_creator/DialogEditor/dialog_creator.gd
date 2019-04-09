@@ -75,7 +75,6 @@ func _load_data():
 		var key = dataFileContent.keys()[i]
 		_data[key] = {}
 		_data[key].data = dataFileContent[key].data
-		_data[key].text = dataFileContent[key].text
 		_data[key].slider = dataFileContent[key].slider
 
 func _on_item_pressed(id):
@@ -109,12 +108,12 @@ func _create_node(type, size = Vector2(-1.0, -1.0), position = $graphEdit.scroll
 		"Event":
 			prefab = eventPrefab.instance()
 			for key in _data:
-				prefab.set_item_suggestions(key, _data[key].text, _data[key].data, _data[key].slider)
+				prefab.set_item_suggestions(key, _data[key].data, _data[key].slider)
 					
 			var entries = []
 			for i in range($startNode.get_popup().get_item_count()):
 				entries.append($startNode.get_popup().get_item_text(i))
-			prefab.set_item_suggestions("Set Entry", "", entries)
+			prefab.set_item_suggestions("Set Entry", entries)
 			if not values.empty():
 				prefab.set_selected_item(values.event_type, values)
 				_allConnections.append([str(values["nodesIndex"]), 0, values.next_success, 0])
@@ -132,7 +131,7 @@ func _create_node(type, size = Vector2(-1.0, -1.0), position = $graphEdit.scroll
 			
 			if not values.empty():
 				prefab.set_entry_point(values.entry)
-				$startNode.add_item(str(values.entry), values.entry)
+				$startNode.add_item(str(values.entry), int(values.entry))
 				if _entryIds <= int(values.entry):
 					_entryIds = int(values.entry) + 1
 					
@@ -357,13 +356,11 @@ func _on_saveFileDialog_file_selected(filePath):
 					newDialog["event_params"] = event_params
 					newDialog["next_success"] = next_success
 					newDialog["next_failure"] = next_failure
-					newDialog["text"] = node.get_text()
 				
 				_:
 					print("type doens't exist: " + str(node["type"]))
-		
 			newConversation[node.name] = newDialog
-	newConversation["currentBegin"] = currentBegin
+	newConversation["currentBegin"] = currentBegin	
 	
 	dialogData[$dialogNameEdit.text] = newConversation
 	file.open(filePath, file.WRITE)
@@ -419,7 +416,6 @@ func _load_conversation(conversation):
 				arr["event_params"] = dial.event_params
 				arr["next_success"] = dial.next_success
 				arr["next_failure"] = dial.next_failure
-				arr["text"] = dial.text
 			_:
 				print("type doens't exist: " + str(dial["type"]))
 		arr["nodesIndex"] = str(conv.keys()[c])
