@@ -167,7 +167,7 @@ func loadItems():
 	var data = JSON.parse(dataText)
 	
 	if data.error != OK:
-		DebugConsole.error("couldn't load items!")
+		DebugConsole.error("cou	ldn't load items!")
 		return
 	else:
 		DebugConsole.warn("loading items was successful!")
