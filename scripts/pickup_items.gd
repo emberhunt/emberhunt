@@ -48,11 +48,8 @@ func pickup_range_entered(child, itemId, amount):
 func pickup_item():
 	var addedToSlot = _mainInv.get_main_inventory().add_item(Global.allItems[_itemId], _amount)
 	if addedToSlot != -1:
-		if Global.nickname != "Offline":
-			Networking.askServerToPickUpItem(_child.name, _amount)
-		else:
-			_child.call_deferred("queue_free")
-		DebugConsole.write_line("picked up: " + str(_amount) + " " + Global.allItems[_itemId].get_name())
+		#Networking.rpc_id(1, "askServerToPickUpItem", get_tree().get_network_unique_id(), _child.name, _amount)
+		Networking.askServerToPickUpItem(get_tree().get_network_unique_id(),_child.name, _amount)
 	else:
-		DebugConsole.write_line("Couldn't pick up item")
+		DebugConsole.write_line("Can't pick up item")
 		

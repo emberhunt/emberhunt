@@ -32,8 +32,9 @@ func _set_properties():
 	DebugConsole.add_command(addStatCommand)
 
 func cmd_set_stat(input):
-	set_property(get_property_by_name(input[0]), input[1])
+	set_property_by_name(input[0], input[1])
 	DebugConsole.warn("set " + str(input[0]) + " to " + input[1])
 
 func cmd_add_stat(input):
-	pass
+	set_property_by_name(input[0], float(get_property_by_name(input[0])) + float(input[1]))
+	DebugConsole.warn("added " + str(input[1]) + " to " + input[0])

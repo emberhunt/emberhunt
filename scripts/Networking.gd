@@ -217,14 +217,11 @@ func shootBullets(path_to_scene, bullet_rotation, stats):
 	if Global.nickname != "Offline":
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
-
-func askServerToPickUpItem(item_id, quantity):
+func askServerToPickUpItem(uuid, item_id, quantity):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
-		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
-	else:
-		pickup_item(get_tree().get_current_scene().get_name(), item_id, quantity)
-
+	rpc("pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
+	#DebugConsole.warn("call client to pick up item (" + str(uuid) + ")")
+	
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -246,6 +243,7 @@ remote func send_input(world, input):
 remote func exit_world(world):
 	pass
 remote func pickup_item(world, itemName, quantity):
+	DebugConsole.warn("called server to pick up item for me (" + str(get_tree().get_network_unique_id()) + ")")
 	DebugConsole.warn("picking up " + str(quantity) + " of " + str(itemName))
 	var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
 	pickupItem.call_deferred("queue_free")

@@ -1061,6 +1061,8 @@ func _on_console_resized():
 		
 
 func add_to_log(message : String):
+	if not logEnabled:
+		return
 	if not logFileCreated:
 		return	
 	var dateDict = OS.get_datetime()
@@ -1139,9 +1141,9 @@ func _get_color_by_name(colorName : String) -> Color:
 			print("couldn't find color %s!" % colorName)
 			return Color.pink
 
-
-
 func _on_logTimer_timeout():
+	if not logEnabled:
+		return
 	logFile.open(logFileName, logFile.READ_WRITE)
 	logFile.seek_end()
 	logFile.store_string(allText)
