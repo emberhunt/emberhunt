@@ -12,7 +12,6 @@ margin_right = 488.0
 margin_bottom = 309.0
 mouse_filter = 1
 script = ExtResource( 1 )
-columns = 0
 maxWeight = 1e+007
 
 [node name="background" type="TextureRect" parent="."]
@@ -22,6 +21,7 @@ texture = ExtResource( 2 )
 expand = true
 
 [node name="slots" type="Control" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 21.0

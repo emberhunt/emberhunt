@@ -10,6 +10,8 @@ var quality = "High" # High, Medium, Low
 var touchpadPosition = "Fixed"
 var UUID = false
 
+const itemAtlas = preload("res://assets/inventory/items.png")
+
 var nickname = "Offline"
 
 var charactersData = {}
@@ -17,6 +19,9 @@ var charactersData = {}
 var charID = 0
 
 var worldReadyFunctions = {}
+
+var playerPath = ""
+var guiPath = ""
 
 const init_stats = {
 	"Knight" : {
@@ -121,9 +126,12 @@ const init_stats = {
 	}
 }
 
+
 # data of all items loaded once
 var allItems = {}
 var allDialogs = {}
+var playerInventory = {}
+var playerEquipment = {}
 
 # game paused
 var paused = false
@@ -159,19 +167,19 @@ func loadItems():
 	var data = JSON.parse(dataText)
 	
 	if data.error != OK:
-		DebugConsole.error("couldn't load items!")
+		DebugConsole.error("cou	ldn't load items!")
 		return
 	else:
 		DebugConsole.warn("loading items was successful!")
 		
 		#print("Problems loading " + fileName + " (in Inventory.gd)")
-
+	
 	data = data.result
 	for i in range(data.size()):
 		var itemData = data[str(i)]
-		var newItem = Item.new(
+		allItems[i] = Item.new(
 				i,
-				itemData["name"], 
+				itemData["name"],
 				Item.get_type_from_name(itemData["type"]),
 				itemData["weight"],
 				itemData["value"],
@@ -190,8 +198,6 @@ func loadItems():
 				itemData["consumable"]
 				)
 				
-		allItems[i] = newItem
-		
 func load_dialogs():
 	var file = File.new()
 	file.open("res://assets/dialogs/dialogs.json", file.READ)
@@ -205,6 +211,22 @@ func load_dialogs():
 	else:
 		DebugConsole.warn("loading dialogs was successful!")
 	
+	data = data.result
+	for i in range(data.size()):
+		var conversation = data[data.keys()[i]]
+		allDialogs[data.keys()[i]] = conversation
+
+func load_inventory():
+	var file = File.new()
+	file.open("res://assets/inventory/inventories.json", file.READ)
+	var data = JSON.parse(file.get_as_text())
+
+	if data.error != OK:
+		DebugConsole.error("couldn't load inventory!")
+		return
+	else:
+		DebugConsole.warn("loading inventory was successful!")
+
 	data = data.result
 	for i in range(data.size()):
 		var conversation = data[data.keys()[i]]

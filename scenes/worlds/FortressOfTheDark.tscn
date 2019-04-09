@@ -212,32 +212,37 @@ position = Vector2( 79.373, 14.4605 )
 npcName = "Fant"
 conversationName = "test"
 
+[node name="npc2" parent="npcs" instance=ExtResource( 5 )]
+position = Vector2( 13.3502, -70.9758 )
+npcName = "Fant"
+conversationName = "Villager_5"
+
 [node name="chests" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
 [node name="chest" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( -42.0771, -12.9967 )
+_type = "mediumChest"
 
 [node name="chest2" parent="chests" instance=ExtResource( 7 )]
-position = Vector2( 98.0585, -51.322 )
+position = Vector2( 70.4549, -43.0768 )
 
 [node name="pickupItems" type="Node2D" parent="."]
 script = ExtResource( 8 )
 
 [node name="itemDrop" parent="pickupItems" instance=ExtResource( 9 )]
+editor/display_folded = true
 position = Vector2( -44.2791, 30.8979 )
-_itemId = 0
-_amount = 1
+region_rect = Rect2( 16, 0, 16, 16 )
+_itemId = 1
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 197.187, 11.234 )
-_itemId = 1
-_amount = 1
+position = Vector2( -46.9433, 61.4223 )
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 77.3045, 77.6047 )
+position = Vector2( -81.8641, 29.2088 )
+region_rect = Rect2( 32, 0, 16, 16 )
 _itemId = 2
-_amount = 1
 
 [node name="YSort" type="YSort" parent="."]
 

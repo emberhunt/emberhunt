@@ -1,8 +1,11 @@
 extends "default_graph_node.gd"
 
+signal on_deletion
+
 var next
 
 func _on_graphNodeStart_close_request():
+	emit_signal("on_deletion", $hBoxContainer/entry.text)
 	queue_free()
 
 func _on_graphNodeStart_resize_request(new_minsize):

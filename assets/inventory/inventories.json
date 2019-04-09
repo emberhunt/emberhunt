@@ -1,0 +1,20 @@
+{
+invName, slotSize, columns, weightEnabled
+	"playerid" : {
+		"inventory" : {
+			"max_size" : 12,
+			"columns" : 4,
+			"weight_enabled" : false,
+			2 : {
+				"itemId" : 0,
+				"amount" : 1
+			}
+		},
+		"equipment" : {
+			1 : {
+				"item_id" : 1,
+				"amount" : 1
+			}
+		}
+	}
+}

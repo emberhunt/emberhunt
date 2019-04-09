@@ -2,14 +2,13 @@ extends Control
 
 const ItemStats = preload("res://scripts/inventory/ItemStats.gd")
 
-onready var descriptionLabel = $RichTextLabel
+onready var descriptionLabel = $textBackground/text
 
 func _ready():
 	descriptionLabel.bbcode_enabled = true
 
 
 func set_description(item : Item):
-	
 	var bbCode = "[u]%s[/u]" % item.get_name()
 	bbCode += "\n"
 	bbCode += "%s" % item.get_description()

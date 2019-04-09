@@ -22,8 +22,8 @@
 		"texture_region" : {
 			"x" : 0,
 			"y" : 0,
-			"w" : 32,
-			"h" : 32
+			"w" : 16,
+			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
@@ -55,10 +55,10 @@
 		},
 		
 		"texture_region" : {
-			"x" : 32,
+			"x" : 16,
 			"y" : 0,
-			"w" : 32,
-			"h" : 32
+			"w" : 16,
+			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 
@@ -90,10 +90,10 @@
 		},
 		
 		"texture_region" : {
-			"x" : 32,
-			"y" : 32,
-			"w" : 32,
-			"h" : 32
+			"x" : 16,
+			"y" : 16,
+			"w" : 16,
+			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
@@ -125,10 +125,10 @@
 		},
 		
 		"texture_region" : {
-			"x" : 128,
-			"y" : 160,
-			"w" : 32,
-			"h" : 32
+			"x" : 64,
+			"y" : 80,
+			"w" : 16,
+			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
