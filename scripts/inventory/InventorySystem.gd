@@ -305,4 +305,8 @@ func _check_requirements_type(item, slot) -> bool:
 func _on_descriptionField_mouse_exited():
 	itemDescription.set_visible(false)
 
-
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		for inv in get_node("inventories").get_children():
+			print("free %s" % inv.name)
+			inv.queue_free()

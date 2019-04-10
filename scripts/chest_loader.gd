@@ -10,14 +10,15 @@ var openedInv
 
 var _openChestButton
 
-var _invName
-var _inv
+# counts how many chests/inventories are nearby that can be opened (0 = none)
+var _invCounter = 0
+var _invInfo = {}
+var _lastInv
+var _invOpened = false
 
 func _ready():
 	if get_tree().get_current_scene().get_name() == "MainServer":
 		return
-
-	mainInventorySystem = "/root/" + get_tree().get_current_scene().get_name() + "/GUI/CanvasLayer/inventorySystem"
 	
 	for i in range(get_child_count()):
 		get_child(i).connect("on_area_entered", self, "on_interaction_range_entered")
@@ -26,6 +27,10 @@ func _ready():
 func init(path):
 	if get_tree().get_current_scene().get_name() == "MainServer":
 		return
+	
+	mainInventorySystem = Global.guiPath + "/CanvasLayer/inventorySystem"
+	
+	get_node(Global.guiPath).connect("on_inventory_toggled", self, "_update_inventory_opened")
 		
 	_invSystem = get_node(path + "inventorySystem")
 	if _invSystem == null:
@@ -37,29 +42,42 @@ func init(path):
 	_openChestButton.get_child(0).connect("pressed", self, "open_inventory")
 
 func on_interaction_range_entered(invName, inventory):
-	_invName = invName
-	_inv = inventory
-	_openChestButton.show()
+	_invInfo[invName] = inventory
+	_lastInv = invName
+	DebugConsole.write_line("Current inventory: " + _lastInv)
+	_update_inventory_counter(1)
 
 func on_interaction_range_exited(_invName):
-	_openChestButton.hide()
-	if _invSystem.visible:
-		get_node("/root/" + get_tree().get_current_scene().get_name() + "/GUI")._on_toggleInventory_pressed()
+	_update_inventory_counter(-1)
+	_invInfo.erase(_invName)
+	if not _invInfo.empty():
+		_lastInv = _invInfo.keys().back()
+	
+func _update_inventory_opened(open):
+	_invOpened = open
+	if open:
+		_openChestButton.hide()
 	else:
-		remove_inventories()
+		_update_inventory_counter(0)
+	
+func _update_inventory_counter(count):
+	_invCounter += count
+	if _invCounter <= 0:
+		if _invSystem.visible:
+			get_node(Global.guiPath)._on_toggleInventory_pressed()
+		else:
+			remove_inventories()
+		_openChestButton.hide()
+	else:
+		_openChestButton.show()
 
 func open_inventory():
 	_openChestButton.hide()
-	_invSystem.open_inventory(_invName, _inv)
-	DebugConsole.write_line("adding inventory: " + _invName)
-	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI")._on_toggleInventory_pressed()
+	DebugConsole.write_line("adding inventory: " + _lastInv)
+	_invSystem.open_inventory(_lastInv, _invInfo[_lastInv])
+	get_node(Global.guiPath)._on_toggleInventory_pressed()
 	
 func remove_inventories():
-	if openedInv != null:
-		openedInv.hide()
-	else:
-		openedInv = null
-		
 	_invSystem.close_all_except_main_inventory()
 	DebugConsole.write_line("remove inventories")
 
