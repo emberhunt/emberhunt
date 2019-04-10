@@ -5,6 +5,8 @@ extends Node
 const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
+const UDP_COMMANDS_PORT = 11211
+var commandsThread = Thread.new()
 
 var init_stats = Global.init_stats
 
@@ -34,6 +36,9 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	print("Server initialized")
+	
+	# Start listening for commands on the UDP port
+	commandsThread.start(self, "listenForCommands")
 	
 	# Create worlds
 	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
@@ -452,6 +457,31 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 					rpc_id(player_id, function_name, args[0], args[1],
 						args[2], args[3], args[4], args[5], args[6],
 						args[7], args[8], args[9])
+
+func listenForCommands(userdata):
+	var socket = PacketPeerUDP.new()
+	if (socket.listen(UDP_COMMANDS_PORT, "127.0.0.1") != OK):
+		print("Error listening on port: " + str(UDP_COMMANDS_PORT))
+	else:
+		print("Listening on port: " + str(UDP_COMMANDS_PORT) + " (Commands)")
+	while true:
+		if socket.get_available_packet_count() > 0:
+			# There are packets that were received but not read yet
+			var array_bytes = socket.get_packet()
+			var data = array_bytes.get_string_from_ascii()
+			var command = data.left(data.length()-1)
+			# Check if the command exists
+			var directory = Directory.new();
+			var regex = RegEx.new()
+			regex.compile("[^ ]")
+			if command == "" or not regex.search(command):
+				continue
+			elif directory.file_exists("res://server/commands/"+command+".gd"):
+				var script = load("res://server/commands/"+command+".gd").new()
+				script.call(command)
+			else:
+				print(command + ": command not found")
+		socket.wait()
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
