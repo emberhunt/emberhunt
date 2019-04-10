@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/FortressOfTheDarkConnectSignal.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png" type="Texture" id=2]
@@ -9,7 +9,8 @@
 [ext_resource path="res://scenes/chest.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scripts/pickup_items.gd" type="Script" id=8]
 [ext_resource path="res://scenes/inventory/item_drop.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/entities/rock0.png" type="Texture" id=10]
+[ext_resource path="res://assets/inventory/items.png" type="Texture" id=10]
+[ext_resource path="res://assets/entities/rock0.png" type="Texture" id=11]
 
 [sub_resource type="TileSet" id=1]
 0/name = "dir5"
@@ -220,12 +221,18 @@ conversationName = "Villager_5"
 [node name="chests" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
-[node name="chest" parent="chests" instance=ExtResource( 7 )]
+[node name="chest1" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( -42.0771, -12.9967 )
 _type = "mediumChest"
 
 [node name="chest2" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( 70.4549, -43.0768 )
+
+[node name="chest3" parent="chests" instance=ExtResource( 7 )]
+position = Vector2( -22.8314, -14.5074 )
+
+[node name="chest4" parent="chests" instance=ExtResource( 7 )]
+position = Vector2( -34.7227, -32.3444 )
 
 [node name="pickupItems" type="Node2D" parent="."]
 script = ExtResource( 8 )
@@ -234,15 +241,24 @@ script = ExtResource( 8 )
 editor/display_folded = true
 position = Vector2( -44.2791, 30.8979 )
 region_rect = Rect2( 16, 0, 16, 16 )
+_texture = ExtResource( 10 )
 _itemId = 1
+_amount = 1
+_autoSelectRegion = true
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( -46.9433, 61.4223 )
+position = Vector2( -60.2616, 49.7688 )
+_texture = ExtResource( 10 )
+_amount = 1
+_autoSelectRegion = true
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( -81.8641, 29.2088 )
+position = Vector2( -71.3997, 25.4036 )
 region_rect = Rect2( 32, 0, 16, 16 )
+_texture = ExtResource( 10 )
 _itemId = 2
+_amount = 1
+_autoSelectRegion = true
 
 [node name="YSort" type="YSort" parent="."]
 
@@ -254,7 +270,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="YSort/rock"]
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/rock"]
 position = Vector2( 0.056561, 4.034 )

@@ -1,7 +1,6 @@
 """
 - contains a list of commands (Commands.gd)
 """
-tool
 extends Control
 
 class_name Console
@@ -552,19 +551,17 @@ func _ready():
 	user.set_name(userName)
 	user.set_rights(ConsoleRights.get_rights_by_name(userRights))
 	
-	
 	add_basic_commands()
 	basicCommandsSize = commands.size()
-	create_log_file(logFileName)
-
+	
+	if logEnabled:
+		create_log_file(logFileName)
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		if logEnabled:
 			_on_logTimer_timeout()
-		
-
-
+			
 func create_log_file(filePath):
 	if logEnabled:
 		var dir = Directory.new()
@@ -1158,3 +1155,9 @@ func _on_logTimer_timeout():
 	
 	
 	
+
+
+
+
+
+
