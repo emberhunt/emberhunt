@@ -70,9 +70,9 @@ func pickup_item():
 		return
 	var _itemId = _pickupInfo[_lastPickupItemName][0]
 	var _amount = _pickupInfo[_lastPickupItemName][1]
-	
-	var addedToSlot = _mainInv.get_main_inventory().add_item(Global.allItems[_itemId], _amount)
-	if addedToSlot != -1:
+
+	#var addedToSlot = _mainInv.get_main_inventory().add_item(Global.allItems[_itemId], _amount)
+	if _mainInv.get_main_inventory().can_add_item(Global.allItems[_itemId]):
 		#Networking.rpc_id(1, "askServerToPickUpItem", get_tree().get_network_unique_id(), _child.name, _amount)
 		DebugConsole.warn("Send pick up item: " + str(_lastPickupItemName))
 		Networking.askServerToPickUpItem(get_tree().get_network_unique_id(), _lastPickupItemName, _itemId,  _amount)

@@ -253,10 +253,10 @@ remote func pickup_item(world, item_id, quantity):
 
 remote func ask_to_pickup_item(uuid, world, itemName, itemId, amount):
 	DebugConsole.warn("Got asked from %s to pickup %s %s" % [str(uuid), str(itemName), str(amount)])
-	
+
 	rpc_id(uuid, "pickup_item", world, itemName, itemId, amount)
-	rpc("remove_pickup_item", world, itemName )
-	
+	rpc("remove_pickup_item", world, itemName)
+
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
 # # # # # # # # # # #
