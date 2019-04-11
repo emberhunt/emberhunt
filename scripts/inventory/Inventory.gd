@@ -70,6 +70,29 @@ func _input(event):
 				_slots[_lastSelected].set_unselected()
 
 
+func can_add_item(item) -> bool:
+	# search if same item exists and is stackable,
+	# and if it is stackable, is it max stacked
+	
+	if weightEnabled:
+		if item.get_weight() + _currentWeight > maxWeight:
+			return false
+	
+	for i in range(_slots.size()):
+		var currentSlot = get_slot(i)
+		var curItem = get_slot(i)._item
+		if currentSlot._item != null:
+			if curItem.get_id() == item.get_id() and curItem.is_stackable():
+				if currentSlot.get_amount() < curItem.get_stack_size():
+					return true
+
+	# if not stackable/not exist/full stack then add to new slot
+	if _get_next_free_slot_id() == -1:
+		return false
+	
+	return true
+
+
 func can_carry_items(item : Item, amount : int = 1) -> bool:
 	if _currentWeight + (item.get_weight() * float(amount)) > maxWeight:
 		return false

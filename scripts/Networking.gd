@@ -221,8 +221,8 @@ func shootBullets(path_to_scene, bullet_rotation, stats):
 func askServerToPickUpItem(uuid, itemName, itemId, quantity):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
-		rpc_id(1, "ask_to_pickup_item", uuid, get_tree().get_current_scene().get_name(), itemName, itemName, quantity)
-	
+		rpc_id(1, "ask_to_pickup_item", uuid, get_tree().get_current_scene().get_name(), itemName, itemId, quantity)
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -245,12 +245,13 @@ remote func exit_world(world):
 	pass
 remote func pickup_item(world, itemName, itemId, quantity):
 	DebugConsole.warn("picking up " + str(quantity) + " of " + str(itemName))
-	var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
-	pickupItem.call_deferred("queue_free")
+	#var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
+	#pickupItem.call_deferred("queue_free")
 	# Todo add {quantity} of {itemId} to {uuid}s inventory
+	var _mainInv = get_node(Global.guiPath + "/CanvasLayer/inventorySystem")
+	_mainInv.get_main_inventory().add_item(Global.allItems[itemId], quantity)
 
 remote func remove_pickup_item(world, itemName):
 	DebugConsole.warn("Removing picki up item %s" % itemName)
 	var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
 	pickupItem.call_deferred("queue_free")
-	
