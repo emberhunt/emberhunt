@@ -472,15 +472,29 @@ func listenForCommands(userdata):
 			var command = data.left(data.length()-1)
 			# Check if the command exists
 			var directory = Directory.new();
-			var regex = RegEx.new()
-			regex.compile("[^ ]")
-			if command == "" or not regex.search(command):
+			var regexNonSpace = RegEx.new()
+			regexNonSpace.compile("[^ ]")
+			var regexArgs = RegEx.new()
+			regexArgs.compile("(?:(?:\\s|^)((\\\"|\\\')?.+?(?(2)\\2|)(?=\\s|$)))")
+			if command == "" or not regexNonSpace.search(command):
 				continue
-			elif directory.file_exists("res://server/commands/"+command+".gd"):
-				var script = load("res://server/commands/"+command+".gd").new()
-				script.call(command)
 			else:
-				print(command + ": command not found")
+				var args = regexArgs.search_all(command)
+				if directory.file_exists("res://server/commands/"+args[0].get_string(1)+".gd"):
+					var script = load("res://server/commands/"+args[0].get_string(1)+".gd").new()
+					var actualCommand = args[0].get_string(1)
+					args.pop_front()
+					var actualArgs = []
+					for arg in args:
+						var temp = arg.get_string(1)
+						if temp.begins_with("\"") or temp.begins_with("\'"):
+							temp = temp.right(1)
+						if temp.ends_with("\"") or temp.ends_with("\'"):
+							temp = temp.left(temp.length()-1)
+						actualArgs.append(temp)
+					script.call(actualCommand, actualArgs)
+				else:
+					print(args[0].get_string(1) + ": command not found")
 		socket.wait()
 
 # # # # # # # # # # # # # #

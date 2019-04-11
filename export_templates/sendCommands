@@ -2,6 +2,6 @@
 
 while :
 do
-  read COMMAND
+  read -e COMMAND
   echo $COMMAND > /dev/udp/127.0.0.1/11211
 done
