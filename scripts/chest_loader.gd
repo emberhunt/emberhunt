@@ -12,7 +12,7 @@ var _openChestButton
 
 # counts how many chests/inventories are nearby that can be opened (0 = none)
 var _invCounter = 0
-var _invInfo = {}
+var _invData
 var _lastInv
 var _invOpened = false
 
@@ -33,6 +33,7 @@ func init(path):
 	get_node(Global.guiPath).connect("on_inventory_toggled", self, "_update_inventory_opened")
 		
 	_invSystem = get_node(path + "inventorySystem")
+	
 	if _invSystem == null:
 		DebugConsole.error("couldn't find inventory!")
 
@@ -41,17 +42,20 @@ func init(path):
 	_openChestButton.connect("pressed", self, "open_inventory")
 	_openChestButton.get_child(0).connect("pressed", self, "open_inventory")
 
+func _get_inventory_index(invName : String) -> int:
+	for i in range(_invSystem.get_child_count()):
+		if _invSystem.get_child(i).name == invName:
+			return i
+	return -1
+
 func on_interaction_range_entered(invName, inventory):
-	_invInfo[invName] = inventory
+	_invData = inventory
 	_lastInv = invName
 	DebugConsole.write_line("Current inventory: " + _lastInv)
 	_update_inventory_counter(1)
 
 func on_interaction_range_exited(_invName):
 	_update_inventory_counter(-1)
-	_invInfo.erase(_invName)
-	if not _invInfo.empty():
-		_lastInv = _invInfo.keys().back()
 	
 func _update_inventory_opened(open):
 	_invOpened = open
@@ -74,7 +78,7 @@ func _update_inventory_counter(count):
 func open_inventory():
 	_openChestButton.hide()
 	DebugConsole.write_line("adding inventory: " + _lastInv)
-	_invSystem.open_inventory(_lastInv, _invInfo[_lastInv])
+	_invSystem.open_inventory(_lastInv, _invData)
 	get_node(Global.guiPath)._on_toggleInventory_pressed()
 	
 func remove_inventories():

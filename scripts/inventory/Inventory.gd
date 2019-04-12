@@ -10,6 +10,8 @@ by including it in an inventory system
 #tool
 extends Control
 
+class_name Inventory
+
 # signaled, when pressed or released
 signal on_slot_toggled(is_pressed, _selected, inventoryName)
 
@@ -44,7 +46,6 @@ func _ready():
 	
 	$nameBackground/name.set_text(inventoryDisplayName)
 	
-	# set colums to 0 for custom layout
 	if itemSlots is GridContainer:
 		pass
 #
@@ -200,7 +201,7 @@ func add_item(item : Item, amount : int = 1):
 
 func get_inventory_save_data() -> Dictionary:
 	var data = {}
-	data.slotSize = _slots.size()
+	data.inventorySize = _slots.size()
 	data.columns = columns
 	data.maxWeight = maxWeight
 	data.weightEnabled = weightEnabled
@@ -215,8 +216,8 @@ func get_inventory_save_data() -> Dictionary:
 	return data
 
 # slots max size
-func load_inventory_from_data(slotSize, columns, weightEnabled, data):
-	update_inventory_size(slotSize)
+func load_inventory_from_data(inventorySize, columns, weightEnabled, data):
+	update_inventory_size(inventorySize)
 	update_inventory_columns(columns)
 	update_weight_enabled(weightEnabled)
 	
