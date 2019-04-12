@@ -39,6 +39,7 @@ func _ready():
 	
 	# Start listening for commands on the UDP port
 	commandsThread.start(self, "listenForCommands")
+	print("For a list of commands, type \"help\".")
 	
 	# Create worlds
 	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
