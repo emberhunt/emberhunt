@@ -6,8 +6,8 @@ var dialogSystem
 var _openDialogButton
 
 # count the npcs that are nearby
-var _npcCounter = 0
-var _npcInfo = {}
+var _npcCounter := 0
+var _npcInfo := {}
 var _lastNpc := ""
 
 func _ready():
@@ -26,15 +26,16 @@ func init(path):
 	_openDialogButton.get_child(0).connect("pressed", self, "start_conversation")
 
 func interation_range_entered(npc):
+	_update_npc_counter(1)
 	_npcInfo[npc.name] = [npc.conversationName, npc.npcName]
 	_lastNpc = npc.name
-	_openDialogButton.show()
+	DebugConsole.warn("Current dialog: %s" % _lastNpc)
 
 func interation_range_exited(npc):
+	_update_npc_counter(-1)
 	_npcInfo.erase(npc.name)
 	if not _npcInfo.empty():
 		_lastNpc = _npcInfo.keys().back()
-	_openDialogButton.hide()
 
 func _update_npc_counter(count):
 	_npcCounter += count
