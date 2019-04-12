@@ -1,20 +1,19 @@
 {
 	"0" : {
-		"name" : "Health Potion",
-		"type" : "GREAT_SWORD",
-		"value" : 10,
+		"name" : "Small Health Potion",
+		"type" : "POTION",
+		"value" : 5,
 		"weight" : 1.0,
-		"description" : "fant",
+		"description" : "This is a health potion.",
 		
 		"requirements" : {
 		},
 						
 		"effects" : {
-			"health" : 5
+			"health" : 10
 		},
 		
 		"stats" : {
-			
 		},
 		
 		"texture_region" : {
@@ -34,22 +33,119 @@
 		"discardable" : true
 	},
 	"1" : {
-		"name" : "The Tome Of Darkness",
-		"type" : "GREAT_SWORD",
-		"value" : 1524,
-		"weight" : 2.0,
-		"description" : "The darklords secrets!",
+		"name" : "Health Potion",
+		"type" : "POTION",
+		"value" : 10,
+		"weight" : 1.0,
+		"description" : "This is a health potion.",
 		
 		"requirements" : {
-			"level" : 10
 		},
 						
 		"effects" : {
-			"health" : 1
+			"health" : 25
 		},
 		
 		"stats" : {
-			
+		},
+		
+		"texture_region" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 16,
+			"h" : 16
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : false,
+		"consumable" : true,
+		"discardable" : true
+	},
+	"2" : {
+		"name" : "Big Health Potion",
+		"type" : "POTION",
+		"value" : 20,
+		"weight" : 1.0,
+		"description" : "This is a health potion.",
+		
+		"requirements" : {
+		},
+						
+		"effects" : {
+			"health" : 50
+		},
+		
+		"stats" : {
+		},
+		
+		"texture_region" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 16,
+			"h" : 16
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : false,
+		"consumable" : true,
+		"discardable" : true
+	},
+	"3" : {
+		"name" : "Super Health Potion",
+		"type" : "POTION",
+		"value" : 40,
+		"weight" : 1.0,
+		"description" : "This is a health potion.",
+		
+		"requirements" : {
+		},
+						
+		"effects" : {
+			"health" : 100
+		},
+		
+		"stats" : {
+		},
+		
+		"texture_region" : {
+			"x" : 0,
+			"y" : 0,
+			"w" : 16,
+			"h" : 16
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : false,
+		"consumable" : true,
+		"discardable" : true
+	}, 
+	"4" : {
+		"name" : "Small Mana Potion",
+		"type" : "POTION",
+		"value" : 5,
+		"weight" : 1.0,
+		"description" : "This is a mana potion.",
+		
+		"requirements" : {
+		},
+						
+		"effects" : {
+			"mana" : 10
+		},
+		
+		"stats" : {
 		},
 		
 		"texture_region" : {
@@ -59,82 +155,111 @@
 			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
-
-		"slots_use" : 2,
-		"stack_size" : 4,		
-		"stackable" : false,
+		
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
 		"sellable" : true,
 		"usable" : false,
-		"consumable" : false,
+		"consumable" : true,
 		"discardable" : true
 	},
-	"2" : {
-		"name" : "asd",
-		"type" : "GREAT_SWORD",
-		"value" : 123,
-		"weight" : 3.0,
-		"description" : "This is a really old tome!",
+	"5" : {
+		"name" : "Mana Potion",
+		"type" : "POTION",
+		"value" : 10,
+		"weight" : 1.0,
+		"description" : "This is a mana potion.",
 		
 		"requirements" : {
-			"level" : 33
 		},
 						
 		"effects" : {
-			"str" : 5
+			"mana" : 25
 		},
 		
 		"stats" : {
-			
 		},
 		
 		"texture_region" : {
 			"x" : 16,
-			"y" : 16,
+			"y" : 0,
 			"w" : 16,
 			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
 		"slots_use" : 1,
-		"stack_size" : 4,
-		"stackable" : false,
+		"stack_size" : 5,
+		"stackable" : true,
 		"sellable" : true,
-		"usable" : true,
-		"consumable" : false,
+		"usable" : false,
+		"consumable" : true,
 		"discardable" : true
 	},
-	"3" : {
-		"name" : "Healing potion",
+	"6" : {
+		"name" : "Big Mana Potion",
 		"type" : "POTION",
-		"value" : 123,
-		"weight" : 0.5,
-		"description" : "This will make you feel better!",
+		"value" : 20,
+		"weight" : 1.0,
+		"description" : "This is a mana potion.",
 		
 		"requirements" : {
-			"level" : 10
 		},
 						
 		"effects" : {
-			"str" : 200
+			"mana" : 50
 		},
 		
 		"stats" : {
-			
 		},
 		
 		"texture_region" : {
-			"x" : 64,
-			"y" : 80,
+			"x" : 16,
+			"y" : 0,
 			"w" : 16,
 			"h" : 16
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
 		"slots_use" : 1,
-		"stack_size" : 4,
+		"stack_size" : 5,
 		"stackable" : true,
 		"sellable" : true,
-		"usable" : true,
+		"usable" : false,
+		"consumable" : true,
+		"discardable" : true
+	},
+	"7" : {
+		"name" : "Super Mana Potion",
+		"type" : "POTION",
+		"value" : 40,
+		"weight" : 1.0,
+		"description" : "This is a mana potion.",
+		
+		"requirements" : {
+		},
+						
+		"effects" : {
+			"mana" : 100
+		},
+		
+		"stats" : {
+		},
+		
+		"texture_region" : {
+			"x" : 16,
+			"y" : 0,
+			"w" : 16,
+			"h" : 16
+		},
+		"texture_path" : "res://assets/inventory/items.png",
+		
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
+		"sellable" : true,
+		"usable" : false,
 		"consumable" : true,
 		"discardable" : true
 	}

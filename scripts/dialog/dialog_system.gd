@@ -31,7 +31,6 @@ func _input(event):
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			_handle_next_dialog()
 	
-	
 func _handle_next_dialog():
 	if _conversation[_index][0] == DialogType.TYPE.END:
 		stop_conversation()
@@ -59,7 +58,8 @@ func _handle_next_dialog():
 				_dialog.start()
 
 		elif _conversation[_index][0] == DialogType.TYPE.DECISION:
-			pass #handled by button press dialogDecision
+			if _conversation.has(_lastIndex):
+				get_dialog_type(_conversation[_lastIndex][0]).show()
 			
 		elif _conversation[_index][0] == DialogType.TYPE.ENTRY:
 			_init = false
@@ -76,6 +76,8 @@ func _handle_next_dialog():
 
 func _on_dialogDecision_on_button_pressed(buttonId):
 	_dialog.finish()
+	if _conversation.has(_lastIndex):
+		get_dialog_type(_conversation[_lastIndex][0]).hide()
 	_lastIndex = _index
 	_index = _dialog.get_next(buttonId)
 	_init = false
@@ -84,6 +86,8 @@ func _on_dialogDecision_on_button_pressed(buttonId):
 func start_conversation(conversationName, partner):
 	if _conversationStarted:
 		return
+		
+	get_parent().get_parent().setTouchpadsState(false)
 	
 	if not Global.allDialogs.has(conversationName):
 		DebugConsole.error("Couldn't find dialog: " + conversationName)
@@ -107,7 +111,7 @@ func start_conversation(conversationName, partner):
 					speaker = _dialogPartner
 				elif dialog.speaker == "{player}":
 					speaker = "You"
-					
+
 				_conversation[conversation.keys()[i]] = [DialogType.TYPE.TEXT, [dialog.next, dialog.text, speaker]]
 			"Entry Point":
 				_conversation[conversation.keys()[i]] = [DialogType.TYPE.ENTRY, dialog.next]
@@ -133,6 +137,7 @@ func start_conversation(conversationName, partner):
 func stop_conversation():
 	if _conversation.has(_index):
 		get_dialog_type(_conversation[_index][0]).hide()
+	get_parent().get_parent().setTouchpadsState(true)
 	$dialogs.hide()
 	_conversationStarted = false
 
