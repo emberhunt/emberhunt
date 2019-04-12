@@ -1,18 +1,16 @@
 {
 	"0" : {
-		"name" : "The Super Great Dingle Donger 9000",
+		"name" : "Health Potion",
 		"type" : "GREAT_SWORD",
 		"value" : 10,
 		"weight" : 1.0,
 		"description" : "fant",
 		
 		"requirements" : {
-			"level" : 10,
-			"str" : 20
 		},
 						
 		"effects" : {
-			"str" : 1
+			"health" : 5
 		},
 		
 		"stats" : {
@@ -27,12 +25,12 @@
 		},
 		"texture_path" : "res://assets/inventory/items.png",
 		
-		"slots_use" : 2,
-		"stack_size" : 4,
-		"stackable" : false,
+		"slots_use" : 1,
+		"stack_size" : 5,
+		"stackable" : true,
 		"sellable" : true,
 		"usable" : false,
-		"consumable" : false,
+		"consumable" : true,
 		"discardable" : true
 	},
 	"1" : {
