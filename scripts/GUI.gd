@@ -3,6 +3,8 @@
 """
 extends Control
 
+signal on_inventory_toggled
+
 onready var debugLabel = $CanvasLayer/debugLabel 
 onready var fpsLabel = $CanvasLayer/FPS
 
@@ -13,7 +15,7 @@ var playerBody : KinematicBody2D = null
 
 func _ready():
 	if is_inside_tree():
-		Global.guiPath = self.get_path()
+		Global.guiPath = str(self.get_path())
 		DebugConsole.warn("GUI path: " + Global.guiPath + "\n")
 	var stats = get_node(Global.playerPath).get_node("stats").get_properties()
 	$CanvasLayer/inventorySystem/playerStats.set_stats(stats)
@@ -28,7 +30,6 @@ func _ready():
 func _input(event):
 	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
 		_on_toggleInventory_pressed()
-		
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
@@ -51,6 +52,8 @@ func _on_TouchScreenButton_pressed():
 func _on_toggleInventory_pressed():
 	if not Global.paused:
 		inventorySystem.visible = ! inventorySystem.visible
+		
+		emit_signal("on_inventory_toggled", inventorySystem.visible)
 		
 		if not inventorySystem.visible:
 			inventorySystem.close_all_except_main_inventory()

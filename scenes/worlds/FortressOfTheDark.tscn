@@ -213,19 +213,31 @@ npcName = "Fant"
 conversationName = "test"
 
 [node name="npc2" parent="npcs" instance=ExtResource( 5 )]
-position = Vector2( 13.3502, -70.9758 )
+position = Vector2( 1.72751, -80.274 )
 npcName = "Fant"
 conversationName = "Villager_5"
+
+[node name="npc3" parent="npcs" instance=ExtResource( 5 )]
+position = Vector2( 50.3811, -98.324 )
+
+[node name="npc4" parent="npcs" instance=ExtResource( 5 )]
+position = Vector2( 47.5425, -42.1853 )
 
 [node name="chests" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
-[node name="chest" parent="chests" instance=ExtResource( 7 )]
+[node name="chest1" parent="chests" instance=ExtResource( 7 )]
 position = Vector2( -42.0771, -12.9967 )
 _type = "mediumChest"
 
 [node name="chest2" parent="chests" instance=ExtResource( 7 )]
-position = Vector2( 70.4549, -43.0768 )
+position = Vector2( -90.5539, -38.7959 )
+
+[node name="chest3" parent="chests" instance=ExtResource( 7 )]
+position = Vector2( -22.8314, -14.5074 )
+
+[node name="chest4" parent="chests" instance=ExtResource( 7 )]
+position = Vector2( -34.7227, -32.3444 )
 
 [node name="pickupItems" type="Node2D" parent="."]
 script = ExtResource( 8 )
@@ -237,10 +249,10 @@ region_rect = Rect2( 16, 0, 16, 16 )
 _itemId = 1
 
 [node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( -46.9433, 61.4223 )
+position = Vector2( -60.2616, 49.7688 )
 
 [node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( -81.8641, 29.2088 )
+position = Vector2( -71.3997, 25.4036 )
 region_rect = Rect2( 32, 0, 16, 16 )
 _itemId = 2
 

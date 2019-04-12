@@ -22,6 +22,9 @@ func set_Event(text, params):
 	$text.set_bbcode(_replace_event_text(text, params))
 
 func execute_event():
+	# ToDo:
+	# - add all events
+	# - create file for events or in networking
 	match(_eventType):
 		"Add Stats":
 			DebugConsole.write_line(_replace_params("/addStat {0} {1}", _params))

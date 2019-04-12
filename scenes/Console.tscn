@@ -11,6 +11,5 @@ script = ExtResource( 1 )
 visible = false
 buttonColor = Color( 0.141176, 0.141176, 0.180392, 0.341176 )
 lineEditColor = Color( 0.211765, 0.211765, 0.211765, 0.670588 )
-showTitleBar = false
 backgroundColor = Color( 0.0588235, 0.0588235, 0.0784314, 0.403922 )
 

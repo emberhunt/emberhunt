@@ -96,5 +96,6 @@ margin_left = -97.0
 margin_top = -78.0
 margin_right = 83.0
 margin_bottom = 78.0
+mouse_filter = 1
 
 [connection signal="mouse_exited" from="itemSlotDescription/descriptionField" to="." method="_on_descriptionField_mouse_exited"]

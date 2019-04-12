@@ -4,8 +4,11 @@ extends Node2D
 var dialogSystem
 
 var _openDialogButton
-var _npc
 
+# count the npcs that are nearby
+var _npcCounter := 0
+var _npcInfo := {}
+var _lastNpc := ""
 
 func _ready():
 	if get_tree().get_current_scene().get_name() == "MainServer":
@@ -23,17 +26,30 @@ func init(path):
 	_openDialogButton.get_child(0).connect("pressed", self, "start_conversation")
 
 func interation_range_entered(npc):
-	_npc = npc
-	_openDialogButton.show()
+	_update_npc_counter(1)
+	_npcInfo[npc.name] = [npc.conversationName, npc.npcName]
+	_lastNpc = npc.name
+	DebugConsole.warn("Current dialog: %s" % _lastNpc)
 
 func interation_range_exited(npc):
-	_npc = npc
-	_openDialogButton.hide()
+	_update_npc_counter(-1)
+	_npcInfo.erase(npc.name)
+	if not _npcInfo.empty():
+		_lastNpc = _npcInfo.keys().back()
+
+func _update_npc_counter(count):
+	_npcCounter += count
+	if _npcCounter <= 0:
+		_openDialogButton.hide()
+	else:
+		_openDialogButton.show()
 
 func start_conversation():
 	_openDialogButton.hide()
+	if _npcInfo.empty():
+		return
 	get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/dialogSystem"). \
-			start_conversation(_npc.conversationName, _npc.npcName)
+			start_conversation(_npcInfo[_lastNpc][0], _npcInfo[_lastNpc][1])
 
 func sight_range_entered(npc):
 	if _openDialogButton != null:
