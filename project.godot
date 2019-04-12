@@ -55,6 +55,11 @@ _global_script_classes=[ {
 "path": "res://scripts/Entity.gd"
 }, {
 "base": "Control",
+"class": "Inventory",
+"language": "GDScript",
+"path": "res://scripts/inventory/Inventory.gd"
+}, {
+"base": "Control",
 "class": "InventorySystem",
 "language": "GDScript",
 "path": "res://scripts/inventory/InventorySystem.gd"
@@ -79,6 +84,7 @@ _global_script_class_icons={
 "DefaultCommands": "",
 "DefaultGraphNode": "",
 "Entity": "",
+"Inventory": "",
 "InventorySystem": "",
 "Item": "",
 "ItemDrop": ""

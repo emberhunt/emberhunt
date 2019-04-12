@@ -139,6 +139,31 @@ margin_right = 25.1129
 margin_bottom = 7.0
 text = "Talk"
 
+[node name="exitDialog" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
+visible = false
+margin_left = 880.0
+margin_top = 280.0
+margin_right = 1010.0
+margin_bottom = 332.0
+texture_normal = ExtResource( 4 )
+expand = true
+
+[node name="touch" type="TouchScreenButton" parent="CanvasLayer/exitDialog"]
+scale = Vector2( 0.883075, 0.418975 )
+normal = ExtResource( 4 )
+
+[node name="text" type="Label" parent="CanvasLayer/exitDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -36.072
+margin_top = -7.0
+margin_right = 30.928
+margin_bottom = 7.0
+text = "Exit Dialog"
+
 [node name="debugLabel" type="Label" parent="CanvasLayer"]
 editor/display_folded = true
 margin_right = 96.0

@@ -10,6 +10,8 @@ by including it in an inventory system
 #tool
 extends Control
 
+class_name Inventory
+
 # signaled, when pressed or released
 signal on_slot_toggled(is_pressed, _selected, inventoryName)
 
@@ -44,7 +46,6 @@ func _ready():
 	
 	$nameBackground/name.set_text(inventoryDisplayName)
 	
-	# set colums to 0 for custom layout
 	if itemSlots is GridContainer:
 		pass
 #
@@ -68,6 +69,29 @@ func _input(event):
 		else:
 			if _lastSelected != -1:
 				_slots[_lastSelected].set_unselected()
+
+
+func can_add_item(item) -> bool:
+	# search if same item exists and is stackable,
+	# and if it is stackable, is it max stacked
+	
+	if weightEnabled:
+		if item.get_weight() + _currentWeight > maxWeight:
+			return false
+	
+	for i in range(_slots.size()):
+		var currentSlot = get_slot(i)
+		var curItem = get_slot(i)._item
+		if currentSlot._item != null:
+			if curItem.get_id() == item.get_id() and curItem.is_stackable():
+				if currentSlot.get_amount() < curItem.get_stack_size():
+					return true
+
+	# if not stackable/not exist/full stack then add to new slot
+	if _get_next_free_slot_id() == -1:
+		return false
+	
+	return true
 
 
 func can_carry_items(item : Item, amount : int = 1) -> bool:
@@ -177,7 +201,7 @@ func add_item(item : Item, amount : int = 1):
 
 func get_inventory_save_data() -> Dictionary:
 	var data = {}
-	data.slotSize = _slots.size()
+	data.inventorySize = _slots.size()
 	data.columns = columns
 	data.maxWeight = maxWeight
 	data.weightEnabled = weightEnabled
@@ -192,8 +216,8 @@ func get_inventory_save_data() -> Dictionary:
 	return data
 
 # slots max size
-func load_inventory_from_data(slotSize, columns, weightEnabled, data):
-	update_inventory_size(slotSize)
+func load_inventory_from_data(inventorySize, columns, weightEnabled, data):
+	update_inventory_size(inventorySize)
 	update_inventory_columns(columns)
 	update_weight_enabled(weightEnabled)
 	

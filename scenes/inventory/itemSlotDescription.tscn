@@ -1,11 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/inventory/itemSlotDescription.gd" type="Script" id=1]
 [ext_resource path="res://assets/inventory/inventory_window_v2.png" type="Texture" id=2]
-[ext_resource path="res://assets/fonts/acari-sans/AcariSans-BoldItalics.tres" type="DynamicFont" id=3]
-[ext_resource path="res://assets/fonts/acari-sans/AcariSans-Italics.tres" type="DynamicFont" id=4]
-[ext_resource path="res://assets/fonts/acari-sans/AcariSans-Bold.tres" type="DynamicFont" id=5]
-[ext_resource path="res://assets/fonts/acari-sans/AcariSans-Regular.tres" type="DynamicFont" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.270588, 0.270588, 0.270588, 1 )
@@ -46,10 +42,6 @@ margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
 mouse_filter = 1
-custom_fonts/bold_italics_font = ExtResource( 3 )
-custom_fonts/italics_font = ExtResource( 4 )
-custom_fonts/bold_font = ExtResource( 5 )
-custom_fonts/normal_font = ExtResource( 6 )
 bbcode_enabled = true
 scroll_active = false
 

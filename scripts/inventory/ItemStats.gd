@@ -27,7 +27,7 @@ enum ItemType {
 	CRYSTAL_SHARD,
 	ORB,
 	TRAP,
-	NATRUE_RELIC,
+	NATURE_RELIC,
 	DIVINE_RELIC,
 	ARROW,
 	
@@ -64,7 +64,7 @@ const _itemTypes = {
 	ItemType.CRYSTAL_SHARD : "CRYSTAL_SHARD",
 	ItemType.ORB : "ORB",
 	ItemType.TRAP : "TRAP",
-	ItemType.NATRUE_RELIC : "NATRUE_RELIC",
+	ItemType.NATURE_RELIC : "NATURE_RELIC",
 	ItemType.DIVINE_RELIC : "DIVINE_RELIC",
 	
 	ItemType.ARMOR_CHEST : "ARMOR_CHEST",

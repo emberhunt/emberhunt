@@ -7,8 +7,8 @@ var _inventory = {}
 export(String, "smallChest", "mediumChest", "bigChest") var _type = "smallChest"
 
 func _ready():
-	_add_item(0, 1)
-	_add_item(1, 1)
+	for i in range(int(name[name.length() - 1])):
+		_add_item(0, 1)
 
 func init(invPrefab):
 	pass

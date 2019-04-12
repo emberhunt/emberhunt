@@ -61,9 +61,9 @@ func _ready():
 	var inv = $inventories/inventory
 	
 	load_save_data({ \
-			"inventory" : { "slotSize" : 20, "columns" : 5, "weightEnabled" : false, \
+			"inventory" : { "inventorySize" : 20, "columns" : 5, "weightEnabled" : false, \
 				"slots" : { 0 : {"item_id" : 0, "amount" : 1}}}, \
-			"equipment" : { "slotSize" : 12, "columns" : 4, "weightEnabled" : false, \
+			"equipment" : { "inventorySize" : 12, "columns" : 4, "weightEnabled" : false, \
 				"slots" : {1 : {"item_id" : 1, "amount" : 1}}}})
 	
 	for i in range($inventories.get_child_count()):
@@ -92,20 +92,33 @@ func get_save_data():
 	return saveData
 
 func load_save_data(data):
-	#slotSize, columns, weightEnabled, data
+	#inventorySize, columns, weightEnabled, data
 	$inventories.get_node("inventory").load_inventory_from_data(\
-			data.inventory.slotSize, data.inventory.columns, data.inventory.weightEnabled, data.inventory.slots)
+			data.inventory.inventorySize, data.inventory.columns, data.inventory.weightEnabled, data.inventory.slots)
 	$inventories.get_node("equipment").load_inventory_from_data(\
-			data.equipment.slotSize, data.equipment.columns, data.equipment.weightEnabled, data.equipment.slots)
+			data.equipment.inventorySize, data.equipment.columns, data.equipment.weightEnabled, data.equipment.slots)
 
 func _process(delta):
 	if holding:
 		draggenItem.rect_global_position = get_viewport().get_mouse_position()
 
+func is_in_consume_field(pos):
+	if pos.x < $consumeField.rect_position.x or \
+		pos.x > $consumeField.rect_position.x + $consumeField.rect_size.x or \
+		pos.y < $consumeField.rect_position.y or \
+		pos.y > $consumeField.rect_position.y + $consumeField.rect_size.y:
+			return false
+	return true
+		
 func _input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and not event.is_pressed():
-		holding = false
-		draggenItem.set_visible(false)
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if not event.is_pressed():
+			if holding and is_in_consume_field(event.position):
+				var _item = get_inventory_by_name(selectedInv).get_slots()[selectedId].get_item()
+				if _item.is_consumable():
+					get_inventory_by_name(selectedInv).remove_item(selectedId, 1)
+			holding = false
+			draggenItem.set_visible(false)
 
 func get_main_inventory():
 	return $inventories/inventory
@@ -132,10 +145,10 @@ func close_opened_inventory(type):
 				inv.set_visible(false)
 	DebugConsole.warn("Closed: " + str(type))
 
-func get_inventory_by_name(invName):
+func get_inventory_by_name(invName) -> Inventory:
 	for i in range($inventories.get_child_count()):
 		if $inventories.get_child(i).name == invName:
-			return $inventories.get_child(i)
+			return $inventories.get_child(i) as Inventory
 	DebugConsole.error("Couldn't find inventory with name: " + invName)
 	return null
 
@@ -162,6 +175,7 @@ func _on_PlayerInventory_on_slot_toggled(is_pressed, id, inv):
 	selectedInv = inv
 	lastSelectedId = selectedId
 	selectedId = id
+	
 	if is_pressed:
 		if get_inventory_by_name(inv).get_item(id) != null : # make dragged item visible
 			holding = true
@@ -227,7 +241,6 @@ func _full_swap(inv1, slot1 : Inventory.Slot, inv2, slot2 : Inventory.Slot):
 	if weightEnabled and \
 			(inv1.get_carry_weight() + slot2.get_weight() > maxWeight1) or \
 			(inv2.get_carry_weight() + slot1.get_weight() > maxWeight2):
-		print("can't carry anymore")
 		inv1.add_weight(slot1.get_weight())
 		inv2.add_weight(slot2.get_weight())
 		return
@@ -259,7 +272,6 @@ func _part_swap(fromInv, fromSlot : Inventory.Slot, toInv, toSlot : Inventory.Sl
 	
 	
 	if addItemsAmount <= 0:
-		print("can't carry anymore")
 		return
 	
 	if weightEnabled:
@@ -304,5 +316,3 @@ func _check_requirements_type(item, slot) -> bool:
 	
 func _on_descriptionField_mouse_exited():
 	itemDescription.set_visible(false)
-
-

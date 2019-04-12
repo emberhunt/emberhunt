@@ -1,5 +1,5 @@
 extends Sprite
-tool
+#tool
 class_name ItemDrop
 
 export(Texture) var _texture = preload("res://assets/inventory/items.png") setget update_texture
