@@ -467,6 +467,7 @@ func listenForCommands(userdata):
 	while true:
 		if socket.get_available_packet_count() > 0:
 			# There are packets that were received but not read yet
+			# Receive a packet
 			var array_bytes = socket.get_packet()
 			var data = array_bytes.get_string_from_ascii()
 			var command = data.left(data.length()-1)
@@ -474,24 +475,32 @@ func listenForCommands(userdata):
 			var directory = Directory.new();
 			var regexNonSpace = RegEx.new()
 			regexNonSpace.compile("[^ ]")
-			var regexArgs = RegEx.new()
-			regexArgs.compile("(?:(?:\\s|^)((\\\"|\\\')?.+?(?(2)\\2|)(?=\\s|$)))")
+			# If the command is just spaces then ignore it
 			if command == "" or not regexNonSpace.search(command):
 				continue
 			else:
+				# Split the input to command and args
+				var regexArgs = RegEx.new()
+				regexArgs.compile("(?:(?:\\s|^)(((?<!\\\\)\\\"|(?<!\\\\)')?.+?(?(2)(?<!\\\\)\\2|)(?=\\s|$)))")
 				var args = regexArgs.search_all(command)
+				# Check if that command exists
 				if directory.file_exists("res://server/commands/"+args[0].get_string(1)+".gd"):
 					var script = load("res://server/commands/"+args[0].get_string(1)+".gd").new()
+					# Get the args ready
 					var actualCommand = args[0].get_string(1)
 					args.pop_front()
 					var actualArgs = []
 					for arg in args:
 						var temp = arg.get_string(1)
-						if temp.begins_with("\"") or temp.begins_with("\'"):
+						# Remove quotation marks
+						if (temp.begins_with("\"") or temp.begins_with("\'")) and (temp.ends_with("\"") or temp.ends_with("\'")):
 							temp = temp.right(1)
-						if temp.ends_with("\"") or temp.ends_with("\'"):
 							temp = temp.left(temp.length()-1)
+						# Unescape escaped quotation marks
+						temp = temp.replace("\\\"","\"").replace("\\'","'")
+						# Add the formatted argument to the list
 						actualArgs.append(temp)
+					# Call the command
 					script.call(actualCommand, actualArgs)
 				else:
 					print(args[0].get_string(1) + ": command not found")
