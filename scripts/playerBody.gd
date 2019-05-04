@@ -5,11 +5,6 @@ var direction = 0 # Joystick direction
 var motion = Vector2(0,0) # Movement vector
 
 
-func _ready():
-	if is_inside_tree():
-		Global.playerPath = self.get_path()
-		DebugConsole.warn("Player path: " + Global.playerPath)
-
 func _process(delta):
 	var motion = (Global.charactersData[Global.charID].agility+25)*(speed/100)*direction*Vector2(1, 1) #Calculate the movement vector using the joystick variables
 	
@@ -24,5 +19,3 @@ func _process(delta):
 		motion += Vector2(0,2500)*delta		#/
 	move_and_slide(motion)# Move according to the motion vector
 	Networking.sendPosition(position)
-	# set according z-index
-	#z_index = position.y
