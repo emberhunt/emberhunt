@@ -3,33 +3,19 @@
 """
 extends Control
 
-signal on_inventory_toggled
-
 onready var debugLabel = $CanvasLayer/debugLabel 
 onready var fpsLabel = $CanvasLayer/FPS
 
 export(NodePath) var playerNode = "../YSort/player"
 
-onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
 
 func _ready():
-	if is_inside_tree():
-		Global.guiPath = str(self.get_path())
-		DebugConsole.warn("GUI path: " + Global.guiPath + "\n")
-	var stats = get_node(Global.playerPath).get_node("stats").get_properties()
-	$CanvasLayer/inventorySystem/playerStats.set_stats(stats)
-		
-	set_process_input(true)
-	inventorySystem.hide()
 	playerBody = get_node("../YSort/player")
 	
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))
 
-func _input(event):
-	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
-		_on_toggleInventory_pressed()
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
@@ -47,19 +33,6 @@ func _on_TouchScreenButton_pressed():
 		$CanvasLayer.add_child(scene_instance)
 		# disable touchads
 		setTouchpadsState(false)
-
-
-func _on_toggleInventory_pressed():
-	if not Global.paused:
-		inventorySystem.visible = ! inventorySystem.visible
-		
-		emit_signal("on_inventory_toggled", inventorySystem.visible)
-		
-		if not inventorySystem.visible:
-			inventorySystem.close_all_except_main_inventory()
-
-		# Disable/Enable touchpads and stuff
-		setTouchpadsState(!inventorySystem.visible)
 
 
 func setTouchpadsState(state):
