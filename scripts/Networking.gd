@@ -131,14 +131,13 @@ remote func receive_world_update(world_name, world_data):
 		
 		# Check if any nodes got removed
 		# Players
-		if get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
-			for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").get_children():
-				var exists = false
-				for playerdata in world_data.players.values():
-					if player.get_name() == playerdata.nickname:
-						exists = true
-				if not exists:
-					get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.get_name()).queue_free()
+		for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").get_children():
+			var exists = false
+			for playerdata in world_data.players.values():
+				if player.get_name() == playerdata.nickname:
+					exists = true
+			if not exists:
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.get_name()).queue_free()
 
 remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_position):
 	# Check if it was sent by the server and if im still in that world
