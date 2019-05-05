@@ -1,0 +1,7 @@
+#!/bin/bash
+
+trap "kill $BGPID; exit" SIGINT
+gray=$(printf "\e[37m")
+esc=$(printf "\e[39m")
+unbuffer ./server.x86_64 | sed -E "s,.*,${gray}&${esc}," & BGPID=$!
+./sendCommands
