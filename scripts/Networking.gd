@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "localhost"
+const SERVER_IP = "nam.zvaigzdele.lt"
 const SERVER_PORT = 22122
 
 func _ready():
@@ -105,21 +105,18 @@ remote func receive_world_update(world_name, world_data):
 			if playerID == get_tree().get_network_unique_id():
 				continue
 			var player = world_data.players[playerID]
-			if not get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
-				# There's no PLAYERS node yet
-				var node = YSort.new()
-				node.set_name("players")
-				get_node("/root/"+get_tree().get_current_scene().get_name()).add_child(node)
 			# Check if there's that player in our world
-			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").has_node(player.nickname):
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").has_node(player.nickname):
 				# That player is not in our world yet
 				var scene = preload("res://scenes/otherPlayer.tscn")
 				var scene_instance = scene.instance()
 				scene_instance.set_name(player.nickname)
 				scene_instance.add_to_group("player")
-				get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").add_child(scene_instance)
+				# Disable collisions
+				scene_instance.get_node("CollisionShape2D").disabled = true
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").add_child(scene_instance)
 			# Sync position
-			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.nickname)
+			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.nickname)
 			playernode.speed = world_data.players[playerID].stats.agility+25
 			if (playernode.position-player.position).length() < 25:
 				playernode.move(player.position)
@@ -135,13 +132,13 @@ remote func receive_world_update(world_name, world_data):
 		# Check if any nodes got removed
 		# Players
 		if get_node("/root/"+get_tree().get_current_scene().get_name()).has_node("players"):
-			for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/players").get_children():
+			for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").get_children():
 				var exists = false
 				for playerdata in world_data.players.values():
 					if player.get_name() == playerdata.nickname:
 						exists = true
 				if not exists:
-					get_node("/root/"+get_tree().get_current_scene().get_name()+"/players/"+player.get_name()).queue_free()
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.get_name()).queue_free()
 
 remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_position):
 	# Check if it was sent by the server and if im still in that world
