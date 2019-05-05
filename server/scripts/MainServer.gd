@@ -165,6 +165,9 @@ remote func join_world(uuid, character_id, world):
 				var scene_instance = scene.instance()
 				scene_instance.set_name(account_data.nickname)
 				scene_instance.add_to_group("player")
+				# Remove collissions between players
+				for player in get_node("/root/MainServer/players").get_children():
+					scene_instance.add_collision_exception_with(player)
 				addSceneToGroup(scene_instance, world)
 				get_node("/root/MainServer/players").add_child(scene_instance)
 				worlds[world].players[get_tree().get_rpc_sender_id()] = {
