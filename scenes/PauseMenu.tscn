@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/PauseMenu.gd" type="Script" id=1]
-[ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=2]
-[ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=3]
-[ext_resource path="res://assets/fonts/Gobold.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/UI/Menu_v1.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=3]
+[ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=4]
+[ext_resource path="res://assets/fonts/Gobold.tres" type="DynamicFont" id=5]
 
 [node name="PauseMenu" type="Control"]
 anchor_right = 1.0
@@ -30,12 +31,13 @@ margin_top = 100.0
 margin_right = -250.0
 margin_bottom = -100.0
 
-[node name="ColorRect" type="ColorRect" parent="Container"]
+[node name="ColorRect" type="TextureRect" parent="Container"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color( 0.152941, 0.152941, 0.152941, 1 )
+texture = ExtResource( 2 )
+expand = true
 
 [node name="Buttons" type="Container" parent="Container"]
 anchor_left = 0.5
@@ -54,14 +56,14 @@ anchor_right = 0.5
 margin_left = -200.0
 margin_right = 200.0
 margin_bottom = 50.0
-texture_normal = ExtResource( 2 )
-texture_pressed = ExtResource( 3 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 4 )
 expand = true
 
 [node name="Label" type="Label" parent="Container/Buttons/ButtonBack"]
 margin_right = 400.0
 margin_bottom = 50.0
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
 text = "Back"
 align = 1
 valign = 1
@@ -75,14 +77,14 @@ margin_left = -200.0
 margin_top = 70.0
 margin_right = 200.0
 margin_bottom = 120.0
-texture_normal = ExtResource( 2 )
-texture_pressed = ExtResource( 3 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 4 )
 expand = true
 
 [node name="Label" type="Label" parent="Container/Buttons/ButtonMainMenu"]
 margin_right = 400.0
 margin_bottom = 50.0
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
 text = "Go To Main Menu"
 align = 1
 valign = 1

@@ -18,6 +18,7 @@ var charID = 0
 
 var worldReadyFunctions = {}
 
+
 const init_stats = {
 	"Knight" : {
 		"max_hp" : 160,
@@ -121,9 +122,6 @@ const init_stats = {
 	}
 }
 
-# data of all items loaded once
-var allItems = {}
-var allDialogs = {}
 
 # game paused
 var paused = false
@@ -151,68 +149,7 @@ func loadGame():
 	touchpadPosition = file.get_value("Settings","touchpadPosition", "Fixed")
 	UUID = file.get_value("Networking","uuid", false)
 
-func loadItems():
-	var file = File.new()
-	file.open("res://assets/inventory/all_items.json", file.READ)
-	var dataText = file.get_as_text()
-	file.close()
-	var data = JSON.parse(dataText)
-	
-	if data.error != OK:
-		DebugConsole.error("couldn't load items!")
-		return
-	else:
-		DebugConsole.warn("loading items was successful!")
-		
-		#print("Problems loading " + fileName + " (in Inventory.gd)")
-
-	data = data.result
-	for i in range(data.size()):
-		var itemData = data[str(i)]
-		var newItem = Item.new(
-				i,
-				itemData["name"], 
-				Item.get_type_from_name(itemData["type"]),
-				itemData["weight"],
-				itemData["value"],
-				itemData["effects"],
-				itemData["requirements"],
-				itemData["stats"],
-				itemData["description"],
-				itemData["texture_path"],
-				itemData["texture_region"],
-				itemData["slots_use"],
-				itemData["stack_size"],
-				itemData["stackable"],
-				itemData["usable"],
-				itemData["discardable"],
-				itemData["sellable"],
-				itemData["consumable"]
-				)
-				
-		allItems[i] = newItem
-		
-func load_dialogs():
-	var file = File.new()
-	file.open("res://assets/dialogs/dialogs.json", file.READ)
-	var dataText = file.get_as_text()
-	file.close()
-	var data = JSON.parse(dataText)
-	
-	if data.error != OK:
-		DebugConsole.error("couldn't load dialogs!")
-		return
-	else:
-		DebugConsole.warn("loading dialogs was successful!")
-	
-	data = data.result
-	for i in range(data.size()):
-		var conversation = data[data.keys()[i]]
-		allDialogs[data.keys()[i]] = conversation
-
 func _ready():
-	loadItems()
-	load_dialogs()
 	loadGame()
 
 func spawnPlayerAndGUI(world_name):

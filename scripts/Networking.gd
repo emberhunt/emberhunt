@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "nam.zvaigzdele.lt"
+const SERVER_IP = "localhost"
 const SERVER_PORT = 22122
 
 func _ready():
@@ -28,11 +28,9 @@ func _player_disconnected(id):
 	pass
 
 func _server_disconnected():
-	
 	pass # Server kicked us; show error and abort.
 
 func _connected_fail():
-	
 	pass # Could not even connect to server; abort.
 
 func _connected_ok():
@@ -211,11 +209,10 @@ func shootBullets(path_to_scene, bullet_rotation, stats):
 	if Global.nickname != "Offline":
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullet_rotation, stats)
 
-
-func askServerToPickUpItem(item_id, quantity):
+func askServerToPickUpItem(uuid, itemName, itemId, quantity):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
-		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), item_id, quantity)
+		rpc_id(1, "ask_to_pickup_item", uuid, get_tree().get_current_scene().get_name(), itemName, itemId, quantity)
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
@@ -237,6 +234,3 @@ remote func send_input(world, input):
 	pass
 remote func exit_world(world):
 	pass
-remote func pickup_item(world, itemName, quantity):
-	var pickupItem = get_node("/root/" + world + "/pickupItems/" + itemName)
-	pickupItem.call_deferred("queue_free")

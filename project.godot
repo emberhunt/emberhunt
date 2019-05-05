@@ -8,80 +8,9 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Node2D",
-"class": "Character",
-"language": "GDScript",
-"path": "res://scripts/character.gd"
-}, {
-"base": "Reference",
-"class": "Command",
-"language": "GDScript",
-"path": "res://console/command.gd"
-}, {
-"base": "Node",
-"class": "CommandRef",
-"language": "GDScript",
-"path": "res://console/command_ref.gd"
-}, {
-"base": "Control",
-"class": "Console",
-"language": "GDScript",
-"path": "res://console/console.gd"
-}, {
-"base": "Reference",
-"class": "ConsoleRights",
-"language": "GDScript",
-"path": "res://console/console_rights.gd"
-}, {
-"base": "Reference",
-"class": "ConsoleUser",
-"language": "GDScript",
-"path": "res://console/console_user.gd"
-}, {
-"base": "Node",
-"class": "DefaultCommands",
-"language": "GDScript",
-"path": "res://console/default_commands.gd"
-}, {
-"base": "GraphNode",
-"class": "DefaultGraphNode",
-"language": "GDScript",
-"path": "res://dialog_creator/DialogEditor/default_graph_node.gd"
-}, {
-"base": "Node2D",
-"class": "Entity",
-"language": "GDScript",
-"path": "res://scripts/Entity.gd"
-}, {
-"base": "Control",
-"class": "InventorySystem",
-"language": "GDScript",
-"path": "res://scripts/inventory/InventorySystem.gd"
-}, {
-"base": "Reference",
-"class": "Item",
-"language": "GDScript",
-"path": "res://scripts/inventory/ItemStats.gd"
-}, {
-"base": "Sprite",
-"class": "ItemDrop",
-"language": "GDScript",
-"path": "res://scripts/item_drop.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"Character": "",
-"Command": "",
-"CommandRef": "",
-"Console": "",
-"ConsoleRights": "",
-"ConsoleUser": "",
-"DefaultCommands": "",
-"DefaultGraphNode": "",
-"Entity": "",
-"InventorySystem": "",
-"Item": "",
-"ItemDrop": ""
+
 }
 
 [application]
@@ -99,7 +28,6 @@ Global="*res://scripts/Global.gd"
 SoundPlayer="*res://scenes/SoundPlayer.tscn"
 MainMenuThemePlayer="*res://scenes/MainMenuThemePlayer.tscn"
 Networking="*res://scenes/Networking.tscn"
-DebugConsole="*res://scenes/Console.tscn"
 
 [debug]
 
