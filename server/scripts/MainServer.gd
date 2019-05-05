@@ -5,6 +5,8 @@ extends Node
 const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
+const UDP_COMMANDS_PORT = 11211
+var commandsThread = Thread.new()
 
 var init_stats = Global.init_stats
 
@@ -34,6 +36,10 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	print("Server initialized")
+	
+	# Start listening for commands on the UDP port
+	commandsThread.start(self, "listenForCommands")
+	print("For a list of commands, type \"help\".")
 	
 	# Create worlds
 	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
@@ -452,6 +458,54 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 					rpc_id(player_id, function_name, args[0], args[1],
 						args[2], args[3], args[4], args[5], args[6],
 						args[7], args[8], args[9])
+
+func listenForCommands(userdata):
+	var socket = PacketPeerUDP.new()
+	if (socket.listen(UDP_COMMANDS_PORT, "127.0.0.1") != OK):
+		print("Error listening on port: " + str(UDP_COMMANDS_PORT))
+	else:
+		print("Listening on port: " + str(UDP_COMMANDS_PORT) + " (Commands)")
+	while true:
+		if socket.get_available_packet_count() > 0:
+			# There are packets that were received but not read yet
+			# Receive a packet
+			var array_bytes = socket.get_packet()
+			var data = array_bytes.get_string_from_ascii()
+			var command = data.left(data.length()-1)
+			# Check if the command exists
+			var directory = Directory.new();
+			var regexNonSpace = RegEx.new()
+			regexNonSpace.compile("[^ ]")
+			# If the command is just spaces then ignore it
+			if command == "" or not regexNonSpace.search(command):
+				continue
+			else:
+				# Split the input to command and args
+				var regexArgs = RegEx.new()
+				regexArgs.compile("(?:(?:\\s|^)(((?<!\\\\)\\\"|(?<!\\\\)')?.+?(?(2)(?<!\\\\)\\2|)(?=\\s|$)))")
+				var args = regexArgs.search_all(command)
+				# Check if that command exists
+				if directory.file_exists("res://server/commands/"+args[0].get_string(1)+".gd"):
+					var script = load("res://server/commands/"+args[0].get_string(1)+".gd").new()
+					# Get the args ready
+					var actualCommand = args[0].get_string(1)
+					args.pop_front()
+					var actualArgs = []
+					for arg in args:
+						var temp = arg.get_string(1)
+						# Remove quotation marks
+						if (temp.begins_with("\"") or temp.begins_with("\'")) and (temp.ends_with("\"") or temp.ends_with("\'")):
+							temp = temp.right(1)
+							temp = temp.left(temp.length()-1)
+						# Unescape escaped quotation marks
+						temp = temp.replace("\\\"","\"").replace("\\'","'")
+						# Add the formatted argument to the list
+						actualArgs.append(temp)
+					# Call the command
+					script.call(actualCommand, actualArgs)
+				else:
+					print(args[0].get_string(1) + ": command not found")
+		socket.wait()
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
