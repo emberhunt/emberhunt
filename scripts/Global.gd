@@ -163,6 +163,10 @@ func spawnPlayerAndGUI(world_name):
 	scene_instance = load("res://scenes/GUI.tscn").instance()
 	scene_instance.set_name("GUI")
 	get_node("/root/"+world_name).add_child(scene_instance)
+	# Add players YSort node for players
+	var node = YSort.new()
+	node.set_name("players")
+	get_node("/root/"+world_name+"/YSort").add_child(node)
 
 func WorldReady(world_name):
 	if worldReadyFunctions.has(world_name):
