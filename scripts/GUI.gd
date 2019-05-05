@@ -8,26 +8,14 @@ onready var fpsLabel = $CanvasLayer/FPS
 
 export(NodePath) var playerNode = "../YSort/player"
 
-onready var inventorySystem = $CanvasLayer/inventorySystem
 var playerBody : KinematicBody2D = null
 
 func _ready():
-	set_process_input(true)
-	inventorySystem.hide()
 	playerBody = get_node("../YSort/player")
 	
 	$CanvasLayer/moveButton.init(playerBody)
 	$CanvasLayer/shootButton.init(playerBody.get_node("weapon"))
 
-	$CanvasLayer/inventorySystem.set_player_stats(\
-			get_node("/root/" + get_tree().get_current_scene().get_name() + "/YSort/player/stats").\
-			get_properties())
-
-
-func _input(event):
-	if event is InputEventKey and event.scancode == KEY_I and event.is_pressed() and not event.echo:
-		_on_toggleInventory_pressed()
-		
 		
 func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
@@ -45,18 +33,6 @@ func _on_TouchScreenButton_pressed():
 		$CanvasLayer.add_child(scene_instance)
 		# disable touchads
 		setTouchpadsState(false)
-
-
-func _on_toggleInventory_pressed():
-	if not Global.paused:
-		inventorySystem.visible = ! inventorySystem.visible
-		inventorySystem.update_stats_visibility()
-		
-		if not inventorySystem.visible:
-			inventorySystem.remove_all_except_main_inventory()
-
-		# Disable/Enable touchpads and stuff
-		setTouchpadsState(!inventorySystem.visible)
 
 
 func setTouchpadsState(state):

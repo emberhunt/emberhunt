@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex"
+path="res://.import/slot_light.png-b88925e74ef356b4bd5ad0ce47937c3c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png"
-dest_files=[ "res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex" ]
+source_file="res://assets/inventory/slot_light.png"
+dest_files=[ "res://.import/slot_light.png-b88925e74ef356b4bd5ad0ce47937c3c.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex"
+path="res://.import/mana_potion.png-742bf91446d78d121a6bc30df5e37f91.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png"
-dest_files=[ "res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex" ]
+source_file="res://assets/inventory/items/mana_potion.png"
+dest_files=[ "res://.import/mana_potion.png-742bf91446d78d121a6bc30df5e37f91.stex" ]
 
 [params]
 

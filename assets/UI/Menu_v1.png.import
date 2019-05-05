@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex"
+path="res://.import/Menu_v1.png-eccfa93b1f7dda12877760f757bb1b90.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png"
-dest_files=[ "res://.import/32x32_map_tile v3.1 [MARGINLESS].png-6c73c11549b05635d93e47fbf05f5193.stex" ]
+source_file="res://assets/UI/Menu_v1.png"
+dest_files=[ "res://.import/Menu_v1.png-eccfa93b1f7dda12877760f757bb1b90.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

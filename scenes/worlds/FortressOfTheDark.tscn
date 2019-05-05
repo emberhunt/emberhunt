@@ -1,15 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/FortressOfTheDarkConnectSignal.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png" type="Texture" id=2]
 [ext_resource path="res://assets/tilemap/Tileset- ground.png" type="Texture" id=3]
-[ext_resource path="res://scripts/npcs.gd" type="Script" id=4]
-[ext_resource path="res://scenes/npc/npc.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scripts/chest_loader.gd" type="Script" id=6]
-[ext_resource path="res://scenes/chest.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scripts/pickup_items.gd" type="Script" id=8]
-[ext_resource path="res://scenes/inventory/item_drop.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/entities/rock0.png" type="Texture" id=10]
+[ext_resource path="res://assets/entities/rock0.png" type="Texture" id=4]
 
 [sub_resource type="TileSet" id=1]
 0/name = "dir5"
@@ -204,41 +198,6 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="npcs" type="Node2D" parent="."]
-script = ExtResource( 4 )
-
-[node name="npc" parent="npcs" instance=ExtResource( 5 )]
-position = Vector2( 79.373, 14.4605 )
-npcName = "Fant"
-conversationName = "test"
-
-[node name="chests" type="Node2D" parent="."]
-script = ExtResource( 6 )
-
-[node name="chest" parent="chests" instance=ExtResource( 7 )]
-position = Vector2( -42.0771, -12.9967 )
-
-[node name="chest2" parent="chests" instance=ExtResource( 7 )]
-position = Vector2( 98.0585, -51.322 )
-
-[node name="pickupItems" type="Node2D" parent="."]
-script = ExtResource( 8 )
-
-[node name="itemDrop" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( -44.2791, 30.8979 )
-_itemId = 0
-_amount = 1
-
-[node name="itemDrop2" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 197.187, 11.234 )
-_itemId = 1
-_amount = 1
-
-[node name="itemDrop3" parent="pickupItems" instance=ExtResource( 9 )]
-position = Vector2( 77.3045, 77.6047 )
-_itemId = 2
-_amount = 1
-
 [node name="YSort" type="YSort" parent="."]
 
 [node name="rock" type="StaticBody2D" parent="YSort"]
@@ -249,7 +208,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="YSort/rock"]
-texture = ExtResource( 10 )
+texture = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/rock"]
 position = Vector2( 0.056561, 4.034 )
