@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://scripts/FortressOfTheDarkConnectSignal.gd" type="Script" id=1]
+[ext_resource path="res://scripts/WorldReadySignal.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilemap/32x32_map_tile v3.1 [MARGINLESS].png" type="Texture" id=2]
 [ext_resource path="res://assets/tilemap/Tileset- ground.png" type="Texture" id=3]
 [ext_resource path="res://assets/entities/rock0.png" type="Texture" id=4]
@@ -198,21 +198,19 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="YSort" type="YSort" parent="."]
+[node name="Entities" type="YSort" parent="."]
 
-[node name="rock" type="StaticBody2D" parent="YSort"]
+[node name="rock" type="StaticBody2D" parent="Entities"]
 editor/display_folded = true
 position = Vector2( 0.0862694, 63.0651 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Sprite" type="Sprite" parent="YSort/rock"]
+[node name="Sprite" type="Sprite" parent="Entities/rock"]
 texture = ExtResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/rock"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/rock"]
 position = Vector2( 0.056561, 4.034 )
 shape = SubResource( 2 )
-
-[node name="bullet_container" type="YSort" parent="."]
 

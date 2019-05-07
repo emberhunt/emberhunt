@@ -158,15 +158,25 @@ func spawnPlayerAndGUI(world_name):
 	var scene_instance = scene.instance()
 	scene_instance.set_name("player")
 	scene_instance.add_to_group("player")
-	get_node("/root/"+world_name+"/YSort").add_child(scene_instance)
+	get_node("/root/"+world_name+"/Entities").add_child(scene_instance)
 	# Add the GUI
 	scene_instance = load("res://scenes/GUI.tscn").instance()
 	scene_instance.set_name("GUI")
 	get_node("/root/"+world_name).add_child(scene_instance)
-	# Add players YSort node for players
+	# Add YSort nodes
 	var node = YSort.new()
 	node.set_name("players")
-	get_node("/root/"+world_name+"/YSort").add_child(node)
+	get_node("/root/"+world_name+"/Entities").add_child(node)
+	node = YSort.new()
+	node.set_name("projectiles")
+	get_node("/root/"+world_name+"/Entities").add_child(node)
+	node = YSort.new()
+	node.set_name("items")
+	get_node("/root/"+world_name+"/Entities").add_child(node)
+	node = YSort.new()
+	node.set_name("npc")
+	get_node("/root/"+world_name+"/Entities").add_child(node)
+	
 
 func WorldReady(world_name):
 	if worldReadyFunctions.has(world_name):
