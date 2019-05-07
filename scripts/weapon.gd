@@ -69,7 +69,7 @@ func _attack():
 			bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
 				
 		new_bullet._ini(stats,global_position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
-		$bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
+		get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/projectiles").add_child(new_bullet) 																		# add bullet to the bullet container
 		
 	# Send the bullet data to server
 	Networking.shootBullets(str(bullet_scene_path), rotation, stats)

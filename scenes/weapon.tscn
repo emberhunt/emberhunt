@@ -16,6 +16,4 @@ region_rect = Rect2( 17, 40, 17, 43 )
 [node name="fire_rate" type="Timer" parent="."]
 one_shot = true
 
-[node name="bullet_container" type="Node" parent="."]
-
 [connection signal="timeout" from="fire_rate" to="." method="_on_fire_rate_timeout"]
