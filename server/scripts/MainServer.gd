@@ -8,14 +8,12 @@ const MAX_PLAYERS = 10
 const UDP_COMMANDS_PORT = 11211
 var commandsThread = Thread.new()
 
-var init_stats = Global.init_stats
-
 
 var worlds = {}
 
-var time_start = OS.get_ticks_msec()
+var player_uuids = {}
 
-onready var bullet_container = get_node("/root/MainServer/projectiles")
+var time_start = OS.get_ticks_msec()
 
 func _ready():
 	# Get ready
@@ -37,9 +35,11 @@ func _ready():
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	print("Server initialized")
 	
+	
 	# Start listening for commands on the UDP port
 	commandsThread.start(self, "listenForCommands")
 	print("For a list of commands, type \"help\".")
+	print("Listening on port: " + str(SERVER_PORT) + " (GameServer)")
 	
 	# Create worlds
 	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
@@ -47,7 +47,20 @@ func _ready():
 	scene_instance.set_name("FortressOfTheDark")
 	addSceneToGroup(scene_instance, "FortressOfTheDark")
 	get_node("/root/MainServer/").add_child(scene_instance)
-	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}}
+	# Add YSorts
+	var ysort = YSort.new()
+	ysort.set_name("players")
+	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("projectiles")
+	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("items")
+	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("npc")
+	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
+	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}, "npc" : {}}
 	print("FortressOfTheDark created")
 
 func _process(delta):
@@ -62,12 +75,12 @@ func _process(delta):
 # # # # # # # # # # # #
 
 func _player_connected(id):
-	print(str(id)+" connected")
+	print(str(id)+" connected; IP - "+get_tree().network_peer.get_peer_address(id))
 
 func _player_disconnected(id):
 	for world in worlds.keys():
 		if worlds[world].players.has(id):
-			get_node("/root/MainServer/players/" + worlds[world].players[id].nickname).queue_free()
+			get_node("/root/MainServer/"+world+"/Entities/players/" + str(id)).queue_free()
 			worlds[world].players.erase(id)
 	print(str(id)+" disconnected")
 
@@ -79,12 +92,14 @@ remote func register_new_account(nickname):
 	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
 	if nickname.length() <= 50:
 		if isNicknameFree(nickname):
-			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", generateRandomUUID(nickname))
+			var uuid = generateRandomUUID(nickname)
+			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", uuid)
+			player_uuids[get_tree().get_rpc_sender_id()] = uuid.sha256_text()
+			print("New account registered")
 		else:
 			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
 	else:
 		rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
-	print("New account registered")
 
 remote func send_character_data(uuid):
 	var uuid_hash = uuid.sha256_text()
@@ -92,20 +107,21 @@ remote func send_character_data(uuid):
 	if not checkIfUuidIsRegistered(uuid_hash):
 		# The UUID is not registered yet
 		rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", false)
+		print(str(get_tree().get_rpc_sender_id())+" tried to get character data, but the specified UUID is not registered.")
 		return
 	# Parse data.json
 	var data = getUuidData(uuid_hash)
 	# Send the data back
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
-	pass
+	player_uuids[get_tree().get_rpc_sender_id()] = uuid_hash
 
 remote func receive_new_character_data(uuid, data):
 	var uuid_hash = uuid.sha256_text()
 	if checkIfUuidIsRegistered(uuid_hash):
 		# Check if the data is valid
-		var classes = ["Knight","Berserker","Assassin","Sniper","Hunter","Arsonist","Brand","Herald","Redeemer","Druid"]
+		var classes = Global.init_stats.keys()
 		if not (data in classes):
-			print("Received invalid new character data")
+			print("Received invalid new character data (Bad class)")
 		else:
 			# Parse data.json
 			var parsed = getUuidData(uuid_hash)
@@ -116,21 +132,21 @@ remote func receive_new_character_data(uuid, data):
 					"class":data,
 					"level":1,
 					"experience":0,
-					"max_hp": init_stats[data].max_hp,
-					"max_mp": init_stats[data].max_mp,
-					"strength": init_stats[data].strength,
-					"agility": init_stats[data].agility,
-					"magic": init_stats[data].magic,
-					"luck": init_stats[data].luck,
-					"physical_defense": init_stats[data].physical_defense,
-					"magic_defense": init_stats[data].magic_defense
+					"max_hp": Global.init_stats[data].max_hp,
+					"max_mp": Global.init_stats[data].max_mp,
+					"strength": Global.init_stats[data].strength,
+					"agility": Global.init_stats[data].agility,
+					"magic": Global.init_stats[data].magic,
+					"luck": Global.init_stats[data].luck,
+					"physical_defense": Global.init_stats[data].physical_defense,
+					"magic_defense": Global.init_stats[data].magic_defense
 				}
 				# Write the new data
 				setUuidData(uuid_hash, parsed)
 			else:
-				print("Received new character data, but the account already has 5 characters")
+				print("Received new character data, but the account already has 5 characters (id: "+str(get_tree().get_rpc_sender_id())+")")
 	else:
-		print("Received new character data on an UUID which is not registered")
+		print("Received new character data on an UUID which is not registered; ("+str(get_tree().get_rpc_sender_id())+")")
 
 remote func check_if_nickname_is_free(nickname):
 	if isNicknameFree(nickname):
@@ -163,19 +179,20 @@ remote func join_world(uuid, character_id, world):
 				# Spawn the player
 				var scene = preload("res://scenes/otherPlayer.tscn")
 				var scene_instance = scene.instance()
-				scene_instance.set_name(account_data.nickname)
+				scene_instance.set_name(str(get_tree().get_rpc_sender_id()))
 				scene_instance.add_to_group("player")
 				# Remove collissions between players
-				for player in get_node("/root/MainServer/players").get_children():
+				for player in get_node("/root/MainServer/"+world+"/Entities/players").get_children():
 					scene_instance.add_collision_exception_with(player)
 				addSceneToGroup(scene_instance, world)
-				get_node("/root/MainServer/players").add_child(scene_instance)
+				get_node("/root/MainServer/"+world+"/Entities/players").add_child(scene_instance)
 				worlds[world].players[get_tree().get_rpc_sender_id()] = {
 					"position" : scene_instance.position,
 					"stats" : account_data.chars[str(character_id)],
 					"nickname" : account_data.nickname,
 					"lastUpdate" : OS.get_ticks_msec() - time_start,
-					"inventory" : {} # Should be loaded from user://serverData/uuidHASH/data.json
+					"inventory" : {}, # Should be loaded from user://serverData/uuidHASH/data.json
+					"account_character_id" : character_id
 				}
 
 remote func exit_world(world):
@@ -184,7 +201,7 @@ remote func exit_world(world):
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Remove it from the world
-			get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname).queue_free()
+			get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id())).queue_free()
 			worlds[world].players.erase(get_tree().get_rpc_sender_id())
 
 remote func send_position(world, pos):
@@ -194,23 +211,23 @@ remote func send_position(world, pos):
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Validate if the position is legal
-			var node = get_node("/root/MainServer/players/" + worlds[world].players[get_tree().get_rpc_sender_id()].nickname)
-			if not node.test_move(node.transform, pos-node.position): # No collisions
+			var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
+			if not player_node.test_move(player_node.transform, pos-player_node.position): # No collisions
 				# Check the speed
 				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25
 				var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
 				var maxLegalDistance = maxLegalSpeed*timeElapsed
-				var traveledDistance = (pos-node.position).length()
+				var traveledDistance = (pos-player_node.position).length()
 				# Check if it traveled more than we allow
 				if traveledDistance <= maxLegalDistance:
 					# Check if the player is not trying to teleport
 					if traveledDistance > 25:
-						var motion = pos-node.position
+						var motion = pos-player_node.position
 						var newMotion = Vector2(motion.x*(25/traveledDistance), motion.y*(25/traveledDistance))
-						pos = node.position+newMotion
+						pos = player_node.position+newMotion
 					# Update player's position
-					node.position = pos
-					worlds[world].players[get_tree().get_rpc_sender_id()].position = node.position
+					player_node.position = pos
+					worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
 remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
@@ -241,6 +258,7 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
 						
 				new_bullet._ini(stats,worlds[world].players[get_tree().get_rpc_sender_id()].position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
 				new_bullet.add_to_group(world)
+				var bullet_container = get_node("/root/MainServer/"+world+"/Entities/projectiles/")
 				bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
 			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullet_rotation, stats, worlds[world].players[get_tree().get_rpc_sender_id()].position], [get_tree().get_rpc_sender_id()])
 

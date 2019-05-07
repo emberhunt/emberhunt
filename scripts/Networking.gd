@@ -93,7 +93,7 @@ remote func answer_is_uuid_valid(answer):
 remote func receive_world_update(world_name, world_data):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
-		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/player")
+		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
 		# Sync position with server
 		# Check if anything is in the way
 		if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):
@@ -106,17 +106,17 @@ remote func receive_world_update(world_name, world_data):
 				continue
 			var player = world_data.players[playerID]
 			# Check if there's that player in our world
-			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").has_node(player.nickname):
+			if not get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").has_node(playerID):
 				# That player is not in our world yet
 				var scene = preload("res://scenes/otherPlayer.tscn")
 				var scene_instance = scene.instance()
-				scene_instance.set_name(player.nickname)
+				scene_instance.set_name(playerID)
 				scene_instance.add_to_group("player")
 				# Disable collisions
 				scene_instance.get_node("CollisionShape2D").disabled = true
-				get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").add_child(scene_instance)
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").add_child(scene_instance)
 			# Sync position
-			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.nickname)
+			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+str(playerID))
 			playernode.speed = world_data.players[playerID].stats.agility+25
 			if (playernode.position-player.position).length() < 25:
 				playernode.move(player.position)
@@ -131,13 +131,13 @@ remote func receive_world_update(world_name, world_data):
 		
 		# Check if any nodes got removed
 		# Players
-		for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players").get_children():
+		for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").get_children():
 			var exists = false
-			for playerdata in world_data.players.values():
-				if player.get_name() == playerdata.nickname:
+			for playerdata in world_data.players.keys():
+				if player.get_name() == playerdata:
 					exists = true
 			if not exists:
-				get_node("/root/"+get_tree().get_current_scene().get_name()+"/YSort/players/"+player.get_name()).queue_free()
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+player.get_name()).queue_free()
 
 remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_position):
 	# Check if it was sent by the server and if im still in that world
@@ -160,7 +160,7 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats, shooter_
 				bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
 					
 			new_bullet._ini(stats,shooter_position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
-			get_node("/root/"+world+"/bullet_container").add_child(new_bullet) 																		# add bullet to the bullet container
+			get_node("/root/"+world+"/Entities/projectiles").add_child(new_bullet) 													# add bullet to the bullet container
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #

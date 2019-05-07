@@ -2,7 +2,3 @@
 
 [node name="MainServer" type="Node"]
 
-[node name="projectiles" type="Node" parent="."]
-
-[node name="players" type="Node" parent="."]
-
