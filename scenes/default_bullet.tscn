@@ -1,13 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/default_bullet.gd" type="Script" id=1]
 [ext_resource path="res://assets/bullets/projectile_sheet.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4.5, 10.5 )
-
-[sub_resource type="CircleShape2D" id=2]
-radius = 0.01
+extents = Vector2( 4.5, 5.9972 )
 
 [node name="default_bullet" type="KinematicBody2D"]
 collision_layer = 0
@@ -22,9 +19,7 @@ hframes = 7
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, -4.5 )
 shape = SubResource( 1 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

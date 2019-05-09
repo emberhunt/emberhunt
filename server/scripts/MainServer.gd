@@ -230,7 +230,7 @@ remote func send_position(world, pos):
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
-remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
+remote func shoot_bullets(world, path_to_scene, bullets, wait_time, attack_sound):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
@@ -239,28 +239,12 @@ remote func shoot_bullets(world, path_to_scene, bullet_rotation, stats):
 			#
 			
 			# Shoot
-			var extra_bullets = 0																				# 
-			var extra_bullet_range = range(stats.bullet_count_random.x,stats.bullet_count_random.y+1)			# \
-			if len(extra_bullet_range) != 0:																	#	calculate random_bullet_count
-				extra_bullets = extra_bullet_range[randi()%len(extra_bullet_range)]								# /
-			
-			var rotation_step = -1																				# \
-			if stats.bullet_spread != 0 and stats.bullet_count + extra_bullets > 1:								#	calculate spread step based on bullet_count and bullet_spread
-				rotation_step = float(stats.bullet_spread) / float(stats.bullet_count+extra_bullets)			# /
-			
-			for bullet_number in range(stats.bullet_count+extra_bullets): 													# for each bullet do:
-				var new_bullet = load(path_to_scene).instance() 																		# instance new bullet
-				var s_bullet_rotation = bullet_rotation 																					# set base rotation to weapon rotation
-				if rotation_step != -1:																							# if there is a fixed spread step
-					bullet_rotation += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step 						# spread the bullets according to the calculated rotation step
-				if stats.bullet_spread_random != 0: 																			# if there is a random spread
-					bullet_rotation += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2) 		# randomly spread each bullet between -0.5*bullet_spread_random to 0.5*bullet_spread_random radians
-						
-				new_bullet._ini(stats,worlds[world].players[get_tree().get_rpc_sender_id()].position,bullet_rotation) 															# initialise new bullet, see default_bullet.gd
-				new_bullet.add_to_group(world)
-				var bullet_container = get_node("/root/MainServer/"+world+"/Entities/projectiles/")
-				bullet_container.add_child(new_bullet) 																		# add bullet to the bullet container
-			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullet_rotation, stats, worlds[world].players[get_tree().get_rpc_sender_id()].position], [get_tree().get_rpc_sender_id()])
+			for bullet in bullets:
+				# Spawn the bullet
+				var new_bullet = load(path_to_scene).instance()
+				new_bullet._ini(bullet)
+				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
+			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, wait_time, attack_sound])
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
