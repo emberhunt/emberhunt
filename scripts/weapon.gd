@@ -101,11 +101,10 @@ func _attack():
 		bullet_data['impact_sound'] = stats.impact_sound
 		bullet_data['type_id'] = stats.bullet_type_id
 		bullet_data['rotation_speed'] = stats.bullet_rotation
-		bullet_data['shooter'] = get_tree().get_network_unique_id()
 		
 		bullets.append(bullet_data)
 		# Spawn the bullet
-		new_bullet._ini(bullet_data)
+		new_bullet._ini(bullet_data, "player", get_tree().get_network_unique_id())
 		get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/projectiles").add_child(new_bullet)
 		
 	# Send the bullet data to server
