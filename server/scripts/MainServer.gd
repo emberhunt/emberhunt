@@ -244,7 +244,7 @@ remote func shoot_bullets(world, path_to_scene, bullets, wait_time, attack_sound
 				var new_bullet = load(path_to_scene).instance()
 				new_bullet._ini(bullet)
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
-			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, wait_time, attack_sound, "player", get_tree().get_rpc_sender_id()])
+			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, wait_time, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
