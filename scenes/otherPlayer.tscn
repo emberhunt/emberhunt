@@ -20,3 +20,18 @@ texture = SubResource( 1 )
 position = Vector2( 0.397762, 3.18208 )
 shape = SubResource( 2 )
 
+[node name="nickname" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -85.0
+margin_top = -14.0
+margin_right = 597.0
+rect_scale = Vector2( 0.25, 0.25 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 0
+custom_constants/shadow_as_outline = 0
+align = 1
+
