@@ -114,6 +114,7 @@ remote func receive_world_update(world_name, world_data):
 				scene_instance.add_to_group("player")
 				# Disable collisions
 				scene_instance.get_node("CollisionShape2D").disabled = true
+				scene_instance.get_node("nickname").set_text(world_data.players[playerID].nickname)
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").add_child(scene_instance)
 			# Sync position
 			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+str(playerID))
