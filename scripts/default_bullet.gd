@@ -14,8 +14,13 @@ var gradient = null
 
 var impact_sound = ""
 
+var shooter = "" # player, enemy or npc
+var shooter_name = "" 	# What to call the shooter; If the shooter is a player,
+						# this variable will hold it's ID, if it's an enemy
+						# or a NPC it will hold it's name.
 
-func _ini(bullet_data): # is called by weapon.gd before the bullet is added to the scene
+
+func _ini(bullet_data, shter, shter_name): # is called before the bullet is added to the scene
 	origin = bullet_data['position'] 
 	speed = bullet_data['speed'] 
 	max_travel_distance = bullet_data['max_distance'] 
@@ -23,6 +28,9 @@ func _ini(bullet_data): # is called by weapon.gd before the bullet is added to t
 	pierce_left = bullet_data['pierces'] 
 	knockback = bullet_data['knockback'] 
 	scale = bullet_data['scale'] 
+	
+	shooter = shter
+	shooter_name = shter_name
 	
 	# set position to weapon origin
 	position = origin
