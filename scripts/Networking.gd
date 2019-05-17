@@ -147,6 +147,9 @@ remote func shoot_bullets(world, path_to_scene, bullets, wait_time, attack_sound
 			SoundPlayer.play(SoundPlayer.loaded_sounds[attack_sound],-10)
 		
 		for bullet in bullets:
+			# Check if the bullet wasn't shot by myself, because if it was, we don't want to spawn the same bullet again!
+			if shooter == "player" && shooter_name == str(get_tree().get_network_unique_id()):
+				continue
 			# Spawn the bullet
 			var new_bullet = load(path_to_scene).instance()
 			new_bullet._ini(bullet, shooter, shooter_name)
