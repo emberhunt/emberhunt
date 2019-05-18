@@ -20,8 +20,8 @@ var shooter_name = "" 	# What to call the shooter; If the shooter is a player,
 						# or a NPC it will hold it's name.
 
 
-func _ini(bullet_data, shter, shter_name): # is called before the bullet is added to the scene
-	origin = bullet_data['position'] 
+func _ini(bullet_data, shter, shter_name, pos): # is called before the bullet is added to the scene
+	origin = pos
 	speed = bullet_data['speed'] 
 	max_travel_distance = bullet_data['max_distance'] 
 	damage = bullet_data['damage'] 

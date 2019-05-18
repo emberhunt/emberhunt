@@ -140,7 +140,7 @@ remote func receive_world_update(world_name, world_data):
 			if not exists:
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+player.get_name()).queue_free()
 
-remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name):
+remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name, pos):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world == get_tree().get_current_scene().get_name():
 		if attack_sound != "":
@@ -152,7 +152,7 @@ remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name):
 				continue
 			# Spawn the bullet
 			var new_bullet = Global.loaded_bullets[bullets[0].scene].instance()
-			new_bullet._ini(bullet, shooter, shooter_name)
+			new_bullet._ini(bullet, shooter, shooter_name, pos)
 			get_node("/root/"+world+"/Entities/projectiles").add_child(new_bullet)
 
 # # # # # # # # # # #
