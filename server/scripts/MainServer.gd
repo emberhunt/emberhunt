@@ -13,6 +13,9 @@ var worlds = {}
 
 var player_uuids = {}
 
+var lastShots = {}
+#			"<player_id>" : timeWhenLastShot,
+
 var time_start = OS.get_ticks_msec()
 
 func _ready():
@@ -238,9 +241,11 @@ remote func shoot_bullets(world, path_to_scene, bullets, attack_sound):
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Check if the player should be able to shoot:
-			#
-			
+			if get_tree().get_rpc_sender_id() in lastShots.keys():
+				if (OS.get_ticks_msec() - lastShots[get_tree().get_rpc_sender_id()]) < 1000.0/3:
+					return
 			# Shoot
+			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec()
 			for bullet in bullets:
 				# Spawn the bullet
 				var new_bullet = load(path_to_scene).instance()
