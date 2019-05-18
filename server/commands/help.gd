@@ -1,6 +1,6 @@
 func help(args = []):
 	if args.size() == 0:
-		print("Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments")
+		print("Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments\n\t* fps - gives server FPS (frames per second)")
 	elif args.size() > 1:
 		print("help: Too many arguments!")
 	else:
