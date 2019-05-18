@@ -109,7 +109,7 @@ func _attack():
 		
 	# Send the bullet data to server
 	var wait_time = (1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random)
-	Networking.shootBullets(str(bullet_scene_path), bullets, wait_time, stats.attack_sound)
+	Networking.shootBullets(str(bullet_scene_path), bullets, stats.attack_sound)
 	can_attack = false # disable attacks until cooldown passed
 	$fire_rate.set_wait_time(wait_time)
 	$fire_rate.start()
