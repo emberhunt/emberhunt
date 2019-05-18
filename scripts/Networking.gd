@@ -95,11 +95,13 @@ remote func receive_world_update(world_name, world_data):
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
 		# Sync position with server
-		# Check if anything is in the way
-		if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):
-			selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
-		else:
-			selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
+		# If the difference is very small, it's probably due to a lost package, so ignore it
+		if (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length() > 10:
+			# Check if anything is in the way
+			if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):
+				selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
+			else:
+				selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
 		# Update all other players
 		for playerID in world_data.players.keys():
 			if playerID == get_tree().get_network_unique_id():
