@@ -235,23 +235,23 @@ remote func send_position(world, pos):
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
-remote func shoot_bullets(world, path_to_scene, bullets, attack_sound):
+remote func shoot_bullets(world, bullets, attack_sound):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Check if the player should be able to shoot:
 			if get_tree().get_rpc_sender_id() in lastShots.keys():
-				if (OS.get_ticks_msec() - lastShots[get_tree().get_rpc_sender_id()]) < 1000.0/3:
+				if (OS.get_ticks_msec() - lastShots[get_tree().get_rpc_sender_id()]) < 1000.0/3-40: # 40ms is tolerated
 					return
 			# Shoot
 			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec()
 			for bullet in bullets:
 				# Spawn the bullet
-				var new_bullet = load(path_to_scene).instance()
+				var new_bullet = Global.loaded_bullets[bullets[0].scene].instance()
 				new_bullet._ini(bullet, "player", str(get_tree().get_rpc_sender_id()))
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
-			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
+			rpc_all_in_world(world, "shoot_bullets", [world, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists

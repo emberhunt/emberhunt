@@ -4,8 +4,6 @@ var direction = 0
 var attacking = false
 var can_attack = true
 var attacked_recently = false
-const bullet_scene_path = "res://scenes/default_bullet.tscn"
-var bullet_scene = preload(bullet_scene_path)
 
 export var stats = {
 	damage = 1, 							# base damage
@@ -32,7 +30,8 @@ export var stats = {
 	bullet_gradient = "",#Gradient, 		# a color ramp to interpolate bullet colors based on traveled distance
 	heavy_attack = false,					# Heavy attacks only get shot when attackpad is released.
 	attack_sound = "",						# Sound name from SoundPlayer.loaded_sounds
-	impact_sound = ""						# Sound name from SoundPlayer.loaded_sounds
+	impact_sound = "",						# Sound name from SoundPlayer.loaded_sounds
+	scene = "default_bullet"
 	}
 
 func _process(delta):
@@ -66,7 +65,7 @@ func _attack():
 	for bullet_number in range(stats.bullet_count+extra_bullets): # Create each bullet
 		var bullet_data = {}
 		randomize()
-		var new_bullet = bullet_scene.instance()
+		var new_bullet = Global.loaded_bullets[stats.scene].instance()
 		bullet_data['rotation'] = rotation
 		# Rotate the bullet
 		if rotation_step != -1:
@@ -101,6 +100,7 @@ func _attack():
 		bullet_data['impact_sound'] = stats.impact_sound
 		bullet_data['type_id'] = stats.bullet_type_id
 		bullet_data['rotation_speed'] = stats.bullet_rotation
+		bullet_data['scene'] = stats.scene
 		
 		bullets.append(bullet_data)
 		# Spawn the bullet
@@ -109,7 +109,7 @@ func _attack():
 		
 	# Send the bullet data to server
 	var wait_time = (1 / stats.fire_rate) * rand_range(1 - stats.fire_rate_random,1 + stats.fire_rate_random)
-	Networking.shootBullets(str(bullet_scene_path), bullets, stats.attack_sound)
+	Networking.shootBullets(bullets, stats.attack_sound)
 	can_attack = false # disable attacks until cooldown passed
 	$fire_rate.set_wait_time(wait_time)
 	$fire_rate.start()

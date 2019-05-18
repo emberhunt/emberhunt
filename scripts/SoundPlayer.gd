@@ -33,7 +33,7 @@ func _load_sounds(path):
 		var file_name = directory.get_next()
 		while( file_name != ""):
 			if file_name.ends_with(".wav"):
-				loaded_sounds[file_name.rstrip(".wav")] = load(path+file_name)
+				loaded_sounds[file_name.trim_suffix(".wav")] = load(path+file_name)
 			file_name = directory.get_next()
 	else:
 		print("Error opening "+path)
