@@ -246,12 +246,13 @@ remote func shoot_bullets(world, bullets, attack_sound):
 					return
 			# Shoot
 			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec()
+			var spawn_point = worlds[world].players[get_tree().get_rpc_sender_id()].position + Vector2(sin(bullets[0].rotation), -cos(bullets[0].rotation))*5
 			for bullet in bullets:
 				# Spawn the bullet
-				var new_bullet = Global.loaded_bullets[bullets[0].scene].instance()
-				new_bullet._ini(bullet, "player", str(get_tree().get_rpc_sender_id()))
+				var new_bullet = Global.loaded_bullets[bullet['scene']].instance()
+				new_bullet._ini(bullet, "player", str(get_tree().get_rpc_sender_id()), spawn_point)
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
-			rpc_all_in_world(world, "shoot_bullets", [world, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
+			rpc_all_in_world(world, "shoot_bullets", [world, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id()), spawn_point])
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
