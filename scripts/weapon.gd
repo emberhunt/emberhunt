@@ -72,9 +72,9 @@ func _attack():
 			bullet_data['rotation'] += (stats.bullet_count+extra_bullets)/PI * rotation_step*-1 + bullet_number * rotation_step
 		if stats.bullet_spread_random != 0:
 			bullet_data['rotation'] += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2)
-		bullet_data['position'] = global_position
-		# Convert rotation to a normalized vector, and make the bullet spawn 5 pixels ahead of shooter
-		bullet_data['position'] += Vector2(sin(bullet_data['rotation']),-cos(bullet_data['rotation']))*5
+		# bullet_data['position'] = global_position
+		# # Convert rotation to a normalized vector, and make the bullet spawn 5 pixels ahead of shooter
+		# bullet_data['position'] += Vector2(sin(bullet_data['rotation']),-cos(bullet_data['rotation']))*5
 		
 		# Calculate speed and max_distance
 		bullet_data['speed'] = stats.bullet_speed * (rand_range(1-stats.bullet_speed_random,1+stats.bullet_speed_random))
@@ -104,7 +104,7 @@ func _attack():
 		
 		bullets.append(bullet_data)
 		# Spawn the bullet
-		new_bullet._ini(bullet_data, "player", get_tree().get_network_unique_id())
+		new_bullet._ini(bullet_data, "player", get_tree().get_network_unique_id(), global_position+Vector2(sin(bullet_data['rotation']), -cos(bullet_data['rotation']))*5)
 		get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/projectiles").add_child(new_bullet)
 		
 	# Send the bullet data to server
