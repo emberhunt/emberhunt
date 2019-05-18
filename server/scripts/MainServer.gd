@@ -42,6 +42,7 @@ func _ready():
 	print("Listening on port: " + str(SERVER_PORT) + " (GameServer)")
 	
 	# Create worlds
+	# Fortress of the dark
 	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
 	var scene_instance = scene.instance()
 	scene_instance.set_name("FortressOfTheDark")
@@ -82,6 +83,7 @@ func _player_disconnected(id):
 		if worlds[world].players.has(id):
 			get_node("/root/MainServer/"+world+"/Entities/players/" + str(id)).queue_free()
 			worlds[world].players.erase(id)
+			player_uuids.erase(id)
 	print(str(id)+" disconnected")
 
 # # # # # # # # # # #
@@ -230,7 +232,7 @@ remote func send_position(world, pos):
 					worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
-remote func shoot_bullets(world, path_to_scene, bullets, wait_time, attack_sound):
+remote func shoot_bullets(world, path_to_scene, bullets, attack_sound):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
@@ -242,9 +244,9 @@ remote func shoot_bullets(world, path_to_scene, bullets, wait_time, attack_sound
 			for bullet in bullets:
 				# Spawn the bullet
 				var new_bullet = load(path_to_scene).instance()
-				new_bullet._ini(bullet)
+				new_bullet._ini(bullet, "player", str(get_tree().get_rpc_sender_id()))
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
-			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, wait_time, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
+			rpc_all_in_world(world, "shoot_bullets", [world, path_to_scene, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id())])
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
