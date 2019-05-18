@@ -18,6 +18,7 @@ var charID = 0
 
 var worldReadyFunctions = {}
 
+var loaded_bullets = {}
 
 const init_stats = {
 	"Knight" : {
@@ -151,6 +152,7 @@ func loadGame():
 
 func _ready():
 	loadGame()
+	_load_bullets()
 
 func spawnPlayerAndGUI(world_name):
 	# Add the player to the world
@@ -181,3 +183,15 @@ func spawnPlayerAndGUI(world_name):
 func WorldReady(world_name):
 	if worldReadyFunctions.has(world_name):
 		worldReadyFunctions[world_name].call_func(world_name)
+
+func _load_bullets():
+	var directory = Directory.new()
+	if directory.open("res://scenes/bullets/") == OK:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		while( file_name != ""):
+			if file_name.ends_with(".tscn"):
+				loaded_bullets[file_name.trim_suffix(".tscn")] = load("res://scenes/bullets/"+file_name)
+			file_name = directory.get_next()
+	else:
+		print("Error opening res://scenes/bullets/")

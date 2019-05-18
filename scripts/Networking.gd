@@ -140,7 +140,7 @@ remote func receive_world_update(world_name, world_data):
 			if not exists:
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+player.get_name()).queue_free()
 
-remote func shoot_bullets(world, path_to_scene, bullets, attack_sound, shooter, shooter_name):
+remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world == get_tree().get_current_scene().get_name():
 		if attack_sound != "":
@@ -151,7 +151,7 @@ remote func shoot_bullets(world, path_to_scene, bullets, attack_sound, shooter, 
 			if shooter == "player" && shooter_name == str(get_tree().get_network_unique_id()):
 				continue
 			# Spawn the bullet
-			var new_bullet = load(path_to_scene).instance()
+			var new_bullet = Global.loaded_bullets[bullets[0].scene].instance()
 			new_bullet._ini(bullet, shooter, shooter_name)
 			get_node("/root/"+world+"/Entities/projectiles").add_child(new_bullet)
 
@@ -193,10 +193,10 @@ func exitWorld():
 	if Global.nickname != "Offline":
 		rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
-func shootBullets(path_to_scene, bullets, attack_sound):
+func shootBullets(bullets, attack_sound):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
-		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), path_to_scene, bullets, attack_sound)
+		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), bullets, attack_sound)
 
 func askServerToPickUpItem(uuid, itemName, itemId, quantity):
 	# Check if we are connected to the server
