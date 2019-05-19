@@ -16,6 +16,9 @@ var player_uuids = {}
 var lastShots = {}
 #			"<player_id>" : timeWhenLastShot,
 
+var lastUpdateRPC = {}
+var updatesSentToPlayer = {}
+
 var time_start = OS.get_ticks_msec()
 
 func _ready():
@@ -72,7 +75,11 @@ func _process(delta):
 	# Sync the worlds with all players
 	for world in worlds.keys():
 		for player in worlds[world].players.keys():
-			rpc_unreliable_id(int(player), "receive_world_update", world, worlds[world])
+			if int(player) in updatesSentToPlayer.keys():
+				updatesSentToPlayer[int(player)] += 1
+			else:
+				updatesSentToPlayer[int(player)] = 1
+			rpc_unreliable_id(int(player), "receive_world_update", world, worlds[world], updatesSentToPlayer[int(player)])
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -209,12 +216,18 @@ remote func exit_world(world):
 			get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id())).queue_free()
 			worlds[world].players.erase(get_tree().get_rpc_sender_id())
 
-remote func send_position(world, pos):
+remote func send_position(world, pos, number):
 	var time_now = OS.get_ticks_msec()
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Check if this RPC isn't too old
+			if get_tree().get_rpc_sender_id() in lastUpdateRPC.keys():
+				if lastUpdateRPC[get_tree().get_rpc_sender_id()] > number:
+					# We already have a newer send_position RPC from this player
+					return
+			lastUpdateRPC[get_tree().get_rpc_sender_id()] = number
 			# Validate if the position is legal
 			var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
 			if not player_node.test_move(player_node.transform, pos-player_node.position): # No collisions
@@ -224,16 +237,19 @@ remote func send_position(world, pos):
 				var maxLegalDistance = maxLegalSpeed*timeElapsed
 				var traveledDistance = (pos-player_node.position).length()
 				# Check if it traveled more than we allow
-				if traveledDistance <= maxLegalDistance+0.1:
-					# Check if the player is not trying to teleport
-					if traveledDistance > 100:
-						var motion = pos-player_node.position
-						var newMotion = Vector2(motion.x*(50/traveledDistance), motion.y*(50/traveledDistance))
-						pos = player_node.position+newMotion
-					# Update player's position
-					player_node.position = pos
-					worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
-					worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
+				if traveledDistance > maxLegalDistance:
+					var motion = pos-player_node.position
+					var newMotion = Vector2(motion.x*(maxLegalDistance/traveledDistance), motion.y*(maxLegalDistance/traveledDistance))
+					pos = player_node.position+newMotion
+				# Check if the player is not trying to teleport
+				if traveledDistance > 100:
+					var motion = pos-player_node.position
+					var newMotion = Vector2(motion.x*(50/traveledDistance), motion.y*(50/traveledDistance))
+					pos = player_node.position+newMotion
+				# Update player's position
+				player_node.position = pos
+				worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
+				worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
 
 remote func shoot_bullets(world, bullets, attack_sound):
 	# Check if the world exists
@@ -532,5 +548,5 @@ remote func answer_is_nickname_free(answer):
 	pass
 remote func answer_is_uuid_valid(answer):
 	pass
-remote func receive_world_update(world_name, world_data):
+remote func receive_world_update(world_name, world_data, number):
 	pass
