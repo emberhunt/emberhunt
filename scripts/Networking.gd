@@ -5,6 +5,10 @@ extends Node
 const SERVER_IP = "nam.zvaigzdele.lt"
 const SERVER_PORT = 22122
 
+var position_rpcs_sent = 0
+
+var lastUpdateRPC = 0
+
 func _ready():
 	# Initialize client
 	var peer = NetworkedMultiplayerENet.new()
@@ -90,13 +94,18 @@ remote func answer_is_uuid_valid(answer):
 	if get_tree().get_rpc_sender_id() == 1:
 		get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
 
-remote func receive_world_update(world_name, world_data):
+remote func receive_world_update(world_name, world_data, number):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
+		# Check if the RPC isn't too old
+		if lastUpdateRPC > number:
+			# We already have a newer receive_world_update RPC
+			return
+		lastUpdateRPC = number
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
 		# Sync position with server
 		# If the difference is very small, it's probably due to a lost package, so ignore it
-		if (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length() > 50:
+		if (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length() > 70:
 			# Check if anything is in the way
 			if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):
 				selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
@@ -188,7 +197,8 @@ func requestToJoinWorld(world_name, charID):
 func sendPosition(pos):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
-		rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos)
+		position_rpcs_sent += 1
+		rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos, position_rpcs_sent)
 
 func exitWorld():
 	# Check if we are connected to the server
@@ -221,7 +231,7 @@ remote func check_if_uuid_exists(uuid):
 	pass
 remote func join_world(uuid, character_id, world):
 	pass
-remote func send_input(world, input):
+remote func send_position(world, pos, number):
 	pass
 remote func exit_world(world):
 	pass
