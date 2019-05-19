@@ -224,9 +224,9 @@ remote func send_position(world, pos):
 				var maxLegalDistance = maxLegalSpeed*timeElapsed
 				var traveledDistance = (pos-player_node.position).length()
 				# Check if it traveled more than we allow
-				if traveledDistance <= maxLegalDistance+5:
+				if traveledDistance <= maxLegalDistance+0.1:
 					# Check if the player is not trying to teleport
-					if traveledDistance > 50:
+					if traveledDistance > 100:
 						var motion = pos-player_node.position
 						var newMotion = Vector2(motion.x*(50/traveledDistance), motion.y*(50/traveledDistance))
 						pos = player_node.position+newMotion
