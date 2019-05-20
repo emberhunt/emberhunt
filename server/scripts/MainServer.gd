@@ -151,7 +151,8 @@ remote func receive_new_character_data(uuid, data):
 					"magic": Global.init_stats[data].magic,
 					"luck": Global.init_stats[data].luck,
 					"physical_defense": Global.init_stats[data].physical_defense,
-					"magic_defense": Global.init_stats[data].magic_defense
+					"magic_defense": Global.init_stats[data].magic_defense,
+					"inventory" : {}
 				}
 				# Write the new data
 				setUuidData(uuid_hash, parsed)
@@ -200,10 +201,12 @@ remote func join_world(uuid, character_id, world):
 				get_node("/root/MainServer/"+world+"/Entities/players").add_child(scene_instance)
 				worlds[world].players[get_tree().get_rpc_sender_id()] = {
 					"position" : scene_instance.position,
+					"health" : account_data.chars[str(character_id)]['max_hp'],
+					"mana" : account_data.chars[str(character_id)]['max_mp'],
 					"stats" : account_data.chars[str(character_id)],
 					"nickname" : account_data.nickname,
 					"lastUpdate" : OS.get_ticks_msec() - time_start,
-					"inventory" : {}, # Should be loaded from user://serverData/uuidHASH/data.json
+					"inventory" : account_data.chars[str(character_id)]['inventory'],
 					"account_character_id" : character_id
 				}
 
