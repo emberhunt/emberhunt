@@ -19,6 +19,20 @@ The money will be used to keep the servers running.
 
 Read the [wiki](../../wiki).
 
+## Docker
+
+The server can be run in a docker container. To get the container up and running simply install docker [installation instructions](https://docs.docker.com/install/).  
+
+Build the image
+```
+docker build -t emberhunt_server:latest .
+```
+
+Run the container
+```
+docker run -it -p "22122:22122/udp" emberhunt_server:latest
+```
+
 ## License
 
 Emberhunt uses 2 licenses.
