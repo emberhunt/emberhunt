@@ -5,7 +5,7 @@ extends Node
 const SERVER_PORT = 22122
 const MAX_PLAYERS = 10
 
-const UDP_COMMANDS_PORT = 11211
+const UDP_COMMANDS_PORT = 11234
 var commandsThread = Thread.new()
 
 
@@ -493,7 +493,7 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 
 func listenForCommands(userdata):
 	var socket = PacketPeerUDP.new()
-	if (socket.listen(UDP_COMMANDS_PORT, "127.0.0.1") != OK):
+	if (socket.listen(UDP_COMMANDS_PORT, "*") != OK):
 		print("Error listening on port: " + str(UDP_COMMANDS_PORT))
 	else:
 		print("Listening on port: " + str(UDP_COMMANDS_PORT) + " (Commands)")
