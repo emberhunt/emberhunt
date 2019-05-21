@@ -503,6 +503,7 @@ func listenForCommands(userdata):
 			# Receive a packet
 			var IP_CLIENT = socket.get_packet_ip()
 			var PORT_CLIENT = socket.get_packet_port()
+			print("Client IP:" + str(IP_CLIENT) + ":" + str(PORT_CLIENT))
 			
 			var array_bytes = socket.get_packet()
 			var data = array_bytes.get_string_from_ascii()
