@@ -501,9 +501,6 @@ func listenForCommands(userdata):
 		if socket.get_available_packet_count() > 0:
 			# There are packets that were received but not read yet
 			# Receive a packet
-			var IP_CLIENT = socket.get_packet_ip()
-			var PORT_CLIENT = socket.get_packet_port()
-			print("Client IP:" + str(IP_CLIENT) + ":" + str(PORT_CLIENT))
 			
 			var array_bytes = socket.get_packet()
 			var data = array_bytes.get_string_from_ascii()
@@ -539,6 +536,10 @@ func listenForCommands(userdata):
 						actualArgs.append(temp)
 					# Call the command
 					var returnValue = script.call(actualCommand, actualArgs)
+					
+					var IP_CLIENT = socket.get_packet_ip()
+					var PORT_CLIENT = socket.get_packet_port()
+					print("Client IP:" + str(IP_CLIENT) + ":" + str(PORT_CLIENT))
 					# Return the result to the client if it has a result
 					if returnValue != null:
 						socket.set_dest_address(IP_CLIENT, PORT_CLIENT)
