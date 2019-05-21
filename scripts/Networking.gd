@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "nam.zvaigzdele.lt"
+const SERVER_IP = "cnidarias.net"
 const SERVER_PORT = 22122
 
 var position_rpcs_sent = 0
