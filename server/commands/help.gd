@@ -11,5 +11,4 @@ func help(args = []) -> String:
 			result = "\nlistargs -- lists the arguments you use\n\nUSAGE:\tlistargs arg1 arg2 arg3 ...\n\nThis command is used to check if you type your arguments correctly"
 		else:
 			result = "help: There's no help page for this command ("+args[0]+")"
-	print(result)
 	return result
