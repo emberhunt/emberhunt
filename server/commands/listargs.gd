@@ -1,4 +1,5 @@
 func listargs(args = []):
-	print("Arguments used in this command:")
+	var returnValue = "Arguments used in this command:\n"
 	for arg in args:
-		print("* "+arg)
+		returnValue += "* "+arg+"\n"
+	return returnValue
