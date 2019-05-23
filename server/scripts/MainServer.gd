@@ -528,7 +528,10 @@ func listenForCommands(userdata):
 						execCommand(bytes, client)
 					else:
 						if bytes.sha256_text() == password:
+							client.put_data("You are now authenticated \n".to_utf8())
 							authenticated.append(client)
+						else:
+							client.put_data("Wrong password\n".to_utf8())
 				
 			# Handle disconnections
 			if client.get_status() == 0: # NOT connected
@@ -536,6 +539,7 @@ func listenForCommands(userdata):
 				authenticated.erase( client )
 
 func execCommand(command, connection):
+	print(command)
 	# Check if the command exists
 	var directory = Directory.new();
 	var regexNonSpace = RegEx.new()
@@ -570,10 +574,10 @@ func execCommand(command, connection):
 			print(returnValue)
 			# Send the output back
 			if returnValue != null:
-				connection.put_string(returnValue)
+				connection.put_data((returnValue+"\n").to_utf8())
 		else:
 			print(args[0].get_string(1) + ": command not found")
-			connection.put_string((args[0].get_string(1) + ": command not found"))
+			connection.put_data((args[0].get_string(1) + ": command not found\n").to_utf8())
 
 
 # # # # # # # # # # # # # #
