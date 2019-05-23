@@ -5,7 +5,8 @@ FROM ubuntu:xenial
 
 ENV GODOT_VERSION "3.1.1"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
+    expect \
     ca-certificates \
     wget \
     unzip \
@@ -20,4 +21,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY . .
 
-CMD godot -d server/scenes/MainServer.tscn
+CMD unbuffer godot -d server/scenes/MainServer.tscn
