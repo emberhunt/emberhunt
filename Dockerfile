@@ -21,4 +21,4 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 
-CMD unbuffer godot -d server/scenes/MainServer.tscn >> /var/log/server_log.txt
+CMD unbuffer godot -d server/scenes/MainServer.tscn 2>&1 | tee /var/log/server_log.txt
