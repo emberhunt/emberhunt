@@ -1,0 +1,5 @@
+{
+	"sword" : {
+		"classes" : ["knight","berzerker","druid"]
+	}
+}
