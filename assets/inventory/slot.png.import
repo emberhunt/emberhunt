@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mana_potion.png-742bf91446d78d121a6bc30df5e37f91.stex"
+path="res://.import/slot.png-b633a28b73133288559780daca984586.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/items/mana_potion.png"
-dest_files=[ "res://.import/mana_potion.png-742bf91446d78d121a6bc30df5e37f91.stex" ]
+source_file="res://assets/inventory/slot.png"
+dest_files=[ "res://.import/slot.png-b633a28b73133288559780daca984586.stex" ]
 
 [params]
 

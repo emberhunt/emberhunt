@@ -50,3 +50,17 @@ func setTouchpadsState(state):
 	get_node("CanvasLayer/shootButton/background").hide()
 
 
+
+
+func _on_InventoryButton_released():
+	if not Global.paused:
+		if not $CanvasLayer.has_node("Inventory"):
+			SoundPlayer.play(preload("res://assets/sounds/click.wav"))
+			var scene = preload("res://scenes/inventory/Inventory.tscn")
+			var scene_instance = scene.instance()
+			$CanvasLayer.add_child(scene_instance)
+			setTouchpadsState(false)
+		else:
+			setTouchpadsState(true)
+			SoundPlayer.play(preload("res://assets/sounds/click.wav"))
+			get_node("CanvasLayer/Inventory").queue_free()

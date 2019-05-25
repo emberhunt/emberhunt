@@ -1,5 +1,7 @@
 {
 	"sword" : {
-		"classes" : ["knight","berzerker","druid"]
+		"classes" : ["knight","berzerker","druid"],
+		"slot" : 0,
+		"stack_size" : 1
 	}
 }

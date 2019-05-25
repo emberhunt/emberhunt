@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/slot_light.png-b88925e74ef356b4bd5ad0ce47937c3c.stex"
+path="res://.import/healthpotion.png-a1c6211cd932148f64cad2752a5a49ea.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/slot_light.png"
-dest_files=[ "res://.import/slot_light.png-b88925e74ef356b4bd5ad0ce47937c3c.stex" ]
+source_file="res://assets/inventory/items/healthpotion.png"
+dest_files=[ "res://.import/healthpotion.png-a1c6211cd932148f64cad2752a5a49ea.stex" ]
 
 [params]
 
