@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/health_potion.png-d99e47fe208d26d5be68098e55e5e341.stex"
+path="res://.import/manapotion.png-02a0d6d83e3c8343d7bd2453d4b37cdc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inventory/items/health_potion.png"
-dest_files=[ "res://.import/health_potion.png-d99e47fe208d26d5be68098e55e5e341.stex" ]
+source_file="res://assets/inventory/items/manapotion.png"
+dest_files=[ "res://.import/manapotion.png-02a0d6d83e3c8343d7bd2453d4b37cdc.stex" ]
 
 [params]
 

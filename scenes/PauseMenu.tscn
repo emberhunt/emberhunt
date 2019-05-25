@@ -90,30 +90,5 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Container"]
-editor/display_folded = true
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 100.0
-margin_top = 70.0
-margin_right = -100.0
-margin_bottom = -70.0
-alignment = 1
-
-[node name="ButtonBack" type="Button" parent="Container/VBoxContainer"]
-margin_top = 108.0
-margin_right = 324.0
-margin_bottom = 128.0
-text = "Back"
-
-[node name="ButtonMainMenu" type="Button" parent="Container/VBoxContainer"]
-margin_top = 132.0
-margin_right = 324.0
-margin_bottom = 152.0
-text = "Go To Main Menu"
-
 [connection signal="pressed" from="Container/Buttons/ButtonBack" to="." method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Container/Buttons/ButtonMainMenu" to="." method="_on_ButtonMainMenu_pressed"]
-[connection signal="pressed" from="Container/VBoxContainer/ButtonBack" to="." method="_on_ButtonBack_pressed"]
-[connection signal="pressed" from="Container/VBoxContainer/ButtonMainMenu" to="." method="_on_ButtonMainMenu_pressed"]

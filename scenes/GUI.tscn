@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
-[ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=3]
-[ext_resource path="res://assets/UI/roundButton_pressed.png" type="Texture" id=4]
-[ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=5]
-[ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=6]
+[ext_resource path="res://assets/UI/inventory_icon.png" type="Texture" id=3]
+[ext_resource path="res://scripts/touchpadv2.gd" type="Script" id=4]
+[ext_resource path="res://assets/UI/roundButton_pressed.png" type="Texture" id=5]
+[ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=6]
+[ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=7]
 
 [node name="gui" type="Control"]
 anchor_right = 1.0
@@ -34,11 +35,37 @@ texture_hover = ExtResource( 2 )
 texture_disabled = ExtResource( 2 )
 texture_focused = ExtResource( 2 )
 expand = true
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/PauseButton"]
 scale = Vector2( 5, 5 )
 normal = ExtResource( 2 )
 pressed = ExtResource( 2 )
+
+[node name="InventoryButton" type="TextureButton" parent="CanvasLayer"]
+editor/display_folded = true
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -90.0
+margin_top = 110.0
+margin_right = -10.0
+margin_bottom = 190.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 3 )
+texture_disabled = ExtResource( 3 )
+texture_focused = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/InventoryButton"]
+scale = Vector2( 5, 5 )
+normal = ExtResource( 3 )
+pressed = ExtResource( 3 )
 
 [node name="debugLabel" type="Label" parent="CanvasLayer"]
 editor/display_folded = true
@@ -53,32 +80,32 @@ autostart = true
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
 position = Vector2( 149.88, 447.728 )
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
 visible = false
 scale = Vector2( 5, 5 )
 z_index = 1
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 
 [node name="background" type="Sprite" parent="CanvasLayer/moveButton"]
 visible = false
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
 position = Vector2( 873.88, 447.728 )
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
 visible = false
 scale = Vector2( 5, 5 )
 z_index = 1
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 
 [node name="background" type="Sprite" parent="CanvasLayer/shootButton"]
 visible = false
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="FPS" type="Label" parent="CanvasLayer"]
 margin_left = 2.3327
@@ -87,3 +114,4 @@ margin_right = 42.3327
 margin_bottom = 32.6617
 
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
+[connection signal="released" from="CanvasLayer/InventoryButton/TouchScreenButton" to="." method="_on_InventoryButton_released"]

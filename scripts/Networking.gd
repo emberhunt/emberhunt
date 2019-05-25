@@ -102,6 +102,8 @@ remote func receive_world_update(world_name, world_data, number):
 			# We already have a newer receive_world_update RPC
 			return
 		lastUpdateRPC = number
+		# update inventory
+		Global.charactersData[Global.charID].inventory = world_data.players[get_tree().get_network_unique_id()].inventory
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
 		# Sync position with server
 		# If the difference is very small, it's probably due to a lost package, so ignore it
@@ -210,6 +212,11 @@ func shootBullets(bullets, attack_sound):
 	if Global.nickname != "Offline":
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), bullets, attack_sound)
 
+func sendInventory(inventory):
+	# Check if we are connected to the server
+	if Global.nickname != "Offline":
+		rpc_id(1, "inventory_changes", get_tree().get_current_scene().get_name(), inventory)
+
 func askServerToPickUpItem(uuid, itemName, itemId, quantity):
 	# Check if we are connected to the server
 	if Global.nickname != "Offline":
@@ -234,4 +241,6 @@ remote func join_world(uuid, character_id, world):
 remote func send_position(world, pos, number):
 	pass
 remote func exit_world(world):
+	pass
+remote func inventory_changes(inv):
 	pass

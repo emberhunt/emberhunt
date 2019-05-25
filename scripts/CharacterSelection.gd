@@ -30,6 +30,7 @@ func _ready():
 		move_child(scene_instance, 0)
 
 func pressed(whichChar):
+	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Char"+whichChar+"/TextureButton").is_pressed():
 		selected = whichChar
 		get_node("../../Buttons/ButtonPlay").set_disabled(false)
