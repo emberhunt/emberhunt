@@ -11,7 +11,7 @@ var commandsThread = Thread.new()
 
 var worlds = {}
 
-var player_uuids = {}
+var player_uuids_and_ids = {}
 
 var lastShots = {}
 #			"<player_id>" : timeWhenLastShot,
@@ -49,26 +49,7 @@ func _ready():
 	
 	# Create worlds
 	# Fortress of the dark
-	var scene = load("res://scenes/worlds/FortressOfTheDark.tscn")
-	var scene_instance = scene.instance()
-	scene_instance.set_name("FortressOfTheDark")
-	addSceneToGroup(scene_instance, "FortressOfTheDark")
-	get_node("/root/MainServer/").add_child(scene_instance)
-	# Add YSorts
-	var ysort = YSort.new()
-	ysort.set_name("players")
-	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
-	ysort = YSort.new()
-	ysort.set_name("projectiles")
-	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
-	ysort = YSort.new()
-	ysort.set_name("items")
-	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
-	ysort = YSort.new()
-	ysort.set_name("npc")
-	get_node("/root/MainServer/FortressOfTheDark/Entities").add_child(ysort)
-	worlds['FortressOfTheDark'] = {"players" : {}, "items" : {}, "enemies" : {}, "npc" : {}}
-	print("FortressOfTheDark created")
+	initWorld("FortressOfTheDark")
 
 func _process(delta):
 
@@ -93,7 +74,7 @@ func _player_disconnected(id):
 		if worlds[world].players.has(id):
 			get_node("/root/MainServer/"+world+"/Entities/players/" + str(id)).queue_free()
 			worlds[world].players.erase(id)
-			player_uuids.erase(id)
+			player_uuids_and_ids.erase(id)
 	print(str(id)+" disconnected")
 
 # # # # # # # # # # #
@@ -106,7 +87,6 @@ remote func register_new_account(nickname):
 		if isNicknameFree(nickname):
 			var uuid = generateRandomUUID(nickname)
 			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", uuid)
-			player_uuids[get_tree().get_rpc_sender_id()] = uuid.sha256_text()
 			print("New account registered")
 		else:
 			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
@@ -125,7 +105,6 @@ remote func send_character_data(uuid):
 	var data = getUuidData(uuid_hash)
 	# Send the data back
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_character_data", data)
-	player_uuids[get_tree().get_rpc_sender_id()] = uuid_hash
 
 remote func receive_new_character_data(uuid, data):
 	var uuid_hash = uuid.sha256_text()
@@ -152,7 +131,9 @@ remote func receive_new_character_data(uuid, data):
 					"luck": Global.init_stats[data].luck,
 					"physical_defense": Global.init_stats[data].physical_defense,
 					"magic_defense": Global.init_stats[data].magic_defense,
-					"inventory" : {}
+					"inventory" : {
+						"0": {"id":"woodsword","quantity":1}
+					}
 				}
 				# Write the new data
 				setUuidData(uuid_hash, parsed)
@@ -189,6 +170,7 @@ remote func join_world(uuid, character_id, world):
 					if account_data.nickname == player_data.nickname:
 						# Another character is already playing
 						return
+				player_uuids_and_ids[get_tree().get_rpc_sender_id()] = {"uuid" : uuid_hash, "id" : character_id}
 				# Spawn the player
 				var scene = preload("res://scenes/otherPlayer.tscn")
 				var scene_instance = scene.instance()
@@ -273,6 +255,29 @@ remote func shoot_bullets(world, bullets, attack_sound):
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
 			rpc_all_in_world(world, "shoot_bullets", [world, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id()), spawn_point])
 
+remote func inventory_changes(world, newInventory):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Validate the inventory changes
+			#   Check if any items appeared/disappeared
+			#   Check if all slots are in range
+			var oldInventory = worlds[world].players[get_tree().get_rpc_sender_id()].inventory.values()
+			oldInventory.sort_custom(InventorySorter, "sort")
+			var newInventoryKeys = newInventory.keys()
+			var newInventoryValues = newInventory.values()
+			newInventoryValues.sort_custom(InventorySorter, "sort")
+			if str(newInventoryValues) == str(oldInventory) and \
+				newInventoryKeys.min() > 0 and \
+				newInventoryKeys.max() <= worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
+				# The change is valid
+				worlds[world].players[get_tree().get_rpc_sender_id()].inventory = newInventory
+				# Save
+				save_player_data(world, get_tree().get_rpc_sender_id())
+			else:
+				print("Received inventory_changes RPC with invalid data")
+
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
 	if world in worlds:
@@ -288,6 +293,17 @@ remote func pickup_item(world, item_id, quantity):
 					print("item pickup request")
 					# Pick it up
 					#worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot] = {"item_id" : item_id, "quantity" : quantity}
+
+# # # # # #
+# SORTERS #
+# # # # # #
+
+class InventorySorter:
+	static func sort(a, b):
+		if a["item_id"].length() < b["item_id"].length():
+			return true
+		return false
+
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -578,6 +594,46 @@ func execCommand(command, connection):
 		else:
 			print(args[0].get_string(1) + ": command not found")
 			connection.put_data((args[0].get_string(1) + ": command not found\n").to_utf8())
+
+func initWorld(worldname):
+	var scene = load("res://scenes/worlds/"+worldname+".tscn")
+	var scene_instance = scene.instance()
+	scene_instance.set_name(worldname)
+	addSceneToGroup(scene_instance, worldname)
+	get_node("/root/MainServer/").add_child(scene_instance)
+	# Add YSorts
+	var ysort = YSort.new()
+	ysort.set_name("players")
+	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("projectiles")
+	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("items")
+	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
+	ysort = YSort.new()
+	ysort.set_name("npc")
+	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
+	worlds[worldname] = {"players" : {}, "items" : {}, "enemies" : {}, "npc" : {}}
+	print(worldname+" created")
+
+func save_player_data(world, id):
+	var uuid_hash = player_uuids_and_ids[id]["uuid"]
+	var char_id = player_uuids_and_ids[id]["id"]
+	var newData = worlds[world].players[id].stats
+	newData['inventory'] = worlds[world].players[id].inventory
+	# Read old data
+	var file = File.new()
+	file.open("user://serverData/accounts/"+uuid_hash+"/data.json", file.READ)
+	var text = file.get_as_text()
+	file.close()
+	var data = parse_json(text)
+	data['chars'][char_id] = newData
+	# Write the new data
+	file = File.new()
+	file.open("user://serverData/accounts/"+uuid_hash+"/data.json", File.WRITE)
+	file.store_line(JSON.print(data))
+	file.close()
 
 
 # # # # # # # # # # # # # #

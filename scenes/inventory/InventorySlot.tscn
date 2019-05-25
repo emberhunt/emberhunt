@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/inventory/slot.png" type="Texture" id=1]
+
+[node name="InventorySlot" type="TextureButton"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 1
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 1 )
+texture_hover = ExtResource( 1 )
+texture_disabled = ExtResource( 1 )
+texture_focused = ExtResource( 1 )
+

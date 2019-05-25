@@ -19,6 +19,7 @@ var charID = 0
 var worldReadyFunctions = {}
 
 var loaded_bullets = {}
+var loaded_item_sprites = {}
 
 var init_stats = {}
 var items = {}
@@ -53,6 +54,7 @@ func loadGame():
 func _ready():
 	loadGame()
 	_load_bullets()
+	_load_item_sprites()
 	
 	init_stats = load_json_from_file("res://data/class_init_stats.json")
 	items = load_json_from_file("res://data/items.json")
@@ -106,3 +108,16 @@ func _load_bullets():
 			file_name = directory.get_next()
 	else:
 		print("Error opening res://scenes/bullets/")
+		
+func _load_item_sprites():
+	var directory = Directory.new()
+	if directory.open("res://assets/inventory/items/") == OK:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		while( file_name != ""):
+			# Godot is weird
+			if file_name.ends_with(".png.import"):
+				loaded_item_sprites[file_name.trim_suffix(".png.import")] = load("res://assets/inventory/items/"+file_name.replace(".import",""))
+			file_name = directory.get_next()
+	else:
+		print("Error opening res://assets/inventory/items/")
