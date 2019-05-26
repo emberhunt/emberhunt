@@ -413,6 +413,18 @@ func isNicknameFree(nickname):
 			return false
 	return true
 
+func getUuidFromNickname(nickname):
+	var contents = listFolderContent("user://serverData/accounts/")
+	for account in contents:
+		var file = File.new()
+		file.open("user://serverData/accounts/"+account+"/data.json", file.READ)
+		var text = file.get_as_text()
+		var parsed = parse_json(text)
+		file.close()
+		if nickname == parsed.nickname:
+			return account
+	return null
+
 func setUuidData(uuid_hash, data):
 	var file = File.new()
 	if file.open("user://serverData/accounts/"+uuid_hash+"/data.json", File.WRITE) != 0:
@@ -586,7 +598,7 @@ func execCommand(command, connection):
 				# Add the formatted argument to the list
 				actualArgs.append(temp)
 			# Call the command
-			var returnValue = script.call(actualCommand, actualArgs)
+			var returnValue = script.call(actualCommand, actualArgs, self)
 			print(returnValue)
 			# Send the output back
 			if returnValue != null:

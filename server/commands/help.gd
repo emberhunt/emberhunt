@@ -1,4 +1,4 @@
-func help(args = []) -> String:
+func help(args = [], mainServer = null) -> String:
 	var result = ""
 	if args.size() == 0:
 		result = "Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments\n\t* fps - gives server FPS (frames per second)"
