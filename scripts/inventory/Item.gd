@@ -71,16 +71,16 @@ func _on_Item_button_up():
 			"drops_from" : PoolStringArray(itemData["drops_from"]).join(", "),
 			"stat_restrictions" : dict_to_string(itemData['stat_restrictions']),
 			"stat_effects" : dict_to_string(itemData['stat_effects']),
-			"damage" : str(itemData['damage']) if str(itemData['damage_extra_random'])==str([0,0]) else str(itemData['damage']+itemData['damage_extra_random'][0])+"-"+str(itemData['damage']+itemData['damage_extra_random'][1]),
-			"fire_rate" : str(itemData['fire_rate']) if itemData['fire_rate_random']==0 else str(itemData['fire_rate']*(1-itemData['fire_rate_random']))+"-"+str(itemData['fire_rate']*(1+itemData['fire_rate_random'])),
-			"bullets" : str(itemData['bullets']) if str(itemData['bullets_random'])==str([0,0]) else str(itemData['bullets']+itemData['bullets_random'][0])+"-"+str(itemData['bullets']+itemData['bullets_random'][1]),
-			"bullet_speed" : str(itemData['bullet_speed']) if itemData['bullet_speed_random']==0 else str(itemData['bullet_speed']*(1-itemData['bullet_speed_random']))+"-"+str(itemData['bullet_speed']*(1+itemData['bullet_speed_random'])),
-			"bullet_range" : str(itemData['bullet_range']) if itemData['bullet_range_random']==0 else str(itemData['bullet_range']*(1-itemData['bullet_range_random']))+"-"+str(itemData['bullet_range']*(1+itemData['bullet_range_random'])),
+			"damage" : str(itemData['min_damage']) if itemData['min_damage']==itemData['max_damage'] else str(itemData['min_damage'])+"-"+str(itemData['max_damage']),
+			"fire_rate" : str(itemData['min_fire_rate']) if itemData['min_fire_rate']==itemData['max_fire_rate'] else str(itemData['min_fire_rate'])+"-"+str(itemData['max_fire_rate']),
+			"bullets" : str(itemData['min_bullets']) if itemData['min_bullets']==itemData['max_bullets'] else str(itemData['min_bullets'])+"-"+str(itemData['max_bullets']),
+			"bullet_speed" : str(itemData['min_speed']) if itemData['min_speed']==itemData['max_speed'] else str(itemData['min_speed'])+"-"+str(itemData['max_speed']),
+			"bullet_range" : str(itemData['min_range']) if itemData['min_range']==itemData['max_range'] else str(itemData['min_range'])+"-"+str(itemData['max_range']),
 			"bullet_spread" : str(itemData['bullet_spread']) if itemData['bullet_spread_random']==0 else str(itemData['bullet_spread']*(1-itemData['bullet_spread_random']))+"-"+str(itemData['bullet_spread']*(1+itemData['bullet_spread_random'])),
-			"bullet_scale" : str(itemData['bullet_scale']) if itemData['bullet_scale_random']==0 else str(itemData['bullet_scale']*(1-itemData['bullet_scale_random']))+"-"+str(itemData['bullet_scale']*(1+itemData['bullet_scale_random'])),
-			"bullet_knockback" : str(itemData['bullet_knockback']) if itemData['bullet_knockback_random']==0 else str(itemData['bullet_knockback']*(1-itemData['bullet_knockback_random']))+"-"+str(itemData['bullet_knockback']*(1+itemData['bullet_knockback_random'])),
-			"bullet_pierce" : str(itemData['bullet_pierce']) if str(itemData['bullet_pierce_random'])==str([0,0]) else str(itemData['bullet_pierce']+itemData['bullet_pierce_random'][0])+"-"+str(itemData['bullet_pierce']+itemData['bullet_pierce_random'][1]),
-			"heavy_attack" : "yes" if itemData['heavy_attack'] else "no"
+			"bullet_scale" : str(itemData['min_scale']) if itemData['min_scale']==itemData['max_scale'] else str(itemData['min_scale'])+"-"+str(itemData['max_scale']),
+			"bullet_knockback" : str(itemData['min_knockback']) if itemData['min_knockback']==itemData['max_knockback'] else str(itemData['min_knockback'])+"-"+str(itemData['max_knockback']),
+			"bullet_pierces" : "No" if itemData['max_pierces'] <= 0 else "Yes, "+str(itemData['min_pierces']) if itemData['min_pierces']==itemData['max_pierces'] else "Yes, "+str(itemData['min_pierces'])+"-"+str(itemData['max_pierces']),
+			"heavy_attack" : "Yes" if itemData['heavy_attack'] else "No"
 		}
 		var infoLeft = Global.item_types[itemData.type].infoLeft.format(infoFormatter)
 		var infoRight = Global.item_types[itemData.type].infoRight.format(infoFormatter)
