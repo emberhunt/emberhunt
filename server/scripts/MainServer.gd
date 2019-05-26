@@ -132,7 +132,7 @@ remote func receive_new_character_data(uuid, data):
 					"physical_defense": Global.init_stats[data].physical_defense,
 					"magic_defense": Global.init_stats[data].magic_defense,
 					"inventory" : {
-						"0": {"id":"woodsword","quantity":1}
+						"0": {"item_id":"woodsword","quantity":1}
 					}
 				}
 				# Write the new data

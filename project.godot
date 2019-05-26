@@ -40,6 +40,7 @@ settings/fps/force_fps.server=60
 
 [display]
 
+window/handheld/orientation="sensor_landscape"
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
