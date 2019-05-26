@@ -2,6 +2,8 @@
 	"sword" : {
 		"classes" : ["knight","berzerker","druid"],
 		"slot" : 0,
-		"stack_size" : 1
+		"stack_size" : 1,
+		"infoLeft": "Damage: {damage}\nStat restrictions: {stat_restrictions}\nStat effects: {stat_effects}",
+		"infoRight" : "Fire rate: {fire_rate}\nRange: {bullet_range}\nShots per attack: {bullets}"
 	}
 }
