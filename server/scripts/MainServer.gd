@@ -555,7 +555,7 @@ func listenForCommands(userdata):
 				authenticated.erase( client )
 
 func execCommand(command, connection):
-	print(command)
+	print("$ "+command)
 	# Check if the command exists
 	var directory = Directory.new();
 	var regexNonSpace = RegEx.new()
