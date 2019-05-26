@@ -10,7 +10,7 @@ func help(args = [], mainServer = null) -> String:
 		elif args[0] == "listargs":
 			result = "\nlistargs -- lists the arguments you use\n\nUSAGE:\tlistargs arg1 arg2 arg3 ...\n\nThis command is used to check if you type your arguments correctly"
 		elif args[0] == "get_player_data":
-			result = "\get_player_data -- displays the account data of given player\n\nUSAGE:\tget_player_data player_nickname"
+			result = "\nget_player_data -- displays the account data of given player\n\nUSAGE:\tget_player_data player_nickname"
 		else:
 			result = "help: There's no help page for this command ("+args[0]+")"
 	return result
