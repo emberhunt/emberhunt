@@ -36,7 +36,7 @@ func _on_Item_button_up():
 		for slot in get_node("../../Container/ScrollContainer/GridContainer").get_children():
 			# Check x and y coordinates
 			var mousepos = slot.get_local_mouse_position()
-			if mousepos.x <= 64  and mousepos.y <= 64:
+			if mousepos.x <= 64 and mousepos.x >= 0 and mousepos.y <= 64 and mousepos.y >= 0:
 				# Found the slot
 				# Check if it's free
 				var free = true
