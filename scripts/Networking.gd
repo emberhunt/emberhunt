@@ -5,7 +5,12 @@ extends Node
 const SERVER_IP = "cnidarias.net"
 const SERVER_PORT = 22122
 
+var connected = false
+
 var position_rpcs_sent = 0
+
+var rand_seeds = []
+var rand_seeds_requested_not_received = 0
 
 var lastUpdateRPC = 0
 
@@ -21,6 +26,16 @@ func _ready():
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
 
+
+func _process(delta):
+	if connected:
+		# Check if we need to request more rand_seeds
+		if rand_seeds.size()+rand_seeds_requested_not_received < 20:
+			# Hell yeah we do
+			var to_request = 20-rand_seeds.size()-rand_seeds_requested_not_received
+			rpc_id(1, "request_rand_seeds", to_request)
+			rand_seeds_requested_not_received += to_request
+
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
 # # # # # # # # # # # #
@@ -32,12 +47,15 @@ func _player_disconnected(id):
 	pass
 
 func _server_disconnected():
+	connected = false
 	pass # Server kicked us; show error and abort.
 
 func _connected_fail():
+	connected = false
 	pass # Could not even connect to server; abort.
 
 func _connected_ok():
+	connected = true
 	print("Connected to the server")
 	# Check if I already have an UUID assigned
 	if not Global.UUID: # I don't
@@ -168,58 +186,68 @@ remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name, p
 			new_bullet._ini(bullet, shooter, shooter_name, pos)
 			get_node("/root/"+world+"/Entities/projectiles").add_child(new_bullet)
 
+remote func receive_rand_seeds(seeds):
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		rand_seeds += seeds
+		rand_seeds_requested_not_received -= seeds.size()
+
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
 # # # # # # # # # # #
 
 func requestServerForMyCharacterData():
 	# Send RPC to server
-	rpc_id(1, "send_character_data", Global.UUID)
+	if connected:
+		rpc_id(1, "send_character_data", Global.UUID)
 
 func sendServeNewCharacterData(data):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "receive_new_character_data", Global.UUID, data)
 
 func askServerIfThisNicknameIsFree(nickname):
 	# Check if we are connected to the server
-	rpc_id(1, "check_if_nickname_is_free", nickname)
+	if connected:
+		rpc_id(1, "check_if_nickname_is_free", nickname)
 
 func registerAccount(nickname):
-	rpc_id(1, "register_new_account", nickname)
+	if connected:
+		rpc_id(1, "register_new_account", nickname)
 
 func askServerIfThisUUIDIsValid(uuid):
-	rpc_id(1, "check_if_uuid_exists", uuid)
+	if connected:
+		rpc_id(1, "check_if_uuid_exists", uuid)
 
 func requestToJoinWorld(world_name, charID):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "join_world", Global.UUID, charID, world_name)
 
 func sendPosition(pos):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		position_rpcs_sent += 1
 		rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos, position_rpcs_sent)
 
 func exitWorld():
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
 func shootBullets(bullets, attack_sound):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), bullets, attack_sound)
 
 func sendInventory(inventory):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "inventory_changes", get_tree().get_current_scene().get_name(), inventory)
 
 func askServerToPickUpItem(uuid, itemName, itemId, quantity):
 	# Check if we are connected to the server
-	if Global.nickname != "Offline":
+	if connected:
 		rpc_id(1, "ask_to_pickup_item", uuid, get_tree().get_current_scene().get_name(), itemName, itemId, quantity)
 
 # # # # # # # # # # # # # #
@@ -243,4 +271,6 @@ remote func send_position(world, pos, number):
 remote func exit_world(world):
 	pass
 remote func inventory_changes(inv):
+	pass
+remote func request_rand_seeds(how_many):
 	pass

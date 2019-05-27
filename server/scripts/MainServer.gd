@@ -16,6 +16,9 @@ var player_uuids_and_ids = {}
 var lastShots = {}
 #			"<player_id>" : timeWhenLastShot,
 
+var given_rand_seeds = {}
+#			"<player_id>" : [1651652163513525632, -1865653153222222322],
+
 var lastUpdateRPC = {}
 var updatesSentToPlayer = {}
 
@@ -235,6 +238,15 @@ remote func send_position(world, pos, number):
 				player_node.position = pos
 				worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 				worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
+
+remote func request_rand_seeds(how_many):
+	var generator = RandomNumberGenerator.new()
+	var seeds = []
+	for iteration in range(how_many):
+		generator.randomize()
+		seeds.append(generator.seed)
+	rpc_id(get_tree().get_rpc_sender_id(), "receive_rand_seeds", seeds)
+	given_rand_seeds[get_tree().get_rpc_sender_id()] += seeds
 
 remote func shoot_bullets(world, bullets, attack_sound):
 	# Check if the world exists
@@ -661,4 +673,6 @@ remote func answer_is_nickname_free(answer):
 remote func answer_is_uuid_valid(answer):
 	pass
 remote func receive_world_update(world_name, world_data, number):
+	pass
+remote func receive_rand_seeds(seeds):
 	pass
