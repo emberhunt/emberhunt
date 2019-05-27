@@ -29,8 +29,8 @@ export var stats = {
 	color = [1,1,1,1],
 	bullet_gradient = "",
 	heavy_attack = false,
-	attack_sound = "",
-	impact_sound = "",
+	attack_sound = "frost_cast1",
+	impact_sound = "frost_impact1",
 	scene = "default_bullet"
 	}
 

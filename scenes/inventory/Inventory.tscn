@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/inventory/inventory_window.png" type="Texture" id=1]
 [ext_resource path="res://scenes/inventory/InventorySlot.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scripts/inventory/generateSlots.gd" type="Script" id=3]
+[ext_resource path="res://assets/inventory/items/woodsword.png" type="Texture" id=3]
+[ext_resource path="res://scripts/inventory/generateSlots.gd" type="Script" id=4]
 
 [node name="Inventory" type="Control"]
 anchor_right = 1.0
@@ -21,11 +22,19 @@ grow_vertical = 2
 texture = ExtResource( 1 )
 expand = true
 
-[node name="WeaponSlot" parent="Container" instance=ExtResource( 2 )]
+[node name="0" parent="Container" instance=ExtResource( 2 )]
+editor/display_folded = true
 margin_left = 78.6395
 margin_top = 82.721
 margin_right = 142.639
 margin_bottom = 146.721
+
+[node name="Weapon" type="Sprite" parent="Container/0"]
+modulate = Color( 0, 0, 0, 0.313726 )
+position = Vector2( 9, 9 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 3 )
+centered = false
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Container"]
 editor/display_folded = true
@@ -41,7 +50,7 @@ scroll_horizontal_enabled = false
 custom_constants/vseparation = 2
 custom_constants/hseparation = 2
 columns = 12
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 [node name="Items" type="Control" parent="."]
 margin_right = 40.0

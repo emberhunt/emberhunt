@@ -30,9 +30,9 @@ func _ready():
 func _process(delta):
 	if connected:
 		# Check if we need to request more rand_seeds
-		if rand_seeds.size()+rand_seeds_requested_not_received < 20:
+		if rand_seeds.size()+rand_seeds_requested_not_received < 100:
 			# Hell yeah we do
-			var to_request = 20-rand_seeds.size()-rand_seeds_requested_not_received
+			var to_request = 100-rand_seeds.size()-rand_seeds_requested_not_received
 			rpc_id(1, "request_rand_seeds", to_request)
 			rand_seeds_requested_not_received += to_request
 

@@ -11,6 +11,10 @@ var itemData = {}
 onready var origin = rect_global_position
 var mouse_origin = Vector2()
 
+onready var special_slots = [
+	get_node("../../Container/0")
+	]
+
 func _ready():
 	# Read the item data
 	itemData = Global.items[itemID]
@@ -33,7 +37,7 @@ func _on_Item_button_up():
 	if dragging:
 		dragging = false
 		# Iterate through all slots to see if the mouse is on any of them
-		for slot in get_node("../../Container/ScrollContainer/GridContainer").get_children():
+		for slot in special_slots+get_node("../../Container/ScrollContainer/GridContainer").get_children():
 			# Check x and y coordinates
 			var mousepos = slot.get_local_mouse_position()
 			if mousepos.x <= 64 and mousepos.x >= 0 and mousepos.y <= 64 and mousepos.y >= 0:

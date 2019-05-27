@@ -281,8 +281,8 @@ remote func inventory_changes(world, newInventory):
 			var newInventoryValues = newInventory.values()
 			newInventoryValues.sort_custom(InventorySorter, "sort")
 			if str(newInventoryValues) == str(oldInventory) and \
-				newInventoryKeys.min() > 0 and \
-				newInventoryKeys.max() <= worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
+				newInventoryKeys.min() >= 0 and \
+				newInventoryKeys.max() < worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
 				# The change is valid
 				worlds[world].players[get_tree().get_rpc_sender_id()].inventory = newInventory
 				# Save
