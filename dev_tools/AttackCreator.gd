@@ -18,6 +18,7 @@ func _ready():
 		$ScrollContainer/SettingsContainer/Sliders/SoundImpact.add_item(key,counter)
 		$ScrollContainer/SettingsContainer/Sliders/SoundAttack.add_item(key,counter)
 		counter+=1
+	_on_ButtonRestoreDefaults_pressed()
 
 func _process(delta):
 	if $weapon.can_attack:
@@ -81,8 +82,8 @@ func _on_ButtonRestoreDefaults_pressed():
 	$ScrollContainer/SettingsContainer/Sliders/MaxFireRate.value = default_values.max_fire_rate
 	$ScrollContainer/SettingsContainer/Sliders/MinBullets.value = default_values.min_bullets
 	$ScrollContainer/SettingsContainer/Sliders/MaxBullets.value = default_values.max_bullets
-	$ScrollContainer/SettingsContainer/Sliders/BulletSpread.value = deg2rad(default_values.bullet_spread)
-	$ScrollContainer/SettingsContainer/Sliders/BulletSpreadRandom.value = deg2rad(default_values.bullet_spread_random)
+	$ScrollContainer/SettingsContainer/Sliders/BulletSpread.value = default_values.bullet_spread
+	$ScrollContainer/SettingsContainer/Sliders/BulletSpreadRandom.value = default_values.bullet_spread_random
 	$ScrollContainer/SettingsContainer/Sliders/MinSpeed.value = default_values.min_speed
 	$ScrollContainer/SettingsContainer/Sliders/MaxSpeed.value = default_values.max_speed
 	$ScrollContainer/SettingsContainer/Sliders/MinRange.value = default_values.min_range
@@ -93,7 +94,7 @@ func _on_ButtonRestoreDefaults_pressed():
 	$ScrollContainer/SettingsContainer/Sliders/MaxKnockback.value = default_values.max_knockback
 	for color in $ScrollContainer/SettingsContainer/Sliders/BulletColor.get_picker().get_presets():
 		$ScrollContainer/SettingsContainer/Sliders/BulletColor.get_picker().erase_preset(color)
-	$ScrollContainer/SettingsContainer/Sliders/BulletColor.color = default_values.color
+	$ScrollContainer/SettingsContainer/Sliders/BulletColor.color = Color(default_values.color[0],default_values.color[1],default_values.color[2],default_values.color[3])
 	$ScrollContainer/SettingsContainer/Sliders/HeavyAttack.pressed = false
 	$ScrollContainer/SettingsContainer/Sliders/SoundAttack.select(0)
 	$ScrollContainer/SettingsContainer/Sliders/SoundImpact.select(0)
@@ -167,13 +168,13 @@ func _on_MaxBullets_value_changed(value):
 
 
 func _on_BulletSpread_value_changed(value):
-	$weapon.stats.bullet_spread = value
+	$weapon.stats.bullet_spread = deg2rad(value)
 	if not $ScrollContainer/SettingsContainer/Values/BulletSpread.has_focus():
 		$ScrollContainer/SettingsContainer/Values/BulletSpread.text = str(value)
 
 
 func _on_BulletSpreadRandom_value_changed(value):
-	$weapon.stats.bullet_spread_random = value
+	$weapon.stats.bullet_spread_random = deg2rad(value)
 	if not $ScrollContainer/SettingsContainer/Values/BulletSpreadRandom.has_focus():
 		$ScrollContainer/SettingsContainer/Values/BulletSpreadRandom.text = str(value)
 
@@ -342,7 +343,7 @@ func _on_MaxBullets_text_changed(new_text):
 
 
 func _on_BulletSpread_text_changed(new_text):
-	$weapon.stats.bullet_spread = float(new_text)
+	$weapon.stats.bullet_spread = deg2rad(float(new_text))
 	var slider = $ScrollContainer/SettingsContainer/Sliders/BulletSpread
 	if float(new_text) < slider.min_value:
 		$ScrollContainer/SettingsContainer/Sliders/BulletSpread.value = slider.min_value
@@ -353,7 +354,7 @@ func _on_BulletSpread_text_changed(new_text):
 
 
 func _on_BulletSpreadRandom_text_changed(new_text):
-	$weapon.stats.bullet_spread_random = float(new_text)
+	$weapon.stats.bullet_spread_random = deg2rad(float(new_text))
 	var slider = $ScrollContainer/SettingsContainer/Sliders/BulletSpreadRandom
 	if float(new_text) < slider.min_value:
 		$ScrollContainer/SettingsContainer/Sliders/BulletSpreadRandom.value = slider.min_value
