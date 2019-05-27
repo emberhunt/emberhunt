@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/inventory/ItemInfo.gd" type="Script" id=1]
-[ext_resource path="res://assets/UI/Menu_v1.png" type="Texture" id=2]
+[ext_resource path="res://assets/inventory/description_window.png" type="Texture" id=2]
 [ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
@@ -42,9 +42,9 @@ margin_bottom = 452.0
 [node name="ItemTitle" type="Label" parent="Background/Control"]
 anchor_right = 1.0
 margin_left = 100.0
-margin_top = 25.0
+margin_top = 48.0
 margin_right = -100.0
-margin_bottom = 70.0
+margin_bottom = 93.0
 custom_fonts/font = SubResource( 1 )
 text = "Title"
 align = 1
@@ -53,20 +53,21 @@ valign = 1
 [node name="ItemDescription" type="Label" parent="Background/Control"]
 anchor_right = 1.0
 margin_left = 50.0
-margin_top = 90.0
+margin_top = 101.0
 margin_right = -50.0
-margin_bottom = 200.0
+margin_bottom = 211.0
 custom_fonts/font = SubResource( 2 )
 text = "Description"
+align = 1
 autowrap = true
 
 [node name="ItemType" type="Label" parent="Background/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = 205.0
+margin_top = 211.0
 margin_right = -50.0
-margin_bottom = -215.0
+margin_bottom = -209.0
 custom_fonts/font = SubResource( 2 )
 text = "Type"
 align = 1
@@ -76,8 +77,8 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = 50.0
-margin_top = -215.0
-margin_bottom = -70.0
+margin_top = -199.0
+margin_bottom = -54.0
 custom_fonts/font = SubResource( 2 )
 text = "Damage: 0-2
 Firerate: 1
@@ -89,9 +90,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -215.0
+margin_top = -199.0
 margin_right = -50.0
-margin_bottom = -70.0
+margin_bottom = -54.0
 custom_fonts/font = SubResource( 2 )
 text = "Damage: 0-2
 Firerate: 1
@@ -105,9 +106,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -550.0
-margin_top = -60.0
+margin_top = -63.0
 margin_right = -50.0
-margin_bottom = -33.0
+margin_bottom = -36.0
 custom_fonts/font = SubResource( 3 )
 text = "Rarity"
 align = 2
@@ -116,5 +117,4 @@ valign = 1
 [node name="TextureButton" type="TextureButton" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-
 [connection signal="button_down" from="TextureButton" to="." method="_on_ItemInfo_button_down"]
