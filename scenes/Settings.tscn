@@ -80,15 +80,14 @@ text = "Settings
 align = 1
 
 [node name="Buttons" type="Container" parent="."]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -360.0
-margin_top = -60.0
+margin_top = -82.0
 margin_right = 80.0
-margin_bottom = 220.0
+margin_bottom = 260.0
 __meta__ = {
 "_edit_group_": true
 }
@@ -197,6 +196,27 @@ align = 1
 valign = 1
 uppercase = true
 
+[node name="ButtonShowDamage" type="TextureButton" parent="Buttons"]
+editor/display_folded = true
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -200.0
+margin_top = 277.0
+margin_right = 200.0
+margin_bottom = 327.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+expand = true
+
+[node name="Label" type="Label" parent="Buttons/ButtonShowDamage"]
+margin_right = 400.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 6 )
+text = "Show Damage: ON"
+align = 1
+valign = 1
+uppercase = true
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 editor/display_folded = true
 anchor_left = 0.5
@@ -204,9 +224,8 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = 72.0
-margin_top = 22.0
 margin_right = 397.0
-margin_bottom = 104.0
+margin_bottom = 82.0
 rect_min_size = Vector2( 128, 0 )
 rect_scale = Vector2( 1, 1.8 )
 custom_constants/separation = 24
@@ -245,12 +264,14 @@ tick_count = 1
 ticks_on_borders = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -67.0
-margin_top = -24.0
+margin_top = -46.0
+margin_bottom = -22.0
 
 [node name="LabelVersion" type="Label" parent="MarginContainer"]
 margin_top = 5.0
@@ -260,11 +281,11 @@ grow_horizontal = 0
 text = "v 0_0_0"
 align = 1
 valign = 1
-
 [connection signal="pressed" from="Buttons/ButtonBack" to="." method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Buttons/ButtonMusic" to="." method="_on_ButtonMusic_pressed"]
 [connection signal="pressed" from="Buttons/ButtonSound" to="." method="_on_ButtonSound_pressed"]
 [connection signal="pressed" from="Buttons/ButtonQuality" to="." method="_on_ButtonQuality_pressed"]
 [connection signal="pressed" from="Buttons/ButtonTouchpads" to="." method="_on_ButtonTouchpads_pressed"]
+[connection signal="pressed" from="Buttons/ButtonShowDamage" to="." method="_on_ButtonShowDamage_pressed"]
 [connection signal="value_changed" from="VBoxContainer2/SliderMusic" to="." method="_on_SliderMusic_value_changed"]
 [connection signal="value_changed" from="VBoxContainer2/SliderSound" to="." method="_on_SliderSound_value_changed"]

@@ -19,7 +19,6 @@ var shooter_name = "" 	# What to call the shooter; If the shooter is a player,
 						# this variable will hold it's ID, if it's an enemy
 						# or a NPC it will hold it's name.
 
-
 func _ini(bullet_data, shter, shter_name, pos): # is called before the bullet is added to the scene
 	origin = pos
 	speed = bullet_data['speed'] 
@@ -60,9 +59,14 @@ func _physics_process(delta):
 	if rotation_speed != 0:
 		rotation += deg2rad(rotation_speed)*delta
 		
-func _hit():
+func _hit(body):
 	if impact_sound != "":
 		SoundPlayer.play(SoundPlayer.loaded_sounds[impact_sound])
+	if Global.showDamageNumbers:
+		var damageDisplay = preload("res://scenes/bullets/DamageDisplay.tscn").instance()
+		damageDisplay.get_node("Damage").set_text(str(damage))
+		damageDisplay.position = body.position - Vector2(0, 10)
+		get_node("../../..").add_child(damageDisplay)
 	if pierce_left <= 0:	# delete bullet if there is no remaining pierce
 		queue_free()
 	else:					# reduce remaining pierces by one
@@ -71,5 +75,7 @@ func _hit():
 func _on_Area2D_body_entered(body):
 	# Check if its not an enemy or a player
 	# Because that would mean it's a wall
-	if not body.is_in_group("player") or body.is_in_group("enemy"):
+	if not body.is_in_group("player"):
 		queue_free()
+	if body.is_in_group("enemy"):
+		_hit(body)
