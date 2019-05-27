@@ -33,9 +33,8 @@ __meta__ = {
 
 [node name="Entities" type="YSort" parent="."]
 
-[node name="rock" type="StaticBody2D" parent="Entities" groups=[
-"enemy",
-]]
+[node name="rock" type="StaticBody2D" parent="Entities"]
+editor/display_folded = true
 position = Vector2( 0.0862694, 63.0651 )
 __meta__ = {
 "_edit_group_": true
@@ -47,3 +46,4 @@ texture = ExtResource( 3 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/rock"]
 position = Vector2( 0.056561, 4.034 )
 shape = SubResource( 2 )
+
