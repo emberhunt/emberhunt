@@ -37,7 +37,6 @@ texture = ExtResource( 3 )
 centered = false
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Container"]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 40.0

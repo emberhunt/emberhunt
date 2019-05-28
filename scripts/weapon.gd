@@ -5,36 +5,15 @@ var attacking = false
 var can_attack = true
 var attacked_recently = false
 
-export var stats = {
-	min_damage = 1,
-	max_damage = 1,
-	min_fire_rate = 3.0,
-	max_fire_rate = 3.0,
-	min_bullets = 1,
-	max_bullets = 1,
-	min_speed = 75,
-	max_speed = 75,
-	min_range = 50,
-	max_range = 50,
-	bullet_spread = 0,
-	bullet_spread_random = 0,
-	min_scale = 1,
-	max_scale = 1,
-	min_knockback = 0,
-	max_knockback = 0,
-	min_pierces = 0,
-	max_pierces = 0,
-	rotation = 0,
-	bullet_type = 0,
-	color = [1,1,1,1],
-	bullet_gradient = "",
-	heavy_attack = false,
-	attack_sound = "frost_cast1",
-	impact_sound = "frost_impact1",
-	scene = "default_bullet"
-	}
+var stats = Global.items[Global.charactersData[str(Global.charID)].inventory["0"].item_id] if Global.charactersData[str(Global.charID)].inventory.has("0") else {}
+
+func set_stats():
+	stats = Global.items[Global.charactersData[str(Global.charID)].inventory["0"].item_id] if Global.charactersData[str(Global.charID)].inventory.has("0") else {}
 
 func _process(delta):
+	if str(stats) == str({}):
+		# Don't shoot if there's no weapon equipped
+		return
 	if attacking: # attack touchpad is in use
 		if can_attack and not stats.heavy_attack:
 			_attack()
@@ -62,7 +41,8 @@ func _attack():
 		var bullet_data = {}
 		randomize()
 		var new_bullet = Global.loaded_bullets[stats.scene].instance()
-		bullet_data['rotation'] = rotation
+		# Shoot to the opposite direction if it's a heavy attack
+		bullet_data['rotation'] = rotation + PI if stats.heavy_attack else rotation
 		# Rotate the bullet
 		if rotation_step != -1:
 			bullet_data['rotation'] += bullet_count/PI * rotation_step*-1 + bullet_number * rotation_step

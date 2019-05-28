@@ -60,7 +60,10 @@ func _on_Item_button_up():
 				# Generate an appropriate dict
 				var newInv = {}
 				for item in get_node("..").get_children():
-					newInv[item.slotID] = {"item_id" : item.itemID, "quantity" : item.quantity}
+					newInv[str(item.slotID)] = {"item_id" : item.itemID, "quantity" : item.quantity}
+				# Maybe weapon changed, so re-set stats
+				Global.charactersData[Global.charID].inventory = newInv
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
 				Networking.sendInventory(newInv)
 				return
 		rect_global_position = origin

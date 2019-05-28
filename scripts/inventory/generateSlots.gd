@@ -17,7 +17,10 @@ func _ready():
 	var items = stats['inventory']
 	for item in items.keys():
 		var scene_instance = preload("res://scenes/inventory/Item.tscn").instance()
-		scene_instance.rect_global_position = rect_global_position+Vector2(((int(item)-special_slots)%columns)*66+8,int((int(item)-special_slots)/columns)*66+8)
+		if int(item) <= 3:
+			scene_instance.rect_global_position = get_node("../../"+item).rect_global_position+Vector2(8,8)
+		else:
+			scene_instance.rect_global_position = rect_global_position+Vector2(((int(item)-special_slots)%columns)*66+8,int((int(item)-special_slots)/columns)*66+8)
 		scene_instance.itemID = items[item]["item_id"]
 		scene_instance.quantity = items[item]["quantity"]
 		scene_instance.slotID = int(item)
