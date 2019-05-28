@@ -30,7 +30,7 @@
 		"bullet_type" : 0,
 		"color" : [1,1,1,1],
 		"bullet_gradient" : "",
-		"heavy_attack" : true,
+		"heavy_attack" : false,
 		"attack_sound" : "frost_cast1",
 		"impact_sound" : "frost_impact1",
 		"scene" : "default_bullet"

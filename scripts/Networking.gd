@@ -174,13 +174,13 @@ remote func receive_world_update(world_name, world_data, number):
 remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name, pos):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world == get_tree().get_current_scene().get_name():
+		# Check if the bullets weren't shot by myself, because if they were, we don't want to spawn the same bullets again!
+		if shooter == "player" && shooter_name == str(get_tree().get_network_unique_id()):
+			return
 		if attack_sound != "":
 			SoundPlayer.play(SoundPlayer.loaded_sounds[attack_sound],-10)
 		
 		for bullet in bullets:
-			# Check if the bullet wasn't shot by myself, because if it was, we don't want to spawn the same bullet again!
-			if shooter == "player" && shooter_name == str(get_tree().get_network_unique_id()):
-				continue
 			# Spawn the bullet
 			var new_bullet = Global.loaded_bullets[bullets[0].scene].instance()
 			new_bullet._ini(bullet, shooter, shooter_name, pos)
@@ -235,10 +235,10 @@ func exitWorld():
 	if connected:
 		rpc_id(1, "exit_world", get_tree().get_current_scene().get_name())
 
-func shootBullets(bullets, attack_sound):
+func shootBullets(rotation):
 	# Check if we are connected to the server
 	if connected:
-		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), bullets, attack_sound)
+		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), rotation)
 
 func sendInventory(inventory):
 	# Check if we are connected to the server

@@ -32,8 +32,8 @@ func _load_sounds(path):
 		directory.list_dir_begin()
 		var file_name = directory.get_next()
 		while( file_name != ""):
-			if file_name.ends_with(".wav"):
-				loaded_sounds[file_name.trim_suffix(".wav")] = load(path+file_name)
+			if file_name.ends_with(".wav.import"):
+				loaded_sounds[file_name.trim_suffix(".wav.import")] = load(path+file_name.replace(".import",""))
 			file_name = directory.get_next()
 	else:
 		print("Error opening "+path)

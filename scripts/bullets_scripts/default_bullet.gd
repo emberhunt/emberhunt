@@ -50,7 +50,7 @@ func _ini(bullet_data, shter, shter_name, pos): # is called before the bullet is
 	$Sprite.frame = bullet_data['type_id']
 	rotation_speed = bullet_data['rotation_speed']
 
-func _physics_process(delta):
+func _process(delta):
 	move_and_slide(direction*speed)
 	if gradient != null:
 		# interpolate gradient colors based on travel distance

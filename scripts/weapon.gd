@@ -1,6 +1,5 @@
 extends Node2D
 
-var direction = 0
 var attacking = false
 var can_attack = true
 var attacked_recently = false
@@ -28,19 +27,24 @@ func _attack():
 	if stats.attack_sound != "":
 		SoundPlayer.play(SoundPlayer.loaded_sounds[stats.attack_sound],-10)
 	
+	# The first seed is always used to generate the bullet_count,
+	# and the rest - for each individual bullet stats
+	seed(Networking.rand_seeds.pop_front())
 	var bullet_count = int(rand_range(stats.min_bullets,stats.max_bullets))
+	
+	var wait_time = (1 / rand_range(stats.min_fire_rate, stats.max_fire_rate))
 	
 	# calculate spread step based on bullet_count and bullet_spread
 	var rotation_step = -1
 	if stats.bullet_spread != 0 and bullet_count > 1:
 		rotation_step = float(stats.bullet_spread) / float(bullet_count)
 	
-	var bullets = []
-	
 	for bullet_number in range(bullet_count): # Create each bullet
-		var bullet_data = {}
-		randomize()
+		var bullet_data = stats.duplicate(true)
+		seed(Networking.rand_seeds.pop_front())
 		var new_bullet = Global.loaded_bullets[stats.scene].instance()
+		
+		bullet_data['rotation_speed'] = stats.rotation
 		# Shoot to the opposite direction if it's a heavy attack
 		bullet_data['rotation'] = rotation + PI if stats.heavy_attack else rotation
 		# Rotate the bullet
@@ -66,20 +70,16 @@ func _attack():
 		bullet_data['scale'] = Vector2(1,1) * rand_range(stats.min_scale,stats.max_scale)
 		
 		bullet_data['gradient'] = stats.bullet_gradient
-		bullet_data['color'] = Color(stats.color[0],stats.color[1],stats.color[2],stats.color[3])
 		bullet_data['impact_sound'] = stats.impact_sound
+		bullet_data['color'] = Color(stats.color[0],stats.color[1],stats.color[2],stats.color[3])
 		bullet_data['type_id'] = stats.bullet_type
-		bullet_data['rotation_speed'] = stats.rotation
-		bullet_data['scene'] = stats.scene
 		
-		bullets.append(bullet_data)
 		# Spawn the bullet
 		new_bullet._ini(bullet_data, "player", get_tree().get_network_unique_id(), global_position+Vector2(sin(bullet_data['rotation']), -cos(bullet_data['rotation']))*5)
 		get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/projectiles").add_child(new_bullet)
 		
 	# Send the bullet data to server
-	var wait_time = (1 / rand_range(stats.min_fire_rate, stats.max_fire_rate))
-	Networking.shootBullets(bullets, stats.attack_sound)
+	Networking.shootBullets(rotation)
 	can_attack = false # disable attacks until cooldown passed
 	$fire_rate.set_wait_time(wait_time)
 	$fire_rate.start()

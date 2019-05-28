@@ -246,26 +246,82 @@ remote func request_rand_seeds(how_many):
 		generator.randomize()
 		seeds.append(generator.seed)
 	rpc_id(get_tree().get_rpc_sender_id(), "receive_rand_seeds", seeds)
+	if not given_rand_seeds.has(get_tree().get_rpc_sender_id()):
+		given_rand_seeds[get_tree().get_rpc_sender_id()] = []
 	given_rand_seeds[get_tree().get_rpc_sender_id()] += seeds
 
-remote func shoot_bullets(world, bullets, attack_sound):
+remote func shoot_bullets(world, rotation):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Get the weapon stats
+			if not worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has("0"):
+				# The player has no weapon equipped
+				return
+			var stats = Global.items[worlds[world].players[get_tree().get_rpc_sender_id()].inventory["0"].item_id]
+			
 			# Check if the player should be able to shoot:
 			if get_tree().get_rpc_sender_id() in lastShots.keys():
-				if (OS.get_ticks_msec() - lastShots[get_tree().get_rpc_sender_id()]) < 1000.0/3-40: # 40ms is tolerated
+				if OS.get_ticks_msec() < lastShots[get_tree().get_rpc_sender_id()]-40: # 40ms is tolerated
 					return
 			# Shoot
-			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec()
-			var spawn_point = worlds[world].players[get_tree().get_rpc_sender_id()].position + Vector2(sin(bullets[0].rotation), -cos(bullets[0].rotation))*5
-			for bullet in bullets:
+			seed(given_rand_seeds[get_tree().get_rpc_sender_id()].pop_front())
+			
+			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec() + rand_range(stats.min_fire_rate, stats.max_fire_rate)
+			var spawn_point = worlds[world].players[get_tree().get_rpc_sender_id()].position + Vector2(sin(rotation), -cos(rotation))*5
+			
+			
+			var bullet_count = int(rand_range(stats.min_bullets,stats.max_bullets))
+			
+			# calculate spread step based on bullet_count and bullet_spread
+			var rotation_step = -1
+			if stats.bullet_spread != 0 and bullet_count > 1:
+				rotation_step = float(stats.bullet_spread) / float(bullet_count)
+			
+			var bullets = []
+			for bullet_number in range(bullet_count):
+				var bullet_data = {}
 				# Spawn the bullet
-				var new_bullet = Global.loaded_bullets[bullet['scene']].instance()
-				new_bullet._ini(bullet, "player", str(get_tree().get_rpc_sender_id()), spawn_point)
+				seed(given_rand_seeds[get_tree().get_rpc_sender_id()].pop_front())
+				var new_bullet = Global.loaded_bullets[stats['scene']].instance()
+				
+				# Shoot to the opposite direction if it's a heavy attack
+				bullet_data['rotation'] = rotation + PI if stats.heavy_attack else rotation
+				# Rotate the bullet
+				if rotation_step != -1:
+					bullet_data['rotation'] += bullet_count/PI * rotation_step*-1 + bullet_number * rotation_step
+				if stats.bullet_spread_random != 0:
+					bullet_data['rotation'] += rand_range(float(stats.bullet_spread_random)/2*-1,float(stats.bullet_spread_random)/2)
+				# Calculate speed and max_distance
+				
+				bullet_data['speed'] = int(rand_range(stats.min_speed, stats.max_speed))
+				bullet_data['max_distance'] = int(rand_range(stats.min_range, stats.max_range))
+				
+				# Calculate damage
+				bullet_data['damage'] = int(rand_range(stats.min_damage,stats.max_damage))
+				
+				# Calculate pierces
+				bullet_data['pierces'] = int(rand_range(stats.min_pierces,stats.max_pierces))
+				
+				# Calculate knockback
+				bullet_data['knockback'] = int(rand_range(stats.min_knockback, stats.max_knockback))
+				
+				# Calculate bullet scale
+				bullet_data['scale'] = Vector2(1,1) * rand_range(stats.min_scale,stats.max_scale)
+				
+				bullet_data['gradient'] = stats.bullet_gradient
+				bullet_data['impact_sound'] = stats.impact_sound
+				bullet_data['color'] = Color(stats.color[0],stats.color[1],stats.color[2],stats.color[3])
+				bullet_data['type_id'] = stats.bullet_type
+				bullet_data['rotation_speed'] = stats.rotation
+				bullet_data['scene'] = stats.scene
+				
+				bullets.append(bullet_data)
+				
+				new_bullet._ini(bullet_data, "player", str(get_tree().get_rpc_sender_id()), spawn_point)
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
-			rpc_all_in_world(world, "shoot_bullets", [world, bullets, attack_sound, "player", str(get_tree().get_rpc_sender_id()), spawn_point])
+			rpc_all_in_world(world, "shoot_bullets", [world, bullets, stats.attack_sound, "player", str(get_tree().get_rpc_sender_id()), spawn_point])
 
 remote func inventory_changes(world, newInventory):
 	# Check if the world exists
@@ -281,8 +337,8 @@ remote func inventory_changes(world, newInventory):
 			var newInventoryValues = newInventory.values()
 			newInventoryValues.sort_custom(InventorySorter, "sort")
 			if str(newInventoryValues) == str(oldInventory) and \
-				newInventoryKeys.min() >= 0 and \
-				newInventoryKeys.max() < worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
+				int(newInventoryKeys.min()) >= 0 and \
+				int(newInventoryKeys.max()) < worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
 				# The change is valid
 				worlds[world].players[get_tree().get_rpc_sender_id()].inventory = newInventory
 				# Save
