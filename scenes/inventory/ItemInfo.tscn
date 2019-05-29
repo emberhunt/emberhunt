@@ -110,8 +110,3 @@ text = "Rarity"
 align = 2
 valign = 1
 
-[node name="TextureButton" type="TextureButton" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[connection signal="button_down" from="TextureButton" to="." method="_on_ItemInfo_button_down"]

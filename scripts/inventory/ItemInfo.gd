@@ -38,5 +38,7 @@ func positionWindowOnScreen(pos, screensize):
 		else:
 			$Background.rect_position.x = pos.x-50
 
-func _on_ItemInfo_button_down():
-	queue_free()
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT and event.pressed:
+			queue_free()
