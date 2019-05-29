@@ -55,6 +55,8 @@ locale_filter=[ 0, [ "en_US" ] ]
 
 [rendering]
 
+quality/2d/use_pixel_snap=true
 threads/thread_model=2
+quality/shadows/filter_mode=0
 environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
