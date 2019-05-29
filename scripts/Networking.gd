@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "localhost"#"cnidarias.net"
+const SERVER_IP = "cnidarias.net"
 const SERVER_PORT = 22122
 
 var connected = false
