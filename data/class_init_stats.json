@@ -7,7 +7,10 @@
 		"magic" : 3,
 		"luck" : 1,
 		"physical_defense" : 18,
-		"magic_defense" : 11 
+		"magic_defense" : 11,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Berserker" : {
 		"max_hp" : 120,
@@ -17,7 +20,10 @@
 		"magic" : 4,
 		"luck" : 1,
 		"physical_defense" : 12,
-		"magic_defense" : 7
+		"magic_defense" : 7,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Assassin" : {
 		"max_hp" : 100,
@@ -27,7 +33,10 @@
 		"magic" : 4,
 		"luck" : 1,
 		"physical_defense" : 7,
-		"magic_defense" : 7 
+		"magic_defense" : 7,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Sniper" : {
 		"max_hp" : 80,
@@ -37,7 +46,10 @@
 		"magic" : 6,
 		"luck" : 1,
 		"physical_defense" : 6,
-		"magic_defense" : 6 
+		"magic_defense" : 6,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Hunter" : {
 		"max_hp" : 90,
@@ -47,7 +59,10 @@
 		"magic" : 5,
 		"luck" : 1,
 		"physical_defense" : 6,
-		"magic_defense" : 6 
+		"magic_defense" : 6,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Arsonist" : {
 		"max_hp" : 70,
@@ -57,7 +72,10 @@
 		"magic" : 13,
 		"luck" : 1,
 		"physical_defense" : 4,
-		"magic_defense" : 16 
+		"magic_defense" : 16,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Brand" : {
 		"max_hp" : 70,
@@ -67,7 +85,10 @@
 		"magic" : 8,
 		"luck" : 1,
 		"physical_defense" : 4,
-		"magic_defense" : 15 
+		"magic_defense" : 15,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Herald" : {
 		"max_hp" : 110,
@@ -77,7 +98,10 @@
 		"magic" : 9,
 		"luck" : 1,
 		"physical_defense" : 5,
-		"magic_defense" : 19 
+		"magic_defense" : 19,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Redeemer" : {
 		"max_hp" : 65,
@@ -87,7 +111,10 @@
 		"magic" : 9,
 		"luck" : 1,
 		"physical_defense" : 5,
-		"magic_defense" : 18 
+		"magic_defense" : 18,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	},
 	"Druid" : {
 		"max_hp" : 65,
@@ -97,6 +124,9 @@
 		"magic" : 11,
 		"luck" : 1,
 		"physical_defense" : 4,
-		"magic_defense" : 18 
+		"magic_defense" : 18,
+		"inventory" : {
+			"0": {"item_id":"woodsword","quantity":""}
+		}
 	}
 }

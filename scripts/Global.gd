@@ -52,7 +52,7 @@ func loadGame():
 	UUID = file.get_value("Networking","uuid", false)
 
 func _ready():
-	loadGame()
+	loadGame() # load settings
 	_load_bullets()
 	_load_item_sprites()
 	
