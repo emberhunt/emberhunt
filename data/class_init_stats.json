@@ -64,7 +64,7 @@
 			"0": {"item_id":"woodsword","quantity":""}
 		}
 	},
-	"Arsonist" : {
+	"Pyromancer" : {
 		"max_hp" : 70,
 		"max_mp" : 200,
 		"strength" : 3,

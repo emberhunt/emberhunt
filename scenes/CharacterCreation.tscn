@@ -134,7 +134,6 @@ margin_bottom = -150.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-editor/display_folded = true
 margin_right = 912.0
 margin_bottom = 1500.0
 size_flags_horizontal = 3
@@ -328,14 +327,13 @@ text = "Hunter"
 align = 1
 valign = 1
 
-[node name="Arsonist" type="Container" parent="ScrollContainer/VBoxContainer"]
-editor/display_folded = true
+[node name="Pyromancer" type="Container" parent="ScrollContainer/VBoxContainer"]
 margin_top = 750.0
 margin_right = 912.0
 margin_bottom = 750.0
 mouse_filter = 1
 
-[node name="Arsonist" type="TextureButton" parent="ScrollContainer/VBoxContainer/Arsonist"]
+[node name="Pyromancer" type="TextureButton" parent="ScrollContainer/VBoxContainer/Pyromancer"]
 editor/display_folded = true
 anchor_right = 1.0
 margin_right = 12.0
@@ -346,21 +344,21 @@ texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
 expand = true
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Arsonist/Arsonist"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Pyromancer/Pyromancer"]
 margin_right = 180.0
 margin_bottom = 150.0
 texture = SubResource( 2 )
 expand = true
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Arsonist/Arsonist"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Pyromancer/Pyromancer"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
 custom_fonts/font = SubResource( 3 )
-text = "Arsonist"
+text = "Pyromancer"
 align = 1
 valign = 1
 
@@ -520,7 +518,7 @@ margin_bottom = 1500.0
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Assassin/Assassin" to="ScrollContainer/VBoxContainer" method="_on_Assassin_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Sniper/Sniper" to="ScrollContainer/VBoxContainer" method="_on_Sniper_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Hunter/Hunter" to="ScrollContainer/VBoxContainer" method="_on_Hunter_pressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/Arsonist/Arsonist" to="ScrollContainer/VBoxContainer" method="_on_Arsonist_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Pyromancer/Pyromancer" to="ScrollContainer/VBoxContainer" method="_on_Pyromancer_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Brand/Brand" to="ScrollContainer/VBoxContainer" method="_on_Brand_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Herald/Herald" to="ScrollContainer/VBoxContainer" method="_on_Herald_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Redeemer/Redeemer" to="ScrollContainer/VBoxContainer" method="_on_Redeemer_pressed"]
