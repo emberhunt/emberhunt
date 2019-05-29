@@ -58,7 +58,8 @@ func _input(event):
 					touchPower = radius
 					$buttonSprite.global_position = radius*touchDirection + origin
 				_weaponNode.rotation = touchRotation
-				_weaponNode.attacking = true
+				if touchPower > 0:
+					_weaponNode.attacking = true
 			
 	if event is InputEventScreenDrag:
 		if not disabled:
@@ -76,4 +77,5 @@ func _input(event):
 						touchPower = radius
 						$buttonSprite.global_position = radius*touchDirection + origin
 					_weaponNode.rotation = touchRotation
-					_weaponNode.attacking = true
+					if touchPower > 0:
+						_weaponNode.attacking = true
