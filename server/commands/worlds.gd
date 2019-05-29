@@ -1,14 +1,13 @@
 func worlds(args = [], mainServer = null) -> String:
-	var returnValue = "";
 	if mainServer == null:
 		return "Instance of MainServer.gd is invalid"
 	if args.size() == 0:
 		return str(mainServer.worlds) + "\n"
 	else:
-		for worldArg in args:
-			var world = mainServer.worlds[worldArg]
-			if world != null:
-				returnValue += str(world) + "\n"
+		var worlds = mainServer.worlds.duplicate()
+		for arg in args:
+			if worlds.has(arg):
+				worlds = worlds[arg]
 			else:
-				returnValue += worldArg + " does not exist\n"
-		return returnValue
+				return arg+" does not exist"
+		return str(worlds)
