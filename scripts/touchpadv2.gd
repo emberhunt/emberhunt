@@ -14,7 +14,7 @@ var disabled = false
 var isPressed = false
 
 func isInArea(pos):
-	if pos.x<2*radius+50 and pos.y>get_viewport().size.y-(2*radius+50):
+	if pos.x<2*radius+150 and pos.y>get_viewport().size.y-(2*radius+150):
 		return true
 	return false
 

@@ -14,10 +14,9 @@ var disabled = false
 var isPressed = false
 
 func isInArea(pos):
-	if pos.x > get_viewport().size.x-(2*radius+50) and pos.y>get_viewport().size.y-(2*radius+50):
+	if pos.x > get_viewport().size.x-(2*radius+150) and pos.y>get_viewport().size.y-(2*radius+150):
 		return true
-	else:
-		return false
+	return false
 
 func init(weaponNode : Node2D):
 	if weaponNode == null:
