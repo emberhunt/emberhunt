@@ -214,24 +214,27 @@ remote func send_position(world, pos, number):
 					# We already have a newer send_position RPC from this player
 					return
 			lastUpdateRPC[get_tree().get_rpc_sender_id()] = number
-			# Validate if the position is legal
+			
 			var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
-			if not player_node.test_move(player_node.transform, pos-player_node.position): # No collisions
-				# Check the speed
-				var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25
-				var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
-				var maxLegalDistance = maxLegalSpeed*timeElapsed
-				var traveledDistance = (pos-player_node.position).length()
-				# Check if it traveled more than we allow
-				if traveledDistance > maxLegalDistance:
-					var motion = pos-player_node.position
-					var newMotion = Vector2(motion.x*(maxLegalDistance/traveledDistance), motion.y*(maxLegalDistance/traveledDistance))
-					pos = player_node.position+newMotion
-				# Check if the player is not trying to teleport
-				if traveledDistance > 100:
-					var motion = pos-player_node.position
-					var newMotion = Vector2(motion.x*(50/traveledDistance), motion.y*(50/traveledDistance))
-					pos = player_node.position+newMotion
+			
+			# Check the speed
+			var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25
+			var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
+			var maxLegalDistance = maxLegalSpeed*timeElapsed
+			var traveledDistance = (pos-player_node.position).length()
+			# Check if it traveled more than we allow
+			if traveledDistance > maxLegalDistance:
+				var motion = pos-player_node.position
+				var newMotion = Vector2(motion.x*(maxLegalDistance/traveledDistance), motion.y*(maxLegalDistance/traveledDistance))
+				pos = player_node.position+newMotion
+			# Check if the player is not trying to teleport
+			if traveledDistance > 100:
+				var motion = pos-player_node.position
+				var newMotion = Vector2(motion.x*(100/traveledDistance), motion.y*(100/traveledDistance))
+				pos = player_node.position+newMotion
+			
+			# Validate if the position is legal
+			if not checkIfClipping(player_node, player_node.position, pos): # No collisions
 				# Update player's position
 				player_node.position = pos
 				worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
@@ -713,6 +716,39 @@ func save_player_data(world, id):
 	file.store_line(JSON.print(data))
 	file.close()
 
+func checkIfClipping(node : KinematicBody2D, a : Vector2, b : Vector2):
+	# calculate the relative vector
+	var rel_vec = b-a
+	# Check if there was any movement at all
+	if rel_vec.length() == 0:
+		return false
+	# check if anything is in the way
+	var a_transform = Transform2D()
+	a_transform.origin = a
+	if node.test_move(a_transform, rel_vec):
+		var failed_pixels = 0
+		# Split the movement into individual pixels
+		var normalized = rel_vec.normalized()
+		var split_count = rel_vec.length()/normalized.length()
+		# Check each pixel for collisions
+		for i in range(int(floor(split_count))-1):
+			var trans = a_transform
+			trans.origin += normalized*i
+			if node.test_move(trans, normalized*(i+1)):
+				# There was a collision
+				failed_pixels += 1
+		# Last pixel
+		var trans = a_transform
+		trans.origin += normalized*int(floor(split_count))
+		if node.test_move(trans, normalized*(split_count-floor(split_count))):
+			# There was a collision
+			failed_pixels += 1
+		# Now we know how many pixels had collisions
+		# If less than 3, it was probably due to a wall corner
+		# If more, the player is possibly cheating
+		if failed_pixels > 2:
+			return true
+	return false
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
