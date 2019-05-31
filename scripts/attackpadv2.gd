@@ -14,7 +14,7 @@ var disabled = false
 var isPressed = false
 
 func isInArea(pos):
-	if pos.x > get_viewport().size.x-(2*radius+150) and pos.y>get_viewport().size.y-(2*radius+150):
+	if pos.x > get_viewport().size.x-(2*radius+150) and pos.y>get_viewport().size.y-(2*radius+110):
 		return true
 	return false
 
@@ -27,8 +27,11 @@ func init(weaponNode : Node2D):
 
 func _ready():
 	# Adjust position on screen
-	position.x = get_viewport().size.x-(radius+30)
-	position.y = get_viewport().size.y-(radius+30)
+	position.x = get_viewport().size.x-(radius+60)
+	position.y = get_viewport().size.y-(radius+60)
+	# Hide everything
+	$buttonSprite.hide()
+	$background.hide()
 	origin = position
 
 

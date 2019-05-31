@@ -83,13 +83,13 @@ position = Vector2( 149.88, 447.728 )
 script = ExtResource( 4 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/moveButton"]
-visible = false
-scale = Vector2( 5, 5 )
+modulate = Color( 1, 1, 1, 0.784314 )
+scale = Vector2( 3, 3 )
 z_index = 1
 texture = ExtResource( 5 )
 
 [node name="background" type="Sprite" parent="CanvasLayer/moveButton"]
-visible = false
+modulate = Color( 1, 1, 1, 0.784314 )
 texture = ExtResource( 6 )
 
 [node name="shootButton" type="TouchScreenButton" parent="CanvasLayer"]
@@ -98,13 +98,13 @@ position = Vector2( 873.88, 447.728 )
 script = ExtResource( 7 )
 
 [node name="buttonSprite" type="Sprite" parent="CanvasLayer/shootButton"]
-visible = false
-scale = Vector2( 5, 5 )
+modulate = Color( 1, 1, 1, 0.784314 )
+scale = Vector2( 3, 3 )
 z_index = 1
 texture = ExtResource( 5 )
 
 [node name="background" type="Sprite" parent="CanvasLayer/shootButton"]
-visible = false
+modulate = Color( 1, 1, 1, 0.784314 )
 texture = ExtResource( 6 )
 
 [node name="FPS" type="Label" parent="CanvasLayer"]
