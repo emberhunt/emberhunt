@@ -15,6 +15,8 @@ onready var special_slots = [
 	get_node("../../Container/0")
 	]
 
+onready var drop_item_slot = get_node("../../Container/DropItem")
+
 func _ready():
 	# Read the item data
 	itemData = Global.items[itemID]
@@ -66,6 +68,20 @@ func _on_Item_button_up():
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
 				Networking.sendInventory(newInv)
 				return
+		# If it's not on any of the slots, then maybe it's on the DROP-ITEM plate
+		var rel_mouse_pos = drop_item_slot.get_local_mouse_position()
+		if rel_mouse_pos.x <= 300 and rel_mouse_pos.x >= 0 and rel_mouse_pos.y <= 120 and rel_mouse_pos.y >= 0:
+			# Drop the item on ground:
+			#   remove it from inventory
+			Global.charactersData[Global.charID].inventory.erase(str(slotID))
+			# It might have been the equipped weapon, so re-set weapon stats
+			get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
+			#   add a bag on the ground
+			print("BAGGY")
+			#   inform the server
+			Networking.dropItem(str(slotID))
+			queue_free()
+			return
 		rect_global_position = origin
 	else:
 		# Show info about item

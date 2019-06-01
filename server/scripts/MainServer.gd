@@ -347,6 +347,20 @@ remote func inventory_changes(world, newInventory):
 			else:
 				print("Received inventory_changes RPC with invalid data")
 
+remote func drop_item(world, slotID):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Check if the character has anything in that slot
+			if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(slotID):
+				# Remove the item from the inventory
+				worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slotID)
+				# Save
+				save_player_data(world, get_tree().get_rpc_sender_id())
+				# Add a bag on the ground
+				print("BAGGY")
+
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
 	if world in worlds:

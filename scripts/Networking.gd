@@ -2,7 +2,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "cnidarias.net"
+const SERVER_IP = "localhost"#"cnidarias.net"
 const SERVER_PORT = 22122
 
 var connected = false
@@ -245,10 +245,11 @@ func sendInventory(inventory):
 	if connected:
 		rpc_id(1, "inventory_changes", get_tree().get_current_scene().get_name(), inventory)
 
-func askServerToPickUpItem(uuid, itemName, itemId, quantity):
+func dropItem(slot):
 	# Check if we are connected to the server
 	if connected:
-		rpc_id(1, "ask_to_pickup_item", uuid, get_tree().get_current_scene().get_name(), itemName, itemId, quantity)
+		rpc_id(1, "drop_item", get_tree().get_current_scene().get_name(), slot)
+
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
@@ -273,4 +274,6 @@ remote func exit_world(world):
 remote func inventory_changes(inv):
 	pass
 remote func request_rand_seeds(how_many):
+	pass
+remote func drop_item(slot):
 	pass
