@@ -354,12 +354,25 @@ remote func drop_item(world, slotID):
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
 			# Check if the character has anything in that slot
 			if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(slotID):
+				var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slotID]
 				# Remove the item from the inventory
 				worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slotID)
 				# Save
 				save_player_data(world, get_tree().get_rpc_sender_id())
 				# Add a bag on the ground
-				print("BAGGY")
+				# Check if a bag on player's position already exists
+				for bag in worlds[world].bags:
+					if (bag.position-worlds[world].players[get_tree().get_rpc_sender_id()].position).length() <=16:
+						# Bag exists
+						# Add the item data to the bag
+						worlds[world].bags[worlds[world].bags.find(bag)].items.append(item_data) 
+						return
+				# Bag doesn't exist
+				var new_bag_info = {
+					"position" : worlds[world].players[get_tree().get_rpc_sender_id()].position,
+					"items" : [item_data]
+					}
+				worlds[world].bags.append(new_bag_info)
 
 remote func pickup_item(world, item_id, quantity):
 	# Check if the world exists
@@ -704,12 +717,9 @@ func initWorld(worldname):
 	ysort.set_name("projectiles")
 	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
 	ysort = YSort.new()
-	ysort.set_name("items")
-	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
-	ysort = YSort.new()
 	ysort.set_name("npc")
 	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
-	worlds[worldname] = {"players" : {}, "items" : {}, "enemies" : {}, "npc" : {}}
+	worlds[worldname] = {"players" : {}, "bags" : [], "enemies" : {}, "npc" : {}}
 	print(worldname+" created")
 
 func save_player_data(world, id):

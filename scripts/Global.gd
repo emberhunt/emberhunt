@@ -25,6 +25,8 @@ var init_stats = {}
 var items = {}
 var item_types = {}
 
+var world_data = {}
+
 # game paused
 var paused = false
 
@@ -86,7 +88,7 @@ func spawnPlayerAndGUI(world_name):
 	node.set_name("projectiles")
 	get_node("/root/"+world_name+"/Entities").add_child(node)
 	node = YSort.new()
-	node.set_name("items")
+	node.set_name("bags")
 	get_node("/root/"+world_name+"/Entities").add_child(node)
 	node = YSort.new()
 	node.set_name("npc")

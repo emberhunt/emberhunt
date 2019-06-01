@@ -76,9 +76,21 @@ func _on_Item_button_up():
 			Global.charactersData[Global.charID].inventory.erase(str(slotID))
 			# It might have been the equipped weapon, so re-set weapon stats
 			get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
-			#   add a bag on the ground
-			print("BAGGY")
-			#   inform the server
+			# Add a bag on the ground
+			# Maybe there's already a bag, so iterate through all bags to check
+			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
+			var bag_exists = false
+			for bag in Global.world_data.bags:
+				if (bag.position-playernode.position).length() <= 16:
+					bag_exists = true
+					break
+			# If bag exists, we don't have to do anything - the server will take care of it
+			# However if it doesn't exist, we will have to add one.
+			if not bag_exists:
+				var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
+				scene_instance.position = playernode.position
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
+			# Inform the server
 			Networking.dropItem(str(slotID))
 			queue_free()
 			return

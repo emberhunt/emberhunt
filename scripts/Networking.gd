@@ -120,6 +120,8 @@ remote func receive_world_update(world_name, world_data, number):
 			# We already have a newer receive_world_update RPC
 			return
 		lastUpdateRPC = number
+		# Save the dictionary for other uses later
+		Global.world_data = world_data.duplicate()
 		# update inventory
 		Global.charactersData[Global.charID].inventory = world_data.players[get_tree().get_network_unique_id()].inventory
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
@@ -158,9 +160,18 @@ remote func receive_world_update(world_name, world_data, number):
 		#
 		# Update all npcs
 		#
-		# Update all items
-		#
-		
+		# Update all bags
+		# Loop through all local bags to make a list of their positions
+		var localbags_positions = []
+		for localbag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
+			localbags_positions.append(localbag.position)
+		for bag in world_data.bags:
+			# Check if we already have that bag 
+			if not (bag.position in localbags_positions):
+				# Add the bag
+				var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
+				scene_instance.position = bag.position
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
 		# Check if any nodes got removed
 		# Players
 		for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").get_children():
