@@ -152,7 +152,6 @@ margin_right = 300.0
 custom_fonts/font = SubResource( 1 )
 text = "OFFLINE"
 valign = 1
-
 [connection signal="pressed" from="buttons/ButtonPlay" to="." method="_on_ButtonPlay_pressed"]
 [connection signal="pressed" from="buttons/ButtonSettings" to="." method="_on_ButtonSettings_pressed"]
 [connection signal="pressed" from="buttons/ButtonExit" to="." method="_on_ButtonExit_pressed"]
