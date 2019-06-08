@@ -10,6 +10,8 @@ export(NodePath) var playerNode = "../Entities/player"
 
 var playerBody : KinematicBody2D = null
 
+var near_a_bag = false
+
 func _ready():
 	playerBody = get_node("../Entities/player")
 	
@@ -22,6 +24,18 @@ func _process(delta):
 	if delta != 0:
 		fpsLabel.set_text("FPS: "+str(round(1/delta)))
 	
+	# Check if we are on an item bag
+	near_a_bag = false
+	for bag_pos in Global.world_data.bags:
+		if (bag_pos-playerBody.position).length() <= 16:
+			near_a_bag = true
+			break
+	if near_a_bag:
+		$CanvasLayer/InventoryButton.texture_normal = preload("res://assets/inventory/bag.png")
+		$CanvasLayer/InventoryButton/TouchScreenButton.normal = preload("res://assets/inventory/bag.png")
+	else:
+		$CanvasLayer/InventoryButton.texture_normal = preload("res://assets/UI/inventory_icon.png")
+		$CanvasLayer/InventoryButton/TouchScreenButton.normal = preload("res://assets/UI/inventory_icon.png")
 
 func _on_TouchScreenButton_pressed():
 	if not Global.paused:
@@ -56,8 +70,13 @@ func _on_InventoryButton_released():
 	if not Global.paused:
 		if not $CanvasLayer.has_node("Inventory"):
 			SoundPlayer.play(preload("res://assets/sounds/click.wav"))
-			var scene = preload("res://scenes/inventory/Inventory.tscn")
+			var scene
+			if near_a_bag:
+				scene = preload("res://scenes/inventory/Bag.tscn")
+			else:
+				scene = preload("res://scenes/inventory/Inventory.tscn")
 			var scene_instance = scene.instance()
+			scene_instance.set_name("Inventory")
 			$CanvasLayer.add_child(scene_instance)
 			setTouchpadsState(false)
 		else:

@@ -3,8 +3,11 @@ extends TextureButton
 var itemID = "woodsword"
 var quantity = 0
 var slotID = -1
+var in_bag = false
+
 var dragging = false
 var clicked = false
+
 
 var itemData = {}
 
@@ -15,9 +18,14 @@ onready var special_slots = [
 	get_node("../../Container/0")
 	]
 
-onready var drop_item_slot = get_node("../../Container/DropItem")
+var drop_item_slot
+
+var viewing_bag
 
 func _ready():
+	viewing_bag = get_node("../..").has_node("BagContainer")
+	if not viewing_bag:
+		drop_item_slot = get_node("../../Container/DropItem")
 	# Read the item data
 	itemData = Global.items[itemID]
 	
@@ -48,52 +56,118 @@ func _on_Item_button_up():
 				var free = true
 				var other_item
 				for item in get_node("..").get_children():
-					if item.slotID == int(slot.get_name()):
+					if item.slotID == int(slot.get_name()) and not item.in_bag:
 						free = false
 						other_item = item
 						break
+				# If the item previously was in a bag, and now is dragged to inventory
+				if in_bag:
+					# Drop the item to the bag
+					if not free:
+						Networking.dropItem(str(int(slot.get_name()))) # This str(int( thing might look dumb, but it's not. Don't remove it.
+					var bag_pos = get_node("../../BagContainer/ScrollContainer/GridContainer").bagPos
+					Networking.pickupItem(bag_pos, itemID, int(slot.get_name()))
 				if not free:
 					# Now just move the other item to the original item's position
 					other_item.rect_global_position = origin
 					other_item.slotID = slotID
 				rect_global_position = slot.rect_global_position+Vector2(8,8)
 				slotID = int(slot.get_name())
+				in_bag = false
 				# Inform the server about the changes
 				# Generate an appropriate dict
 				var newInv = {}
 				for item in get_node("..").get_children():
-					newInv[str(item.slotID)] = {"item_id" : item.itemID, "quantity" : item.quantity}
+					if not item.in_bag:
+						newInv[str(item.slotID)] = {"item_id" : item.itemID, "quantity" : item.quantity}
 				# Maybe weapon changed, so re-set stats
 				Global.charactersData[Global.charID].inventory = newInv
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
 				Networking.sendInventory(newInv)
 				return
+		
+		# It might also be on bag slots, if we're viewing a bag
+		if viewing_bag:
+			# Iterate through bag slots
+			for slot in get_node("../../BagContainer/ScrollContainer/GridContainer").get_children():
+				# Check x and y coordinates
+				var mousepos = slot.get_local_mouse_position()
+				if mousepos.x <= 64 and mousepos.x >= 0 and mousepos.y <= 64 and mousepos.y >= 0:
+					# Found the slot
+					# Check if it's free
+					var free = true
+					var other_item
+					var items_in_bag = 0
+					for item in get_node("..").get_children():
+						if item.in_bag:
+							items_in_bag += 1
+							if item.slotID == int(slot.get_name()):
+								free = false
+								other_item = item
+								break
+					# If the item was originally in the inventory and now is dragged to a bag
+					if not in_bag:
+						# Drop the item
+						Networking.dropItem(str(slotID))
+						# If the player is switching item with a bag
+						if not free:
+							# Now just move the bag item to inventory
+							other_item.rect_global_position = origin
+							var bag_pos = get_node("../../BagContainer/ScrollContainer/GridContainer").bagPos
+							Networking.pickupItem(bag_pos, other_item.itemID, slotID)
+							other_item.slotID = slotID
+							other_item.in_bag = in_bag
+					rect_global_position = slot.rect_global_position+Vector2(8,8)
+					
+					# If the slot was free, and the item was moved from inventory, we need
+					# to add 1 more slot, because player might want to drop another item
+					if free and not in_bag \
+						and get_node("../../BagContainer/ScrollContainer/GridContainer").get_child_count() == items_in_bag+1:
+						var scene = preload("res://scenes/inventory/InventorySlot.tscn")
+						var scene_instance = scene.instance()
+						scene_instance.set_name("B"+str(slot))
+						get_node("../../BagContainer/ScrollContainer/GridContainer").add_child(scene_instance)
+					
+					in_bag = true
+					slotID = int(slot.get_name())
+					# Inform the server about the changes
+					# Generate the new inventory dict
+					var newInv = {}
+					for item in get_node("..").get_children():
+						if not item.in_bag:
+							newInv[str(item.slotID)] = {"item_id" : item.itemID, "quantity" : item.quantity}
+					# Maybe weapon changed, so re-set stats
+					Global.charactersData[Global.charID].inventory = newInv
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
+					return
+		
 		# If it's not on any of the slots, then maybe it's on the DROP-ITEM plate
-		var rel_mouse_pos = drop_item_slot.get_local_mouse_position()
-		if rel_mouse_pos.x <= 300 and rel_mouse_pos.x >= 0 and rel_mouse_pos.y <= 120 and rel_mouse_pos.y >= 0:
-			# Drop the item on ground:
-			#   remove it from inventory
-			Global.charactersData[Global.charID].inventory.erase(str(slotID))
-			# It might have been the equipped weapon, so re-set weapon stats
-			get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
-			# Add a bag on the ground
-			# Maybe there's already a bag, so iterate through all bags to check
-			var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
-			var bag_exists = false
-			for bag in Global.world_data.bags:
-				if (bag.position-playernode.position).length() <= 16:
-					bag_exists = true
-					break
-			# If bag exists, we don't have to do anything - the server will take care of it
-			# However if it doesn't exist, we will have to add one.
-			if not bag_exists:
-				var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
-				scene_instance.position = playernode.position
-				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
-			# Inform the server
-			Networking.dropItem(str(slotID))
-			queue_free()
-			return
+		if not viewing_bag: # there's no DROP-ITEM slot when viewing a bag
+			var rel_mouse_pos = drop_item_slot.get_local_mouse_position()
+			if rel_mouse_pos.x <= 300 and rel_mouse_pos.x >= 0 and rel_mouse_pos.y <= 120 and rel_mouse_pos.y >= 0:
+				# Drop the item on ground:
+				#   remove it from inventory
+				Global.charactersData[Global.charID].inventory.erase(str(slotID))
+				# It might have been the equipped weapon, so re-set weapon stats
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
+				# Add a bag on the ground
+				# Maybe there's already a bag, so iterate through all bags to check
+				var playernode = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
+				var bag_exists = false
+				for bag_pos in Global.world_data.bags.keys():
+					if (bag_pos-playernode.position).length() <= 16:
+						bag_exists = true
+						break
+				# If bag exists, we don't have to do anything - the server will take care of it
+				# However if it doesn't exist, we will have to add one.
+				if not bag_exists:
+					var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
+					scene_instance.position = playernode.position
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
+				# Inform the server
+				Networking.dropItem(str(slotID))
+				queue_free()
+				return
 		rect_global_position = origin
 	else:
 		# Show info about item

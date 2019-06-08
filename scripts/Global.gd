@@ -25,7 +25,7 @@ var init_stats = {}
 var items = {}
 var item_types = {}
 
-var world_data = {}
+var world_data = {"players" : {}, "bags" : [], "enemies" : [], "npc" : []}
 
 # game paused
 var paused = false

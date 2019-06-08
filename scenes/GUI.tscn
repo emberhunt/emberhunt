@@ -45,7 +45,6 @@ normal = ExtResource( 2 )
 pressed = ExtResource( 2 )
 
 [node name="InventoryButton" type="TextureButton" parent="CanvasLayer"]
-editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -90.0
@@ -53,10 +52,6 @@ margin_top = 110.0
 margin_right = -10.0
 margin_bottom = 190.0
 texture_normal = ExtResource( 3 )
-texture_pressed = ExtResource( 3 )
-texture_hover = ExtResource( 3 )
-texture_disabled = ExtResource( 3 )
-texture_focused = ExtResource( 3 )
 expand = true
 __meta__ = {
 "_edit_group_": true
@@ -65,7 +60,6 @@ __meta__ = {
 [node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/InventoryButton"]
 scale = Vector2( 5, 5 )
 normal = ExtResource( 3 )
-pressed = ExtResource( 3 )
 
 [node name="debugLabel" type="Label" parent="CanvasLayer"]
 editor/display_folded = true

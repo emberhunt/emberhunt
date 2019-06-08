@@ -165,12 +165,12 @@ remote func receive_world_update(world_name, world_data, number):
 		var localbags_positions = []
 		for localbag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
 			localbags_positions.append(localbag.position)
-		for bag in world_data.bags:
+		for bag_pos in world_data.bags.keys():
 			# Check if we already have that bag 
-			if not (bag.position in localbags_positions):
+			if not (bag_pos in localbags_positions):
 				# Add the bag
 				var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
-				scene_instance.position = bag.position
+				scene_instance.position = bag_pos
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
 		# Check if any nodes got removed
 		# Players
@@ -179,8 +179,18 @@ remote func receive_world_update(world_name, world_data, number):
 			for playerdata in world_data.players.keys():
 				if player.get_name() == str(playerdata):
 					exists = true
+					break
 			if not exists:
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+player.get_name()).queue_free()
+		# Bags
+		for bag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
+			var exists = false
+			for bag_pos in world_data.bags.keys():
+				if bag.position == bag_pos:
+					exists = true
+					break
+			if not exists:
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags/"+bag.get_name()).queue_free()
 
 remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name, pos):
 	# Check if it was sent by the server and if im still in that world
@@ -259,7 +269,14 @@ func sendInventory(inventory):
 func dropItem(slot):
 	# Check if we are connected to the server
 	if connected:
+		print("Dropping item from slot "+str(slot))
 		rpc_id(1, "drop_item", get_tree().get_current_scene().get_name(), slot)
+
+func pickupItem(bag_pos, bag_item_id, inv_slot):
+	# Check if we are connected to the server
+	if connected:
+		print("Picking up "+str(bag_item_id)+" from bag in "+str(bag_pos)+" to "+str(inv_slot)+" inventory slot.")
+		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), bag_pos, bag_item_id, inv_slot)
 
 
 # # # # # # # # # # # # # #
@@ -286,5 +303,7 @@ remote func inventory_changes(inv):
 	pass
 remote func request_rand_seeds(how_many):
 	pass
-remote func drop_item(slot):
+remote func drop_item(world, slot):
+	pass
+remote func pickup_item(world, bag_pos, bag_item_id, inv_slot):
 	pass

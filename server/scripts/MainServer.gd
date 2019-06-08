@@ -361,34 +361,50 @@ remote func drop_item(world, slotID):
 				save_player_data(world, get_tree().get_rpc_sender_id())
 				# Add a bag on the ground
 				# Check if a bag on player's position already exists
-				for bag in worlds[world].bags:
-					if (bag.position-worlds[world].players[get_tree().get_rpc_sender_id()].position).length() <=16:
+				for bag_pos in worlds[world].bags.keys():
+					if (bag_pos-worlds[world].players[get_tree().get_rpc_sender_id()].position).length() <=16:
 						# Bag exists
 						# Add the item data to the bag
-						worlds[world].bags[worlds[world].bags.find(bag)].items.append(item_data) 
+						worlds[world].bags[bag_pos].append(item_data) 
 						return
-				# Bag doesn't exist
-				var new_bag_info = {
-					"position" : worlds[world].players[get_tree().get_rpc_sender_id()].position,
-					"items" : [item_data]
-					}
-				worlds[world].bags.append(new_bag_info)
+				# Bag doesn't exist, add one
+				worlds[world].bags[worlds[world].players[get_tree().get_rpc_sender_id()].position] = [item_data]
 
-remote func pickup_item(world, item_id, quantity):
+remote func pickup_item(world, bag_pos, bag_item_id, inv_slot):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			# Check if that item exists
-			if item_id in worlds[world].items:
-				# Check if enough of it is there
-				if quantity <= worlds[world].items[item_id].quantity:
-					# Check if the player should be able to pick it up
-					# with area2D or something, also check if they have
-					# enough space in their inventory
-					print("item pickup request")
-					# Pick it up
-					#worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot] = {"item_id" : item_id, "quantity" : quantity}
+			# Check if that bag exists
+			var bag_exists = false
+			var bag_info
+			for existing_bag_pos in worlds[world].bags.keys():
+				if existing_bag_pos == bag_pos:
+					bag_exists = true
+					bag_info = worlds[world].bags[bag_pos]
+					break
+			if bag_exists:
+				# Check if the the requested item is in that bag
+				var item_in_bag = false
+				var item_array_id
+				for item in bag_info:
+					if item.item_id == bag_item_id:
+						item_in_bag = true
+						item_array_id = bag_info.find(item)
+						break
+				if item_in_bag:
+					# If the player has that inventory slot and if it's free
+					if inv_slot in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+24):
+						if not worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(str(inv_slot)):
+							# It's all good
+							# Add the item
+							worlds[world].players[get_tree().get_rpc_sender_id()].inventory[str(inv_slot)] = bag_info[item_array_id]
+							# Remove item from bag
+							worlds[world].bags[bag_pos].erase(bag_info[item_array_id])
+							if worlds[world].bags[bag_pos].size()==0:
+								# Remove the bag, because it's empty
+								worlds[world].bags.erase(bag_pos)
+
 
 # # # # # #
 # SORTERS #
@@ -581,6 +597,7 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 			if not (player_id in exceptions):
 				# There's probably a better way to do this, but I'm not a pro
 				# And I couldn't find anything on the internet
+				# Feel free to improve
 				if args.size() == 0:
 					rpc_id(player_id, function_name)
 				elif args.size() == 1:
@@ -719,7 +736,7 @@ func initWorld(worldname):
 	ysort = YSort.new()
 	ysort.set_name("npc")
 	get_node("/root/MainServer/"+worldname+"/Entities").add_child(ysort)
-	worlds[worldname] = {"players" : {}, "bags" : [], "enemies" : {}, "npc" : {}}
+	worlds[worldname] = {"players" : {}, "bags" : {}, "enemies" : {}, "npc" : {}}
 	print(worldname+" created")
 
 func save_player_data(world, id):
