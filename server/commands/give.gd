@@ -59,5 +59,7 @@ func give(args = [], mainServer = null) -> String:
 			"item_id" : args[1],
 			"quantity" : quantity
 		}
+	# Save
+	mainServer.save_player_data(all_players[int(args[0])], int(args[0]))
 	return "Gave "+args[0]+" ("+player_data.nickname \
 		+") "+( str(quantity)+" " if quantity != "" else "")+args[1]

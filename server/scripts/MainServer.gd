@@ -404,6 +404,8 @@ remote func pickup_item(world, bag_pos, bag_item_id, inv_slot):
 							if worlds[world].bags[bag_pos].size()==0:
 								# Remove the bag, because it's empty
 								worlds[world].bags.erase(bag_pos)
+							# Save
+							save_player_data(world, get_tree().get_rpc_sender_id())
 
 
 # # # # # #
