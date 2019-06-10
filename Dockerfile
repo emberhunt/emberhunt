@@ -1,5 +1,5 @@
 # taken from https://github.com/vayan/docker-godot
-# just upped the version to 3.1.1 and removed template istallation
+# just upped the version to 3.1.1 and removed template installation
 
 FROM ubuntu:xenial
 
