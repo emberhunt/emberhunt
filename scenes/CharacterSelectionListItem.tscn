@@ -3,18 +3,24 @@
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=1]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=2]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=3]
-[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=4]
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
 region = Rect2( 305.75, 111.625, 12.375, 16.625 )
 
-[sub_resource type="DynamicFont" id=1]
-size = 70
+[sub_resource type="DynamicFont" id=2]
+size = 111
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=2]
-size = 70
+[sub_resource type="DynamicFont" id=3]
+size = 80
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 4 )
 
 [node name="Char" type="Container"]
@@ -41,7 +47,7 @@ margin_left = -43.0
 margin_top = 10.0
 margin_right = 43.0
 margin_bottom = 127.0
-texture = SubResource( 3 )
+texture = SubResource( 1 )
 expand = true
 stretch_mode = 5
 
@@ -52,18 +58,17 @@ margin_left = -247.0
 margin_top = 22.0
 margin_right = 247.0
 margin_bottom = 121.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Knight"
 
 [node name="Level" type="Label" parent="."]
 anchor_left = 0.9
 anchor_right = 0.9
-margin_left = -101.6
+margin_left = -221.6
 margin_top = 22.0
-margin_right = 60.0
-margin_bottom = 121.0
-custom_fonts/font = SubResource( 2 )
+margin_right = 81.3998
+margin_bottom = 139.0
+custom_fonts/font = SubResource( 3 )
 text = "11LvL"
 align = 2
 valign = 1
-

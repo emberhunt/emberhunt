@@ -5,10 +5,13 @@
 [ext_resource path="res://assets/inventory/items/woodsword.png" type="Texture" id=3]
 [ext_resource path="res://scripts/inventory/generateSlots.gd" type="Script" id=4]
 [ext_resource path="res://assets/inventory/dropItemSlot.png" type="Texture" id=5]
-[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=1]
-size = 34
+size = 70
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 6 )
 
 [node name="Inventory" type="Control"]
@@ -61,7 +64,6 @@ script = ExtResource( 4 )
 [node name="Items" type="Control" parent="Container/ScrollContainer"]
 
 [node name="DropItem" type="TextureRect" parent="Container"]
-editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -370.0

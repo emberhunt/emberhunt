@@ -1,24 +1,36 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/UI/main_menu_background_placeholder.jpg" type="Texture" id=1]
-[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/CharacterCreation.gd" type="Script" id=3]
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=4]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=5]
-[ext_resource path="res://assets/fonts/Gobold.tres" type="DynamicFont" id=6]
-[ext_resource path="res://scripts/SelectClass.gd" type="Script" id=7]
-[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=8]
+[ext_resource path="res://scripts/SelectClass.gd" type="Script" id=6]
+[ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=7]
 
-[sub_resource type="DynamicFont" id=1]
-size = 34
+[sub_resource type="DynamicFont" id=2]
+size = 111
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 8 )
+[sub_resource type="DynamicFont" id=12]
+size = 41
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 7 )
 region = Rect2( 320.25, 110.25, 15, 19.25 )
 
-[sub_resource type="DynamicFont" id=3]
-size = 110
+[sub_resource type="DynamicFont" id=13]
+size = 115
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 2 )
 
 [node name="CharacterSelection" type="Control"]
@@ -43,7 +55,7 @@ anchor_right = 0.5
 margin_left = -512.0
 margin_right = 512.0
 margin_bottom = 140.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Select Class"
 align = 1
 valign = 1
@@ -68,12 +80,11 @@ expand = true
 
 [node name="Label" type="Label" parent="Buttons/ButtonBack"]
 margin_right = 400.0
-margin_bottom = 45.0
-custom_fonts/font = ExtResource( 6 )
+margin_bottom = 57.0
+custom_fonts/font = SubResource( 12 )
 text = "Back"
 align = 1
 valign = 1
-uppercase = true
 
 [node name="ButtonFinish" type="TextureButton" parent="Buttons"]
 editor/display_folded = true
@@ -89,13 +100,12 @@ expand = true
 
 [node name="Label" type="Label" parent="Buttons/ButtonFinish"]
 margin_right = 400.0
-margin_bottom = 45.0
-custom_fonts/font = ExtResource( 6 )
+margin_bottom = 57.0
+custom_fonts/font = SubResource( 12 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 text = "Create"
 align = 1
 valign = 1
-uppercase = true
 
 [node name="marginContainer" type="MarginContainer" parent="."]
 editor/display_folded = true
@@ -139,7 +149,7 @@ margin_bottom = 1500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 150
-script = ExtResource( 7 )
+script = ExtResource( 6 )
 
 [node name="Knight" type="Container" parent="ScrollContainer/VBoxContainer"]
 editor/display_folded = true
@@ -164,7 +174,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Knight/Knight"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -174,7 +184,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Knight"
 align = 1
 valign = 1
@@ -204,7 +214,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Berserker/Berserker"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -214,7 +224,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Berserker"
 align = 1
 valign = 1
@@ -240,7 +250,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Assassin/Assassin"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -250,7 +260,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Assassin"
 align = 1
 valign = 1
@@ -276,7 +286,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Sniper/Sniper"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -286,7 +296,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Sniper"
 align = 1
 valign = 1
@@ -312,7 +322,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Hunter/Hunter"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -322,12 +332,13 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Hunter"
 align = 1
 valign = 1
 
 [node name="Pyromancer" type="Container" parent="ScrollContainer/VBoxContainer"]
+editor/display_folded = true
 margin_top = 750.0
 margin_right = 912.0
 margin_bottom = 750.0
@@ -347,7 +358,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Pyromancer/Pyromancer"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -357,7 +368,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Pyromancer"
 align = 1
 valign = 1
@@ -383,7 +394,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Brand/Brand"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -393,7 +404,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Brand"
 align = 1
 valign = 1
@@ -419,7 +430,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Herald/Herald"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -429,7 +440,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Herald"
 align = 1
 valign = 1
@@ -455,7 +466,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Redeemer/Redeemer"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -465,7 +476,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Redeemer"
 align = 1
 valign = 1
@@ -491,7 +502,7 @@ expand = true
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/Druid/Druid"]
 margin_right = 180.0
 margin_bottom = 150.0
-texture = SubResource( 2 )
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 6
 
@@ -501,7 +512,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 13 )
 text = "Druid"
 align = 1
 valign = 1
@@ -510,7 +521,6 @@ valign = 1
 margin_top = 1500.0
 margin_right = 912.0
 margin_bottom = 1500.0
-
 [connection signal="pressed" from="Buttons/ButtonBack" to="Buttons" method="_on_ButtonBack_pressed"]
 [connection signal="pressed" from="Buttons/ButtonFinish" to="Buttons" method="_on_ButtonFinish_pressed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Knight/Knight" to="ScrollContainer/VBoxContainer" method="_on_Knight_pressed"]

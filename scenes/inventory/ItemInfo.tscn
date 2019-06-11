@@ -1,26 +1,21 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/inventory/ItemInfo.gd" type="Script" id=1]
 [ext_resource path="res://assets/inventory/item_info_window.png" type="Texture" id=2]
-[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 34
-outline_size = 2
+size = 50
+outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=2]
-size = 22
+[sub_resource type="DynamicFont" id=15]
+size = 29
 outline_size = 1
-outline_color = Color( 0.294118, 0.294118, 0.294118, 1 )
-font_data = ExtResource( 3 )
-
-[sub_resource type="DynamicFont" id=3]
-size = 20
-outline_size = 1
-outline_color = Color( 0.294118, 0.294118, 0.294118, 1 )
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
 font_data = ExtResource( 3 )
 
 [node name="ItemInfo" type="Control"]
@@ -36,7 +31,6 @@ texture = ExtResource( 2 )
 expand = true
 
 [node name="Control" type="Control" parent="Background"]
-editor/display_folded = true
 margin_right = 600.0
 margin_bottom = 452.0
 
@@ -56,8 +50,8 @@ anchor_right = 1.0
 margin_left = 47.0
 margin_top = 81.0
 margin_right = -53.0
-margin_bottom = 174.0
-custom_fonts/font = SubResource( 2 )
+margin_bottom = 180.0
+custom_fonts/font = SubResource( 15 )
 text = "Description
 okok
 okok"
@@ -70,7 +64,7 @@ margin_left = 50.0
 margin_top = 175.0
 margin_right = -50.0
 margin_bottom = -245.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 15 )
 text = "Type"
 align = 1
 
@@ -81,7 +75,7 @@ anchor_bottom = 1.0
 margin_left = 50.0
 margin_top = -251.0
 margin_bottom = -106.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 15 )
 text = "info left"
 
 [node name="ItemInfoRight" type="Label" parent="Background/Control"]
@@ -92,7 +86,7 @@ anchor_bottom = 1.0
 margin_top = -251.0
 margin_right = -50.0
 margin_bottom = -106.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 15 )
 text = "info right"
 align = 2
 
@@ -105,7 +99,7 @@ margin_left = -550.0
 margin_top = -103.0
 margin_right = -50.0
 margin_bottom = -76.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 15 )
 text = "Rarity"
 align = 2
 valign = 1

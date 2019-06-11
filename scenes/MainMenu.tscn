@@ -6,12 +6,15 @@
 [ext_resource path="res://assets/title.png" type="Texture" id=4]
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
-[ext_resource path="res://assets/fonts/Gobold.tres" type="DynamicFont" id=7]
-[ext_resource path="res://assets/fonts/Gobold Regular.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/emberfont/emberfont.tres" type="DynamicFont" id=8]
 
-[sub_resource type="DynamicFont" id=1]
-size = 34
-font_data = ExtResource( 8 )
+[sub_resource type="DynamicFont" id=12]
+size = 41
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 7 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -53,7 +56,6 @@ texture = ExtResource( 4 )
 stretch_mode = 6
 
 [node name="buttons" type="Container" parent="."]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -64,7 +66,6 @@ margin_right = 220.0
 margin_bottom = 220.0
 
 [node name="ButtonPlay" type="TextureButton" parent="buttons"]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -200.0
@@ -75,16 +76,15 @@ texture_pressed = ExtResource( 6 )
 expand = true
 
 [node name="Label" type="Label" parent="buttons/ButtonPlay"]
+margin_top = 2.0
 margin_right = 400.0
-margin_bottom = 50.0
-custom_fonts/font = ExtResource( 7 )
+margin_bottom = 49.0
+custom_fonts/font = SubResource( 12 )
 text = "Play"
 align = 1
-valign = 1
-uppercase = true
+valign = 2
 
 [node name="ButtonSettings" type="TextureButton" parent="buttons"]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -200.0
@@ -97,15 +97,13 @@ expand = true
 
 [node name="Label" type="Label" parent="buttons/ButtonSettings"]
 margin_right = 400.0
-margin_bottom = 50.0
-custom_fonts/font = ExtResource( 7 )
+margin_bottom = 51.0
+custom_fonts/font = SubResource( 12 )
 text = "Settings"
 align = 1
 valign = 1
-uppercase = true
 
 [node name="ButtonExit" type="TextureButton" parent="buttons"]
-editor/display_folded = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -200.0
@@ -118,12 +116,11 @@ expand = true
 
 [node name="Label" type="Label" parent="buttons/ButtonExit"]
 margin_right = 400.0
-margin_bottom = 50.0
-custom_fonts/font = ExtResource( 7 )
+margin_bottom = 59.0
+custom_fonts/font = SubResource( 12 )
 text = "Exit"
 align = 1
 valign = 1
-uppercase = true
 
 [node name="marginContainer" type="MarginContainer" parent="."]
 editor/display_folded = true
@@ -149,7 +146,7 @@ anchor_bottom = 1.0
 margin_left = 20.0
 margin_top = -70.0
 margin_right = 300.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = ExtResource( 8 )
 text = "OFFLINE"
 valign = 1
 [connection signal="pressed" from="buttons/ButtonPlay" to="." method="_on_ButtonPlay_pressed"]

@@ -106,6 +106,5 @@ margin_left = 2.3327
 margin_top = 18.6617
 margin_right = 42.3327
 margin_bottom = 32.6617
-
 [connection signal="pressed" from="CanvasLayer/PauseButton/TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
 [connection signal="released" from="CanvasLayer/InventoryButton/TouchScreenButton" to="." method="_on_InventoryButton_released"]

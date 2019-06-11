@@ -16,11 +16,7 @@ func _ready():
 		get_node("../../Buttons/ButtonCreate/Label").set("custom_colors/font_color",Color(0.6431372549,0.6431372549,0.6431372549))
 	# Check if there are any characters
 	if Global.charactersData.size() == 0:
-		var node = Label.new()
-		node.set_name("noCharactersYet")
-		node.set_text("It looks like you don't have any characters yet.")
-		add_child(node)
-		move_child(node, 0)
+		get_node("Label").set_visible(true)
 	# Generate List Items based on character data
 	for i in range(Global.charactersData.size()):
 		var scene = preload("res://scenes/CharacterSelectionListItem.tscn")
@@ -46,7 +42,7 @@ func pressed(whichChar):
 		get_node("../../Buttons/ButtonPlay/Label").set("custom_colors/font_color",Color(0.6431372549,0.6431372549,0.6431372549))
 	for Char in get_children():
 		# Check if this is not span or me
-		if Char.get_name() == "span" or Char.get_name() == "Char"+whichChar:
+		if Char.get_name() == "span" or Char.get_name() == "Char"+whichChar or Char.get_name() == "Label":
 			continue
 		Char.get_node("TextureButton").set_pressed(false)
 	pass
