@@ -1,0 +1,3 @@
+[submodule "assets/emberfont"]
+	path = assets/emberfont
+	url = https://github.com/emberhunt/emberfont.git
