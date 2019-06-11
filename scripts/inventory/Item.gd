@@ -65,7 +65,7 @@ func _input(event):
 						var other_item
 						for item in get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/Container/ScrollContainer/Items").get_children() \
 							+get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/Container/ItemsInSpecialSlots").get_children():
-							if item.slotID == int(slot.get_name()) and not item.in_bag:
+							if item.slotID == int(slot.get_name()):
 								free = false
 								other_item = item
 								break
@@ -75,7 +75,7 @@ func _input(event):
 							if not free:
 								Networking.dropItem(str(int(slot.get_name())))
 								# This str(int( thing might look dumb, but it's not. Don't remove it.
-							var bag_pos = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/Container/ScrollContainer/GridContainer").bagPos
+							var bag_pos = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/GridContainer").bagPos
 							Networking.pickupItem(bag_pos, itemID, int(slot.get_name()))
 						if not free:
 							# Now just move the other item to the original item's position
@@ -107,11 +107,11 @@ func _input(event):
 						get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/weapon").set_stats()
 						Networking.sendInventory(newInv)
 						return
-				######HERE
+				
 				# It might also be on bag slots, if we're viewing a bag
 				if viewing_bag:
 					# Iterate through bag slots
-					for slot in get_node("../../BagContainer/ScrollContainer/GridContainer").get_children():
+					for slot in get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/GridContainer").get_children():
 						# Check x and y coordinates
 						var mousepos = slot.get_local_mouse_position()
 						if mousepos.x <= 64 and mousepos.x >= 0 and mousepos.y <= 64 and mousepos.y >= 0:
@@ -119,14 +119,11 @@ func _input(event):
 							# Check if it's free
 							var free = true
 							var other_item
-							var items_in_bag = 0
-							for item in get_node("..").get_children():
-								if item.in_bag:
-									items_in_bag += 1
-									if item.slotID == int(slot.get_name()):
-										free = false
-										other_item = item
-										break
+							for item in get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/Items").get_children():
+								if item.slotID == int(slot.get_name()):
+									free = false
+									other_item = item
+									break
 							# If the item was originally in the inventory and now is dragged to a bag
 							if not in_bag:
 								# Drop the item
@@ -134,21 +131,30 @@ func _input(event):
 								# If the player is switching item with a bag
 								if not free:
 									# Now just move the bag item to inventory
+									# Reparent:
+									var invItems = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/Container/ScrollContainer/Items")
+									other_item.get_parent().remove_child(other_item)
+									invItems.add_child(other_item)
 									other_item.rect_global_position = origin
-									var bag_pos = get_node("../../BagContainer/ScrollContainer/GridContainer").bagPos
+									var bag_pos = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/GridContainer").bagPos
 									Networking.pickupItem(bag_pos, other_item.itemID, slotID)
 									other_item.slotID = slotID
 									other_item.in_bag = in_bag
+							# Move the self item:
+							# Reparent
+							var bagItems = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/Items")
+							get_parent().remove_child(self)
+							bagItems.add_child(self)
 							rect_global_position = slot.rect_global_position+Vector2(8,8)
 							
 							# If the slot was free, and the item was moved from inventory, we need
 							# to add 1 more slot, because player might want to drop another item
 							if free and not in_bag \
-								and get_node("../../BagContainer/ScrollContainer/GridContainer").get_child_count() == items_in_bag+1:
+								and get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/GridContainer").get_child_count() == get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/Items").get_child_count():
 								var scene = preload("res://scenes/inventory/InventorySlot.tscn")
 								var scene_instance = scene.instance()
 								scene_instance.set_name("B"+str(slot))
-								get_node("../../BagContainer/ScrollContainer/GridContainer").add_child(scene_instance)
+								get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/GridContainer").add_child(scene_instance)
 							
 							in_bag = true
 							slotID = int(slot.get_name())
@@ -192,9 +198,13 @@ func _input(event):
 						return
 				# If the item was dropped not on a slot
 				
-				if slotID > 3:
+				if slotID > 3 and not in_bag:
 					# Move self-item back to the scrollcontainer
 					var scrollcontainer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/Container/ScrollContainer/Items")
+					get_parent().remove_child(self)
+					scrollcontainer.add_child(self)
+				if in_bag:
+					var scrollcontainer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory/BagContainer/ScrollContainer/Items")
 					get_parent().remove_child(self)
 					scrollcontainer.add_child(self)
 				rect_global_position = origin
@@ -248,7 +258,7 @@ func _process(delta):
 			rect_global_position = get_global_mouse_position()-Vector2(24,24)
 			# Move the item out of scroll container, to make it appear above all items
 			# (doesn't apply to items in special slots)
-			if slotID > 3:
+			if slotID > 3 or in_bag:
 				var outside = get_node("../../../..")
 				get_parent().remove_child(self)
 				outside.add_child(self)

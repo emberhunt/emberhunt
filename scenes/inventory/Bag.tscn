@@ -11,7 +11,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Container" type="Control" parent="."]
-editor/display_folded = true
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_right = -72.0
@@ -39,7 +38,6 @@ texture = ExtResource( 3 )
 centered = false
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Container"]
-editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 40.0
@@ -53,6 +51,12 @@ custom_constants/vseparation = 2
 custom_constants/hseparation = 2
 columns = 5
 script = ExtResource( 4 )
+
+[node name="Items" type="Control" parent="Container/ScrollContainer"]
+
+[node name="ItemsInSpecialSlots" type="Control" parent="Container"]
+margin_right = 40.0
+margin_bottom = 40.0
 
 [node name="BagContainer" type="Control" parent="."]
 anchor_left = 0.5
@@ -92,6 +96,4 @@ custom_constants/hseparation = 2
 columns = 5
 script = ExtResource( 4 )
 
-[node name="Items" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="Items" type="Control" parent="BagContainer/ScrollContainer"]
