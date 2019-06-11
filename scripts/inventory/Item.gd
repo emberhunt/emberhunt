@@ -239,7 +239,7 @@ func _input(event):
 				info_window.get_node("Background/Control/ItemInfoLeft").set_text(infoLeft)
 				info_window.get_node("Background/Control/ItemInfoRight").set_text(infoRight)
 				info_window.get_node("Background/Control/ItemRarity").set_text("Rarity: "+str(itemData.rarity))
-				get_node("../../..").add_child(info_window)
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory").add_child(info_window)
 
 func dict_to_string(dict):
 	if dict.size() == 0:
