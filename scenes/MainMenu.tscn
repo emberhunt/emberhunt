@@ -7,9 +7,9 @@
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
 [ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=7]
-[ext_resource path="res://assets/emberfont/emberfont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://assets/emberfont.tres" type="DynamicFont" id=8]
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=1]
 size = 41
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
@@ -79,7 +79,7 @@ expand = true
 margin_top = 2.0
 margin_right = 400.0
 margin_bottom = 49.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "Play"
 align = 1
 valign = 2
@@ -98,7 +98,7 @@ expand = true
 [node name="Label" type="Label" parent="buttons/ButtonSettings"]
 margin_right = 400.0
 margin_bottom = 51.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "Settings"
 align = 1
 valign = 1
@@ -117,7 +117,7 @@ expand = true
 [node name="Label" type="Label" parent="buttons/ButtonExit"]
 margin_right = 400.0
 margin_bottom = 59.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "Exit"
 align = 1
 valign = 1
