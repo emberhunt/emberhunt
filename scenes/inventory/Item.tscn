@@ -17,4 +17,3 @@ align = 2
 valign = 1
 clip_text = true
 [connection signal="button_down" from="." to="." method="_on_Item_button_down"]
-[connection signal="button_up" from="." to="." method="_on_Item_button_up"]

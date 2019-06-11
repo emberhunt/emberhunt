@@ -43,6 +43,7 @@ texture = ExtResource( 3 )
 centered = false
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Container"]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 40.0
@@ -56,6 +57,8 @@ custom_constants/vseparation = 2
 custom_constants/hseparation = 2
 columns = 12
 script = ExtResource( 4 )
+
+[node name="Items" type="Control" parent="Container/ScrollContainer"]
 
 [node name="DropItem" type="TextureRect" parent="Container"]
 editor/display_folded = true
@@ -79,6 +82,6 @@ text = "drop"
 align = 1
 valign = 1
 
-[node name="Items" type="Control" parent="."]
+[node name="ItemsInSpecialSlots" type="Control" parent="Container"]
 margin_right = 40.0
 margin_bottom = 40.0
