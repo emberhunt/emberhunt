@@ -13,9 +13,9 @@ This project is completely free and open-source mobile MMORPG game, created with
 
 A God of Darkness sends knights of darkness to the surface world to conquer it, but the Royal Empire resists. The player is one of those dark knights who must explore the world, killing everyone who is not a dark knight (cooperative style) and gathering items, gaining experience, leveling up and becoming stronger.
 
-## Submodules
+## Set up
 
-This repository contains submodules, so before working on it/exporting always make sure that you have the latest versions of them, by executing [update_submodules.sh](update_submodules.sh).
+Before working on the project, make sure that you have the latest version of the [emberfont](https://github.com/emberhunt/emberfont). To do that, just execute [update_font.sh](update_font.sh)
 
 ## Contributing
 
