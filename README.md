@@ -13,6 +13,10 @@ This project is completely free and open-source mobile MMORPG game, created with
 
 A God of Darkness sends knights of darkness to the surface world to conquer it, but the Royal Empire resists. The player is one of those dark knights who must explore the world, killing everyone who is not a dark knight (cooperative style) and gathering items, gaining experience, leveling up and becoming stronger.
 
+## Submodules
+
+This repository contains submodules, so before working on it/exporting always make sure that you have the latest versions of them, by executing [update_submodules.sh](update_submodules.sh).
+
 ## Contributing
 
 Everyone is welcome to contribute and help develop this project. We need programmers, artists, sound-engineers, testers, writers... If you want to help, just [join our discord](https://discord.gg/eEVGG7v), and we will discuss how you can help.

@@ -1,2 +1,3 @@
 *.pswd
 dev_tools/*.json
+assets/emberfont/*
