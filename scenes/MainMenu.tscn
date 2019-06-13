@@ -7,7 +7,8 @@
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
 [ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=7]
-[ext_resource path="res://assets/emberfont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://assets/emberfont/emberfont.tres" type="DynamicFont" id=8]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 41
