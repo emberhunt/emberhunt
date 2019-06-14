@@ -11,7 +11,7 @@ This project is completely free and open-source mobile MMORPG game, created with
 
 ## Lore
 
-A God of Darkness sends knights of darkness to the surface world to conquer it, but the Royal Empire resists. The player is one of those dark knights who must explore the world, killing everyone who is not a dark knight (cooperative style) and gathering items, gaining experience, leveling up and becoming stronger.
+The Dark Lord has fallen, and the alliance rejoices in victory. The last battalion lies in ruins and remains of the dark army hide under the stones. Who would stand for what the Dark Lord believed in? Who would tear the broken blade out of cold hands of those who rested untimely? Pick up the blade! Burn down your foes! Gather your friends and siege the deepest dungeons, the highest peaks to reclaim the Lords power to depose the forces of the Empire! Get your best gear, grind to the highest level and march through the gates of the High Inquisitor palace!
 
 ## Set up
 
