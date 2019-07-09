@@ -3,7 +3,7 @@
 [//]: <> (Licensed under the GNU General Public License v3.0 or later)
 [//]: <> (SPDX-License-Identifier: GPL-3.0-or-later)
 
-![Emberhunt logo](https://i.imgur.com/YqUsW5u.png)
+![Emberhunt logo](https://i.imgur.com/RyI6qDt.png)
 # Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Commit activity](https://img.shields.io/github/last-commit/PonasKovas/emberhunt.svg?color=yellow) [![Server Status](http://mykolo.we2host.lt/pingServer?)](http://mykolo.we2host.lt/pingServer) [![License](https://img.shields.io/badge/license-GPLv3%2FCC--BY--NC--SA-blue.svg)](LICENSE)
 
 
