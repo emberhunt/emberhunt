@@ -6,8 +6,8 @@
 func exit(args = [], mainServer = null) -> String:
 	if mainServer == null:
 		return "Instance of MainServer.gd is invalid"
-	if args[0] == 0:
+	if args.empty() or args[0] == "0":
 		mainServer.get_tree().quit()
-	elif args[0] == 1:
+	else:
 		var exception = mainServer.doSomethingToCrash()
 	return "Exited"
