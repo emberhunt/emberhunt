@@ -22,4 +22,4 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 
-CMD unbuffer godot -d server/scenes/MainServer.tscn 2>&1 | tee /var/log/server_log.txt ; echo "Server died!!!" | netcat emberhunt_discord 11268 -w1 
+CMD backtrace=$(unbuffer godot -d server/scenes/MainServer.tscn 2>&1 | tee /var/log/server_log.txt | tail -10) ; echo ":gear: **SERVER CRASHED** :gear:\n```$backtrace```" | netcat emberhunt_discord 11268 -w1 
