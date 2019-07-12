@@ -6,7 +6,7 @@
 func help(args = [], mainServer = null) -> String:
 	var result = ""
 	if args.size() == 0:
-		result = "Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments\n\t* fps - gives server FPS (frames per second)\n\t* get_player_data <nickname> - gives the account data with nickname as parameter\n\t* get_account_data <uuid> - gives the account data with UUID as parameter\n\t* worlds [world_name] [players|bags|enemies|npc] [...] - gives the world data with optional parameters\n\t* give <player id> <item id> [amount] - gives a player an item"
+		result = "Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments\n\t* fps - gives server FPS (frames per second)\n\t* get_player_data <nickname> - gives the account data with nickname as parameter\n\t* get_account_data <uuid> - gives the account data with UUID as parameter\n\t* worlds [world_name] [players|bags|enemies|npc] [...] - gives the world data with optional parameters\n\t* give <player id> <item id> [amount] - gives a player an item\n\t* exit - shuts down the server"
 	elif args.size() > 1:
 		result = "help: Too many arguments!"
 	else:
@@ -22,6 +22,8 @@ func help(args = [], mainServer = null) -> String:
 			result = "\nworlds - gives the world data with optional parameters \n\nUSAGE:\tworlds [world_name] [players|bags|enemies|npc] [...]"
 		elif args[0] == "give":
 			result = "\ngive - gives a player an item \n\nUSAGE:\tgive <player id> <item id> [amount]"
+		elif args[0] == "exit":
+			result = "\nexit - shuts down the server. Use with caution!"
 		else:
 			result = "help: There's no help page for this command ("+args[0]+")"
 	return result
