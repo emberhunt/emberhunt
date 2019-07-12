@@ -9,5 +9,5 @@ func exit(args = [], mainServer = null) -> String:
 	if args.empty() or args[0] == "0":
 		mainServer.get_tree().quit()
 	else:
-		var exception = mainServer.doSomethingToCrash()
+		I wonder if a syntax error will crash it?
 	return "Exited"
