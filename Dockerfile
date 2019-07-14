@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     python \
+    netcat \
     python-openssl \
     && rm -rf /var/lib/apt/lists/ \
     && wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_server.64.zip \
@@ -21,4 +22,4 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 
-CMD unbuffer godot -d server/scenes/MainServer.tscn 2>&1 | tee /var/log/server_log.txt
+CMD unbuffer godot -d server/scenes/MainServer.tscn 2>&1 | tee /var/log/server_log.txt ; BACKTRACE=$(tail /var/log/server_log.txt) ; printf ":skull_crossbones: **SERVER CRASHED** :skull_crossbones: \n \`\`\`%b\`\`\`" "$BACKTRACE" | netcat emberhunt_discord 11268 -w1 
