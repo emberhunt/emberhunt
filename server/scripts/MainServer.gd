@@ -890,48 +890,7 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 	if world in worlds:
 		for player_id in worlds[world].players.keys():
 			if not (player_id in exceptions):
-				# There's probably a better way to do this, but I'm not a pro
-				# And I couldn't find anything on the internet
-				# Feel free to improve
-				
-				# Note from the future me:
-				# Probably `callv()` is the answer here,
-				# but I don't have time to fix it right now,
-				# So if you see this, feel free to do it yourself
-				# Or remind me (I'm Ponas)
-				if args.size() == 0:
-					rpc_id(player_id, function_name)
-				elif args.size() == 1:
-					rpc_id(player_id, function_name, args[0])
-				elif args.size() == 2:
-					rpc_id(player_id, function_name, args[0], args[1])
-				elif args.size() == 3:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2])
-				elif args.size() == 4:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3])
-				elif args.size() == 5:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4])
-				elif args.size() == 6:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4], args[5])
-				elif args.size() == 7:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4], args[5], args[6])
-				elif args.size() == 8:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4], args[5], args[6],
-						args[7])
-				elif args.size() == 9:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4], args[5], args[6],
-						args[7], args[8])
-				elif args.size() == 10:
-					rpc_id(player_id, function_name, args[0], args[1],
-						args[2], args[3], args[4], args[5], args[6],
-						args[7], args[8], args[9])
+				callv("rpc_id", [player_id, function_name]+args)
 
 func listenForCommands(userdata):
 	# Get the password hash from cp.pswd
