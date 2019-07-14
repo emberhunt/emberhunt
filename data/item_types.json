@@ -1,9 +1,18 @@
 {
 	"sword" : {
-		"classes" : ["knight","berzerker","druid"],
+		"special_slots" : {
+			"0" : ["knight","berzerker"]
+			},
 		"slot" : 0,
 		"stack_size" : 1,
+		"consumable" : false,
 		"infoLeft": "Damage: {damage}\nStat restrictions: {stat_restrictions}\nStat effects: {stat_effects}",
 		"infoRight" : "Fire rate: {fire_rate}\nRange: {bullet_range}\nShots per attack: {bullets}"
+	},
+	"potion" : {
+		"stack_size" : 99,
+		"consumable" : true,
+		"infoLeft": "Heal: {heal}\nStat effects: {stat_effects}",
+		"infoRight" : "Magic Heal: {mheal}"
 	}
 }

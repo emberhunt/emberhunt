@@ -20,7 +20,7 @@ func changeFinishButtonState(state):
 func _on_Knight_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Knight/Knight").is_pressed():
-		selected = "Knight"
+		selected = "knight"
 		changeFinishButtonState(true)
 		get_node("Berserker/Berserker").set_pressed(false)
 		get_node("Assassin/Assassin").set_pressed(false)
@@ -39,7 +39,7 @@ func _on_Knight_pressed():
 func _on_Berserker_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Berserker/Berserker").is_pressed():
-		selected = "Berserker"
+		selected = "berserker"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Assassin/Assassin").set_pressed(false)
@@ -58,7 +58,7 @@ func _on_Berserker_pressed():
 func _on_Assassin_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Assassin/Assassin").is_pressed():
-		selected = "Assassin"
+		selected = "assassin"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -77,7 +77,7 @@ func _on_Assassin_pressed():
 func _on_Sniper_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Sniper/Sniper").is_pressed():
-		selected = "Sniper"
+		selected = "sniper"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -96,7 +96,7 @@ func _on_Sniper_pressed():
 func _on_Hunter_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Hunter/Hunter").is_pressed():
-		selected = "Hunter"
+		selected = "hunter"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -115,7 +115,7 @@ func _on_Hunter_pressed():
 func _on_Pyromancer_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Pyromancer/Pyromancer").is_pressed():
-		selected = "Pyromancer"
+		selected = "pyromancer"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -134,7 +134,7 @@ func _on_Pyromancer_pressed():
 func _on_Brand_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Brand/Brand").is_pressed():
-		selected = "Brand"
+		selected = "brand"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -153,7 +153,7 @@ func _on_Brand_pressed():
 func _on_Herald_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Herald/Herald").is_pressed():
-		selected = "Herald"
+		selected = "herald"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -172,7 +172,7 @@ func _on_Herald_pressed():
 func _on_Redeemer_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Redeemer/Redeemer").is_pressed():
-		selected = "Redeemer"
+		selected = "redeemer"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)
@@ -191,7 +191,7 @@ func _on_Redeemer_pressed():
 func _on_Druid_pressed():
 	SoundPlayer.play(preload("res://assets/sounds/click.wav"))
 	if get_node("Druid/Druid").is_pressed():
-		selected = "Druid"
+		selected = "druid"
 		changeFinishButtonState(true)
 		get_node("Knight/Knight").set_pressed(false)
 		get_node("Berserker/Berserker").set_pressed(false)

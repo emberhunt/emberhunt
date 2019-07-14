@@ -31,4 +31,3 @@ drag_margin_right = 0.02
 drag_margin_bottom = 0.02
 
 [node name="weapon" parent="." instance=ExtResource( 3 )]
-

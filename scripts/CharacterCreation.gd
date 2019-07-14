@@ -25,7 +25,7 @@ func _on_ButtonFinish_pressed():
 		"luck" : Global.init_stats[selectedClass].luck,
 		"physical_defense" : Global.init_stats[selectedClass].physical_defense,
 		"magic_defense" : Global.init_stats[selectedClass].magic_defense,
-		"inventory" : Global.init_stats[selectedClass].inventory
+		"inventory" : Global.init_stats[selectedClass].inventory.duplicate(true)
 	}
 	Global.charactersData[str(Global.charactersData.size())] = charData
 	# Send the selected class to the server

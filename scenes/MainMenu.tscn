@@ -9,7 +9,6 @@
 [ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://assets/emberfont/emberfont.tres" type="DynamicFont" id=8]
 
-
 [sub_resource type="DynamicFont" id=1]
 size = 41
 outline_size = 1

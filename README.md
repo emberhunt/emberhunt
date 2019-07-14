@@ -46,4 +46,4 @@ Emberhunt uses 2 licenses.
  - Assets ― [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](LICENSE.CC-BY-NC-SA-4.0)
    - The [CC-BY-NC-SA 4.0 license](LICENSE.CC-BY-NC-SA-4.0) applies to all files in [assets](assets) folder, except for files with `.import` file extension.
  - Code ― [GNU GENERAL PUBLIC LICENSE](LICENSE.GPL-3.0)
-   - The [GPLv3 license](LICENSE.GPL-3.0) applies to all non-asset files.
+   - The [GPLv3 license](LICENSE.GPL-3.0) applies to all non-asset files, unless specified otherwise.

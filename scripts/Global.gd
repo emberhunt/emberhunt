@@ -30,7 +30,7 @@ var init_stats = {}
 var items = {}
 var item_types = {}
 
-var world_data = {"players" : {}, "bags" : [], "enemies" : [], "npc" : []}
+var world_data = {"players" : {}, "bags" : {}, "enemies" : {}, "npc" : {}}
 
 # game paused
 var paused = false
@@ -99,6 +99,12 @@ func spawnPlayerAndGUI(world_name):
 	node.set_name("npc")
 	get_node("/root/"+world_name+"/Entities").add_child(node)
 	
+	# Spawn bags
+	for bag_pos in world_data.bags.keys():
+		var bag_instance = preload("res://scenes/inventory/Bag.tscn").instance()
+		bag_instance.position = bag_pos
+		get_node("/root/"+world_name+"/Entities/bags").add_child(bag_instance)
+	
 
 func WorldReady(world_name):
 	if worldReadyFunctions.has(world_name):
@@ -118,13 +124,45 @@ func _load_bullets():
 		
 func _load_item_sprites():
 	var directory = Directory.new()
-	if directory.open("res://assets/inventory/items/") == OK:
+	if directory.open("res://assets/UI/inventory/items/") == OK:
 		directory.list_dir_begin()
 		var file_name = directory.get_next()
 		while( file_name != ""):
 			# Godot is weird
-			if file_name.ends_with(".png.import"):
-				loaded_item_sprites[file_name.trim_suffix(".png.import")] = load("res://assets/inventory/items/"+file_name.replace(".import",""))
+			if file_name.ends_with(".import"):
+				loaded_item_sprites[file_name.trim_suffix(".import")] = load("res://assets/UI/inventory/items/"+file_name.replace(".import",""))
 			file_name = directory.get_next()
 	else:
-		print("Error opening res://assets/inventory/items/")
+		print("Error opening res://assets/UI/inventory/items/")
+
+func get_item_sprite(item_id):
+	var size
+	var not_found
+	if quality == "High":
+		size = "_216x216"
+		not_found = preload("res://assets/UI/sprite_not_found_216x216.png")
+	elif quality=="Medium":
+		size = "_108x108"
+		not_found = preload("res://assets/UI/sprite_not_found_108x108.png")
+	else:
+		size = "_54x54"
+		not_found = preload("res://assets/UI/sprite_not_found_54x54.png")
+	if items[ item_id ].has("icon"):
+		var file_name = items[ item_id ].icon.get_basename()+size+"."+items[ item_id ].icon.get_extension()
+		if loaded_item_sprites.has(file_name):
+			return loaded_item_sprites[ file_name ]
+	return not_found
+
+func find_position_for_bag():
+	# We will pick a random position that is near enough
+	# We cannot risk on generating a position that some bag already has
+	# So we will put this in a loop
+	var player_pos = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player").position
+	while true:
+		randomize()
+		var rotation = rand_range(-PI, PI)
+		var vector_from_playernode = Vector2(sin(rotation), -cos(rotation))*11
+		# Check if there's already a bag on the generated position
+		if vector_from_playernode+player_pos in Global.world_data.bags.keys():
+			continue
+		return vector_from_playernode

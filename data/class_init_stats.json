@@ -1,5 +1,5 @@
 {
-	"Knight" : {
+	"knight" : {
 		"max_hp" : 160,
 		"max_mp" : 120,
 		"strength" : 8,
@@ -9,10 +9,12 @@
 		"physical_defense" : 18,
 		"magic_defense" : 11,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"0": {"item_id":"woodsword","quantity":""},
+			"1": {"item_id":"testsword","quantity":""},
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Berserker" : {
+	"berserker" : {
 		"max_hp" : 120,
 		"max_mp" : 115,
 		"strength" : 15,
@@ -22,10 +24,11 @@
 		"physical_defense" : 12,
 		"magic_defense" : 7,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"0": {"item_id":"woodsword","quantity":""},
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Assassin" : {
+	"assassin" : {
 		"max_hp" : 100,
 		"max_mp" : 100,
 		"strength" : 6,
@@ -35,10 +38,10 @@
 		"physical_defense" : 7,
 		"magic_defense" : 7,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Sniper" : {
+	"sniper" : {
 		"max_hp" : 80,
 		"max_mp" : 125,
 		"strength" : 9,
@@ -48,10 +51,10 @@
 		"physical_defense" : 6,
 		"magic_defense" : 6,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Hunter" : {
+	"hunter" : {
 		"max_hp" : 90,
 		"max_mp" : 115,
 		"strength" : 6,
@@ -61,10 +64,10 @@
 		"physical_defense" : 6,
 		"magic_defense" : 6,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Pyromancer" : {
+	"pyromancer" : {
 		"max_hp" : 70,
 		"max_mp" : 200,
 		"strength" : 3,
@@ -74,10 +77,10 @@
 		"physical_defense" : 4,
 		"magic_defense" : 16,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Brand" : {
+	"brand" : {
 		"max_hp" : 70,
 		"max_mp" : 180,
 		"strength" : 4,
@@ -87,10 +90,10 @@
 		"physical_defense" : 4,
 		"magic_defense" : 15,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Herald" : {
+	"herald" : {
 		"max_hp" : 110,
 		"max_mp" : 240,
 		"strength" : 3,
@@ -100,10 +103,10 @@
 		"physical_defense" : 5,
 		"magic_defense" : 19,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Redeemer" : {
+	"redeemer" : {
 		"max_hp" : 65,
 		"max_mp" : 165,
 		"strength" : 2,
@@ -113,10 +116,10 @@
 		"physical_defense" : 5,
 		"magic_defense" : 18,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	},
-	"Druid" : {
+	"druid" : {
 		"max_hp" : 65,
 		"max_mp" : 170,
 		"strength" : 4,
@@ -126,7 +129,7 @@
 		"physical_defense" : 4,
 		"magic_defense" : 18,
 		"inventory" : {
-			"0": {"item_id":"woodsword","quantity":""}
+			"15": {"item_id":"healthpotion","quantity":5}
 		}
 	}
 }

@@ -7,7 +7,7 @@
 [ext_resource path="res://assets/emberfont/emberfont.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://scripts/CharacterSelection.gd" type="Script" id=6]
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=1]
 size = 41
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
@@ -51,7 +51,7 @@ expand = true
 [node name="Label" type="Label" parent="Buttons/ButtonBack"]
 margin_right = 400.0
 margin_bottom = 55.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "Back"
 align = 1
 valign = 1
@@ -74,7 +74,7 @@ expand = true
 [node name="Label" type="Label" parent="Buttons/ButtonPlay"]
 margin_right = 400.0
 margin_bottom = 55.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 text = "Play"
 align = 1
@@ -95,7 +95,7 @@ expand = true
 [node name="Label" type="Label" parent="Buttons/ButtonCreate"]
 margin_right = 400.0
 margin_bottom = 58.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "Create"
 align = 1
 valign = 1
@@ -150,7 +150,7 @@ script = ExtResource( 6 )
 visible = false
 margin_right = 924.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 1 )
 text = "It looks like you don't have any characters yet."
 align = 1
 valign = 1

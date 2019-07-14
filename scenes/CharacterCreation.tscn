@@ -8,14 +8,14 @@
 [ext_resource path="res://scripts/SelectClass.gd" type="Script" id=6]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=7]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 111
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=2]
 size = 41
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
@@ -26,7 +26,7 @@ font_data = ExtResource( 2 )
 atlas = ExtResource( 7 )
 region = Rect2( 320.25, 110.25, 15, 19.25 )
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=4]
 size = 115
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
@@ -55,7 +55,7 @@ anchor_right = 0.5
 margin_left = -512.0
 margin_right = 512.0
 margin_bottom = 140.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Select Class"
 align = 1
 valign = 1
@@ -81,7 +81,7 @@ expand = true
 [node name="Label" type="Label" parent="Buttons/ButtonBack"]
 margin_right = 400.0
 margin_bottom = 57.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 2 )
 text = "Back"
 align = 1
 valign = 1
@@ -101,7 +101,7 @@ expand = true
 [node name="Label" type="Label" parent="Buttons/ButtonFinish"]
 margin_right = 400.0
 margin_bottom = 57.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 text = "Create"
 align = 1
@@ -184,7 +184,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Knight"
 align = 1
 valign = 1
@@ -224,7 +224,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Berserker"
 align = 1
 valign = 1
@@ -260,7 +260,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Assassin"
 align = 1
 valign = 1
@@ -296,7 +296,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Sniper"
 align = 1
 valign = 1
@@ -332,7 +332,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Hunter"
 align = 1
 valign = 1
@@ -368,7 +368,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Pyromancer"
 align = 1
 valign = 1
@@ -404,7 +404,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Brand"
 align = 1
 valign = 1
@@ -440,7 +440,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Herald"
 align = 1
 valign = 1
@@ -476,7 +476,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Redeemer"
 align = 1
 valign = 1
@@ -512,7 +512,7 @@ anchor_right = 0.5
 margin_left = -462.0
 margin_right = 465.0
 margin_bottom = 151.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 4 )
 text = "Druid"
 align = 1
 valign = 1

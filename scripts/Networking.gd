@@ -127,9 +127,15 @@ remote func receive_world_update(world_name, world_data, number):
 		lastUpdateRPC = number
 		# Save the dictionary for other uses later
 		Global.world_data = world_data.duplicate()
-		# update inventory
-		Global.charactersData[Global.charID].inventory = world_data.players[get_tree().get_network_unique_id()].inventory
+		# update characters data
+		Global.charactersData[Global.charID] = world_data.players[get_tree().get_network_unique_id()].stats
+		Global.charactersData[Global.charID].inventory = world_data.players[get_tree().get_network_unique_id()].inventory.duplicate()
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
+		# Update inventory gui if we're viewing it
+		if get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer").has_node("Inventory"):
+			get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/Inventory").update_gui()
+		if get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer").has_node("InventoryAndBag"):
+			get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/InventoryAndBag").update_gui()
 		# Sync position with server
 		# If the difference is very small, it's probably due to a lost package, so ignore it
 		if (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length() > 30:
@@ -165,18 +171,28 @@ remote func receive_world_update(world_name, world_data, number):
 		#
 		# Update all npcs
 		#
+		
 		# Update all bags
-		# Loop through all local bags to make a list of their positions
-		var localbags_positions = []
-		for localbag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
-			localbags_positions.append(localbag.position)
-		for bag_pos in world_data.bags.keys():
-			# Check if we already have that bag 
-			if not (bag_pos in localbags_positions):
+		var processed_bags = []
+		for local_bag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
+			# Add the processed new world_data bag to the processed bags list
+			processed_bags.append(local_bag.position)
+			# Check if that bag exists in the new world data
+			if not (local_bag.position in world_data.bags.keys()):
+				# Nope, we should delete it
+				local_bag.queue_free()
+		# Now if there are any unprocessed bags left, that means they're new and we need to add them
+		var unprocessed_bags = subtract_array(world_data.bags.keys(), processed_bags)
+		for new_bag in unprocessed_bags:
+			# Make sure it's not a private bag
+			if (world_data.bags[new_bag].has("player") and world_data.bags[new_bag].player == get_tree().get_network_unique_id()) \
+			or not world_data.bags[new_bag].has("player"):
 				# Add the bag
-				var scene_instance = preload("res://scenes/inventory/ItemBag.tscn").instance()
-				scene_instance.position = bag_pos
+				var scene_instance = preload("res://scenes/inventory/Bag.tscn").instance()
+				scene_instance.position = new_bag
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").add_child(scene_instance)
+		
+		
 		# Check if any nodes got removed
 		# Players
 		for player in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").get_children():
@@ -187,15 +203,6 @@ remote func receive_world_update(world_name, world_data, number):
 					break
 			if not exists:
 				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+player.get_name()).queue_free()
-		# Bags
-		for bag in get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags").get_children():
-			var exists = false
-			for bag_pos in world_data.bags.keys():
-				if bag.position == bag_pos:
-					exists = true
-					break
-			if not exists:
-				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/bags/"+bag.get_name()).queue_free()
 
 remote func shoot_bullets(world, bullets, attack_sound, shooter, shooter_name, pos):
 	# Check if it was sent by the server and if im still in that world
@@ -266,22 +273,42 @@ func shootBullets(rotation):
 	if connected:
 		rpc_id(1, "shoot_bullets", get_tree().get_current_scene().get_name(), rotation)
 
-func sendInventory(inventory):
+func dropItem(slot, bag_pos, bag_slot, quantity = -1):
 	# Check if we are connected to the server
 	if connected:
-		rpc_id(1, "inventory_changes", get_tree().get_current_scene().get_name(), inventory)
+		rpc_id(1, "drop_item", get_tree().get_current_scene().get_name(), slot, bag_pos, bag_slot, quantity)
 
-func dropItem(slot):
+func pickupItem(bag_pos, bag_slot, inv_slot, quantity = -1):
 	# Check if we are connected to the server
 	if connected:
-		print("Dropping item from slot "+str(slot))
-		rpc_id(1, "drop_item", get_tree().get_current_scene().get_name(), slot)
+		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), bag_pos, bag_slot, inv_slot, quantity)
 
-func pickupItem(bag_pos, bag_item_id, inv_slot):
+func changeInventoryLayout(new_layout):
 	# Check if we are connected to the server
 	if connected:
-		print("Picking up "+str(bag_item_id)+" from bag in "+str(bag_pos)+" to "+str(inv_slot)+" inventory slot.")
-		rpc_id(1, "pickup_item", get_tree().get_current_scene().get_name(), bag_pos, bag_item_id, inv_slot)
+		rpc_id(1, "change_inventory_layout", get_tree().get_current_scene().get_name(), new_layout)
+
+func changeBagLayout(bag_pos, new_layout):
+	# Check if we are connected to the server
+	if connected:
+		rpc_id(1, "change_bag_layout", get_tree().get_current_scene().get_name(), bag_pos, new_layout)
+
+func swapItem(inv_slot_id, bag_slot_id, bag_pos):
+	# Check if we are connected to the server
+	if connected:
+		rpc_id(1, "swap_item", get_tree().get_current_scene().get_name(), inv_slot_id, bag_slot_id, bag_pos)
+
+func mergeItem(inv_slot_id, bag_slot_id, bag_pos, target_bag : bool):
+	# Check if we are connected to the server
+	if connected:
+		rpc_id(1, "merge_item", get_tree().get_current_scene().get_name(), inv_slot_id, bag_slot_id, bag_pos, target_bag)
+
+func subtract_array(array1, array2):
+	var final_array = []
+	for item in array1:
+		if not (item in array2):
+			final_array.append(item)
+	return final_array
 
 
 # # # # # # # # # # # # # #
@@ -304,11 +331,17 @@ remote func send_position(world, pos, number):
 	pass
 remote func exit_world(world):
 	pass
-remote func inventory_changes(inv):
-	pass
 remote func request_rand_seeds(how_many):
 	pass
-remote func drop_item(world, slot):
+remote func drop_item(world, slot, bag_pos, bag_slot):
 	pass
-remote func pickup_item(world, bag_pos, bag_item_id, inv_slot):
+remote func pickup_item(world, bag_pos, bag_slot, inv_slot):
+	pass
+remote func change_inventory_layout(world, new_layout):
+	pass
+remote func change_bag_layout(world, bag_pos, new_layout):
+	pass
+remote func swap_item(world, inv_slot_id, bag_slot_id, bag_pos):
+	pass
+remote func merge_item(world, inv_slot_id, bag_slot_id, bag_pos, target_bag):
 	pass

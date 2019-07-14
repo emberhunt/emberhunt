@@ -22,7 +22,13 @@ var lastShots = {}
 #			"<player_id>" : timeWhenLastShot,
 
 var given_rand_seeds = {}
-#			"<player_id>" : [1651652163513525632, -1865653153222222322],
+#			"<player_id>" : [1651652163513525632, -1865653153222222322, 1653185168511123152, ...], <- seeds
+
+var last_action_on_bag = {}
+#			"<world name" : {
+#				Vector2(bag position) : time when last action on bag occurred,
+#				...
+#			} 
 
 var lastUpdateRPC = {}
 var updatesSentToPlayer = {}
@@ -60,15 +66,30 @@ func _ready():
 	initWorld("FortressOfTheDark")
 
 func _process(delta):
-
+	# Check if any bags are old enough to be discarded
+	# That's right. We should KILL old things
+	for world in last_action_on_bag.keys():
+		for bag in last_action_on_bag[world].keys():
+			if last_action_on_bag[world][bag]+300<=OS.get_unix_time(): # Discard after 300 seconds of inactivity
+				# Yeet the frick outta dat bag
+				worlds[world].bags.erase(bag)
+				last_action_on_bag[world].erase(bag)
+	
+	
 	# Sync the worlds with all players
 	for world in worlds.keys():
 		for player in worlds[world].players.keys():
+			var world_data = worlds[world].duplicate(true)
+			# Do not send any private bags items data
+			for bag in world_data.bags.keys():
+				if world_data.bags[bag].has("player") and world_data.bags[bag].player != int(player):
+					world_data.bags[bag].items = {}
+			
 			if int(player) in updatesSentToPlayer.keys():
 				updatesSentToPlayer[int(player)] += 1
 			else:
 				updatesSentToPlayer[int(player)] = 1
-			rpc_unreliable_id(int(player), "receive_world_update", world, worlds[world], updatesSentToPlayer[int(player)])
+			rpc_unreliable_id(int(player), "receive_world_update", world, world_data, updatesSentToPlayer[int(player)])
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -329,99 +350,366 @@ remote func shoot_bullets(world, rotation):
 				get_node("/root/MainServer/"+world+"/Entities/projectiles/").add_child(new_bullet)
 			rpc_all_in_world(world, "shoot_bullets", [world, bullets, stats.attack_sound, "player", str(get_tree().get_rpc_sender_id()), spawn_point])
 
-remote func inventory_changes(world, newInventory):
+remote func drop_item(world, slot, bag_pos, bag_slot, quantity):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			# Validate the inventory changes
-			#   Check if any items appeared/disappeared
-			#   Check if all slots are in range
-			var oldInventory = worlds[world].players[get_tree().get_rpc_sender_id()].inventory.values()
-			oldInventory.sort_custom(InventorySorter, "sort")
-			var newInventoryKeys = newInventory.keys()
-			var newInventoryValues = newInventory.values()
-			newInventoryValues.sort_custom(InventorySorter, "sort")
-			if str(newInventoryValues) == str(oldInventory) and \
-				int(newInventoryKeys.min()) >= 0 and \
-				int(newInventoryKeys.max()) < worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20:
-				# The change is valid
-				worlds[world].players[get_tree().get_rpc_sender_id()].inventory = newInventory
-				# Save
-				save_player_data(world, get_tree().get_rpc_sender_id())
-			else:
-				print("Received inventory_changes RPC with invalid data")
+			# Check if the given slot IDs are in range
+			if int(slot) in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20) \
+			and int(bag_slot) in range(20):
+				# Check if the character has anything in that slot
+				if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(slot):
+					# Check if the given bag position is close enough to the actual player
+					if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+						# Check if quantity was specified
+						if quantity != -1:
+							# Check if quantity is in range
+							if quantity in range(1, worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot].quantity):
+								# Check if there's a bag in the given position
+								if worlds[world].bags.has(bag_pos):
+									# There is a bag
+									# Check if there's anything in the specified bag slot
+									if not worlds[world].bags[bag_pos].items.has(bag_slot):
+										# Hurray! We can proceed to drop the items
+										# Get the item data
+										var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot].duplicate(true)
+										item_data.quantity = quantity
+										# Change the quantity of the item in the inventory
+										worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot].quantity -= quantity
+										# Save
+										save_player_data(world, get_tree().get_rpc_sender_id())
+										# Add the item to bag
+										worlds[world].bags[bag_pos].items[bag_slot] = item_data
+									else:
+										return
+								else:
+									# There is no bag
+									# We will have to create one
+									# Get the item data
+									var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot].duplicate(true)
+									item_data.quantity = quantity
+									# Change the quantity of the item in the inventory
+									worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot].quantity -= quantity
+									# Save
+									save_player_data(world, get_tree().get_rpc_sender_id())
+									# Add the bag with the item
+									worlds[world].bags[bag_pos] = {
+										"items": {
+											bag_slot : item_data
+										}
+									}
+								update_last_bag_action_time(world, bag_pos)
+						else:
+							# Check if there's a bag in the given position
+							if worlds[world].bags.has(bag_pos):
+								# There is a bag
+								# Check if there's anything in the specified bag slot
+								if not worlds[world].bags[bag_pos].items.has(bag_slot):
+									# Hurray! We can proceed to drop the item
+									# Get the item data
+									var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot]
+									# Remove the item from the inventory
+									worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slot)
+									# Save
+									save_player_data(world, get_tree().get_rpc_sender_id())
+									# Add the item to bag
+									worlds[world].bags[bag_pos].items[bag_slot] = item_data
+								else:
+									return
+							else:
+								# There is no bag
+								# We will have to create one
+								# Get the item data
+								var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot]
+								# Remove the item from the inventory
+								worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slot)
+								# Save
+								save_player_data(world, get_tree().get_rpc_sender_id())
+								# Add the bag with the item
+								worlds[world].bags[bag_pos] = {
+									"items": {
+										bag_slot : item_data
+									}
+								}
+							update_last_bag_action_time(world, bag_pos)
 
-remote func drop_item(world, slotID):
+remote func pickup_item(world, bag_pos, bag_slot, inv_slot, quantity):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			# Check if the character has anything in that slot
-			if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(slotID):
-				var item_data = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slotID]
-				# Remove the item from the inventory
-				worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slotID)
-				# Save
-				save_player_data(world, get_tree().get_rpc_sender_id())
-				# Add a bag on the ground
-				# Check if a bag on player's position already exists
-				for bag_pos in worlds[world].bags.keys():
-					if (bag_pos-worlds[world].players[get_tree().get_rpc_sender_id()].position).length() <=16:
-						# Bag exists
-						# Add the item data to the bag
-						worlds[world].bags[bag_pos].append(item_data) 
+			# Check if the given slot IDs are in range
+			if int(inv_slot) in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20) \
+			and int(bag_slot) in range(20):
+				# Check if the character has anything in that slot
+				if not worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(inv_slot):
+					# Check if the given bag position is close enough to the actual player
+					if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+						# Check if there's a bag in the given position
+						if worlds[world].bags.has(bag_pos):
+							# Check if there's anything in the specified bag slot
+							if worlds[world].bags[bag_pos].items.has(bag_slot):
+								# Check if the item is allowed in that slot
+								if item_allowed_in_slot(world, get_tree().get_rpc_sender_id(), inv_slot, worlds[world].bags[bag_pos].items[bag_slot].item_id):
+									# Check if quantity was specified
+									if quantity != -1:
+										# Check if quantity is in range
+										if quantity in range(1, worlds[world].bags[bag_pos].items[bag_slot].quantity):
+											# Nice
+											# Get the item data
+											var item_data = worlds[world].bags[bag_pos].items[bag_slot].duplicate(true)
+											item_data.quantity = quantity
+											
+											# Decrease the bag item's quantity
+											worlds[world].bags[bag_pos].items[bag_slot].quantity -= quantity
+											
+											update_last_bag_action_time(world, bag_pos)
+											
+											# Add the item to the inventory
+											worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot] = item_data
+											print("Picking up "+str(quantity)+" "+str(item_data.item_id)+" to inventory slot "+str(inv_slot))
+											# Save
+											save_player_data(world, get_tree().get_rpc_sender_id())
+									else:
+										# Pick it up
+										# Get the item data
+										var item_data = worlds[world].bags[bag_pos].items[bag_slot]
+										# Remove the item from the bag
+										worlds[world].bags[bag_pos].items.erase(bag_slot)
+										
+										update_last_bag_action_time(world, bag_pos)
+										
+										# if the bag is empty, remove it altogether
+										if worlds[world].bags[bag_pos].items.size() == 0:
+											worlds[world].bags.erase(bag_pos)
+											remove_last_bag_action_time(world, bag_pos)
+										# Add the item to the inventory
+										worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot] = item_data
+										# Save
+										save_player_data(world, get_tree().get_rpc_sender_id())
+
+remote func change_inventory_layout(world, new_layout):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# In a valid layout change, all the item types should be the same,
+			# The sums of quantities of each item should also be the same,
+			# Slot IDs can change.
+			# We will need to check if the slot IDs are in range
+			for slot_id in new_layout.keys():
+				if not (int(slot_id) in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20) ):
+					return
+			# OK, now check if the same items are present
+			
+			# Get the new item ids list
+			var new_items = new_layout.values()
+			var new_item_ids = []
+			for item in new_items:
+				if not (item.item_id in new_item_ids):
+					new_item_ids.append(item.item_id)
+			new_item_ids.sort()
+			
+			# Get the old item ids list
+			var old_items = worlds[world].players[get_tree().get_rpc_sender_id()].inventory.values()
+			var old_item_ids = []
+			for item in old_items:
+				if not (item.item_id in old_item_ids):
+					old_item_ids.append(item.item_id)
+			old_item_ids.sort()
+			
+			# Compare them
+			if str(new_item_ids) == str(old_item_ids):
+				# Very cool.
+				# Now lets check if the items have the same quantities overall
+				
+				# Get the new items quantities
+				var new_items_quantities = {}
+				for item in new_items:
+					if new_items_quantities.has(item.item_id):
+						new_items_quantities[item.item_id] += item.quantity
+					else:
+						new_items_quantities[item.item_id] = item.quantity
+				
+				# Get the old items quantities
+				var old_items_quantities = {}
+				for item in old_items:
+					if old_items_quantities.has(item.item_id):
+						old_items_quantities[item.item_id] += item.quantity
+					else:
+						old_items_quantities[item.item_id] = item.quantity
+				
+				# Compare the old quantities to the new ones
+				for item_id in new_items_quantities.keys():
+					if old_items_quantities[item_id] != new_items_quantities[item_id]:
 						return
-				# Bag doesn't exist, add one
-				worlds[world].bags[worlds[world].players[get_tree().get_rpc_sender_id()].position] = [item_data]
+				
+				# Now check all the items in special slots to make sure they can be there
+				for special_slot in range(1):
+					if new_layout.has(str(special_slot)):
+						# Check if it's allowed
+						if not item_allowed_in_slot(world, get_tree().get_rpc_sender_id(), str(special_slot), new_layout[str(special_slot)].item_id):
+							# ಠ(•̀o•́)ง
+							return
+				
+				# Very very cool. Lets update the layout!
+				worlds[world].players[get_tree().get_rpc_sender_id()].inventory = new_layout
+				# Save
+				save_player_data(world, get_tree().get_rpc_sender_id())
 
-remote func pickup_item(world, bag_pos, bag_item_id, inv_slot):
+remote func change_bag_layout(world, bag_pos, new_layout):
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			# Check if that bag exists
-			var bag_exists = false
-			var bag_info
-			for existing_bag_pos in worlds[world].bags.keys():
-				if existing_bag_pos == bag_pos:
-					bag_exists = true
-					bag_info = worlds[world].bags[bag_pos]
-					break
-			if bag_exists:
-				# Check if the the requested item is in that bag
-				var item_in_bag = false
-				var item_array_id
-				for item in bag_info:
-					if item.item_id == bag_item_id:
-						item_in_bag = true
-						item_array_id = bag_info.find(item)
-						break
-				if item_in_bag:
-					# If the player has that inventory slot and if it's free
-					if inv_slot in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+24):
-						if not worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(str(inv_slot)):
-							# It's all good
-							# Add the item
-							worlds[world].players[get_tree().get_rpc_sender_id()].inventory[str(inv_slot)] = bag_info[item_array_id]
-							# Remove item from bag
-							worlds[world].bags[bag_pos].erase(bag_info[item_array_id])
-							if worlds[world].bags[bag_pos].size()==0:
-								# Remove the bag, because it's empty
-								worlds[world].bags.erase(bag_pos)
-							# Save
-							save_player_data(world, get_tree().get_rpc_sender_id())
+			# Check if the given bag position is close enough to the actual player
+			if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+				# Check if there's a bag in the given position
+				if worlds[world].bags.has(bag_pos):
+					# In a valid layout change, all the item types should be the same,
+					# The sums of quantities of each item should also be the same,
+					# Slot IDs can change.
+					# We will need to check if the slot IDs are in range
+					for slot_id in new_layout.keys():
+						if not (int(slot_id) in range(20) ):
+							return
+					# OK, now check if the same items are present
+					
+					# Get the new item ids list
+					var new_items = new_layout.values()
+					var new_item_ids = []
+					for item in new_items:
+						if not (item.item_id in new_item_ids):
+							new_item_ids.append(item.item_id)
+					new_item_ids.sort()
+					
+					# Get the old item ids list
+					var old_items = worlds[world].bags[bag_pos].items.values()
+					var old_item_ids = []
+					for item in old_items:
+						if not (item.item_id in old_item_ids):
+							old_item_ids.append(item.item_id)
+					old_item_ids.sort()
+					
+					# Compare them
+					if str(new_item_ids) == str(old_item_ids):
+						# Very cool.
+						# Now lets check if the items have the same quantities overall
+						
+						# Get the new items quantities
+						var new_items_quantities = {}
+						for item in new_items:
+							if new_items_quantities.has(item.item_id):
+								new_items_quantities[item.item_id] += item.quantity
+							else:
+								new_items_quantities[item.item_id] = item.quantity
+						
+						# Get the old items quantities
+						var old_items_quantities = {}
+						for item in old_items:
+							if old_items_quantities.has(item.item_id):
+								old_items_quantities[item.item_id] += item.quantity
+							else:
+								old_items_quantities[item.item_id] = item.quantity
+						
+						# Compare the old quantities to the new ones
+						for item_id in new_items_quantities.keys():
+							if old_items_quantities[item_id] != new_items_quantities[item_id]:
+								return
+						
+						# Very very cool. Lets update the layout!
+						worlds[world].bags[bag_pos].items = new_layout
+						
+						update_last_bag_action_time(world, bag_pos)
 
+remote func swap_item(world, inv_slot_id, bag_slot_id, bag_pos):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Check if the given bag position is close enough to the actual player
+			if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+				# Check if there's a bag in the given position
+				if worlds[world].bags.has(bag_pos):
+					# Check if the slot IDs are in range
+					if int(inv_slot_id) in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20) \
+					and int(bag_slot_id) in range(20):
+						# Check if the character has anything in that slot
+						if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(inv_slot_id):
+							# Check if the bag has anything in that slot
+							if worlds[world].bags[bag_pos].items.has(bag_slot_id):
+								# Check if the bag item is allowed in that inventory slot
+								if item_allowed_in_slot(world, get_tree().get_rpc_sender_id(), inv_slot_id, worlds[world].bags[bag_pos].items[bag_slot_id].item_id):
+									# Proceed to swap the items
+									var bag_item_info = worlds[world].bags[bag_pos].items[bag_slot_id].duplicate(true)
+									worlds[world].bags[bag_pos].items[bag_slot_id] = \
+										worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].duplicate(true)
+									worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id] = bag_item_info
+									# Save
+									save_player_data(world, get_tree().get_rpc_sender_id())
+									update_last_bag_action_time(world, bag_pos)
 
-# # # # # #
-# SORTERS #
-# # # # # #
-
-class InventorySorter:
-	static func sort(a, b):
-		if a["item_id"].length() < b["item_id"].length():
-			return true
-		return false
+remote func merge_item(world, inv_slot_id, bag_slot_id, bag_pos, target_bag):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			# Check if the given bag position is close enough to the actual player
+			if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+				# Check if there's a bag in the given position
+				if worlds[world].bags.has(bag_pos):
+					# Check if the slot IDs are in range
+					if int(inv_slot_id) in range(worlds[world].players[get_tree().get_rpc_sender_id()].stats.level+20) \
+					and int(bag_slot_id) in range(20):
+						# Check if the character has anything in that slot
+						if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(inv_slot_id):
+							# Check if the bag has anything in that slot
+							if worlds[world].bags[bag_pos].items.has(bag_slot_id):
+								# Get the variables of items ready
+								var first_item
+								var second_item
+								if target_bag:
+									first_item = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].duplicate(true)
+									second_item = worlds[world].bags[bag_pos].items[bag_slot_id].duplicate(true)
+								else:
+									second_item = worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].duplicate(true)
+									first_item = worlds[world].bags[bag_pos].items[bag_slot_id].duplicate(true)
+								# Check if the item types are the same
+								if first_item.item_id == second_item.item_id:
+									# Check if the item type is stackable
+									if Global.item_types[ Global.items[ first_item.item_id ].type ].has("stack_size") \
+									and Global.item_types[ Global.items[ first_item.item_id ].type ].stack_size > 1:
+										# Also neither of the items should be full
+										if first_item.quantity < Global.item_types[ Global.items[ first_item.item_id ].type ].stack_size \
+										and second_item.quantity < Global.item_types[ Global.items[ second_item.item_id ].type ].stack_size:
+											
+											# Ok, we are now sure that this merge is valid
+											# Now we need to find out if this is a part merge, or a full merge
+											if (first_item.quantity+second_item.quantity) > \
+												Global.item_types[ Global.items[ first_item.item_id ].type ].stack_size:
+												# Partial merge
+												
+												var second_item_new_quantity = Global.item_types[ Global.items[ first_item.item_id ].type ].stack_size
+												var first_item_new_quantity = first_item.quantity - (second_item_new_quantity - second_item.quantity)
+												
+												if target_bag:
+													worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].quantity = first_item_new_quantity
+													worlds[world].bags[bag_pos].items[bag_slot_id].quantity = second_item_new_quantity
+												else:
+													worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].quantity = second_item_new_quantity
+													worlds[world].bags[bag_pos].items[bag_slot_id].quantity = first_item_new_quantity
+												
+											else:
+												# Full merge
+												if target_bag:
+													worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(inv_slot_id)
+													worlds[world].bags[bag_pos].items[bag_slot_id].quantity = first_item.quantity+second_item.quantity
+												else:
+													worlds[world].bags[bag_pos].items.erase(bag_slot_id)
+													worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].quantity = first_item.quantity+second_item.quantity
+											
+											update_last_bag_action_time(world, bag_pos)
 
 
 # # # # # # # # # # #
@@ -605,6 +893,12 @@ func rpc_all_in_world(world, function_name, args = [], exceptions = []):
 				# There's probably a better way to do this, but I'm not a pro
 				# And I couldn't find anything on the internet
 				# Feel free to improve
+				
+				# Note from the future me:
+				# Probably `callv()` is the answer here,
+				# but I don't have time to fix it right now,
+				# So if you see this, feel free to do it yourself
+				# Or remind me (I'm Ponas)
 				if args.size() == 0:
 					rpc_id(player_id, function_name)
 				elif args.size() == 1:
@@ -792,11 +1086,43 @@ func checkIfClipping(node : KinematicBody2D, a : Vector2, b : Vector2):
 			# There was a collision
 			failed_pixels += 1
 		# Now we know how many pixels had collisions
-		# If less than 3, it was probably due to a wall corner
+		# If less than 2, it was probably due to a wall corner
 		# If more, the player is possibly cheating
 		if failed_pixels > 2:
 			return true
 	return false
+
+func update_last_bag_action_time(world, bag_pos):
+	if not last_action_on_bag.has(world):
+		last_action_on_bag[world] = {}
+	last_action_on_bag[world][bag_pos] = OS.get_unix_time()
+
+func remove_last_bag_action_time(world, bag_pos):
+	if last_action_on_bag.has(world) and last_action_on_bag[world].has(bag_pos):
+		last_action_on_bag[world].erase(bag_pos)
+
+func item_allowed_in_slot(world, player_id, inv_slot, item_id):
+	# Check if it's a special slot
+	if int(inv_slot) < 1:
+		# Check if the item type is allowed in that special slot
+		var item_type = Global.items[item_id].type
+		var char_class = worlds[world].players[player_id].stats["class"]
+		if Global.item_types[item_type].has("special_slots"):
+			if Global.item_types[item_type].special_slots.has(inv_slot):
+				if not Global.item_types[item_type].special_slots[inv_slot].has(char_class):
+					return false
+			else:
+				return false
+		else:
+			return false
+		
+		# Check individual stat requirements
+		var stats = worlds[world].players[player_id].stats
+		if Global.items[item_id].has("stat_restrictions"):
+			for restriction in Global.items[item_id].stat_restrictions.keys():
+				if Global.items[item_id].stat_restrictions[restriction] > stats[restriction]:
+					return false
+	return true
 
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
