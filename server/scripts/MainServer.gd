@@ -112,11 +112,17 @@ func _player_disconnected(id):
 
 remote func register_new_account(nickname):
 	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
-	if nickname.length() <= 50:
-		if isNicknameFree(nickname):
-			var uuid = generateRandomUUID(nickname)
-			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", uuid)
-			print("New account registered")
+	if nickname.length() > 0 and nickname.length() <= 50:
+		# Check if the nickname is alphanumerical
+		var regex = RegEx.new()
+		regex.compile("^[a-zA-Z0-9_]+$")
+		if regex.search(nickname):
+			if isNicknameFree(nickname):
+				var uuid = generateRandomUUID(nickname)
+				rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", uuid)
+				print("New account registered")
+			else:
+				rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
 		else:
 			rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
 	else:

@@ -7,6 +7,15 @@ extends Control
 
 
 func _on_Nickname_text_changed(new_text):
+	# First of all, make sure that the entered nickname is alphanumeric
+	var old_caret_pos = get_node("Nickname").get_cursor_position()
+	var regex = RegEx.new()
+	regex.compile("[^a-zA-Z0-9_]")
+	var amount_of_non_alphanumerical_chars = regex.search_all(new_text).size()
+	new_text = regex.sub(new_text, "", true)
+	get_node("Nickname").text = new_text
+	get_node("Nickname").set_cursor_position(old_caret_pos-amount_of_non_alphanumerical_chars)
+	
 	get_node("NicknameError").visible = false
 	if new_text != "":
 		get_node("UUID").set_editable(false)

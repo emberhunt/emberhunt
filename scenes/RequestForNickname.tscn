@@ -5,28 +5,28 @@
 [ext_resource path="res://assets/UI/button_notPressed.png" type="Texture" id=3]
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=4]
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=1]
 size = 34
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=14]
+[sub_resource type="DynamicFont" id=2]
 size = 30
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=3]
 size = 41
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=4]
 size = 29
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
@@ -62,7 +62,7 @@ margin_left = 214.0
 margin_top = 100.0
 margin_right = -212.0
 margin_bottom = 197.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 1 )
 text = "It looks like it's your first time playing!
 Please choose a nickname."
 align = 1
@@ -97,13 +97,14 @@ margin_left = 212.0
 margin_top = 270.0
 margin_right = 810.0
 margin_bottom = 347.0
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 2 )
 text = "Or enter your UUID if you have an existing
 account"
 align = 1
 valign = 1
 
 [node name="TextureButton" type="TextureButton" parent="."]
+editor/display_folded = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -150.0
@@ -119,7 +120,7 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="TextureButton"]
 margin_right = 300.0
 margin_bottom = 51.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 text = "Confirm"
 align = 1
@@ -133,7 +134,7 @@ margin_left = -222.0
 margin_top = 232.0
 margin_right = 222.0
 margin_bottom = 277.0
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 text = "This nickname is already taken"
 align = 1
@@ -147,7 +148,7 @@ margin_left = -220.0
 margin_top = 386.0
 margin_right = 220.0
 margin_bottom = 412.0
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 text = "This UUID is invalid"
 align = 1
