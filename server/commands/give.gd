@@ -3,6 +3,14 @@
 # Licensed under the GNU General Public License v3.0 or later
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+
+var _short_description = "gives the account data with UUID as parameter."
+
+var _description = """gives the account data with UUID as parameter
+
+USAGE:	get_account_data <player_uuid>."""
+
+
 func give(args = [], mainServer = null) -> String:
 	var special_slots = 1
 	if mainServer == null:

@@ -3,27 +3,55 @@
 # Licensed under the GNU General Public License v3.0 or later
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+
+var _short_description = "displays a manual for a specific command"
+
+var _description = """displays a manual for a specific command
+
+USAGE:	help [command]"""
+
+
 func help(args = [], mainServer = null) -> String:
-	var result = ""
 	if args.size() == 0:
-		result = "Here's some help:\n\n\tList of commands:\n\t* help - display a manual for a specific command\n\t* listargs - just lists the arguments\n\t* fps - gives server FPS (frames per second)\n\t* get_player_data <nickname> - gives the account data with nickname as parameter\n\t* get_account_data <uuid> - gives the account data with UUID as parameter\n\t* worlds [world_name] [players|bags|enemies|npc] [...] - gives the world data with optional parameters\n\t* give <player id> <item id> [amount] - gives a player an item\n\t* exit - shuts down the server"
+		# Get the list of all commands
+		var files = []
+		var dir = Directory.new()
+		dir.open("res://server/commands")
+		dir.list_dir_begin(true)
+		var file = dir.get_next()
+		while file:
+			if file.ends_with(".gd"):
+				files.append(file.rstrip(".gd"))
+			file = dir.get_next()
+		files.sort()
+		
+		# Get the description of each command
+		var output = "Here's some help:\n\n\tList of commands:"
+		for command in files:
+			var command_description = "not defined."
+			var command_script = load("res://server/commands/"+command+".gd").new()
+			# Check if the command has a description defined
+			var properties = []
+			for property in command_script.get_property_list():
+				properties.append(property.name)
+			if "_short_description" in properties:
+				command_description = command_script._short_description
+			output += "\n\t* "+command+" - "+command_description
+		return output
 	elif args.size() > 1:
-		result = "help: Too many arguments!"
+		return "help: Too many arguments!"
 	else:
-		if args[0] == "help":
-			result = "\nhelp -- displays a manual for a specific command\n\nUSAGE:\thelp <command> ...\n\nEXAMPLE:\thelp listargs"
-		elif args[0] == "listargs":
-			result = "\nlistargs -- lists the arguments you use\n\nUSAGE:\tlistargs arg1 arg2 arg3 ...\n\nThis command is used to check if you type your arguments correctly"
-		elif args[0] == "get_player_data":
-			result = "\nget_player_data -- displays the account data of given player\n\nUSAGE:\tget_player_data <player_nickname>"
-		elif args[0] == "get_account_data":
-			result = "\nget_account_data - gives the account data with UUID as parameter \n\nUSAGE:\tget_account_data <player_uuid>."
-		elif args[0] == "worlds":
-			result = "\nworlds - gives the world data with optional parameters \n\nUSAGE:\tworlds [world_name] [players|bags|enemies|npc] [...]"
-		elif args[0] == "give":
-			result = "\ngive - gives a player an item \n\nUSAGE:\tgive <player id> <item id> [amount]"
-		elif args[0] == "exit":
-			result = "\nexit - shuts down the server. Use with caution!"
+		# Check if a command with specified name exists
+		var file = File.new()
+		if file.file_exists("res://server/commands/"+args[0]+".gd"):
+			var command_description = "not defined."
+			var command_script = load("res://server/commands/"+args[0]+".gd").new()
+			# Check if the command has a description defined
+			var properties = []
+			for property in command_script.get_property_list():
+				properties.append(property.name)
+			if "_description" in properties:
+				command_description = command_script._description
+			return "\n"+args[0]+" -- "+command_description
 		else:
-			result = "help: There's no help page for this command ("+args[0]+")"
-	return result
+			return "help: There's no help page for this command ("+args[0]+")"

@@ -3,6 +3,14 @@
 # Licensed under the GNU General Public License v3.0 or later
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+
+var _short_description = "gives the world data with optional parameters"
+
+var _description = """gives the world data with optional parameters
+
+USAGE:	worlds [world_name] [players|bags|enemies|npc] [...]"""
+
+
 func worlds(args = [], mainServer = null) -> String:
 	if mainServer == null:
 		return "Instance of MainServer.gd is invalid"

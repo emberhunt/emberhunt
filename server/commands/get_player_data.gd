@@ -3,6 +3,14 @@
 # Licensed under the GNU General Public License v3.0 or later
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+
+var _short_description = "displays a manual for a specific command"
+
+var _description = """displays the account data of given player
+
+USAGE:	get_player_data <player_nickname>"""
+
+
 func get_player_data(args = [], mainServer = null) -> String:
 	var returnValue = "";
 	if mainServer == null:
