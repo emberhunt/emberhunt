@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-var _short_description = "displays a manual for a specific command"
+var _short_description = "displays the account data of given player"
 
 var _description = """displays the account data of given player
 
