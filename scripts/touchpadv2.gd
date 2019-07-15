@@ -47,7 +47,8 @@ func _input(event):
 			$buttonSprite.global_position = origin
 			$buttonSprite.hide()
 			$background.hide()
-			_playerBody.speed = 0
+			#_playerBody.speed = 0
+			_playerBody.direction = Vector2(0,0)
 		if event.pressed and not isPressed and isInArea(event.position):
 			if not disabled:
 				if Global.touchpadPosition == "Flexible":
@@ -64,7 +65,7 @@ func _input(event):
 				if touchPower > radius:
 					touchPower = radius
 					$buttonSprite.global_position = radius*touchDirection + origin
-				_playerBody.speed = touchPower
+				#_playerBody.speed = touchPower
 				_playerBody.direction = touchDirection
 			
 	if event is InputEventScreenDrag:
@@ -81,5 +82,5 @@ func _input(event):
 					if touchPower > radius:
 						touchPower = radius
 						$buttonSprite.global_position = radius*touchDirection + origin
-					_playerBody.speed = touchPower
+					#_playerBody.speed = touchPower
 					_playerBody.direction = touchDirection

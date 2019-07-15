@@ -81,8 +81,8 @@ func _on_PauseButton_pressed():
 func setTouchpadsState(state):
 	get_node("CanvasLayer/moveButton").disabled = !state
 	get_node("CanvasLayer/moveButton").isPressed = false
-	get_node("CanvasLayer/moveButton")._playerBody.direction = 0
-	get_node("CanvasLayer/moveButton")._playerBody.speed = 0
+	get_node("CanvasLayer/moveButton")._playerBody.direction = Vector2(0,0)
+	#get_node("CanvasLayer/moveButton")._playerBody.speed = 0
 	get_node("CanvasLayer/moveButton/buttonSprite").hide()
 	get_node("CanvasLayer/moveButton/background").hide()
 	get_node("CanvasLayer/shootButton").disabled = !state
