@@ -77,10 +77,24 @@ func _process(delta):
 			var world_data = worlds[world].duplicate(true)
 			# Do not send any private bags items data
 			for bag in world_data.bags.keys():
-				if world_data.bags[bag].has("player") and world_data.bags[bag].player != int(player):
+				if world_data.bags[bag].has("player") and world_data.bags[bag].player != player:
 					world_data.bags[bag].items = {}
 			
-			rpc_id(int(player), "receive_world_update", world, world_data)
+			# Also don't send any irrelevant things that are far away
+			# from that individual player to preserve bandwidth
+			var viewport = 200.0 # <- This is how far an object has to be, to be sent to that player
+			
+			var player_pos = worlds[world].players[player].position
+			# players
+			for player in world_data.players.keys():
+				if (world_data.players[player].position-player_pos).length() > viewport:
+					world_data.players.erase(player)
+			# bags
+			for bag in world_data.bags.keys():
+				if (bag-player_pos).length() > viewport:
+					world_data.bags.erase(bag)
+			
+			rpc_id(player, "receive_world_update", world, world_data)
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
