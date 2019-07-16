@@ -51,8 +51,8 @@ func _process(delta):
 		# Change the sprite of the inventory button to tell the player
 		# That they can view the bag
 		if not near_a_bag:
-			get_node("CanvasLayer/InventoryButton/InventoryButton").normal = preload("res://assets/UI/inventory/bag.png")
-			get_node("CanvasLayer/InventoryButton/InventoryButton").pressed = preload("res://assets/UI/inventory/bag.png")
+			get_node("CanvasLayer/InventoryButton/InventoryButton").normal = preload("res://assets/UI/inventory/bag_button.png")
+			get_node("CanvasLayer/InventoryButton/InventoryButton").pressed = preload("res://assets/UI/inventory/bag_button.png")
 			near_a_bag = true
 	else:
 		# If there was a bag last frame, but now isn't remove all highlights
