@@ -480,14 +480,15 @@ remote func pickup_item(world, bag_pos, bag_slot, inv_slot, quantity):
 										
 										update_last_bag_action_time(world, bag_pos)
 										
-										# if the bag is empty, remove it altogether
-										if worlds[world].bags[bag_pos].items.size() == 0:
-											worlds[world].bags.erase(bag_pos)
-											remove_last_bag_action_time(world, bag_pos)
 										# Add the item to the inventory
 										worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot] = item_data
 										# Save
 										save_player_data(world, get_tree().get_rpc_sender_id())
+									
+									# if the bag is empty, remove it altogether
+									if worlds[world].bags[bag_pos].items.size() == 0:
+										worlds[world].bags.erase(bag_pos)
+										remove_last_bag_action_time(world, bag_pos)
 
 remote func change_inventory_layout(world, new_layout):
 	# Check if the world exists
@@ -710,6 +711,10 @@ remote func merge_item(world, inv_slot_id, bag_slot_id, bag_pos, target_bag):
 													worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot_id].quantity = first_item.quantity+second_item.quantity
 											
 											update_last_bag_action_time(world, bag_pos)
+											# if the bag ends up empty, remove it
+											if worlds[world].bags[bag_pos].items.size() == 0:
+												worlds[world].bags.erase(bag_pos)
+												remove_last_bag_action_time(world, bag_pos)
 
 
 # # # # # # # # # # #
