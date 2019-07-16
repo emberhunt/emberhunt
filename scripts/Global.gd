@@ -25,6 +25,7 @@ var worldReadyFunctions = {}
 
 var loaded_bullets = {}
 var loaded_item_sprites = {}
+var loaded_class_sprites = {}
 
 var init_stats = {}
 var items = {}
@@ -62,6 +63,7 @@ func _ready():
 	loadGame() # load settings
 	_load_bullets()
 	_load_item_sprites()
+	_load_class_sprites()
 	
 	init_stats = load_json_from_file("res://data/class_init_stats.json")
 	items = load_json_from_file("res://data/items.json")
@@ -135,6 +137,18 @@ func _load_item_sprites():
 	else:
 		print("Error opening res://assets/UI/inventory/items/")
 
+func _load_class_sprites():
+	var directory = Directory.new()
+	if directory.open("res://assets/classes") == OK:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		while( file_name != ""):
+			if file_name.ends_with(".import"):
+				loaded_class_sprites[file_name.trim_suffix(".import")] = load("res://assets/classes/"+file_name.replace(".import",""))
+			file_name = directory.get_next()
+	else:
+		print("Error opening res://assets/classes/")
+
 func get_item_sprite(item_id):
 	var size
 	var not_found
@@ -151,6 +165,25 @@ func get_item_sprite(item_id):
 		var file_name = items[ item_id ].icon.get_basename()+size+"."+items[ item_id ].icon.get_extension()
 		if loaded_item_sprites.has(file_name):
 			return loaded_item_sprites[ file_name ]
+	return not_found
+
+func get_class_sprite(className):
+	var size
+	var not_found
+	if quality == "High":
+		size = "_216x216"
+		not_found = preload("res://assets/UI/sprite_not_found_216x216.png")
+	elif quality=="Medium":
+		size = "_108x108"
+		not_found = preload("res://assets/UI/sprite_not_found_108x108.png")
+	else:
+		size = "_54x54"
+		not_found = preload("res://assets/UI/sprite_not_found_54x54.png")
+	
+	if init_stats.has(className):
+		var file_name = className.capitalize()+size+".png"
+		if loaded_class_sprites.has(file_name):
+			return loaded_class_sprites[ file_name ]
 	return not_found
 
 func find_position_for_bag():

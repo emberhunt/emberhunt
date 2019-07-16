@@ -22,8 +22,9 @@ func _ready():
 		var scene = preload("res://scenes/CharacterSelectionListItem.tscn")
 		var scene_instance = scene.instance()
 		scene_instance.set_name("Char"+str(i))
+		scene_instance.get_node("Image").texture = Global.get_class_sprite(Global.charactersData[str(i)]["class"])
 		scene_instance.get_node("Class").set_text(Global.charactersData[str(i)]["class"].capitalize())
-		scene_instance.get_node("Level").set_text(str(Global.charactersData[str(i)]["level"])+"LvL")
+		scene_instance.get_node("Level").set_text(str(Global.charactersData[str(i)]["level"]))
 		# Connect signals
 		scene_instance.get_node("TextureButton").connect("pressed",self,"pressed", [str(i)])
 		# Add the item to the scene

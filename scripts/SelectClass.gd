@@ -7,6 +7,12 @@ extends VBoxContainer
 
 var selected = ""
 
+func _ready():
+	# Change the classes sprites
+	for className in Global.init_stats.keys():
+		var sprite = Global.get_class_sprite(className)
+		get_node(className.capitalize()+"/"+className.capitalize()+"/TextureRect").texture = sprite
+
 func changeFinishButtonState(state):
 	if state:
 		# Enable it
