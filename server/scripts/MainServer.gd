@@ -468,7 +468,7 @@ remote func pickup_item(world, bag_pos, bag_slot, inv_slot, quantity):
 											
 											# Add the item to the inventory
 											worlds[world].players[get_tree().get_rpc_sender_id()].inventory[inv_slot] = item_data
-											print("Picking up "+str(quantity)+" "+str(item_data.item_id)+" to inventory slot "+str(inv_slot))
+											
 											# Save
 											save_player_data(world, get_tree().get_rpc_sender_id())
 									else:
