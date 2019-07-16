@@ -56,8 +56,7 @@ func _ready():
 	print("For a list of commands, type \"help\".")
 	print("Listening on port: " + str(SERVER_PORT) + " (GameServer)")
 	
-	# Create worlds
-	# Fortress of the dark
+	# Create Fortress of the dark
 	initWorld("FortressOfTheDark")
 
 func _process(delta):
@@ -83,8 +82,8 @@ func _process(delta):
 			# Also don't send any irrelevant things that are far away
 			# from that individual player to preserve bandwidth
 			var viewport = 200.0 # <- This is how far an object has to be, to be sent to that player
-			
 			var player_pos = worlds[world].players[player].position
+			
 			# players
 			for player in world_data.players.keys():
 				if (world_data.players[player].position-player_pos).length() > viewport:
@@ -116,7 +115,6 @@ func _player_disconnected(id):
 # # # # # # # # # # #
 
 remote func register_new_account(nickname):
-	print("Received request to register new account from "+str(get_tree().get_rpc_sender_id()))
 	if nickname.length() > 0 and nickname.length() <= 50:
 		# Check if the nickname is alphanumerical
 		var regex = RegEx.new()
@@ -125,7 +123,7 @@ remote func register_new_account(nickname):
 			if isNicknameFree(nickname):
 				var uuid = generateRandomUUID(nickname)
 				rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", uuid)
-				print("New account registered")
+				print(str(get_tree().get_rpc_sender_id())+" registered a new account, "+nickname+".")
 			else:
 				rpc_id(get_tree().get_rpc_sender_id(), "receive_new_uuid", false)
 		else:
@@ -250,6 +248,10 @@ remote func send_position(world, direction, delta):
 			var deltas_sum = worlds[world].players[get_tree().get_rpc_sender_id()].deltas_sum+delta
 			# Deltas sum can't be higher than the total time elapsed.
 			if deltas_sum <= time_passed:
+				# Also if the delta is bigger than half a second,
+				# then shorten it, to avoid teleporting
+				if delta > 0.5:
+					delta = 0.5
 				# Update player's position
 				var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
 				
@@ -258,7 +260,8 @@ remote func send_position(world, direction, delta):
 				# We're dividing the velocity by the server-side process delta
 				# Because inside move_and_slide, they get multiplied, and we don't need that
 				# So in the end get_process_delta_time() cancels out
-				player_node.move_and_slide(velocity/get_process_delta_time())
+				if direction != Vector2(0,0):
+					player_node.move_and_slide(velocity/get_process_delta_time())
 				
 				worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
 				worlds[world].players[get_tree().get_rpc_sender_id()].deltas_sum = deltas_sum
@@ -1013,40 +1016,6 @@ func save_player_data(world, id):
 	file.open("user://serverData/accounts/"+uuid_hash+"/data.json", File.WRITE)
 	file.store_line(JSON.print(data))
 	file.close()
-
-func checkIfClipping(node : KinematicBody2D, a : Vector2, b : Vector2):
-	# calculate the relative vector
-	var rel_vec = b-a
-	# Check if there was any movement at all
-	if rel_vec.length() == 0:
-		return false
-	# check if anything is in the way
-	var a_transform = Transform2D()
-	a_transform.origin = a
-	if node.test_move(a_transform, rel_vec):
-		var failed_pixels = 0
-		# Split the movement into individual pixels
-		var normalized = rel_vec.normalized()
-		var split_count = rel_vec.length()/normalized.length()
-		# Check each pixel for collisions
-		for i in range(int(floor(split_count))-1):
-			var trans = a_transform
-			trans.origin += normalized*i
-			if node.test_move(trans, normalized*(i+1)):
-				# There was a collision
-				failed_pixels += 1
-		# Last pixel
-		var trans = a_transform
-		trans.origin += normalized*int(floor(split_count))
-		if node.test_move(trans, normalized*(split_count-floor(split_count))):
-			# There was a collision
-			failed_pixels += 1
-		# Now we know how many pixels had collisions
-		# If less than 2, it was probably due to a wall corner
-		# If more, the player is possibly cheating
-		if failed_pixels > 2:
-			return true
-	return false
 
 func update_last_bag_action_time(world, bag_pos):
 	if not last_action_on_bag.has(world):

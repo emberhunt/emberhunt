@@ -7,7 +7,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "cnidarias.net"
+const SERVER_IP = "localhost"#"cnidarias.net"
 const SERVER_PORT = 22122
 
 var connected = false
@@ -146,6 +146,7 @@ remote func receive_world_update(world_name, world_data):
 				var scene_instance = scene.instance()
 				scene_instance.set_name(str(playerID))
 				scene_instance.add_to_group("player")
+				scene_instance.enabled = true
 				# Disable collisions
 				scene_instance.get_node("CollisionShape2D").disabled = true
 				scene_instance.get_node("nickname").set_text(world_data.players[playerID].nickname)

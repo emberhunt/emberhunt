@@ -14,4 +14,5 @@ func _process(delta):
 	var motion = (Global.charactersData[Global.charID].agility+25)*direction #Calculate the movement vector using the joystick variables
 	
 	move_and_slide(motion)# Move according to the motion vector
+	
 	Networking.sendPosition(direction, delta)

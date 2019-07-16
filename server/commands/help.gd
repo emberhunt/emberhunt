@@ -11,7 +11,10 @@ var _description = """displays a manual for a specific command
 USAGE:	help [command]"""
 
 
-func help(args = [], mainServer = null) -> String:
+func help(args = [], mainServer = null):
+	if mainServer == null:
+		return "Instance of MainServer.gd is invalid"
+	
 	if args.size() == 0:
 		# Get the list of all commands
 		var files = []
