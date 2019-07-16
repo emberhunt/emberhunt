@@ -12,12 +12,8 @@ const SERVER_PORT = 22122
 
 var connected = false
 
-var position_rpcs_sent = 0
-
 var rand_seeds = []
 var rand_seeds_requested_not_received = 0
-
-var lastUpdateRPC = 0
 
 func _ready():
 	# Initialize client
@@ -117,14 +113,9 @@ remote func answer_is_uuid_valid(answer):
 	if get_tree().get_rpc_sender_id() == 1:
 		get_node("/root/RequestForNickname").receivedAnswerIfUUIDIsValid(answer)
 
-remote func receive_world_update(world_name, world_data, number):
+remote func receive_world_update(world_name, world_data):
 	# Check if it was sent by the server and if im still in that world
 	if get_tree().get_rpc_sender_id() == 1 and world_name == get_tree().get_current_scene().get_name():
-		# Check if the RPC isn't too old
-		if lastUpdateRPC > number:
-			# We already have a newer receive_world_update RPC
-			return
-		lastUpdateRPC = number
 		# Save the dictionary for other uses later
 		Global.world_data = world_data.duplicate()
 		# update characters data
@@ -137,13 +128,12 @@ remote func receive_world_update(world_name, world_data, number):
 		if get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer").has_node("InventoryAndBag"):
 			get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer/InventoryAndBag").update_gui()
 		# Sync position with server
-		# If the difference is very small, it's probably due to a lost package, so ignore it
-		if (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length() > 30:
-			# Check if anything is in the way
-			if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position):
-				selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
-			else:
-				selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
+		# If anything is in the way, just teleport there
+		if not selfPlayer.test_move(selfPlayer.transform, world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position) \
+		and (world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position).length()<10:
+			selfPlayer.move_and_slide( world_data.players[get_tree().get_network_unique_id()].position-selfPlayer.position )
+		else:
+			selfPlayer.position = world_data.players[get_tree().get_network_unique_id()].position
 		# Update all other players
 		for playerID in world_data.players.keys():
 			if playerID == get_tree().get_network_unique_id():
@@ -257,11 +247,10 @@ func requestToJoinWorld(world_name, charID):
 	if connected:
 		rpc_id(1, "join_world", Global.UUID, charID, world_name)
 
-func sendPosition(pos):
+func sendPosition(direction, delta):
 	# Check if we are connected to the server
 	if connected:
-		position_rpcs_sent += 1
-		rpc_unreliable_id(1, "send_position", get_tree().get_current_scene().get_name(), pos, position_rpcs_sent)
+		rpc_id(1, "send_position", get_tree().get_current_scene().get_name(), direction, delta)
 
 func exitWorld():
 	# Check if we are connected to the server

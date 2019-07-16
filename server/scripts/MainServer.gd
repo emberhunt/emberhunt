@@ -30,11 +30,6 @@ var last_action_on_bag = {}
 #				...
 #			} 
 
-var lastUpdateRPC = {}
-var updatesSentToPlayer = {}
-
-var time_start = OS.get_ticks_msec()
-
 func _ready():
 	# Get ready
 	# Check if serverData folder exists
@@ -85,11 +80,7 @@ func _process(delta):
 				if world_data.bags[bag].has("player") and world_data.bags[bag].player != int(player):
 					world_data.bags[bag].items = {}
 			
-			if int(player) in updatesSentToPlayer.keys():
-				updatesSentToPlayer[int(player)] += 1
-			else:
-				updatesSentToPlayer[int(player)] = 1
-			rpc_unreliable_id(int(player), "receive_world_update", world, world_data, updatesSentToPlayer[int(player)])
+			rpc_id(int(player), "receive_world_update", world, world_data)
 
 # # # # # # # # # # # #
 # CONNECTED FUNCTIONS #
@@ -220,7 +211,8 @@ remote func join_world(uuid, character_id, world):
 					"mana" : account_data.chars[str(character_id)]['max_mp'],
 					"stats" : account_data.chars[str(character_id)],
 					"nickname" : account_data.nickname,
-					"lastUpdate" : OS.get_ticks_msec() - time_start,
+					"joined" : OS.get_ticks_msec(),
+					"deltas_sum" : 0,
 					"inventory" : account_data.chars[str(character_id)]['inventory'],
 					"account_character_id" : character_id
 				}
@@ -234,43 +226,28 @@ remote func exit_world(world):
 			get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id())).queue_free()
 			worlds[world].players.erase(get_tree().get_rpc_sender_id())
 
-remote func send_position(world, pos, number):
+remote func send_position(world, direction, delta):
 	var time_now = OS.get_ticks_msec()
 	# Check if the world exists
 	if world in worlds:
 		# Check if the character is in that world
 		if get_tree().get_rpc_sender_id() in worlds[world].players:
-			# Check if this RPC isn't too old
-			if get_tree().get_rpc_sender_id() in lastUpdateRPC.keys():
-				if lastUpdateRPC[get_tree().get_rpc_sender_id()] > number:
-					# We already have a newer send_position RPC from this player
-					return
-			lastUpdateRPC[get_tree().get_rpc_sender_id()] = number
-			
-			var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
-			
-			# Check the speed
-			var maxLegalSpeed = worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25
-			var timeElapsed = ((time_now - time_start)-worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate)/1000.0
-			var maxLegalDistance = maxLegalSpeed*timeElapsed
-			var traveledDistance = (pos-player_node.position).length()
-			# Check if it traveled more than we allow
-			if traveledDistance > maxLegalDistance:
-				var motion = pos-player_node.position
-				var newMotion = Vector2(motion.x*(maxLegalDistance/traveledDistance), motion.y*(maxLegalDistance/traveledDistance))
-				pos = player_node.position+newMotion
-			# Check if the player is not trying to teleport
-			if traveledDistance > 100:
-				var motion = pos-player_node.position
-				var newMotion = Vector2(motion.x*(100/traveledDistance), motion.y*(100/traveledDistance))
-				pos = player_node.position+newMotion
-			
-			# Validate if the position is legal
-			if not checkIfClipping(player_node, player_node.position, pos): # No collisions
+			var time_passed = float(time_now-worlds[world].players[get_tree().get_rpc_sender_id()].joined)/1000.0
+			var deltas_sum = worlds[world].players[get_tree().get_rpc_sender_id()].deltas_sum+delta
+			# Deltas sum can't be higher than the total time elapsed.
+			if deltas_sum <= time_passed:
 				# Update player's position
-				player_node.position = pos
+				var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
+				
+				var velocity = (worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25)*direction.normalized()*delta
+				
+				# We're dividing the velocity by the server-side process delta
+				# Because inside move_and_slide, they get multiplied, and we don't need that
+				# So in the end get_process_delta_time() cancels out
+				player_node.move_and_slide(velocity/get_process_delta_time())
+				
 				worlds[world].players[get_tree().get_rpc_sender_id()].position = player_node.position
-				worlds[world].players[get_tree().get_rpc_sender_id()].lastUpdate = time_now - time_start
+				worlds[world].players[get_tree().get_rpc_sender_id()].deltas_sum = deltas_sum
 
 remote func request_rand_seeds(how_many):
 	var generator = RandomNumberGenerator.new()
