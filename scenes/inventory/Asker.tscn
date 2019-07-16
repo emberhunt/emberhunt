@@ -7,8 +7,8 @@
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/tick_pressed.png" type="Texture" id=6]
 [ext_resource path="res://assets/UI/tick_notPressed.png" type="Texture" id=7]
-[ext_resource path="res://assets/UI/slider_notPressed.png" type="Texture" id=8]
-[ext_resource path="res://assets/UI/slider_pressed.png" type="Texture" id=9]
+[ext_resource path="res://assets/UI/slider_pressed.png" type="Texture" id=8]
+[ext_resource path="res://assets/UI/slider_notPressed.png" type="Texture" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -124,6 +124,7 @@ custom_styles/grabber_area = SubResource( 5 )
 min_value = 1.0
 value = 1.0
 exp_edit = true
+ticks_on_borders = true
 [connection signal="pressed" from="BG" to="." method="_on_BG_pressed"]
 [connection signal="pressed" from="TextureButton" to="." method="_confirm"]
 [connection signal="value_changed" from="SpinBox" to="." method="_on_SpinBox_value_changed"]

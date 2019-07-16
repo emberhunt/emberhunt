@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/UI_themes/main_menu.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/Settings.gd" type="Script" id=2]
@@ -8,8 +8,8 @@
 [ext_resource path="res://assets/UI/button_pressed.png" type="Texture" id=6]
 [ext_resource path="res://assets/UI/tick_notPressed.png" type="Texture" id=7]
 [ext_resource path="res://assets/UI/tick_pressed.png" type="Texture" id=8]
-[ext_resource path="res://assets/UI/slider_notPressed.png" type="Texture" id=9]
-[ext_resource path="res://assets/UI/slider_pressed.png" type="Texture" id=10]
+[ext_resource path="res://assets/UI/slider_pressed.png" type="Texture" id=9]
+[ext_resource path="res://assets/UI/slider_notPressed.png" type="Texture" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 110
@@ -25,15 +25,11 @@ outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="StyleBoxTexture" id=3]
+[sub_resource type="StyleBoxTexture" id=4]
 texture = ExtResource( 9 )
 region_rect = Rect2( 0, 0, 150, 15 )
 
-[sub_resource type="StyleBoxTexture" id=4]
-texture = ExtResource( 10 )
-region_rect = Rect2( 0, 0, 150, 15 )
-
-[sub_resource type="StyleBoxTexture" id=5]
+[sub_resource type="StyleBoxTexture" id=3]
 texture = ExtResource( 10 )
 region_rect = Rect2( 0, 0, 150, 15 )
 
@@ -79,6 +75,7 @@ text = "Settings
 align = 1
 
 [node name="Buttons" type="Container" parent="."]
+editor/display_folded = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -209,8 +206,8 @@ custom_icons/tick = ExtResource( 7 )
 custom_icons/grabber_disabled = ExtResource( 7 )
 custom_icons/grabber_highlight = ExtResource( 8 )
 custom_icons/grabber = ExtResource( 7 )
-custom_styles/slider = SubResource( 3 )
-custom_styles/grabber_area = SubResource( 4 )
+custom_styles/slider = SubResource( 4 )
+custom_styles/grabber_area = SubResource( 3 )
 value = 100.0
 tick_count = 1
 ticks_on_borders = true
@@ -223,8 +220,8 @@ custom_icons/tick = ExtResource( 7 )
 custom_icons/grabber_disabled = ExtResource( 7 )
 custom_icons/grabber_highlight = ExtResource( 8 )
 custom_icons/grabber = ExtResource( 7 )
-custom_styles/slider = SubResource( 3 )
-custom_styles/grabber_area = SubResource( 5 )
+custom_styles/slider = SubResource( 4 )
+custom_styles/grabber_area = SubResource( 3 )
 value = 100.0
 tick_count = 1
 ticks_on_borders = true
