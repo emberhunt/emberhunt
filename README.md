@@ -6,7 +6,7 @@
 ![Emberhunt logo](https://i.imgur.com/RyI6qDt.png)
 # Emberhunt [![Discord](https://img.shields.io/discord/546682836326023208.svg?label=discord&logo=discord&style=flat)](https://discord.gg/J5B478u) ![Commit activity](https://img.shields.io/github/last-commit/PonasKovas/emberhunt.svg?color=yellow) [![License](https://img.shields.io/badge/license-GPLv3%2FCC--BY--NC--SA-blue.svg)](LICENSE)
 
-*The Dark Lord has fallen, and the alliance rejoices in victory. The last battalion lies in ruins and remains of the dark army hide under the stones. Who would stand for what the Dark Lord believed in? Who would tear the broken blade out of cold hands of those who rested untimely? Pick up the blade! Burn down your foes! Gather your friends and siege the deepest dungeons, the highest peaks to reclaim the Lords power to depose the forces of the Empire! Get your best gear, grind to the highest level and march through the gates of the High Inquisitor palace!*
+*The Dark Lord has fallen, and the Empire rejoices in victory. The last battalion lies in ruins and remains of the dark army hide under the stones. Who would stand for what the Dark Lord believed in? Who would tear the broken blade out of cold hands of those who rested untimely? Pick up the blade! Burn down your foes! Gather your friends and siege the deepest dungeons, the highest peaks to reclaim the Lords power to depose the forces of the Empire! Get your best gear, grind to the highest level and march through the gates of the High Inquisitor palace!*
 
 This project is completely free and open-source mobile game, created with [Godot](https://godotengine.org/).
 
@@ -18,7 +18,7 @@ Similar games: [Realm of the Mad God](https://www.google.com/url?sa=t&rct=j&q=&e
 
 ## Screenshots
 
-<img src='https://i.imgur.com/aXJkYIR.png' width='480'> <img src='https://i.imgur.com/OxiGC7H.png' width='480'> <img src='https://i.imgur.com/Y25NcbY.png' width='480'> <img src='https://i.imgur.com/7RrH5em.gif' width='480'>
+<img src='https://i.imgur.com/aXJkYIR.png' width='420'> <img src='https://i.imgur.com/OxiGC7H.png' width='420'> <img src='https://i.imgur.com/Y25NcbY.png' width='420'> <img src='https://i.imgur.com/7RrH5em.gif' width='420'>
 
 ## Goals
 
