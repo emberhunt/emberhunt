@@ -67,6 +67,6 @@ func dict_to_string(dict):
 		return "None"
 	var string = ""
 	for key in dict.keys():
-		string += "+"+str(dict[key])+" "+str(key).capitalize().to_upper()+", " if dict[key] > 0 else "-"+str(dict[key])+" "+str(key).capitalize().to_upper()+", "
+		string += "+"+str(dict[key])+" "+str(key).capitalize().to_upper().replace(" "," ")+", " if dict[key] > 0 else "-"+str(dict[key])+" "+str(key).capitalize().to_upper().replace(" "," ")+", "
 	
 	return string.rstrip(", ")
