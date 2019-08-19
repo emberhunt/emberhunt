@@ -12,7 +12,7 @@
 	"potion" : {
 		"stack_size" : 99,
 		"consumable" : true,
-		"infoLeft": "Heal: {heal}\nStat effects: {stat_effects}",
-		"infoRight" : "Magic Heal: {mheal}"
+		"infoLeft": "Buffs: {buffs}",
+		"infoRight" : ""
 	}
 }

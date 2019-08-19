@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/GUI.gd" type="Script" id=1]
 [ext_resource path="res://assets/UI/pausebutton.png" type="Texture" id=2]
@@ -7,14 +7,28 @@
 [ext_resource path="res://assets/UI/roundButton_pressed.png" type="Texture" id=5]
 [ext_resource path="res://assets/UI/touchpad_bg.png" type="Texture" id=6]
 [ext_resource path="res://scripts/attackpadv2.gd" type="Script" id=7]
+[ext_resource path="res://assets/UI/bars_bg.png" type="Texture" id=8]
+[ext_resource path="res://assets/UI/bars.png" type="Texture" id=9]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 9 )
+region = Rect2( 5, 5, 72, 6 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 9 )
+region = Rect2( 5, 19, 72, 3 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 9 )
+region = Rect2( 4, 33, 74, 3 )
 
 [node name="gui" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -0.119565
-margin_top = 1.605
-margin_right = -0.119568
-margin_bottom = 1.60492
+margin_left = -1.21881
+margin_top = 1.26444
+margin_right = -1.21881
+margin_bottom = 1.2644
 script = ExtResource( 1 )
 playerNode = NodePath("")
 
@@ -49,13 +63,20 @@ pressed = ExtResource( 3 )
 
 [node name="debugLabel" type="Label" parent="CanvasLayer"]
 editor/display_folded = true
-margin_right = 96.0
+margin_left = 80.0
+margin_right = 248.0
 margin_bottom = 57.0
 text = "(149.880432, 447.727936)"
 
 [node name="Timer" type="Timer" parent="CanvasLayer/debugLabel"]
 wait_time = 4096.0
 autostart = true
+
+[node name="FPS" type="Label" parent="CanvasLayer"]
+margin_left = 3.3327
+margin_top = -1.3383
+margin_right = 43.3327
+margin_bottom = 12.6617
 
 [node name="moveButton" type="TouchScreenButton" parent="CanvasLayer"]
 editor/display_folded = true
@@ -87,10 +108,54 @@ texture = ExtResource( 5 )
 modulate = Color( 1, 1, 1, 0.784314 )
 texture = ExtResource( 6 )
 
-[node name="FPS" type="Label" parent="CanvasLayer"]
-margin_left = 2.3327
-margin_top = 18.6617
-margin_right = 42.3327
-margin_bottom = 32.6617
+[node name="StatusBars" type="TextureRect" parent="CanvasLayer"]
+margin_left = 15.0
+margin_top = 15.0
+margin_right = 97.0
+margin_bottom = 55.0
+rect_scale = Vector2( 3, 3 )
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+
+[node name="hp" type="TextureProgress" parent="CanvasLayer/StatusBars"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 77.0
+margin_bottom = 11.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_progress = SubResource( 1 )
+
+[node name="mp" type="TextureProgress" parent="CanvasLayer/StatusBars"]
+margin_left = 5.0
+margin_top = 19.0
+margin_right = 77.0
+margin_bottom = 22.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_progress = SubResource( 2 )
+
+[node name="exp" type="TextureProgress" parent="CanvasLayer/StatusBars"]
+margin_left = 4.0
+margin_top = 33.0
+margin_right = 78.0
+margin_bottom = 36.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_progress = SubResource( 3 )
+
+[node name="BuffIndicators" type="VBoxContainer" parent="CanvasLayer"]
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 160.0
+margin_right = 42.0
+margin_bottom = -216.0
+custom_constants/separation = 0
 [connection signal="pressed" from="CanvasLayer/PauseButton/PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/InventoryButton/InventoryButton" to="." method="_on_InventoryButton_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/StatusBars" to="." method="_on_HP_MP_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/StatusBars" to="." method="_on_HP_MP_mouse_exited"]

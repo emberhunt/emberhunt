@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/playerBody.gd" type="Script" id=1]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=2]
 [ext_resource path="res://scenes/weapon.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/UI/minihealthbar_bg.png" type="Texture" id=4]
+[ext_resource path="res://assets/UI/minihealthbar_player.png" type="Texture" id=5]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
-region = Rect2( 304.5, 111.25, 14.25, 19 )
+region = Rect2( 305.868, 111.25, 12.2086, 19 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5, 4 )
@@ -31,3 +33,15 @@ drag_margin_right = 0.02
 drag_margin_bottom = 0.02
 
 [node name="weapon" parent="." instance=ExtResource( 3 )]
+
+[node name="minihp" type="TextureProgress" parent="."]
+margin_left = -10.667
+margin_top = -15.0
+margin_right = 53.333
+margin_bottom = 1.0
+rect_scale = Vector2( 0.333, 0.333 )
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_under = ExtResource( 4 )
+texture_progress = ExtResource( 5 )

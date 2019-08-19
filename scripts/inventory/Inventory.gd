@@ -175,19 +175,19 @@ func _ready():
 func select_slot(slot):
 	# If the same slot is selected twice in a row, then its unselected
 	if not selected_slot.empty():
-		selected_slot.node.get_child(0).get_child(0).set_visible(false)
+		selected_slot.node.get_node("Slot/Select").set_visible(false)
 		if selected_slot.node == slot:
 			selected_slot = {}
 			get_node("Buttons").set_buttons_state()
 			return
 	# Set the selection animation visible
-	slot.get_child(0).get_child(0).set_visible(true)
+	slot.get_node("Slot/Select").set_visible(true)
 	selected_slot = {"slot_id":slot.get_name(), "in_bag": slot.get_parent().get_parent().get_name()=="BagGrid", "node": slot}
 	get_node("Buttons").set_buttons_state()
 
 func unselect_slot():
 	if not selected_slot.empty():
-		selected_slot.node.get_child(0).get_child(0).set_visible(false)
+		selected_slot.node.get_node("Slot/Select").set_visible(false)
 		selected_slot = {}
 		get_node("Buttons").set_buttons_state()
 

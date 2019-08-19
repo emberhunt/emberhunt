@@ -11,7 +11,7 @@ var motion = Vector2(0,0) # Movement vector
 
 func _process(delta):
 	
-	var motion = (Global.charactersData[Global.charID].agility+25)*direction #Calculate the movement vector using the joystick variables
+	var motion = (Global.array_sum(Global.player_data.buffs.agility)+Global.charactersData[Global.charID].agility+25)*direction #Calculate the movement vector using the joystick variables
 	
 	move_and_slide(motion)# Move according to the motion vector
 	

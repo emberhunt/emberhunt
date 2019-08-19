@@ -121,6 +121,9 @@ remote func receive_world_update(world_name, world_data):
 		# update characters data
 		Global.charactersData[Global.charID] = world_data.players[get_tree().get_network_unique_id()].stats
 		Global.charactersData[Global.charID].inventory = world_data.players[get_tree().get_network_unique_id()].inventory.duplicate()
+		Global.player_data.hp = world_data.players[get_tree().get_network_unique_id()].hp
+		Global.player_data.mp = world_data.players[get_tree().get_network_unique_id()].mp
+		Global.player_data.buffs = world_data.players[get_tree().get_network_unique_id()].buffs
 		var selfPlayer = get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player")
 		# Update inventory gui if we're viewing it
 		if get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI/CanvasLayer").has_node("Inventory"):
@@ -158,6 +161,9 @@ remote func receive_world_update(world_name, world_data):
 				playernode.move(player.position)
 			else:
 				playernode.position = player.position
+			# Update the minihp bar
+			playernode.get_node("minihp").value = float(world_data.players[playerID].hp)/float(world_data.players[playerID].stats.max_hp+ \
+				Global.array_sum(world_data.players[playerID].buffs.max_hp))
 		# Update all enemies
 		#
 		# Update all npcs
@@ -215,6 +221,27 @@ remote func receive_rand_seeds(seeds):
 	if get_tree().get_rpc_sender_id() == 1:
 		rand_seeds += seeds
 		rand_seeds_requested_not_received -= seeds.size()
+
+remote func levelup_self(gain):
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		# Play level up animation
+		var animation_scene = preload("res://scenes/LevelUpAnimation.tscn").instance()
+		get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player").add_child(animation_scene)
+		# Display what was gained
+		get_node("/root/"+get_tree().get_current_scene().get_name()+"/GUI").display_gain(gain)
+
+remote func levelup_other(player_id):
+	# Check if it was sent by the server
+	if get_tree().get_rpc_sender_id() == 1:
+		# Check if we locally have a player with that ID
+		if get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players").has_node(str(player_id)):
+			# Check if that player is near enough to be relevant
+			if (get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+str(player_id)).position - \
+				get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player").position).length() < 200:
+					# Play the level up animation on the player
+					var animation_scene = preload("res://scenes/LevelUpAnimation.tscn").instance()
+					get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/players/"+str(player_id)).add_child(animation_scene)
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -292,6 +319,11 @@ func mergeItem(inv_slot_id, bag_slot_id, bag_pos, target_bag : bool):
 	# Check if we are connected to the server
 	if connected:
 		rpc_id(1, "merge_item", get_tree().get_current_scene().get_name(), inv_slot_id, bag_slot_id, bag_pos, target_bag)
+
+func drink_potion(slot, bag_pos = []):
+	# Check if we are connected to the server
+	if connected:
+		rpc_id(1, "drink_potion", get_tree().get_current_scene().get_name(), slot, bag_pos)
 
 func subtract_array(array1, array2):
 	var final_array = []

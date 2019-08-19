@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/otherPlayer.gd" type="Script" id=1]
 [ext_resource path="res://assets/testing_spritesheet.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/minihealthbar_bg.png" type="Texture" id=3]
+[ext_resource path="res://assets/UI/minihealthbar_player.png" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -34,3 +36,15 @@ custom_constants/shadow_offset_x = 0
 custom_constants/shadow_offset_y = 0
 custom_constants/shadow_as_outline = 0
 align = 1
+
+[node name="minihp" type="TextureProgress" parent="."]
+margin_left = -10.667
+margin_top = -19.0
+margin_right = 53.333
+margin_bottom = -3.0
+rect_scale = Vector2( 0.333, 0.333 )
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_under = ExtResource( 3 )
+texture_progress = ExtResource( 4 )

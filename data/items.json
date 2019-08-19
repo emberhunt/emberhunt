@@ -72,24 +72,29 @@
 	},
 	"healthpotion" : {
 		"title" : "A health potion",
-		"description" : "Small potion that restores your health a bit when drunk.",
+		"description" : "Small potion that slightly restores your health when drunk.",
 		"icon" : "healthpotion.png",
 		"type" : "potion",
 		"drops_from" : ["villager"],
-		"rarity" : 20,
-		"stat_effects" : {},
-		"heal" : 5,
-		"mheal" : 0
+		"rarity" : 5,
+		"buffs" : [["hp", 100, -1]]
 	},
 	"manapotion" : {
 		"title" : "A mana potion",
-		"description" : "Small potion that restores your mana a bit when drunk.",
+		"description" : "Small potion that slightly restores your mana when drunk.",
 		"icon" : "manapotion.png",
 		"type" : "potion",
 		"drops_from" : ["villager"],
-		"rarity" : 20,
-		"stat_effects" : {},
-		"heal" : 0,
-		"mheal" : 5
+		"rarity" : 5,
+		"buffs" : [["mp", 100, -1]],
+	},
+	"strengthpotion" : {
+		"title" : "Strength potion",
+		"description" : "Brewed by an old witch, this potion will give it's drinker a temporary feeling of power and confidentness.",
+		"icon" : "strengthpotion.png",
+		"type" : "potion",
+		"drops_from" : ["villager"],
+		"rarity" : 80,
+		"buffs" : [["strength", 2, 15]],
 	}
 }

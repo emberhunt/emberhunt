@@ -26,12 +26,15 @@ var worldReadyFunctions = {}
 var loaded_bullets = {}
 var loaded_item_sprites = {}
 var loaded_class_sprites = {}
+var loaded_buff_indicators = {}
 
 var init_stats = {}
 var items = {}
 var item_types = {}
 
 var world_data = {"players" : {}, "bags" : {}, "enemies" : {}, "npc" : {}}
+
+var player_data = {hp = 0, mp = 0, buffs = {"max_hp" : [], "max_mp" : [], "strength" : [], "agility" : [], "magic" : [], "luck" : [], "physical_defense" : [], "magic_defense" : []}}
 
 # game paused
 var paused = false
@@ -64,6 +67,7 @@ func _ready():
 	_load_bullets()
 	_load_item_sprites()
 	_load_class_sprites()
+	_load_buff_indicator_sprites()
 	
 	init_stats = load_json_from_file("res://data/class_init_stats.json")
 	items = load_json_from_file("res://data/items.json")
@@ -149,6 +153,18 @@ func _load_class_sprites():
 	else:
 		print("Error opening res://assets/classes/")
 
+func _load_buff_indicator_sprites():
+	var directory = Directory.new()
+	if directory.open("res://assets/UI/buff_indicators") == OK:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		while( file_name != ""):
+			if file_name.ends_with(".import"):
+				loaded_buff_indicators[file_name.trim_suffix(".png.import")] = load("res://assets/UI/buff_indicators/"+file_name.replace(".import",""))
+			file_name = directory.get_next()
+	else:
+		print("Error opening res://assets/UI/buff_indicators/")
+
 func get_item_sprite(item_id):
 	var size
 	var not_found
@@ -199,3 +215,9 @@ func find_position_for_bag():
 		if vector_from_playernode+player_pos in Global.world_data.bags.keys():
 			continue
 		return vector_from_playernode
+
+func array_sum(array):
+	var sum = 0
+	for item in array:
+		sum += float(item)
+	return sum

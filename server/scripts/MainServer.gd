@@ -69,6 +69,14 @@ func _process(delta):
 				worlds[world].bags.erase(bag)
 				last_action_on_bag[world].erase(bag)
 	
+	# Check if any buffs expired and should be removed
+	for world in worlds.keys():
+		for player in worlds[world].players.keys():
+			for stat in worlds[world].players[player].buffs.keys():
+				for buff in worlds[world].players[player].buffs[stat]:
+					if OS.get_ticks_msec() > buff[1]:
+						worlds[world].players[player].buffs[stat].erase(buff)
+	
 	
 	# Sync the worlds with all players
 	for world in worlds.keys():
@@ -80,7 +88,7 @@ func _process(delta):
 					world_data.bags[bag].items = {}
 			
 			# Also don't send any irrelevant things that are far away
-			# from that individual player to preserve bandwidth
+			# from that individual player to preserve bandwidth (and anti-cheat)
 			var viewport = 200.0 # <- This is how far an object has to be, to be sent to that player
 			var player_pos = worlds[world].players[player].position
 			
@@ -219,8 +227,9 @@ remote func join_world(uuid, character_id, world):
 				get_node("/root/MainServer/"+world+"/Entities/players").add_child(scene_instance)
 				worlds[world].players[get_tree().get_rpc_sender_id()] = {
 					"position" : scene_instance.position,
-					"health" : account_data.chars[str(character_id)]['max_hp'],
-					"mana" : account_data.chars[str(character_id)]['max_mp'],
+					"hp" : account_data.chars[str(character_id)]['max_hp'],
+					"mp" : account_data.chars[str(character_id)]['max_mp'],
+					"buffs" : {"max_hp" : [], "max_mp" : [], "strength" : [], "agility" : [], "magic" : [], "luck" : [], "physical_defense" : [], "magic_defense" : []},
 					"stats" : account_data.chars[str(character_id)],
 					"nickname" : account_data.nickname,
 					"joined" : OS.get_ticks_msec(),
@@ -255,7 +264,7 @@ remote func send_position(world, direction, delta):
 				# Update player's position
 				var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
 				
-				var velocity = (worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25)*direction.normalized()*delta
+				var velocity = (Global.array_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility)+worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25)*direction.normalized()*delta
 				
 				# We're dividing the velocity by the server-side process delta
 				# Because inside move_and_slide, they get multiplied, and we don't need that
@@ -295,7 +304,10 @@ remote func shoot_bullets(world, rotation):
 			# Shoot
 			seed(given_rand_seeds[get_tree().get_rpc_sender_id()].pop_front())
 			
-			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec() + rand_range(stats.min_fire_rate, stats.max_fire_rate)
+			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec() + rand_range(stats.min_fire_rate, stats.max_fire_rate) * \
+				(1+ (worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+Global.array_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility))/100.0)
+			
+			# Spawn the bullet 5 pixels ahead of the player, for... certain reasons...
 			var spawn_point = worlds[world].players[get_tree().get_rpc_sender_id()].position + Vector2(sin(rotation), -cos(rotation))*5
 			
 			
@@ -716,6 +728,84 @@ remote func merge_item(world, inv_slot_id, bag_slot_id, bag_pos, target_bag):
 												worlds[world].bags.erase(bag_pos)
 												remove_last_bag_action_time(world, bag_pos)
 
+remote func drink_potion(world, slot_id, bag_pos):
+	# Check if the world exists
+	if world in worlds:
+		# Check if the character is in that world
+		if get_tree().get_rpc_sender_id() in worlds[world].players:
+			if bag_pos.size() == 0:
+				# Check if the player has anything in that slot
+				if worlds[world].players[get_tree().get_rpc_sender_id()].inventory.has(slot_id):
+					# Check if that item is indeed a potion
+					if Global.items[worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot_id].item_id].type == "potion":
+						# Add potion's buffs to the player
+						for buff in Global.items[worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot_id].item_id].buffs:
+							var stat = buff[0]
+							var points = buff[1]
+							var time = buff[2]
+							if time == -1:
+								if stat == "hp":
+									worlds[world].players[get_tree().get_rpc_sender_id()].hp += points
+									if worlds[world].players[get_tree().get_rpc_sender_id()].hp > worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_hp:
+										worlds[world].players[get_tree().get_rpc_sender_id()].hp = worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_hp
+								elif stat == "mp":
+									worlds[world].players[get_tree().get_rpc_sender_id()].mp += points
+									if worlds[world].players[get_tree().get_rpc_sender_id()].mp > worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_mp:
+										worlds[world].players[get_tree().get_rpc_sender_id()].mp = worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_mp
+								else:
+									worlds[world].players[get_tree().get_rpc_sender_id()].stats[stat] += points
+							else:
+								worlds[world].players[get_tree().get_rpc_sender_id()].buffs[stat].append([points, OS.get_ticks_msec()+time*1000])
+						
+						# Remove the potion
+						worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot_id].quantity = int(worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot_id].quantity)-1
+						if worlds[world].players[get_tree().get_rpc_sender_id()].inventory[slot_id].quantity < 1:
+							worlds[world].players[get_tree().get_rpc_sender_id()].inventory.erase(slot_id)
+						
+						# Save
+						save_player_data(world, get_tree().get_rpc_sender_id())
+			else:
+				# It's from a bag:
+				# Check if the given bag position is close enough to the actual player
+				bag_pos = Vector2(bag_pos[0],bag_pos[1])
+				if (worlds[world].players[get_tree().get_rpc_sender_id()].position-bag_pos).length()<=12:
+					# Check if there's a bag in the given position
+					if worlds[world].bags.has(bag_pos):
+						# Check if the bag has anything in that slot
+						if worlds[world].bags[bag_pos].items.has(slot_id):
+							# Check if that item is indeed a potion
+							if Global.items[worlds[world].bags[bag_pos].items[slot_id].item_id].type == "potion":
+								# Add potion's buffs to the player
+								for buff in Global.items[worlds[world].bags[bag_pos].items[slot_id].item_id].buffs:
+									var stat = buff[0]
+									var points = buff[1]
+									var time = buff[2]
+									if time == -1:
+										if stat == "hp":
+											worlds[world].players[get_tree().get_rpc_sender_id()].hp += points
+											if worlds[world].players[get_tree().get_rpc_sender_id()].hp > worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_hp:
+												worlds[world].players[get_tree().get_rpc_sender_id()].hp = worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_hp
+										elif stat == "mp":
+											worlds[world].players[get_tree().get_rpc_sender_id()].mp += points
+											if worlds[world].players[get_tree().get_rpc_sender_id()].mp > worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_mp:
+												worlds[world].players[get_tree().get_rpc_sender_id()].mp = worlds[world].players[get_tree().get_rpc_sender_id()].stats.max_mp
+										else:
+											worlds[world].players[get_tree().get_rpc_sender_id()].stats[stat] += points
+									else:
+										worlds[world].players[get_tree().get_rpc_sender_id()].buffs[stat].append([points, OS.get_ticks_msec()+time*1000])
+								
+								# Remove the potion
+								worlds[world].bags[bag_pos].items[slot_id].quantity = int(worlds[world].bags[bag_pos].items[slot_id].quantity)-1
+								if worlds[world].bags[bag_pos].items[slot_id].quantity < 1:
+									worlds[world].bags[bag_pos].items.erase(slot_id)
+									# If bag is empty, remove it altogether
+									if worlds[world].bags[bag_pos].items.size() == 0:
+										worlds[world].bags.erase(bag_pos)
+										remove_last_bag_action_time(world, bag_pos)
+								
+								# Save
+								save_player_data(world, get_tree().get_rpc_sender_id())
+
 
 # # # # # # # # # # #
 # NORMAL FUNCTIONS  #
@@ -1054,6 +1144,137 @@ func item_allowed_in_slot(world, player_id, inv_slot, item_id):
 					return false
 	return true
 
+func give_exp(world, player_id, amount):
+	worlds[world].players[player_id].stats.experience += amount
+	while worlds[world].players[player_id].stats.experience >= floor(200*pow(1.15, worlds[world].players[player_id].stats.level-1)):
+		# Level up
+		var gain_per_level = {
+			"knight" : {
+				"max_hp" : [13, 16],
+				"max_mp" : [11, 15],
+				"strength":[1, 2],
+				"agility" :[1, 2],
+				"magic" : [1, 2],
+				"luck" : [0, 4],
+				"physical_defense" : [4, 5],
+				"magic_defense": [2, 4]
+			},
+			"berzerker" : {
+				"max_hp" : [10, 14],
+				"max_mp" : [11, 14],
+				"strength":[2, 4],
+				"agility" :[2, 4],
+				"magic" : [1, 2],
+				"luck" : [0, 4],
+				"physical_defense" : [2, 4],
+				"magic_defense": [1, 3]
+			},
+			"assassin" : {
+				"max_hp" : [9, 12],
+				"max_mp" : [9, 12],
+				"strength":[1, 2],
+				"agility" :[3, 4],
+				"magic" : [1, 2],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 3],
+				"magic_defense": [1, 3]
+			},
+			"sniper" : {
+				"max_hp" : [7, 11],
+				"max_mp" : [10, 13],
+				"strength":[1, 3],
+				"agility" :[1, 3],
+				"magic" : [1, 3],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 3],
+				"magic_defense": [1, 3]
+			},
+			"hunter" : {
+				"max_hp" : [7, 11],
+				"max_mp" : [11, 14],
+				"strength":[1, 2],
+				"agility" :[1, 3],
+				"magic" : [1, 3],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 3],
+				"magic_defense": [1, 3]
+			},
+			"pyromancer" : {
+				"max_hp" : [6, 10],
+				"max_mp" : [16, 19],
+				"strength":[1, 2],
+				"agility" :[2, 3],
+				"magic" : [3, 4],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 2],
+				"magic_defense": [3, 4]
+			},
+			"brand" : {
+				"max_hp" : [6, 10],
+				"max_mp" : [13, 17],
+				"strength":[1, 2],
+				"agility" :[1, 3],
+				"magic" : [2, 3],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 2],
+				"magic_defense": [3, 4]
+			},
+			"herald" : {
+				"max_hp" : [11, 15],
+				"max_mp" : [18, 21],
+				"strength":[1, 2],
+				"agility" :[2, 3],
+				"magic" : [2, 3],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 2],
+				"magic_defense": [4, 5]
+			},
+			"redeemer" : {
+				"max_hp" : [6, 10],
+				"max_mp" : [12, 15],
+				"strength":[1, 2],
+				"agility" :[2, 3],
+				"magic" : [2, 3],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 2],
+				"magic_defense": [3, 5]
+			},
+			"druid" : {
+				"max_hp" : [5, 9],
+				"max_mp" : [12, 16],
+				"strength":[1, 2],
+				"agility" :[2, 3],
+				"magic" : [2, 4],
+				"luck" : [0, 4],
+				"physical_defense" : [1, 2],
+				"magic_defense": [3, 5]
+			},
+		}
+		var player_class = worlds[world].players[player_id].stats["class"]
+		
+		var gain = {}
+		
+		for stat in gain_per_level[player_class].keys():
+			randomize()
+			var r = floor(rand_range(gain_per_level[player_class][stat][0], gain_per_level[player_class][stat][1]-1))
+			gain[stat] = r
+			worlds[world].players[player_id].stats[stat] += r
+		
+		worlds[world].players[player_id].stats.experience -= floor(200*pow(1.15, worlds[world].players[player_id].stats.level-1))
+		worlds[world].players[player_id].stats.level += 1
+		# Fully heal
+		worlds[world].players[player_id].hp = worlds[world].players[player_id].stats.max_hp
+		worlds[world].players[player_id].mp = worlds[world].players[player_id].stats.max_mp
+		
+		# Save
+		save_player_data(world, player_id)
+		
+		# Inform players
+		rpc_all_in_world(world, "levelup_other", [player_id], [player_id])
+		
+		rpc_id(player_id, "levelup_self", gain)
+
+
 # # # # # # # # # # # # # #
 # OTHER REMOTE FUNCTIONS  #
 # # # # # # # # # # # # # #
@@ -1069,4 +1290,8 @@ remote func answer_is_uuid_valid(answer):
 remote func receive_world_update(world_name, world_data, number):
 	pass
 remote func receive_rand_seeds(seeds):
+	pass
+remote func levelup_self(gain):
+	pass
+remote func levelup_other(id):
 	pass

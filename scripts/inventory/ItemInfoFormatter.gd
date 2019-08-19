@@ -54,12 +54,9 @@ func get_formatter(itemData):
 		"heavy_attack" :
 			( "Yes" if itemData['heavy_attack'] else "No") if \
 				itemData.has("heavy_attack") else "null",
-		"heal" :
-			str(itemData['heal'])+" HP" if \
-				itemData.has("heal") else "null",
-		"mheal" :
-			str(itemData['mheal'])+" MP" if \
-				itemData.has("mheal") else "null",
+		"buffs" :
+			format_buffs(itemData['buffs']) \
+				if itemData.has("buffs") else "null",
 	}
 
 func dict_to_string(dict):
@@ -67,6 +64,18 @@ func dict_to_string(dict):
 		return "None"
 	var string = ""
 	for key in dict.keys():
-		string += "+"+str(dict[key])+" "+str(key).capitalize().to_upper().replace(" "," ")+", " if dict[key] > 0 else "-"+str(dict[key])+" "+str(key).capitalize().to_upper().replace(" "," ")+", "
+		string += ("+" if dict[key] > 0 else "-") +str(dict[key])+" "+str(key).capitalize().to_upper().replace(" "," ")+", "
+	
+	return string.rstrip(", ")
+
+func format_buffs(buffs):
+	if buffs.size() == 0:
+		return "None"
+	var string = ""
+	for buff in buffs:
+		if buff[2] == -1:
+			string += ("+" if buff[1] > 0 else "-") +str(buff[1])+" "+buff[0].capitalize().to_upper().replace(" "," ")+", "
+		else:
+			string += ("+" if buff[1] > 0 else "-") +str(buff[1])+" "+buff[0].capitalize().to_upper().replace(" "," ")+" for "+str(buff[2])+" s, "
 	
 	return string.rstrip(", ")

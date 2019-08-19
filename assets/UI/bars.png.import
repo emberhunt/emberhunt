@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_72x72.png-679a72ae89b5e88b5cb48bc3ce38ea97.stex"
+path="res://.import/bars.png-8b27e8ce772c8e1fda67f4f7272197f2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icon_72x72.png"
-dest_files=[ "res://.import/icon_72x72.png-679a72ae89b5e88b5cb48bc3ce38ea97.stex" ]
+source_file="res://assets/UI/bars.png"
+dest_files=[ "res://.import/bars.png-8b27e8ce772c8e1fda67f4f7272197f2.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

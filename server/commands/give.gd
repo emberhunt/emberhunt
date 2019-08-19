@@ -4,11 +4,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-var _short_description = "gives the account data with UUID as parameter."
+var _short_description = "gives a player an item."
 
-var _description = """gives the account data with UUID as parameter
+var _description = """gives a player an item.
 
-USAGE:	get_account_data <player_uuid>."""
+USAGE:	give <player_id> <item_id>."""
 
 
 func give(args = [], mainServer = null) -> String:
@@ -28,7 +28,7 @@ func give(args = [], mainServer = null) -> String:
 	if not (int(args[0]) in all_players.keys()):
 		return "Nobody is playing with ID "+args[0]+" right now..."
 	
-	# Check if an item with the specified it exists
+	# Check if an item with the specified id exists
 	if not (args[1] in Global.items.keys()):
 		return "No item with identificator "+args[1]+" exists."
 	

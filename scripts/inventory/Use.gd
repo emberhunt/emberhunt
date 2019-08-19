@@ -80,3 +80,24 @@ func _use_sword(inv):
 	else:
 		# Just move it
 		inv.move_to("0", false)
+
+func _use_potion(inv):
+	if inv.selected_slot.in_bag:
+		Networking.drink_potion(inv.selected_slot.slot_id, [inv.bag_pos.x,inv.bag_pos.y])
+		# Remove the potion
+		inv.items.bag[inv.selected_slot.slot_id].quantity = int(inv.items.bag[inv.selected_slot.slot_id].quantity)-1
+		if inv.items.bag[inv.selected_slot.slot_id].quantity < 1:
+			inv.items.bag[inv.selected_slot.slot_id].node.queue_free()
+			inv.items.bag.erase(inv.selected_slot.slot_id)
+			# Unselect
+			inv.unselect_slot()
+	else:
+		Networking.drink_potion(inv.selected_slot.slot_id)
+		# Remove the potion
+		inv.items.inventory[inv.selected_slot.slot_id].quantity = int(inv.items.inventory[inv.selected_slot.slot_id].quantity)-1
+		if inv.items.inventory[inv.selected_slot.slot_id].quantity < 1:
+			inv.items.inventory[inv.selected_slot.slot_id].node.queue_free()
+			inv.items.inventory.erase(inv.selected_slot.slot_id)
+			# Unselect
+			inv.unselect_slot()
+

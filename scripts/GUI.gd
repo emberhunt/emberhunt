@@ -15,6 +15,12 @@ var playerBody : KinematicBody2D = null
 var near_a_bag = false
 var last_bag = null
 
+var buff_indicators = {}
+#				"strength_pos" : Node
+
+var mouse_on_bars = false
+var characterInfoWindow_open = false
+
 func _ready():
 	playerBody = get_node("../Entities/player")
 	
@@ -29,6 +35,38 @@ func _process(delta):
 	debugLabel.set_text(str(playerBody.get_position()))
 	if delta != 0:
 		fpsLabel.set_text("FPS: "+str(round(1/delta)))
+	
+	# Update health/mana/exp bars
+	$CanvasLayer/StatusBars/hp.value = float(Global.player_data.hp)/float(Global.charactersData[Global.charID].max_hp+ \
+		Global.array_sum(Global.player_data.buffs.max_hp))
+	$CanvasLayer/StatusBars/mp.value = float(Global.player_data.mp)/float(Global.charactersData[Global.charID].max_mp+ \
+		Global.array_sum(Global.player_data.buffs.max_mp))
+	get_node("CanvasLayer/StatusBars/exp").value = float(Global.charactersData[Global.charID].experience)/floor(200*pow(1.15, Global.charactersData[Global.charID].level-1))
+	# Minibar
+	get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/minihp").value = float(Global.player_data.hp)/float(Global.charactersData[Global.charID].max_hp+ \
+		Global.array_sum(Global.player_data.buffs.max_hp))
+	
+	# Buff indicators
+	var processed_indicators = []
+	for stat in Global.player_data.buffs.keys():
+		var sum = 0
+		for buff in Global.player_data.buffs[stat]:
+			sum += buff[0]
+		if sum == 0:
+			continue
+		var id = stat+("_pos" if sum > 0 else "_neg")
+		if not buff_indicators.has(id):
+			var indicator = preload("res://scenes/Buff_Indicator.tscn").instance()
+			indicator.texture = Global.loaded_buff_indicators[id]
+			get_node("CanvasLayer/BuffIndicators").add_child(indicator)
+			buff_indicators[id] = indicator
+		processed_indicators.append(buff_indicators[id])
+	# Remove expired buff indicators
+	for indicator in get_node("CanvasLayer/BuffIndicators").get_children():
+		if not (indicator in processed_indicators):
+			buff_indicators.erase(buff_indicators.keys()[buff_indicators.values().find(indicator)])
+			indicator.queue_free()
+	
 	
 	# Check if there's a bag near enough for the player to view it's contents
 	var bags = []
@@ -65,6 +103,22 @@ func _process(delta):
 			get_node("CanvasLayer/InventoryButton/InventoryButton").normal = preload("res://assets/UI/inventory/inventory_icon.png")
 			get_node("CanvasLayer/InventoryButton/InventoryButton").pressed = preload("res://assets/UI/inventory/inventory_icon.png")
 			near_a_bag = false
+
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if not Global.paused and mouse_on_bars and not characterInfoWindow_open:
+			var characterInfoWindow = preload("res://scenes/CharacterInfoWindow.tscn").instance()
+			# Set the window up with relevant info
+			characterInfoWindow.get_node("CharacterSprite").texture = Global.loaded_class_sprites[Global.charactersData[Global.charID]["class"].capitalize()+"_216x216.png"]
+			for stat in Global.charactersData[Global.charID].keys():
+				if not (stat in ["experience", "inventory"]):
+					characterInfoWindow.get_node(stat).set_text(str(Global.charactersData[Global.charID][stat]))
+			characterInfoWindow.get_node("nickname").set_text(Global.nickname)
+			get_child(0).add_child(characterInfoWindow)
+			characterInfoWindow_open = true
+		elif not Global.paused and characterInfoWindow_open:
+			get_node("CanvasLayer/CharacterInfoWindow").queue_free()
+			characterInfoWindow_open = false
 
 func _on_PauseButton_pressed():
 	if not Global.paused:
@@ -139,3 +193,14 @@ func highlight_bag(bag_pos = null):
 					bag_node.texture = preload("res://assets/UI/inventory/bag_outline_48x48.png")
 					bag_node.scale = Vector2(1.0/3.0, 1.0/3.0)
 				break
+
+func display_gain(gain):
+	var gain_scene = preload("res://scenes/StatGains.tscn").instance()
+	gain_scene.init(gain)
+	get_node("CanvasLayer").add_child(gain_scene)
+
+func _on_HP_MP_mouse_entered():
+	mouse_on_bars = true
+
+func _on_HP_MP_mouse_exited():
+	mouse_on_bars = false
