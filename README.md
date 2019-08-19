@@ -16,9 +16,27 @@ At the beginning, the player choose from 10 classes and then plays until their c
 
 Similar games: [Realm of the Mad God](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj4jbiQybzjAhUIqIsKHb6AD1sQFjAAegQIABAB&url=https%3A%2F%2Fwww.realmofthemadgod.com%2F&usg=AOvVaw3oF6qy-HgZqTsGN0X4awir), [Soul Knight](https://play.google.com/store/apps/details?id=com.ChillyRoom.DungeonShooter&hl=en).
 
+## Table of contents
+ - [Screenshots](#screenshots)
+ - [Goals](#goals)
+ - [State of the project](#state)
+   - [Scalability](#scalability)
+   - [Security](#security)
+ - [Setup](#setup)
+   - [Server](#server)
+   - [Client](#client)
+ - [Documentation](#documentation)
+ - [Contributing](#contributing)
+ - [Who's behind this project](#behind)
+ - [License](#license)
+
+<a name="screenshots" />
+
 ## Screenshots
 
 <img src='https://i.imgur.com/aXJkYIR.png' width='420'> <img src='https://i.imgur.com/OxiGC7H.png' width='420'> <img src='https://i.imgur.com/Y25NcbY.png' width='420'> <img src='https://i.imgur.com/7RrH5em.gif' width='420'>
+
+<a name="goals" />
 
 ## Goals
 
@@ -27,30 +45,40 @@ The main three goals of this project are
  - to provide the mobile game industry a **free** quality MMORPG,
  - to be a good example to other mobile games,
  - and to contribute to the Open-Source software world.
+ 
+<a name="state" />
 
 ## State of the project
 
 This project is not very mature yet, we're still working on the core mechanics.
 
 But with the passion and love of our team, it's moving forward very fast.
+ 
+<a name="scalability" />
 
 ### Scalabilty
 
 Currently the server is not very scalable, since we're using Godot engine on the server side too.
 
 We have plans to write our own low-level scalable server with Rust in the near future, as Godot wasn't really designed for these kind of things, and is extremely inefficient.
+ 
+<a name="security" />
 
 ### Security
 
 We do not guarantee the security of your computer if you try to expose Emberhunt's server to the internet, because, as written before, the server is using Godot engine, which was not designed for this purpose, and might have security flaws. No security flaws have been encountered yet though, so don't assume it's very dangerous too.
 
 Again, this will change in the near future, as we have plans to write our own low-level secure and scalable server dedicated to this game.
+ 
+<a name="setup" />
 
 ## Setup
 
 To start working on this project, you will have to download [Godot's executable](https://godotengine.org/download/) first. Godot is very lightweight, so you won't need to install anything, just run the executable and import this project.
 
 You can configure what items there are in the game, and what are the classes initial stats and inventories at `data/`.
+ 
+<a name="server" />
 
 ### Server
 
@@ -63,12 +91,16 @@ The server has some commands built in, to execute them you will have to connect 
 
 You can easily add more commands, by creating a `GDScript` script in `server/commands/`.
 [A more in-depth look at creating commands](../../wiki/Creating-Commands)
+ 
+<a name="client" />
 
 ### Client
 
 To launch the game as client, just run it normally, or in other words, the `scenes/MainMenus.tscn` scene.
 
 There's not much configuration on the client side, but you can change the server IP, to which it tries to connect at `scripts/Networking.gd`.
+ 
+<a name="documentation" />
 
 ## Documentation
 
@@ -77,6 +109,8 @@ The technical documentation is available [here](../../wiki).
 All improvements and modifications are really appreciated, as most of us have a lot of work, and can't really put much time into it.
 
 The game's content wiki is being worked on.
+ 
+<a name="contributing" />
 
 ## Contributing
 
@@ -91,12 +125,16 @@ We need:
  - Generally supportive people :heart:
 
 [Join our discord!](https://discord.gg/eEVGG7v)
+ 
+<a name="behind" />
 
 ## Who's behind all this
 
 This project is being worked on with passion by our team of complete strangers from all over the world, who have put their strenghts together to create something **good** :)
 
 If you want to **support us**, contact the project leader [**@PonasKovas**](https://github.com/PonasKovas).
+ 
+<a name="license" />
 
 ## License
 
