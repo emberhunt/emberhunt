@@ -18,7 +18,6 @@ var last_bag = null
 var buff_indicators = {}
 #				"strength_pos" : Node
 
-var mouse_on_bars = false
 var characterInfoWindow_open = false
 
 func _ready():
@@ -38,13 +37,13 @@ func _process(delta):
 	
 	# Update health/mana/exp bars
 	$CanvasLayer/StatusBars/hp.value = float(Global.player_data.hp)/float(Global.charactersData[Global.charID].max_hp+ \
-		Global.array_sum(Global.player_data.buffs.max_hp))
+		Global.buffs_sum(Global.player_data.buffs.max_hp))
 	$CanvasLayer/StatusBars/mp.value = float(Global.player_data.mp)/float(Global.charactersData[Global.charID].max_mp+ \
-		Global.array_sum(Global.player_data.buffs.max_mp))
+		Global.buffs_sum(Global.player_data.buffs.max_mp))
 	get_node("CanvasLayer/StatusBars/exp").value = float(Global.charactersData[Global.charID].experience)/floor(200*pow(1.15, Global.charactersData[Global.charID].level-1))
 	# Minibar
 	get_node("/root/"+get_tree().get_current_scene().get_name()+"/Entities/player/minihp").value = float(Global.player_data.hp)/float(Global.charactersData[Global.charID].max_hp+ \
-		Global.array_sum(Global.player_data.buffs.max_hp))
+		Global.buffs_sum(Global.player_data.buffs.max_hp))
 	
 	# Buff indicators
 	var processed_indicators = []
@@ -103,22 +102,6 @@ func _process(delta):
 			get_node("CanvasLayer/InventoryButton/InventoryButton").normal = preload("res://assets/UI/inventory/inventory_icon.png")
 			get_node("CanvasLayer/InventoryButton/InventoryButton").pressed = preload("res://assets/UI/inventory/inventory_icon.png")
 			near_a_bag = false
-
-func _input(event):
-	if event is InputEventMouseButton and event.pressed:
-		if not Global.paused and mouse_on_bars and not characterInfoWindow_open:
-			var characterInfoWindow = preload("res://scenes/CharacterInfoWindow.tscn").instance()
-			# Set the window up with relevant info
-			characterInfoWindow.get_node("CharacterSprite").texture = Global.loaded_class_sprites[Global.charactersData[Global.charID]["class"].capitalize()+"_216x216.png"]
-			for stat in Global.charactersData[Global.charID].keys():
-				if not (stat in ["experience", "inventory"]):
-					characterInfoWindow.get_node(stat).set_text(str(Global.charactersData[Global.charID][stat]))
-			characterInfoWindow.get_node("nickname").set_text(Global.nickname)
-			get_child(0).add_child(characterInfoWindow)
-			characterInfoWindow_open = true
-		elif not Global.paused and characterInfoWindow_open:
-			get_node("CanvasLayer/CharacterInfoWindow").queue_free()
-			characterInfoWindow_open = false
 
 func _on_PauseButton_pressed():
 	if not Global.paused:
@@ -199,8 +182,36 @@ func display_gain(gain):
 	gain_scene.init(gain)
 	get_node("CanvasLayer").add_child(gain_scene)
 
-func _on_HP_MP_mouse_entered():
-	mouse_on_bars = true
 
-func _on_HP_MP_mouse_exited():
-	mouse_on_bars = false
+func _on_StatusBars_pressed():
+	if not Global.paused:
+		if not characterInfoWindow_open:
+			var characterInfoWindow = preload("res://scenes/CharacterInfoWindow.tscn").instance()
+			# Set the window up with relevant info
+			characterInfoWindow.get_node("CharacterSprite").texture = Global.loaded_class_sprites[Global.charactersData[Global.charID]["class"].capitalize()+"_216x216.png"]
+			characterInfoWindow.get_node("class").set_text(str(Global.charactersData[Global.charID]["class"]))
+			characterInfoWindow.get_node("_level/level").set_text(str(Global.charactersData[Global.charID]["level"]))
+			for stat in Global.charactersData[Global.charID].keys():
+				if not (stat in ["experience", "inventory", "class", "level"]):
+					var parent
+					if stat in ["max_hp","strength","magic","physical_defense"]:
+						parent = characterInfoWindow.get_node("_left")
+					else:
+						parent = characterInfoWindow.get_node("_right")
+					if Global.buffs_sum(Global.player_data.buffs[stat]) > 0:
+						parent.get_node(stat).set("custom_colors/font_color", Color8(69, 246, 34))
+						parent.get_node(stat).set_text(str(Global.charactersData[Global.charID][stat]+Global.buffs_sum(Global.player_data.buffs[stat]))+" (+"+str(Global.buffs_sum(Global.player_data.buffs[stat]))+")")
+					elif Global.buffs_sum(Global.player_data.buffs[stat]) < 0:
+						parent.get_node(stat).set("custom_colors/font_color", Color8(246, 34, 34))
+						parent.get_node(stat).set_text(str(Global.charactersData[Global.charID][stat]+Global.buffs_sum(Global.player_data.buffs[stat]))+" (+"+str(Global.buffs_sum(Global.player_data.buffs[stat]))+")")
+					else:
+						parent.get_node(stat).set_text(str(Global.charactersData[Global.charID][stat]))
+			characterInfoWindow.get_node("nickname").set_text(Global.nickname)
+			get_child(0).add_child(characterInfoWindow)
+			characterInfoWindow_open = true
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.pressed and characterInfoWindow_open and not Global.paused:
+			get_node("CanvasLayer/CharacterInfoWindow").queue_free()
+			characterInfoWindow_open = false

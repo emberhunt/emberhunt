@@ -38,7 +38,7 @@ func _attack():
 	var bullet_count = int(rand_range(stats.min_bullets,stats.max_bullets))
 	
 	var wait_time = (1 / (rand_range(stats.min_fire_rate, stats.max_fire_rate)*(1+( \
-		Global.charactersData[Global.charID].agility + Global.array_sum(Global.player_data.buffs.agility) \
+		Global.charactersData[Global.charID].agility + Global.buffs_sum(Global.player_data.buffs.agility) \
 	)/100.0)))
 	
 	# calculate spread step based on bullet_count and bullet_spread

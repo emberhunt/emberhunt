@@ -264,7 +264,7 @@ remote func send_position(world, direction, delta):
 				# Update player's position
 				var player_node = get_node("/root/MainServer/"+world+"/Entities/players/" + str(get_tree().get_rpc_sender_id()))
 				
-				var velocity = (Global.array_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility)+worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25)*direction.normalized()*delta
+				var velocity = (Global.buffs_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility)+worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+25)*direction.normalized()*delta
 				
 				# We're dividing the velocity by the server-side process delta
 				# Because inside move_and_slide, they get multiplied, and we don't need that
@@ -305,7 +305,7 @@ remote func shoot_bullets(world, rotation):
 			seed(given_rand_seeds[get_tree().get_rpc_sender_id()].pop_front())
 			
 			lastShots[get_tree().get_rpc_sender_id()] = OS.get_ticks_msec() + rand_range(stats.min_fire_rate, stats.max_fire_rate) * \
-				(1+ (worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+Global.array_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility))/100.0)
+				(1+ (worlds[world].players[get_tree().get_rpc_sender_id()].stats.agility+Global.buffs_sum(worlds[world].players[get_tree().get_rpc_sender_id()].buffs.agility))/100.0)
 			
 			# Spawn the bullet 5 pixels ahead of the player, for... certain reasons...
 			var spawn_point = worlds[world].players[get_tree().get_rpc_sender_id()].position + Vector2(sin(rotation), -cos(rotation))*5

@@ -7,7 +7,7 @@ extends Node
 
 # This is the CLIENT's side of networking
 
-const SERVER_IP = "emberhunt.cnidarias.net"
+const SERVER_IP = "localhost"#"emberhunt.cnidarias.net"
 const SERVER_PORT = 22122
 
 var connected = false
@@ -163,7 +163,7 @@ remote func receive_world_update(world_name, world_data):
 				playernode.position = player.position
 			# Update the minihp bar
 			playernode.get_node("minihp").value = float(world_data.players[playerID].hp)/float(world_data.players[playerID].stats.max_hp+ \
-				Global.array_sum(world_data.players[playerID].buffs.max_hp))
+				Global.buffs_sum(world_data.players[playerID].buffs.max_hp))
 		# Update all enemies
 		#
 		# Update all npcs

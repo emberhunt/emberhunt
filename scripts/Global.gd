@@ -216,8 +216,8 @@ func find_position_for_bag():
 			continue
 		return vector_from_playernode
 
-func array_sum(array):
+func buffs_sum(array):
 	var sum = 0
 	for item in array:
-		sum += float(item)
+		sum += float(item[0])
 	return sum

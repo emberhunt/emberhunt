@@ -67,7 +67,48 @@ Magic:
 Physical defense:"
 align = 2
 
+[node name="max_hp" type="Label" parent="_left"]
+anchor_right = 1.0
+margin_left = 407.0
+margin_right = 36.0
+margin_bottom = 43.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
+[node name="strength" type="Label" parent="_left"]
+anchor_right = 1.0
+margin_left = 407.0
+margin_top = 46.0
+margin_right = 36.0
+margin_bottom = 89.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "-1"
+valign = 1
+
+[node name="magic" type="Label" parent="_left"]
+anchor_right = 1.0
+margin_left = 407.0
+margin_top = 92.0
+margin_right = 36.0
+margin_bottom = 135.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
+[node name="physical_defense" type="Label" parent="_left"]
+anchor_right = 1.0
+margin_left = 407.0
+margin_top = 138.0
+margin_right = 36.0
+margin_bottom = 181.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
 [node name="_right" type="Label" parent="."]
+editor/display_folded = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 150.0
@@ -81,7 +122,47 @@ Luck:
 Magic defense:"
 align = 2
 
+[node name="max_mp" type="Label" parent="_right"]
+anchor_right = 1.0
+margin_left = 659.0
+margin_right = 34.0
+margin_bottom = 43.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
+[node name="agility" type="Label" parent="_right"]
+anchor_right = 1.0
+margin_left = 659.0
+margin_top = 46.0
+margin_right = 34.0
+margin_bottom = 89.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
+[node name="luck" type="Label" parent="_right"]
+anchor_right = 1.0
+margin_left = 659.0
+margin_top = 92.0
+margin_right = 34.0
+margin_bottom = 135.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
+[node name="magic_defense" type="Label" parent="_right"]
+anchor_right = 1.0
+margin_left = 659.0
+margin_top = 138.0
+margin_right = 34.0
+margin_bottom = 181.0
+custom_fonts/font = SubResource( 2 )
+text = "-1"
+valign = 1
+
 [node name="_level" type="Label" parent="."]
+editor/display_folded = true
 anchor_right = 0.5
 margin_left = 369.0
 margin_top = 508.0
@@ -92,92 +173,12 @@ text = "level: "
 align = 2
 valign = 1
 
-[node name="max_hp" type="Label" parent="."]
+[node name="level" type="Label" parent="_level"]
 anchor_right = 1.0
-margin_left = 407.0
-margin_top = 340.0
-margin_right = -474.0
-margin_bottom = 383.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="max_mp" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 809.0
-margin_top = 340.0
-margin_right = -72.0
-margin_bottom = 383.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="strength" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 407.0
-margin_top = 386.0
-margin_right = -474.0
-margin_bottom = 429.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="agility" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 809.0
-margin_top = 386.0
-margin_right = -72.0
-margin_bottom = 429.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="magic" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 407.0
-margin_top = 432.0
-margin_right = -474.0
-margin_bottom = 475.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="luck" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 809.0
-margin_top = 432.0
-margin_right = -72.0
-margin_bottom = 475.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="physical_defense" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 407.0
-margin_top = 478.0
-margin_right = -474.0
-margin_bottom = 521.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="magic_defense" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 809.0
-margin_top = 478.0
-margin_right = -72.0
-margin_bottom = 521.0
-custom_fonts/font = SubResource( 2 )
-text = "-1"
-valign = 1
-
-[node name="level" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = 470.0
-margin_top = 517.0
-margin_right = -426.0
-margin_bottom = 560.0
+margin_left = 101.0
+margin_top = 9.0
+margin_right = 40.0
+margin_bottom = 52.0
 custom_fonts/font = SubResource( 2 )
 text = "-1"
 valign = 1
