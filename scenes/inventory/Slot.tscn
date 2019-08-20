@@ -24,6 +24,7 @@ tracks/0/keys = {
 margin_right = 72.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
+mouse_filter = 1
 
 [node name="Slot" type="Sprite" parent="."]
 texture = ExtResource( 1 )
