@@ -28,6 +28,7 @@ Similar games: [Realm of the Mad God](https://www.google.com/url?sa=t&rct=j&q=&e
  - [Documentation](#documentation)
  - [Contributing](#contributing)
  - [Who's behind this project](#behind)
+ - [Stargazers over time](#stargazers)
  - [License](#license)
 
 <a name="screenshots" />
@@ -134,6 +135,12 @@ This project is being worked on with passion by our team of complete strangers f
 
 If you want to **support us**, contact the project leader [**@PonasKovas**](https://github.com/PonasKovas).
  
+<a name="stargazers" />
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/emberhunt/emberhunt.svg)](https://starchart.cc/emberhunt/emberhunt)
+
 <a name="license" />
 
 ## License
